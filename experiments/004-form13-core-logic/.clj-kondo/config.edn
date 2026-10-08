@@ -1,0 +1,8 @@
+;; core.logic's macros bind logic variables and define relations; clj-kondo
+;; does not know that and reports each one as unresolved.
+{:lint-as {clojure.core.logic.pldb/db-rel clojure.core/declare}
+ :linters {:unresolved-symbol {:exclude [(clojure.core.logic/run)
+                                         (clojure.core.logic/run*)
+                                         (clojure.core.logic/fresh)
+                                         (clojure.core.logic/defne)
+                                         (clojure.core.logic/matche)]}}}

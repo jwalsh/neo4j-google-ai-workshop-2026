@@ -1,0 +1,18 @@
+{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.12.0"}
+        ;; miniKanren, with pldb: a fact database the relations read from.
+        org.clojure/core.logic {:mvn/version "1.1.1"}
+        org.clojure/data.csv {:mvn/version "1.1.1"}}
+ :aliases
+ {;; dev/explore_logic.clj: rich comments for CIDER. cider-jack-in uses this
+  ;; alias (see .dir-locals.el).
+  :dev {:extra-paths ["dev"]}
+  ;; clojure -M:gate [path-to-csv]: load, run every query, assert the
+  ;; numbers, print timings. Exits 1 when a number is off.
+  :gate {:main-opts ["-m" "form13.logic"]}
+  ;; clojure -M:dev:repl, then cider-connect. Writes .nrepl-port. Same
+  ;; versions as the repository root.
+  :repl {:extra-deps {nrepl/nrepl {:mvn/version "1.8.0"}
+                      cider/cider-nrepl {:mvn/version "0.63.1"}}
+         :main-opts ["-m" "nrepl.cmdline"
+                     "--middleware" "[cider.nrepl/cider-middleware]"]}}}

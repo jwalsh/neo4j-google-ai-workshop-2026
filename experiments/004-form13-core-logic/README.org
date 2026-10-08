@@ -1,0 +1,241 @@
+#+TITLE: 004 - Form 13 in core.logic
+#+DATE: 2026-10-08
+
+* Source
+
+The Form 13 day file from Lab 4, =data/form13-2023-05-11.csv= (git-ignored;
+=workshop.form13/fetch!= at the root downloads it). 7,381 rows, one quarter. The lab
+loads it into Neo4j as =(:Manager)-[:OWNS]->(:Company)=;
+=src/workshop/form13.clj= at the root answers the lab's questions from the
+file in memory, and its numbers are the oracle here.
+
+Libraries, from Maven Central's =maven-metadata.xml= on 2026-10-08:
+=org.clojure/core.logic 1.1.1= and =org.clojure/data.csv 1.1.1=, the newest
+of each. Clojure 1.12.0, as at the root.
+
+* Hypothesis
+
+The same file, loaded as facts into core.logic's fact database (pldb),
+answers the lab's questions with relations and gives the same numbers. The
+relational part will be short; counting will not be relational at all; and
+joins over 7,381 facts will be slow enough somewhere to be worth writing
+down.
+
+All three held. The slow part was not where expected.
+
+* What was kept and what was left out
+
+Kept: three relations.
+
+| relation                                   | facts | indexed             |
+|--------------------------------------------+-------+---------------------|
+| =manager(manager-name)=                    |    28 | manager-name        |
+| =company(cusip, company-name)=             | 2,577 | cusip, company-name |
+| =holds(cusip, manager-name, value, shares)= | 7,381 | cusip, manager-name |
+
+=company= is one fact per name a CUSIP was filed under, which is why it has
+2,577 facts for 2,251 CUSIPs. =value= is a long; it is integral throughout
+the file.
+
+On indexing. pldb keeps one map per indexed position and, for each call,
+uses the index of the leftmost position that is both indexed and ground. One
+index per call, chosen by position, not by selectivity. So =holds= has cusip
+first: when a join reaches its second =holds= with cusip and manager both
+ground, the cusip bucket has at most 28 facts and the manager bucket up to
+1,615. The brief suggested =holds(manager, cusip, value, shares)=; that
+order was measured and is a hundred times slower on the join (Log).
+
+Left out: the quarter (one value in the file), the filing id, and matching a
+company by a fragment of its name. =form13/holders-of= at the root takes
+"nvidia"; here the name is exact. A substring test is not a relation; it can
+be bolted on with =project= and a predicate, and then it only runs one way.
+
+* Where the relational part ends
+
+core.logic has no aggregation: no count, no sum, no order, no limit other
+than =run n=, no distinct. =run*= returns a vector of answers, one per
+derivation, and Clojure takes it from there. In =src/form13/logic.clj= every
+query function is a =run*= form bound to =answers= and then a =->>= pipeline,
+so the line is on the page:
+
+| question                    | relational (=run*=)                | Clojure, after          |
+|-----------------------------+------------------------------------+-------------------------|
+| how many managers           | =manager=                          | =count=                 |
+| how many CUSIPs             | =company=, 2,577 answers           | =distinct=, =count=     |
+| who holds APPLE INC         | =company= joined to =holds=        | =sort-by= value         |
+| what two managers both hold | =holdso= twice, joined to =company= | =group-by= cusip        |
+| CUSIPs with several names   | =company= twice and =!==           | =group-by= cusip        |
+| manager with most companies | =holdso=, all 7,381 pairs          | =frequencies=, =sort-by= |
+| largest positions           | =holds=, all 7,381 facts           | =sort-by=, =take=       |
+
+For the last two the relational part is "give me everything". That is the
+honest shape of an aggregate here.
+
+* Gate
+
+=clojure -M:gate= prints 17 checks and exits 1 if any is off. Eight are the
+known numbers: 28 managers, 2,251 CUSIPs, 7,381 holdings, 258 CUSIPs under
+more than one name, ENVESTNET ASSET MANAGEMENT INC on top with 1,615 (asked
+two ways), APPLE INC held by 22 (asked two ways). The other nine compare a
+relational answer with the same thing worked out from the rows with sets or
+=filter=, so the constraint and chain examples are checked against something
+that is not core.logic.
+
+* Run
+
+From this directory; the CSV path is relative to it.
+
+#+begin_src sh
+cd experiments/004-form13-core-logic
+clojure -M:gate                       # or: clojure -M:gate path/to/form13.csv
+clojure -M:dev:repl                   # nREPL for cider-connect
+#+end_src
+
+From Emacs: open =dev/explore_logic.clj=, =cider-jack-in= (the
+=.dir-locals.el= here selects =clojure-cli= and the =:dev= alias), load the
+buffer, and evaluate the forms in each =(comment ...)= one at a time with
+=C-x C-e=.
+
+* What core.logic gives here
+
+Run on this data; all of it is in =dev/explore_logic.clj=.
+
+- One relation, every direction. =holdso= is two lines. With the manager
+  ground it lists holdings (Envestnet: 1,615); with the CUSIP ground it lists
+  holders (Apple: 22); with neither it lists all 7,381 pairs; with both it
+  is a yes or no. Nothing was written per direction. Cypher's =MATCH= does
+  this too for a single pattern; the difference is that here the pattern is
+  a named function that composes, so =holds-companyo=, =both-holdo= and
+  =chaino= are built from it and inherit the property.
+- The path is an ordinary answer. =chaino= relates a start, an end, a hop
+  limit and the list of managers between. Leave the path fresh and get
+  paths; supply a path with a hole in it and get what fits the hole.
+- A bounded chain was worth having, barely. 281 of the 378 manager pairs
+  share a holding directly. Westwood Global holds two companies and shares
+  them with two managers (Envestnet and Nomura); the other 25 are two links
+  away. Everything is within two links of everything, so there is no third
+  hop to find. One day of filings from 28 managers, one of which holds 72%
+  of all the CUSIPs, is a small-world graph with nothing in it to search.
+- Constraints. =!== on the two names of a CUSIP is the real one. =nafc=
+  gives "Guggenheim holds it and Envestnet does not" (219, equal to the set
+  difference). A finite domain on =shares= works (191 Envestnet positions of
+  between one and a hundred million shares) and is a poor fit: nothing is
+  solved for, it is =filter= with more machinery. Finite domains earn their
+  keep when unknowns are related by arithmetic, and a table of reported
+  holdings has no unknowns.
+
+* Beside a graph database
+
+Fits: a few thousand facts already in a Clojure process, questions that are
+the same pattern asked from different ends, rules built from other rules,
+and wanting the answer as plain data in the REPL without a server. The whole
+experiment is one file and two jars.
+
+Does not fit:
+
+- Anything aggregated. Degree centrality, which is the point of Lab 5, is
+  =frequencies= here; the logic engine contributes nothing to it.
+- Anything large. pldb is a map of sets in memory with one index used per
+  call and no planner. Goal order and argument order are the query plan and
+  the author writes both. Neo4j with a constraint on =cusip= does not ask
+  that.
+- Reachability at scale. No tabling was used; pldb answers are bags, so a
+  pair linked through 1,099 companies is 1,099 answers unless the relation
+  is cut with =onceo=, which gives up running it in every direction.
+- Persistence, concurrency, Bloom, a second user.
+
+So: a way to think about the data and to prototype a rule, next to the
+database, not a replacement for it.
+
+* Log
+
+Timings: Apple M1 Pro, JDK 21.0.4, one =clojure -M:gate= run. "First" is the
+first call in the JVM and pays for JIT; "best" is the fastest of five.
+
+- 2026-10-08. First run of the gate failed 7 of 17: every query touching
+  =manager= or =company= returned nothing. The loader destructured a row
+  with ={:keys [manager company ...]}=, shadowing the relations of the same
+  name, so =db-fact= was handed a string where a relation belongs and filed
+  the facts under a nil key without an error. Row keys renamed to
+  =:manager-name= and =:company-name=. Nothing else changed.
+- 2026-10-08. Second run: 17 of 17. Every known number matches.
+
+  | query                                          | answers | first ms | best ms |
+  |------------------------------------------------+---------+----------+---------|
+  | read and parse the CSV                         |   7,381 |     84.0 |    33.3 |
+  | build the pldb database                        |   7,381 |     63.8 |    29.0 |
+  | managers                                       |      28 |      6.0 |     0.6 |
+  | cusips (2,577 answers, then distinct)          |   2,251 |     34.8 |    10.3 |
+  | holdso, nothing ground: all pairs              |   7,381 |     54.1 |    32.5 |
+  | holdso, manager ground                         |   1,615 |      8.1 |     3.9 |
+  | holdso, cusip ground                           |      22 |      1.1 |     0.1 |
+  | holdso, both ground                            |    true |      1.3 |     0.0 |
+  | holders-of APPLE INC                           |      22 |      3.4 |     0.3 |
+  | common-holdings, the two largest managers      |   1,099 |     43.8 |    30.0 |
+  | name-variants                                  |     258 |    152.9 |   101.9 |
+  | manager-degree (run*, then frequencies)        |      28 |     33.3 |    24.7 |
+  | top-holdings 10 (run*, then sort-by)           |      10 |     49.9 |    49.9 |
+  | held-by-first-only (nafc)                      |     219 |     15.4 |     9.8 |
+  | positions-with-shares-between (fd)             |     191 |     33.9 |    17.9 |
+  | co-holder-pairs (onceo)                        |     562 |    523.5 |   223.3 |
+  | co-holder pairs, one answer per shared company |  37,632 |  1,078.1 |   541.4 |
+  | fewest-hops from Westwood, limit 1             |       2 |     11.3 |     1.0 |
+  | fewest-hops from Westwood, limit 2             |      27 |     71.8 |    58.2 |
+  | chains-from Westwood, limit 3 (paths)          |   1,126 |  2,121.1 |   681.1 |
+
+  Load is nothing. Lookups through an index are sub-millisecond. Whole-table
+  scans are tens of milliseconds, against well under one for the same
+  =group-by= in plain Clojure.
+- 2026-10-08. Index order. The Envestnet-and-Guggenheim join with =holds=
+  stored manager first: 1,099 answers in 758.8 ms. Cusip first: 8.2 ms. Same
+  facts, same answers; three other runs gave 776 to 865 ms against 7 to 15.
+  The cause is the leftmost-ground-index rule, read from
+  =clojure/core/logic/pldb.clj= in the 1.1.1 jar.
+- 2026-10-08. =!== placement. =name-variants= states =!== before the names
+  are bound and takes about 100 ms. With =!== after the two =company= calls
+  the same 258 came back in about 30 ms, measured in a scratch script that
+  is not kept. Left as it is, since it is the one place the constraint is
+  shown doing what a filter cannot; the docstring says so.
+- 2026-10-08. The impractical one. All pairs within two links, with =onceo=
+  at each link: 784 pairs (28 x 28; a manager reaches itself in two), 9 s on
+  one run and 18 to 24 s on three others. A set intersection per pair does
+  the same in milliseconds. Without =onceo= the two-link join has
+  114,962,418 derivations for those pairs, a figure worked out from set
+  sizes, not by running it. Bounded: =run 10000= took 0.24 s and reached 53
+  distinct pairs, =run 100000= 1.3 s and 137, =run 1000000= 16.5 s and 417.
+  At that rate the full enumeration is on the order of half an hour, to
+  learn that everyone is connected. It was not run to the end. Both forms
+  are in the last-but-one comment block of =dev/explore_logic.clj=; neither
+  is in the gate.
+- 2026-10-08. Bags. Westwood holds two CUSIPs and =holds-companyo= returns
+  three company names, because Credicorp was filed as "CREDICORP LTD" and
+  "Credicorp Ltd". Every count in this experiment that goes through
+  =company= needs =distinct= for that reason.
+- 2026-10-08. =dev/explore_logic.clj= loads with =(require 'explore-logic)=
+  under =-M:dev=, and a script read the file and evaluated all 46 forms
+  inside its comment blocks in order without error. =.dir-locals.el= was
+  read by =emacs --batch= with CIDER loaded and all four variables reported
+  safe.
+
+* What it is not
+
+Not exercised from CIDER. No interactive Emacs here: =cider-jack-in=,
+=C-x C-e= and what =print-table= looks like in the REPL buffer are untested.
+What was tested is the paragraph above, which is weaker. In particular,
+whether CIDER takes this directory or the repository root as the project
+when both have a =deps.edn= was not checked; if it picks the root, the
+relative CSV path is wrong and =(form13/read-rows "data/...")= with an
+explicit path is the way round.
+
+Not compared with Neo4j, SPARQL or DataScript on the same machine. The
+remarks on Cypher above are from the lab, not from a measurement, and
+experiments 002 and 003 were not read.
+
+Not a benchmark. One machine, one run for the table, =System/nanoTime=
+around each call, five repetitions, no criterium.
+
+Not idiomatic at the edges. =onceo= and =nafc= are not pure relations:
+=co-holdero= grounds both managers first so that committing to one answer is
+safe, and it would be wrong if called with that guarantee removed. core.logic
+has tabling, which is the usual answer to duplicate derivations in a
+recursive relation; it was not tried.
