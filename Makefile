@@ -24,13 +24,15 @@ QUERY_API_URL = https://$${NEO4J_URI\#*://}/db/$${NEO4J_DATABASE:-neo4j}/query/v
 
 # Runs the statement on stdin. cypher-shell when it is installed, else the
 # Query API through curl, with the password passed on stdin and not in argv.
+# The API answers 200 with an errors array when a statement fails, so jq is
+# what turns a failed statement into a failed recipe.
 RUN_CYPHER = if command -v cypher-shell >/dev/null; then \
 	    cypher-shell -a "$$NEO4J_URI" -u "$$NEO4J_USERNAME" -p "$$NEO4J_PASSWORD" -d "$${NEO4J_DATABASE:-neo4j}" --format plain; \
 	  else \
 	    jq -Rs '{statement: .}' \
 	    | curl -sS --fail-with-body -K <(printf 'user = "%s:%s"\n' "$$NEO4J_USERNAME" "$$NEO4J_PASSWORD") \
 	        -H 'Content-Type: application/json' -H 'Accept: application/json' -d @- "$(QUERY_API_URL)" \
-	    | jq -c '.data // .'; \
+	    | jq -c 'if (.errors // []) | length > 0 then (.errors | tostring + "\n" | halt_error(1)) else .data end'; \
 	  fi
 
 REQUIRE_NEO4J = for name in NEO4J_URI NEO4J_USERNAME NEO4J_PASSWORD; do \
