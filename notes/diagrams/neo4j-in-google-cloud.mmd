@@ -1,0 +1,42 @@
+%% Redrawn from the slide "Neo4j in the Google Cloud Ecosystem".
+%% Arrow directions are as drawn on the slide.
+flowchart TB
+  subgraph google_cloud["Google Cloud"]
+    bigquery[("BigQuery")]
+    cloud_storage[("Cloud Storage")]
+    dataflow_native["Dataflow (Native)"]
+    dataflow_jdbc["Dataflow (JDBC)"]
+    kafka_connector["Neo4j Connector for Apache Kafka"]
+    managed_kafka["Kafka"]
+    cloud_functions["Cloud Functions"]
+    database_driver["Database Driver"]
+    spark_connector["Neo4j Connector for Apache Spark"]
+    dataproc["Dataproc"]
+    gemini["Gemini"]
+
+    subgraph aura["Neo4j Aura"]
+      graph_analytics["Graph Analytics"]
+      graph_database[("Graph Database")]
+      bloom["Bloom"]
+      graph_analytics <--> graph_database
+      graph_database --> bloom
+    end
+
+    bigquery --> dataflow_native
+    bigquery <--> dataflow_jdbc
+    cloud_storage --> dataflow_native
+    dataflow_native --> aura
+    dataflow_jdbc <--> aura
+    cloud_storage --> aura
+
+    kafka_connector <--> managed_kafka
+    kafka_connector <--> aura
+
+    cloud_functions <--> database_driver
+    database_driver <--> aura
+
+    aura <--> spark_connector
+    spark_connector <--> dataproc
+
+    aura --> gemini
+  end

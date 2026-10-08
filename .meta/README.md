@@ -18,8 +18,11 @@ right when Aura returns what the lab says it should. Nothing local can stand
 in for that.
 
 The lab content and slides are Neo4j's and Google's. Notes and the owner's
-queries go in; copies of their materials do not. One slide image is in
-`notes/img/`; ask before adding another.
+queries go in; copies of their materials do not. A slide worth keeping is
+redrawn as a mermaid file in `notes/diagrams/`, and the original goes in
+`resources/`, which git ignores. The one slide image that was committed
+early on was removed from the tree on 2026-10-08; it is still in history
+(commit `232e0f4`).
 
 ## Where things stand (2026-10-08)
 

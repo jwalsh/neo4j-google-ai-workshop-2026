@@ -1,8 +1,8 @@
 * What gets built
 
-From the slide "Here's what we're building today…".
-
-[[file:img/what-we-are-building.png]]
+From the slide "Here's what we're building today…", redrawn as
+[[file:diagrams/what-we-are-building.mmd][diagrams/what-we-are-building.mmd]]. The slide itself is not in the
+repository.
 
 Everything runs in Google Cloud.
 
@@ -23,3 +23,30 @@ Where the labs land on the picture: Labs 2 and 3 are the database, Lab 4 is
 Query, Lab 5 is Bloom, Lab 6 is Document Intelligence, Labs 7 and 8 are the
 Neo4j Agent in Gemini Enterprise, Lab 9 is the Aura Agent. No lab is named
 for Graph Analytics.
+
+* Neo4j in the Google Cloud ecosystem
+
+From the slide of that name, redrawn as
+[[file:diagrams/neo4j-in-google-cloud.mmd][diagrams/neo4j-in-google-cloud.mmd]]. Arrow directions are as the slide
+draws them.
+
+Neo4j Aura sits in the middle, holding Graph Analytics, the graph database
+and Bloom. Around it, the ways in and out:
+
+- BigQuery and Cloud Storage feed Dataflow (Native), which writes to Aura.
+  Cloud Storage also has an arrow straight to Aura.
+- Dataflow (JDBC) sits between BigQuery and Aura with arrows both ways.
+- The Neo4j Connector for Apache Kafka, between Kafka and Aura.
+- A database driver, between Cloud Functions and Aura.
+- The Neo4j Connector for Apache Spark, between Dataproc and Aura.
+- An arrow from Aura to Gemini.
+
+Where today's work sits on it: Lab 4 is the straight arrow from Cloud
+Storage to Aura. =src/workshop/neo4j.clj= is the database driver, without
+the Cloud Functions. The Dataflow and Dataproc routes are the two things in
+[[file:resources.org][Resources from the slides]]. Nothing today used Kafka.
+
+The slide does not say what distinguishes Dataflow (Native) from Dataflow
+(JDBC). The Google Cloud to Neo4j template in the resources note reads
+BigQuery and Cloud Storage and writes to Neo4j, which fits the Native box;
+that is a reading, not something the slide states.

@@ -58,7 +58,9 @@ workshop.env-test/parse-dotenv-test`.
   `(comment ...)` blocks per lab, evaluated a form at a time; a new lab
   gets a block there.
 - `resources/` is git-ignored and holds other people's material kept for
-  reference: the lab's step images, slides. Nothing in it is committed.
+  reference: the lab's step images, slides. Nothing in it is committed. A
+  slide worth keeping is redrawn as mermaid in `notes/diagrams/` and the
+  note says which slide it came from.
 - `experiments/NNN-name/` is for exploration in anything else (Python, say).
   What survives is rewritten into `src/workshop/` in Clojure, ClojureScript
   or babashka.

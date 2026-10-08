@@ -1,0 +1,33 @@
+%% Redrawn from the slide "Here's what we're building today…".
+%% Arrow directions are as drawn on the slide.
+flowchart TB
+  subgraph google_cloud["Google Cloud"]
+    cloud_storage[("Cloud Storage")]
+
+    subgraph gemini_enterprise["Gemini Enterprise"]
+      neo4j_agent["Neo4j Agent"]
+      gemini_app["Gemini Enterprise app"]
+      neo4j_agent <--> gemini_app
+    end
+
+    subgraph aura["Neo4j AuraDB Professional"]
+      graph_database[("Graph Database")]
+      query["Query"]
+      bloom["Bloom"]
+      graph_analytics["Graph Analytics"]
+      aura_agent["Aura Agent"]
+      document_intelligence["Document Intelligence"]
+
+      graph_database <--> query
+      graph_database --> bloom
+      graph_database --> graph_analytics
+      bloom <--> graph_analytics
+      graph_database <--> aura_agent
+      graph_database <--> document_intelligence
+    end
+
+    cloud_storage ==> aura
+    neo4j_agent <==> graph_database
+  end
+
+  aims["1. Reduce token usage<br/>2. Improve accuracy<br/>3. Increase explainability"]
