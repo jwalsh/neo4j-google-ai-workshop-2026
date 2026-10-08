@@ -1,0 +1,60 @@
+#+TITLE: Lecture - Neo4j and AI
+#+DATE: 2026-10-08
+
+Two slides kept from the lecture, each redrawn as mermaid. The lecture
+opened on "Here's what we're building today…" again, which is in
+[[file:architecture.org][What gets built]].
+
+* Neo4j and AI Reference Architecture
+
+Redrawn as [[file:diagrams/neo4j-and-ai-reference-architecture.mmd][diagrams/neo4j-and-ai-reference-architecture.mmd]].
+
+Five columns, left to right:
+
+- Data Sources: structured (databases, JSON, XML, CSV), ontologies (RDF),
+  unstructured (documents, conversations, video).
+- Creation: Gemini and a Neo4j Agent.
+- Knowledge Graph: Neo4j Aura, holding Query, the graph database and
+  Document Intelligence.
+- Consumption: Gemini and a Neo4j Agent again.
+- Applications: enterprise knowledge search, customer service, ticket
+  triaging, recommendations, news content and discovery, FAQ bots, patient
+  prioritization, clinical decision support systems, pharmacovigilance,
+  health assistants.
+
+The arrows run inward from both ends: blue from the data sources through
+creation into the graph, green from the applications through consumption
+toward it.
+
+Where today sits on it: Lab 4 was the structured row, a CSV, loaded without
+the Creation column at all. Lab 6 is the unstructured row through Document
+Intelligence. The ontologies row, RDF, has no lab; the experiments under
+=experiments/= that hold the Form 13 data as triples are this repository's
+look at it.
+
+* Enterprise Agentic Reference Architecture
+
+Redrawn as [[file:diagrams/enterprise-agentic-reference-architecture.mmd][diagrams/enterprise-agentic-reference-architecture.mmd]].
+
+- Across the top: iApps, Agents, Tools.
+- Down the left: Agentic Orchestration, as a column of vendor logos: Amazon
+  Bedrock AgentCore, Gemini Enterprise, Microsoft Foundry, Agentforce,
+  Agent Bricks, LangGraph, Snowflake Cortex Agents.
+- Under the top band: a Knowledge Layer "powered by Neo4j Graph
+  Intelligence Platform", made of Ontologies, Data and Memory.
+- Under that, five blocks each joined to the knowledge layer by a
+  double-headed arrow: Databases (drawn as kinds: relational, key-value,
+  document, graph, wide-column, in-memory, time-series, object-oriented,
+  blob, ledger, vector), Lakehouse Platform (Databricks, Snowflake,
+  BigQuery, Microsoft Fabric), Apps & Services, AI/ML Ops (Vertex AI,
+  Databricks, Amazon SageMaker, Azure Machine Learning), Catalog (AWS Glue,
+  Unity Catalog, Microsoft Purview, Dataplex, Collibra, and one logo not
+  read).
+- Along the bottom: Real-time Messaging & Processing (clickstream, IoT,
+  CDC): Spark, Kafka, Amazon Kinesis, Cloud Pub/Sub, with arrows up into
+  Databases and the Lakehouse.
+
+The claim of the picture is where the graph goes: between the agents and
+every other store, as the one layer they all read through. Gemini
+Enterprise, which today's labs use, is one of seven orchestrators in the
+left column. That is a reading of the layout; the slide has no caption.

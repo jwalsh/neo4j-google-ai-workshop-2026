@@ -1,0 +1,36 @@
+%% Redrawn from the slide "Enterprise Agentic Reference Architecture"
+%% (Lecture - Neo4j and AI). The slide shows vendors as logos; they are
+%% listed here as read from it. Arrows are as drawn: double-headed between
+%% the knowledge layer and each block under it, single-headed up from
+%% messaging.
+flowchart TB
+  subgraph surface["iApps, Agents, Tools"]
+    iapps["iApps"]
+    agents["Agents"]
+    tools["Tools"]
+  end
+
+  orchestration["Agentic Orchestration<br/>Amazon Bedrock AgentCore, Gemini Enterprise,<br/>Microsoft Foundry, Agentforce, Agent Bricks,<br/>LangGraph, Snowflake Cortex Agents"]
+
+  subgraph knowledge_layer["Knowledge Layer, powered by the Neo4j Graph Intelligence Platform"]
+    layer_ontologies["Ontologies"]
+    layer_data["Data"]
+    layer_memory["Memory"]
+  end
+
+  databases["Databases<br/>relational, key-value, document, graph, wide-column,<br/>in-memory, time-series, object-oriented, blob, ledger, vector"]
+  lakehouse["Lakehouse Platform<br/>Databricks, Snowflake, BigQuery, Microsoft Fabric"]
+  apps_services["Apps & Services<br/>Node, Python, Java, .NET, Go; SaaS; applications"]
+  ml_ops["AI/ML Ops<br/>Vertex AI, Databricks, Amazon SageMaker, Azure Machine Learning"]
+  catalog["Catalog<br/>AWS Glue, Unity Catalog, Microsoft Purview,<br/>Dataplex, Collibra, and one logo not read"]
+  messaging["Real-time Messaging & Processing (clickstream, IoT, CDC)<br/>Spark, Kafka, Amazon Kinesis, Cloud Pub/Sub"]
+
+  surface --- knowledge_layer
+  orchestration --- knowledge_layer
+  knowledge_layer <--> databases
+  knowledge_layer <--> lakehouse
+  knowledge_layer <--> apps_services
+  knowledge_layer <--> ml_ops
+  knowledge_layer <--> catalog
+  messaging --> databases
+  messaging --> lakehouse

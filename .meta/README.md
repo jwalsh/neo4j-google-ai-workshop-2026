@@ -32,9 +32,11 @@ early on was removed from the tree on 2026-10-08; it is still in history
   `.env`, and the database holds Lab 4's keyed load: 2,251 companies, 28
   managers, 7,381 OWNS, two node-key constraints. `bb form13 verify` checks
   that against the file. The lectures are unticked: slides, and the owner's.
-- Lab 5 is half done. Bloom opened and "Show me a graph" drew a scene; the
-  search and the Degree Centrality steps were not driven (finding 17) and
-  are the owner's to click.
+- Lab 5 is done: the Manager, OWNS, Company search and Degree Centrality
+  with size scaling, in Bloom. A 4GB Graph Analytics session was left
+  running.
+- Lab 6 looks blocked: this Aura account has no Document Intelligence in
+  its sidebar (finding 22).
 - The lab account, the project and the instance expire with the lab, about
   five hours from 16:23 EDT. After that `.env` holds dead values and
   `gmake ping` fails; that is expected, not a regression.

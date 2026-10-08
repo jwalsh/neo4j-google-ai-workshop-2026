@@ -1,0 +1,60 @@
+#+TITLE: Lecture - Gemini Enterprise
+#+DATE: 2026-10-08
+
+One slide kept from the lecture, "Gemini Enterprise Agent Platform". It is a
+catalogue of product names in four bands and not a picture of how anything
+connects, so it is a table here and not a diagram. The badges are the
+slide's: New, GA, or none.
+
+* Build
+
+| item                  | badge |
+|-----------------------+-------|
+| Agent Development Kit | New   |
+| 3P agent frameworks   |       |
+| Agent Studio          |       |
+| Agent Garden          |       |
+
+Under "Gemini API and Model Garden": Gemini models, 3P and open models,
+model training, model inference.
+
+Under "Tools, data, and other agents": A2A, MCP, A2UI, Grounding, Search,
+AP2 and UCP, RAG, APIs and connectors, Cloud Marketplace.
+
+* Scale
+
+| item              | badge |
+|-------------------+-------|
+| Agent Runtime     | GA    |
+| Agent Sessions    | GA    |
+| Agent Sandbox     | GA    |
+| Agent Memory Bank | GA    |
+
+* Govern
+
+| item                    | badge |
+|-------------------------+-------|
+| Agent Gateway           | New   |
+| Agent Identity          | GA    |
+| Agent Registry          | New   |
+| Agent Anomaly Detection | New   |
+| Model Armor             |       |
+| Agent Policy            |       |
+| Agent Security          | New   |
+| Agent Compliance        |       |
+
+* Optimize
+
+| item                | badge |
+|---------------------+-------|
+| Agent Evaluation    | New   |
+| Agent Simulation    | New   |
+| Agent Observability | New   |
+| Agent Optimizer     | New   |
+
+* Where the labs touch it
+
+Not from the slide: Labs 7 and 8 put a Neo4j Agent into Gemini Enterprise,
+and Lab 2 went through Cloud Marketplace, which the slide files under
+Build. Which of the other boxes the labs use is not known until they are
+done.

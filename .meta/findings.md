@@ -59,12 +59,18 @@ owner's. These are what that cost.
     tool ran as a second statement and failed. The check before Run looked
     only at the first words. Where the `t` came from is not known. The real
     statement had already succeeded, so nothing was lost.
-17. **Bloom's search box did not take driven input.** The visible input is a
-    disabled placeholder; a click by position opens the suggestions, but
-    Tab, Enter and clicks on the suggestion rows (tried as `role=option` and
-    as list items) never added a term, in four attempts. "Show me a graph"
-    is an ordinary button and worked. Bloom is point-and-click on a canvas:
-    the search and the Degree Centrality panel were left to a person.
+17. **Bloom's search was reported as undrivable, and the fault was the
+    driver's.** Four attempts failed and the entry first written here blamed
+    Bloom. The cause: clicks were placed by converting screenshot
+    coordinates to page coordinates with the wrong factor, so two attempts
+    clicked above the search bar, and the other two used Tab and Enter,
+    which do not pick a suggestion. Screenshots here are 2x the page, and
+    the image shown to the agent is scaled again: page = shown x 0.6. What
+    worked: ask the page for the position of each visible text and click
+    that, one suggestion at a time (`driver/bloom.py`). The owner's
+    reference images of the lab's steps showed what the list should look
+    like, which is what exposed that it had never opened. A tool that
+    "does not respond" is first a question about where the click went.
 18. **The account's email is in the header of every Query and Bloom
     screenshot.** "User: Aura (...)" sits on the instance bar. Each image
     kept in `notes/img/` has that span painted over before it is added. At
@@ -73,6 +79,18 @@ owner's. These are what that cost.
     and anything that reads as an email or holds a value from `.env` is
     covered, then the output is read again to check nothing is left. It
     catches what OCR can read and no more, so the image is still looked at.
+22. **Aura has no "Document Intelligence" for this account.** Lab 6 starts
+    from that sidebar entry, a private preview "enabled for your account".
+    The lab's own images show an organization "New Organization" with a
+    project "Google Cloud marketplace project". This account has one
+    organization, "test", one project, "New project", on a trial, and the
+    sidebar ends at Dashboards. Read with finding 13: the sign-up seems to
+    have made a fresh trial organization and not the marketplace one the
+    preview is attached to. Not resolved.
+23. **A navigation that never fires "load" hangs the driver.** Going from
+    "All organizations" back to the project timed out waiting for the load
+    event, and the next script blocked on the half-navigated page. Navigate
+    with `wait_until="commit"` and a short default timeout.
 
 ## Tooling
 

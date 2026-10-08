@@ -24,7 +24,6 @@ browser's tabs, a little over two hours of lab time left.
 
 * Still to capture
 
-- The Bloom search and Degree Centrality, once they are clicked through.
 - Labs 6 to 9: Document Intelligence, the agents, Gemini Enterprise.
 - An Emacs session: =cider-jack-in=, a block of =dev/explore.clj= evaluated.
   There has not been one yet.

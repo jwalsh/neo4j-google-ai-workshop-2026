@@ -1,0 +1,34 @@
+%% Redrawn from the slide "Neo4j and AI Reference Architecture"
+%% (Lecture - Neo4j and AI). Blue arrows on the slide point right, into the
+%% knowledge graph; green arrows point left, from the applications toward it.
+flowchart LR
+  subgraph data_sources["Data Sources"]
+    structured["Structured<br/>databases, JSON, XML, CSV"]
+    ontologies["Ontologies<br/>RDF"]
+    unstructured["Unstructured<br/>documents, conversations, video"]
+  end
+
+  subgraph creation["Creation"]
+    creation_gemini["Gemini"]
+    creation_agent["Neo4j Agent"]
+  end
+
+  subgraph knowledge_graph["Knowledge Graph: Neo4j Aura"]
+    query["Query"]
+    graph_database[("Graph Database")]
+    document_intelligence["Document Intelligence"]
+  end
+
+  subgraph consumption["Consumption"]
+    consumption_gemini["Gemini"]
+    consumption_agent["Neo4j Agent"]
+  end
+
+  subgraph applications["Applications"]
+    application_list["Enterprise Knowledge Search<br/>Customer Service<br/>Ticket Triaging<br/>Recommendations<br/>News Content & Discovery<br/>FAQ Bots<br/>Patient Prioritization<br/>Clinical Decision Support Systems<br/>Pharmacovigilance<br/>Health Assistants"]
+  end
+
+  data_sources ==> creation
+  creation ==> knowledge_graph
+  consumption ==> knowledge_graph
+  applications ==> consumption
