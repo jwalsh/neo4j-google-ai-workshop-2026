@@ -1,0 +1,233 @@
+#+TITLE: 003 - Form 13 as datoms, queried with Datalog
+#+DATE: 2026-10-08
+
+* Source
+
+Lab 4's Form 13 day file, =data/form13-2023-05-11.csv= (7,381 rows, fetched
+as =src/workshop/form13.clj= does; git-ignored). The lab loads it into Neo4j
+as =(:Manager)-[:OWNS {value, shares, reportCalendarOrQuarter}]->(:Company)=;
+the statements are in =labs/lab-04/=. The known numbers are from
+=workshop.form13= over the same file.
+
+The owner's question: what are related ways to hold data like this, such as
+RDF-style tuples, and how is that explored from Emacs with CIDER. RDF proper
+is =experiments/002-form13-rdf/=. This is the Clojure-native end: stores of
+[entity attribute value] tuples queried with Datalog.
+
+* Hypothesis
+
+The property graph is not needed to ask the lab's questions. The same file as
+flat three-part tuples in an in-memory Clojure store gives the same counts and
+the same degree tables, and a Datalog rule says "managers who hold the same
+companies" at least as plainly as the Cypher pattern does.
+
+* What was kept and what was left out
+
+Kept: every row and every column. Two stores, the same questions of each:
+DataScript 1.8.1 as the main one, Asami 2.3.4 as the comparison.
+
+Changed, deliberately:
+
+- A datom has three parts and no room for properties on an edge. =OWNS=
+  becomes an entity of its own, a holding, with a ref to the manager and a
+  ref to the company, and value, shares and quarter as its attributes.
+- =:manager/name= and =:company/cusip= are unique identities, so loading is
+  upsert: 7,381 manager maps and 7,381 company maps, none with an id,
+  collapse to 28 and 2,251 entities.
+- =:company/name= is cardinality-many. With CUSIP as the identity and the
+  default cardinality, each upsert replaces the name and the 258 CUSIPs with
+  more than one spelling come out as 0: no error, the last name filed wins.
+  That is measured in the gate (=lossy-schema=), not assumed. As a set, every
+  spelling stays on the company. The holding also keeps the spelling its own
+  filing used (=:holding/company-name=), so which manager wrote "Apple, Inc."
+  is still answerable.
+- The quarter stays a string. All 7,381 rows say =2023-03-31=.
+
+Left out: Neo4j, any network, persistence (both stores are in memory and gone
+when the JVM exits), Datalevin and XTDB (Asami resolved and ran, so the
+fallbacks were not needed and were not tried), transaction history and
+=as-of= (DataScript keeps none), and the value scale question from
+=workshop.form13/odd-prices=.
+
+* Gate
+
+=clojure -M:gate= exits 0 only if all 23 checks pass. Against the known
+numbers, in both stores: 28 managers, 2,251 CUSIPs, 7,381 holdings, 258
+CUSIPs with more than one name, Envestnet at the top with 1,615 companies;
+in DataScript also Apple (CUSIP 037833100) held by 22 managers. Against the
+same answers computed from the parsed rows with =group-by=, no database: the
+top five of each degree table, row for row, and the shared-company count of
+every one of the 281 manager pairs that share anything.
+
+* Run
+
+From this directory. Nothing in the repository root is used or changed.
+
+#+begin_src sh
+cd experiments/003-form13-datalog
+clojure -M:gate                       # or: clojure -M:gate /path/to/file.csv
+clojure -M:dev -e "(require 'form13.explore)"   # the comment file loads
+#+end_src
+
+From Emacs: open =dev/form13/explore.clj=, =M-x cider-jack-in=, =C-c C-k= to
+load the buffer, then =C-x C-e= at the end of each form inside the comment
+blocks, top to bottom. =.dir-locals.el= points CIDER at this directory's
+=deps.edn= and the =:dev= alias. To attach instead: =clojure -M:dev:repl=
+here, then =cider-connect=.
+
+| file                     | what                                              |
+|--------------------------+---------------------------------------------------|
+| =src/form13/datoms.clj=  | CSV, schema, transactions, tuples, queries, rule  |
+| =src/form13/triples.clj= | the same in Asami                                 |
+| =src/form13/gate.clj=    | reference answers from the rows, checks, timings  |
+| =dev/form13/explore.clj= | rich comments for CIDER                           |
+
+* Log
+
+- 2026-10-08. Versions taken from =clojars.org/api/artifacts/...=, not from
+  memory: =datascript/datascript= 1.8.1, =org.clojars.quoll/asami= 2.3.4
+  (and =datalevin/datalevin= 1.1.0, looked up, not used). Both resolved with
+  =clojure -P= on the first try, Clojure 1.12.0, Temurin 21.0.4. Asami brings
+  ClojureScript and the Closure compiler along through a test library; it is
+  the heavier classpath of the two by a wide margin.
+- DataScript passed every number on the first run. 56,523 datoms: 28 + 2,251
+  + 2,577 names + 7 per holding.
+- =(:holding/_manager :limit 5)= in a pull pattern is refused: "Expected limit
+  attribute having :db.cardinality/many, got: :holding/manager". It checks the
+  forward attribute. The limit is applied in Clojure instead.
+- No (manager, CUSIP, quarter) repeats in this file, so one holding per row
+  and one =OWNS= per MERGE are the same 7,381. That was checked, not assumed;
+  on a file with repeats they would differ and this model would keep more.
+- Asami, in the order it bit:
+  1. =(count ?entity)= with the attribute passed through =:in= returned 9,660
+     for managers, companies and holdings alike: every subject in the store.
+     The first gate run failed on exactly those three. With an aggregate in
+     =:find= the =:in= binding is ignored; without the aggregate the same
+     query returns 28 rows. Fixed by writing the attribute in. No error.
+  2. =(sum ?value)= over all holdings returned 9.6331905975E13. The rows
+     total 9.6335448383E13. The smaller figure is exactly the sum of the
+     distinct values: the result is a set before it is summed. DataScript
+     does the same unless told =:with ?holding=; Asami given =:with ?holding=
+     grouped by holding instead.
+  3. =count= and =count-distinct= are not what the names say next to
+     DataScript. On the name-variant query =(count ?company)= gave 258, the
+     distinct companies; =(count-distinct ?company)= gave 800, which looks
+     like the distinct rows. Reported as seen, not explained.
+  4. The shared-companies query with =?first ?second (count ?company)= in
+     =:find= did not come back: see the next entry. The same join without the
+     aggregate takes 0.2 s, so the count is done in Clojure.
+  5. =[(< ?first-name ?second-name)]= throws ClassCastException: the filter
+     is =clojure.core/<=, numbers only. DataScript's =<= compares anything
+     comparable. The pair is ordered in Clojure.
+  6. Rules: =:in $ %= with a rule call fails with "Unknown form in query".
+     Asami's rules are a separate engine (Naga) that writes inferred triples
+     back to the store; not tried here.
+  After those, Asami agrees with the rows on every check it is given.
+- Slow aggregate, measured separately: that grouped aggregate, alone in a
+  JVM, was killed at 590 s with no result. An earlier attempt had run past
+  300 s. Why was not established; it is recorded as "does not return in ten
+  minutes on 7,381 holdings", nothing more.
+- Timings from one =clojure -M:gate= run, Apple M1 Pro, one JVM, milliseconds.
+  "First" is the first call in the process, so it includes compilation;
+  "best of 5" is the fastest of five further calls. Reading the CSV: 94.4 ms.
+
+  | store | step | first | best of 5 |
+  |------------+----------------------------------+-------+-----------|
+  | datascript | transact (two transactions) | 555.3 | - |
+  | datascript | counts | 24.6 | 4.4 |
+  | datascript | companies per manager | 33.2 | 10.5 |
+  | datascript | managers per company | 86.4 | 77.4 |
+  | datascript | name variant count | 6.1 | 2.2 |
+  | datascript | name variants listed | 6.2 | 4.2 |
+  | datascript | holders of Apple | 4.8 | 1.7 |
+  | datascript | shared companies, rule | 81.4 | 62.7 |
+  | datascript | shared companies, inline | 48.1 | 46.9 |
+  | asami | transact (one, triples) | 63.9 | - |
+  | asami | counts | 15.3 | 6.3 |
+  | asami | companies per manager | 34.4 | 17.7 |
+  | asami | managers per company | 115.7 | 93.0 |
+  | asami | name variant count | 7.4 | 6.1 |
+  | asami | shared companies, join + Clojure | 202.2 | 189.9 |
+
+  DataScript's load is the slow line: two transactions of 14,762 and 7,381
+  maps, each map checked against the unique indexes. Asami takes the triples
+  as given. Nothing here is a benchmark: one file, one machine, no warm-up
+  discipline beyond what is stated.
+- The rule costs something over the inlined clauses and returns the same
+  281 pairs. At this size it does not matter.
+- =dev/form13/explore.clj=: =(require 'form13.explore)= loads clean, and a
+  script evaluated all 70 forms inside its comment blocks in order without
+  an error. The =; =>= annotations were checked against real output.
+- CIDER was not exercised live: nobody ran Emacs interactively. What was
+  checked in =emacs --batch= (Emacs 32.0.50, clojure-mode 20260709, cider
+  20260718): all three directory-local variables are applied without a
+  prompt, =clojure-project-dir= and =cider-project-dir= resolve to this
+  directory, and the jack-in command CIDER builds ends in
+  =-M:dev:cider/nrepl=. The first version of =.dir-locals.el= did not have
+  =clojure-preferred-build-tool= and resolved to the repository root: this
+  clojure-mode prefers the candidate directory that has a =.git=. Whether
+  the REPL then starts and connects was not seen.
+
+* Property graph, datoms, triples: this file in each
+
+|                     | Neo4j (Lab 4)                        | DataScript                                | Asami                                  |
+|---------------------+--------------------------------------+-------------------------------------------+----------------------------------------|
+| unit                | node, relationship, properties on both | [entity attribute value]                | [subject predicate object]             |
+| size for this file  | 2,279 nodes, 7,381 relationships     | 56,523 datoms                             | 49,142 triples (no filing id loaded)   |
+| OWNS                | a relationship with three properties | an entity with two refs and five values   | a node with two links and four values  |
+| schema              | two uniqueness constraints           | five attributes declared, the rest free   | none                                   |
+| identity            | =MERGE= on the key                   | upsert on a unique attribute              | the loader's naming of nodes           |
+| a CUSIP's names     | one: =ON CREATE SET=, first wins     | all, because the attribute was made many  | all, every attribute is many           |
+| top N               | =ORDER BY ... LIMIT= in the query    | sort and take in Clojure                  | sort and take in Clojure               |
+| filter on a count   | =WITH ... WHERE=                     | in Clojure, or a second query             | in Clojure                             |
+| named sub-pattern   | none; repeat the pattern             | a rule                                    | none in the query                      |
+| tree for one entity | pattern comprehension or map projection | =pull=                                 | =entity=                               |
+
+The Neo4j column is from the lab's statements in =labs/lab-04/= and the
+Cypher in =dev/explore.clj=; nothing was run against Neo4j for this
+experiment and no Neo4j timing is claimed.
+
+What that came to in practice:
+
+- The relationship with properties is the one thing the graph has that the
+  tuples lack, and it costs one hop. Cypher writes
+  =(a:Manager)-[:OWNS]->(c:Company)<-[:OWNS]-(b:Manager)=; here the same
+  walk passes through two holding entities. The =holds= rule buys the edge
+  back, and after that =co-holds= reads much like the Cypher. If =OWNS= had
+  no properties, =:manager/holds= as a cardinality-many ref would be the
+  graph's edge exactly and the holding entity would not exist.
+- Identity is where the three differ most, and the name variants show it.
+  Neo4j's =ON CREATE SET= keeps the first name and drops the rest quietly.
+  DataScript with the obvious schema keeps the last and drops the rest
+  quietly: 0 variants instead of 258. One word in the schema keeps them all.
+  Asami keeps them all without being asked, because it has no notion of a
+  single-valued attribute; whether that is a feature depends on wanting it.
+- Cypher is the better reporting language. Ordering, limits, and filtering
+  on an aggregate are in the query; in Datalog the query ends at a set of
+  tuples and the rest is =sort-by= and =take=. In a REPL that is no loss:
+  the result is Clojure data and the next form is Clojure. Set semantics is
+  the trap that goes with it: a sum needs =:with=, and Asami's sum was wrong
+  by 3.5 billion without saying so.
+- The database is a value. =db-with= on the loaded database gives a new one
+  with a fourth Apple name and leaves the first alone, which is what makes
+  the =lossy-schema= comparison three lines. Nothing in the lab's Aura
+  instance works like that.
+- Between the two stores: DataScript did what its documentation says on
+  every query and took about nine times longer to load. Asami loaded fast and
+  is closer to RDF in spirit (no schema, any value as a node, open-ended
+  attributes), but five of the first queries written against it were
+  silently wrong, threw, or did not return. For this data, explored from a
+  REPL, DataScript is the one to reach for.
+
+* What it is not
+
+Not a comparison of performance with Neo4j: nothing was timed there. Not a
+test of either store at a size where it matters; 7,381 rows fit in a
+=group-by=, which is what the gate checks them against. Not a durable
+database: Datalevin and XTDB were not tried, and DataScript holds no history,
+so the "database as a value in time" half of the Datomic idea is absent.
+Not an account of why Asami's aggregates behave as they do: the behaviour was
+observed on 2.3.4 and worked around, the source was not read. Not RDF: no
+IRIs, no vocabulary, no SPARQL; that is experiment 002. And the CIDER
+workflow was checked by loading and evaluating the forms from a script and by
+batch Emacs, not by anyone pressing =C-x C-e=.

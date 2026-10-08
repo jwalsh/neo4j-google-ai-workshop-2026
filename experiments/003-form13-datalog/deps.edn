@@ -1,0 +1,21 @@
+;; Self-contained: nothing here is shared with the repository root's deps.edn.
+;; Run from this directory. Versions are the latest releases on Clojars as of
+;; 2026-10-08 (clojars.org/api/artifacts/<group>/<name>).
+{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.12.0"}
+        org.clojure/data.csv {:mvn/version "1.1.0"}
+        ;; The main store: in-memory EAV datoms, Datalog and pull.
+        datascript/datascript {:mvn/version "1.8.1"}
+        ;; The comparison: a schemaless triple store, also queried with Datalog.
+        org.clojars.quoll/asami {:mvn/version "2.3.4"}}
+ :aliases
+ {;; dev/form13/explore.clj: rich comments for CIDER. cider-jack-in uses this
+  ;; alias (see .dir-locals.el).
+  :dev {:extra-paths ["dev"]}
+  ;; clojure -M:gate [path-to-csv]
+  :gate {:main-opts ["-m" "form13.gate"]}
+  ;; clojure -M:dev:repl, then cider-connect. Same alias name as the root.
+  :repl {:extra-deps {nrepl/nrepl {:mvn/version "1.8.0"}
+                      cider/cider-nrepl {:mvn/version "0.63.1"}}
+         :main-opts ["-m" "nrepl.cmdline"
+                     "--middleware" "[cider.nrepl/cider-middleware]"]}}}
