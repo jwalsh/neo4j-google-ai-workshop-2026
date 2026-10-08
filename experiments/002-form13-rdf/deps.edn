@@ -1,0 +1,20 @@
+{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.12.0"}
+        ;; Apache Jena, by interop: jena-arq is the SPARQL engine and the
+        ;; Turtle reader/writer, and brings jena-core (the Model API) with it.
+        org.apache.jena/jena-arq {:mvn/version "6.2.0"}
+        org.clojure/data.csv {:mvn/version "1.1.1"}
+        ;; Jena logs through SLF4J; this keeps it quiet.
+        org.slf4j/slf4j-nop {:mvn/version "2.0.20"}}
+ :aliases
+ {;; dev/rdf_explore.clj: the forms to evaluate from CIDER. cider-jack-in
+  ;; uses this alias (see .dir-locals.el).
+  :dev {:extra-paths ["dev"]}
+  ;; clojure -M:gate [path-to-csv]
+  :gate {:main-opts ["-m" "form13.gate"]}
+  ;; clojure -M:dev:repl, then cider-connect. Writes .nrepl-port. Same alias
+  ;; name and versions as the repository root.
+  :repl {:extra-deps {nrepl/nrepl {:mvn/version "1.8.0"}
+                       cider/cider-nrepl {:mvn/version "0.63.1"}}
+          :main-opts ["-m" "nrepl.cmdline"
+                      "--middleware" "[cider.nrepl/cider-middleware]"]}}}

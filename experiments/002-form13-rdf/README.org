@@ -1,0 +1,221 @@
+#+TITLE: 002 - Form 13 as RDF, with Jena and SPARQL
+#+DATE: 2026-10-08
+
+* Source
+
+Lab 4's day file, =data/form13-2023-05-11.csv= (7,381 rows, fetched by
+=workshop.form13/fetch!=), and the property graph the lab makes of it:
+=(:Manager)-[:OWNS {value, shares, reportCalendarOrQuarter}]->(:Company)=,
+loaded by =labs/lab-04/03= to =06=. The figures to reproduce are those
+=src/workshop/form13.clj= computes from the same file in memory.
+
+The question was the owner's: what are related ways to hold this data, RDF
+triples for one, and how is that explored from Emacs, CIDER and Clojure.
+
+* Hypothesis
+
+The same file held as RDF triples and asked in SPARQL gives the same
+answers as the rows in memory, and the whole thing is drivable from a
+Clojure REPL with nothing running but a JVM: Apache Jena by interop, an
+in-memory model, no server.
+
+* What was kept and what was left out
+
+Kept: every row and every column. Managers keyed on name and companies on
+CUSIP, as the lab's node keys are. The vocabulary is ten properties and
+three classes under =http://example.org/form13/vocab#=, made up here.
+
+The decision that matters. =OWNS= carries properties, and a triple has
+nowhere to put them, so the relationship becomes a node (the n-ary relation
+pattern). Abbreviated for reading; the file in =out/= writes this IRI in
+full:
+
+#+begin_src ttl
+holding:M%26T%20Bank%20Corp/037833100/2023-03-31
+        a                   f13:Holding ;
+        f13:manager         manager:M%26T%20Bank%20Corp ;
+        f13:company         company:037833100 ;
+        f13:value           1054757624000.0 ;
+        f13:shares          6396039 ;
+        f13:quarter         "2023-03-31"^^xsd:date ;
+        f13:sourceFilingId  "raw_2023-05-11_archives_edgar_data_36270_0000950123-23-004428.txt" .
+#+end_src
+
+The Holding's IRI is minted from manager, CUSIP and quarter, the key the
+lab's =MERGE= uses for =OWNS=. The bare triple
+=manager:... f13:owns company:...= is asserted as well, as a shortcut that
+carries none of the above.
+
+Changed from the lab's graph: a company keeps every name it was filed
+under (the lab's =ON CREATE SET= keeps the first one it meets), and
+=sourceFilingId= is kept (the lab's load drops it).
+
+Left out: RDF-star as the load's model. =form13.rdf/annotated-example= is
+one holding written with the properties on the triple itself, in Turtle 1.2
+annotation syntax, and Jena 6.2.0 parses and queries it; the data is not
+loaded that way. Also left out: any ontology (no RDFS or OWL, no
+inference), named graphs, a persistent store (TDB2) or a SPARQL endpoint
+(Fuseki), and any published vocabulary. =arachne-framework/aristotle= was
+checked and not used: it has no release on Clojars, resolves only as a git
+dependency (last commit 2025-01-27), and pins Jena 5.3.0.
+
+* Gate
+
+=clojure -M:gate= exits 0 only if all of these hold.
+
+| Check                                        | Expected                             |
+|----------------------------------------------+--------------------------------------|
+| managers                                     | 28                                   |
+| companies (distinct CUSIPs)                  | 2,251                                |
+| holdings                                     | 7,381                                |
+| CUSIPs with more than one name               | 258                                  |
+| manager holding the most companies           | ENVESTNET ASSET MANAGEMENT INC, 1,615 |
+| managers holding APPLE INC (037833100)       | 22                                   |
+| top 5 companies per manager, SPARQL          | same as counted from the rows        |
+| top 5 managers per company, SPARQL           | same as counted from the rows        |
+| top 5 from bare =owns= triples               | same as from Holding nodes           |
+| triples in the model                         | the number the mapping predicts      |
+| triples after adding every row twice         | unchanged                            |
+| Turtle file read back                        | isomorphic to the model              |
+
+The first six are the known numbers, hard-coded in =form13.gate/known=. The
+"counted from the rows" checks are plain Clojure over the CSV in the same
+namespace, with no RDF involved.
+
+* Run
+
+From this directory. The CSV path is an argument; the default is
+=../../data/form13-2023-05-11.csv=.
+
+#+begin_src sh
+cd experiments/002-form13-rdf
+clojure -M:gate                       # writes out/form13-2023-05-11.ttl
+clojure -M:gate /some/other/form13.csv
+#+end_src
+
+From Emacs: open =dev/rdf_explore.clj=, =M-x cider-jack-in= (the
+=.dir-locals.el= here selects =clojure-cli= and the =:dev= alias, and this
+directory's =deps.edn= makes it the project root), =C-c C-k= to load the
+namespace, then =C-x C-e= after each form in the comment blocks, top to
+bottom. Or start the server by hand and =cider-connect=:
+
+#+begin_src sh
+clojure -M:dev:repl                   # writes .nrepl-port
+#+end_src
+
+| File                    | What                                                       |
+|-------------------------+------------------------------------------------------------|
+| =deps.edn=              | Jena 6.2.0, data.csv; aliases =:dev=, =:gate=, =:repl=     |
+| =src/form13/rdf.clj=    | rows to triples, Turtle out and in, =select=, the queries  |
+| =src/form13/gate.clj=   | the checks above                                           |
+| =dev/rdf_explore.clj=   | comment blocks for CIDER                                   |
+| =out/=                  | the Turtle file; ignored                                   |
+
+* Property graph and RDF, for this file
+
+From what was built here and what =labs/lab-04= loads, not in general.
+
+- *The relationship with properties.* In Neo4j it is one =OWNS= edge with
+  three properties: 7,381 relationships. In RDF it is a Holding node and
+  seven triples, plus the bare =owns= triple: 59,048 of the 66,183 triples
+  are holdings. Every query that needs a value or a share count goes
+  through the Holding (=?holding f13:manager ?m ; f13:company ?c=) where
+  Cypher writes =(m)-[o:OWNS]->(c)=. Degree needs no properties, and the
+  bare triple answers it with the same top five.
+- *One company, several names.* 258 CUSIPs were filed under more than one
+  spelling. The lab's =MERGE ... ON CREATE SET c.companyName= keeps
+  whichever arrives first and the rest are gone. A property in RDF is
+  multi-valued unless something says otherwise, so =company:037833100= has
+  three =f13:companyName= values and the name-variants question is a
+  =GROUP BY ... HAVING= over data that is still there: 2,577 name triples
+  for 2,251 companies. The cost is that "the company's name" is no longer
+  one thing: =:managers-per-company= picks =MIN(?name)= in a subquery, and
+  joining names straight into a =SUM= would multiply it.
+- *Identity and idempotence.* In Neo4j identity is whatever the =MERGE=
+  pattern names, backed by the two node-key constraints.
+  =01-simple-load.cypher= merges Company on name and CUSIP together, so
+  each spelling is its own node; =04-companies.cypher= merges on CUSIP
+  alone. Here identity is the IRI,
+  and a graph is a set of triples: adding every row twice leaves 66,183.
+  What takes the place of the constraint is the function that mints the
+  IRI, and nothing checks it: a second quarter would mint new Holdings
+  correctly, but two managers whose names differ by a comma are two IRIs,
+  as they are two nodes in Neo4j.
+- *Types.* =toFloat(row.value)= in the lab; =xsd:decimal= here, so the
+  value is exact in the file (=1054757624000.0=). Jena hands a whole-number
+  decimal back to Clojure as a =Long= and the shares as an =Integer= or
+  =Long= by size. The quarter is =xsd:date= in both.
+- *Schema.* Neither has one imposed. Labels and relationship types in
+  Neo4j, =rdf:type= and predicates here; both can be listed from the data
+  (=CALL db.schema.visualization()= there, two =GROUP BY= queries in
+  =rdf_explore.clj= here). RDF's are global names, which is what would
+  let this file be merged with someone else's by CUSIP; nothing here tests
+  that.
+- *Traversal.* "Managers who hold the same companies" is two hops either
+  way: =(a)-[:OWNS]->(c)<-[:OWNS]-(b)= or two triple patterns sharing
+  =?company=, or the property path =f13:owns/^f13:owns=. About a second
+  in Jena's in-memory model on this file. SPARQL has no path values: it
+  can say that two managers are connected, not return the path, which is
+  what Lab 5's Bloom views are made of.
+- *RDF 1.2.* With annotation syntax the edge-with-properties shape comes
+  back: =manager f13:owns company {| f13:value ... |}=. Jena stores it as
+  four triples (the triple, a blank reifier with =rdf:reifies=, two
+  properties), so it is the Holding node again with the IRI left out and
+  nicer syntax. Left out, the reifier is a fresh blank node per parse:
+  reading the example twice into one model gives 7 triples and two rows
+  from the query, so the idempotence above is lost. Naming the reifier
+  (=~ holding:x {| ... |}=) gives 4 again, and is the Holding node.
+
+* Log
+
+- 2026-10-08. Versions looked up, not remembered: =jena-arq= 6.2.0 is the
+  last entry in Maven Central's =maven-metadata.xml= (updated 2026-07-31),
+  =data.csv= 1.1.1 likewise; =slf4j-nop= 2.0.20 is the last 2.0.x and what
+  the repository root uses. Java here is Temurin 21.0.4.
+- 2026-10-08. First run failed before any data was read:
+  =NullPointerException= in =TypeMapper.registerDatatype=. Jena's classes
+  initialise each other in a circle and =XSDDatatype= was the first one
+  touched. =(JenaSystem/init)= at the top of =form13.rdf= fixes it.
+- 2026-10-08. Gate passed on the first run that got as far as data, 14 of
+  14 checks: 28 managers, 2,251 companies, 7,381 holdings, 258 CUSIPs with
+  several names, ENVESTNET ASSET MANAGEMENT INC with 1,615, APPLE INC held
+  by 22. 66,183 triples, which is what the mapping predicts from the rows
+  (56 + 4,502 + 2,577 + 51,667 + 7,381). The Turtle file is 4.4 MB against
+  the CSV's 1.1 MB.
+- 2026-10-08. Top five by managers: Apple 22, Johnson & Johnson 21,
+  Microsoft 21, Disney 20, JPMorgan Chase 20. Ties are ordered by CUSIP in
+  both the SPARQL and the row count, so the comparison is exact;
+  =form13/company-degree= does not order ties.
+- 2026-10-08. The Turtle 1.2 annotation example parsed and its SPARQL 1.2
+  query returned the one row. Reported by the gate, not part of it. Read
+  twice into one model: 7 triples, two rows. With a named reifier: 4.
+- 2026-10-08. =dev/rdf_explore.clj= loads under =clojure -M:dev=, and all
+  52 forms inside its comment blocks were read from the file and evaluated
+  in order in that namespace without an exception. Separately,
+  =clojure -M:dev:repl= started nREPL with the CIDER middleware and
+  answered four of those forms sent by an nREPL client (7381, 66183, the
+  counts table).
+
+* What it is not
+
+Not exercised from Emacs. Nobody ran =cider-jack-in= here: that
+=.dir-locals.el= is read, that CIDER takes this directory as the project
+root and not the repository's, and that =C-x C-e= behaves as described are
+all untested. What was tested is the layer beneath: the forms evaluate, in
+process and over nREPL.
+
+Not compared with the database. The gate's numbers are the file's; the
+Aura instance was not queried, so "the same as the lab's graph" rests on
+=form13/verify= having said the load matches the file, not on anything
+here.
+
+Not an ontology and not linked data. The IRIs are under =example.org= and
+resolve to nothing; the vocabulary reuses no published terms (FIBO, for
+one, has terms for holdings); nothing is inferred. Percent-encoded manager
+names make IRIs that Jena's Turtle writer spells out in full, as it does
+the Holding IRIs with their slashes; a real model would mint them from the filer's CIK, which is
+inside =sourceFilingId= and was not parsed out.
+
+Not a store. An in-memory model built in a quarter of a second from 7,381
+rows says nothing about TDB2, Fuseki, or how either compares with Aura at
+any size.
