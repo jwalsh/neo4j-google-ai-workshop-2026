@@ -24,6 +24,8 @@
              :task (apply clojure "-M:run" "form13" *command-line-args*)}
   msa       {:doc "Similarity edges for a census file, as TSV (experiments/001-msa-similarity)"
              :task (apply clojure "-M:run" "msa" *command-line-args*)}
+  redact    {:doc "Cover emails and .env secrets in a screenshot: bb redact IN.png OUT.png"
+             :task (apply clojure "-M:run" "redact" *command-line-args*)}
   repl      {:doc "An nREPL in dev/user.clj with CIDER's middleware, for cider-connect"
              :override-builtin true
              :task (clojure "-M:dev:repl")}}}

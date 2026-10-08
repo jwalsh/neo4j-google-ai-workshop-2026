@@ -7,6 +7,7 @@
             [workshop.gcp :as gcp]
             [workshop.msa :as msa]
             [workshop.neo4j :as neo4j]
+            [workshop.redact :as redact]
             [workshop.status :as status]))
 
 (defn- print-rows
@@ -69,6 +70,14 @@
                          (throw (ex-info "msa needs a census csv." {})))
                        (doseq [[source-name target-name edge-similarity] (msa/edges csv-path)]
                          (println (format "%s\t%s\t%.9f" source-name target-name edge-similarity))))}
+   "redact"    {:doc "Cover emails and .env secrets in a screenshot: redact IN.png OUT.png"
+                :run (fn [[image-path output-path]]
+                       (when-not (and image-path output-path)
+                         (throw (ex-info "redact needs an input and an output image." {})))
+                       (let [{:keys [still-readable] :as outcome} (redact/redact! image-path output-path)]
+                         (prn outcome)
+                         (when (pos? still-readable)
+                           (throw (ex-info "something sensitive is still readable in the output." {})))))}
    "datasets"  {:doc "List the workshop's datasets in Cloud Storage"
                 :run (fn [_]
                        (print-rows (gcp/list-objects (gcp/public-storage))))}

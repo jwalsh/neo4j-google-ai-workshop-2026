@@ -3,6 +3,7 @@
             [workshop.env :as env]
             [workshop.form13 :as form13]
             [workshop.neo4j :as neo4j]
+            [workshop.redact :as redact]
             [workshop.status :as status]))
 
 (deftest parse-dotenv-test
@@ -47,6 +48,19 @@
   (is (= ["A" "B"] (map :manager (form13/manager-degree sample-holdings))))
   (is (= [{:company "ACME INC" :cusip "1" :managers 2}] (form13/company-degree sample-holdings 1)))
   (is (= ["ACME INC"] (map :company (form13/odd-prices sample-holdings 1.0)))))
+
+(deftest redact-test
+  (let [fragments (redact/secret-fragments {"LAB_EMAIL" "user123456@example.com" "LAB_EMPLOYEE_ID" "42"})
+        word (fn [line text] {:line line :text text :left 0 :top 0 :width 1 :height 1})]
+    (is (= ["user123456@example.com" "user123456"] fragments))
+    (testing "an email, a fragment inside a word, and a value split across a line"
+      (is (= ["(someone@example.org)" "USER123456" "user12" "3456"]
+             (map :text (redact/words-to-cover
+                         fragments
+                         [(word [1 1 1] "User:") (word [1 1 1] "(someone@example.org)")
+                          (word [1 1 2] "id") (word [1 1 2] "USER123456")
+                          (word [1 1 3] "user12") (word [1 1 3] "3456")
+                          (word [1 1 4] "Instances")])))))))
 
 (deftest statements-test
   (is (= ["RETURN 1 AS ok" "MATCH (n)\nRETURN count(n)"]
