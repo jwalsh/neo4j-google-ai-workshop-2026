@@ -39,6 +39,13 @@ queries go in; copies of their materials do not. One slide image is in
   `.env.template`, `.envrc`, `labs/`, this directory.
 - `cypher-shell` is not installed on this machine. `gmake ping` and
   `gmake cypher` fall back to Aura's Query API over curl.
+- The core tooling is Clojure in `src/workshop/`, run through `bb` tasks:
+  the Neo4j Java driver over Bolt and Google's Cloud Storage client. The
+  Storage client is unauthenticated, which is enough for the datasets.
+- The dataset bucket holds more than the class page names: beside the two
+  CSVs and the PDF there are `form10k.zip`, an importer model
+  (`neo4j_importer_model_sec-edgar-forms13.json`) and `form13-raw/`, about
+  31,000 raw filings. `bb datasets` lists the top level.
 
 ## Open
 
@@ -56,6 +63,15 @@ queries go in; copies of their materials do not. One slide image is in
   executed.
 - The lab-to-component mapping in `notes/architecture.org` is a reading of
   the lab titles. The slide does not number anything.
+- `workshop.gcp/project-storage` and `download-object` have never run. The
+  first needs application default credentials for the lab account, which
+  exists only in the driven browser; nothing on this machine can call the
+  lab project's own APIs yet.
+- `workshop.neo4j/->clj` has only converted scalars: the database is empty,
+  so no node, relationship or path has been through it.
+- `cider-jack-in` was not run in a live Emacs. Checked in batch: the
+  `.dir-locals.el` values are accepted as safe and applied, and
+  `clojure -M:dev:nrepl` starts with CIDER's middleware.
 
 ## Verified on 2026-10-08
 
@@ -63,3 +79,8 @@ queries go in; copies of their materials do not. One slide image is in
   host taken from `NEO4J_URI`, basic auth, and `{"statement": ...}`.
 - The six variable names in `.env.template` are the six in the credentials
   file Aura hands out.
+- Through the Java driver, against the live instance: `bb ping`,
+  `bb databases`, `bb counts` (empty), `bb cypher`, and `(q ...)` from
+  `dev/user.clj`.
+- The dataset bucket lists and reads with no credentials: `bb datasets`,
+  `bb peek`.

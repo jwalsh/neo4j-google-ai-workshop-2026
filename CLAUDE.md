@@ -26,6 +26,14 @@ cypher-shell or, without it, Aura's Query API (one statement per file).
 `gmake guard-env` fails if `.env` is tracked or in history; run it before a
 push.
 
+The Clojure tooling is the core; the Makefile's curl path stays as the check
+that needs no JVM. `bb tasks` lists it: `bb ping`, `bb databases`,
+`bb counts`, `bb cypher labs/x.cypher` (any number of statements),
+`bb datasets`, `bb peek OBJECT [lines]`, `bb test`, `bb nrepl`. Each task
+starts `clojure -M:run ...`; babashka is the runner, not the runtime, because
+the drivers are JVM libraries. A single test: `clojure -M:test -v
+workshop.env-test/parse-dotenv-test`.
+
 ## Layout
 
 - `README.org` is the index: event details, the assignment/lab checklist
@@ -34,6 +42,14 @@ push.
 - `notes/` holds one org file per session or topic. Images a note links to go
   in `notes/img/` and are committed alongside it.
 - `labs/` holds the owner's own queries and scripts, one file per lab.
+- `src/workshop/` is the Clojure core: `env` reads `.env`, `neo4j` wraps the
+  official Java driver (`query` returns rows as maps), `gcp` wraps Google's
+  Cloud Storage client (unauthenticated by default: the datasets are
+  public), `cli` is what `bb` calls. `dev/user.clj` is the REPL namespace;
+  `.dir-locals.el` makes `cider-jack-in` start in it.
+- `experiments/NNN-name/` is for exploration in anything else (Python, say).
+  What survives is rewritten into `src/workshop/` in Clojure, ClojureScript
+  or babashka.
 - `.meta/README.md` says where things stand and what was never verified;
   `.meta/findings.md` takes one numbered entry per thing that bit. Read the
   first on arrival and keep its "Never verified" list honest.
