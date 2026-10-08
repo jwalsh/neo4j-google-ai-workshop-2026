@@ -1,7 +1,8 @@
 (ns workshop.env-test
   (:require [clojure.test :refer [deftest is testing]]
             [workshop.env :as env]
-            [workshop.neo4j :as neo4j]))
+            [workshop.neo4j :as neo4j]
+            [workshop.status :as status]))
 
 (deftest parse-dotenv-test
   (testing "plain, quoted and commented lines"
@@ -26,6 +27,13 @@
                        (catch clojure.lang.ExceptionInfo caught caught))]
       (is (= ["B" "C"] (:missing (ex-data failure))))
       (is (not (re-find #"secret" (ex-message failure)))))))
+
+(deftest checklist-test
+  (is (= [{:heading "Assignment 1" :state "TODO" :ticked 1 :total 2}
+          {:heading "Assignment 2" :state "DONE" :ticked 1 :total 1}]
+         (status/checklist (str "* Top\n- [ ] not under an assignment\n"
+                                "*** TODO Assignment 1\n- [X] Lab 1\n- [ ] Lab 2\n"
+                                "*** DONE Assignment 2\n- [x] Lab 3\n")))))
 
 (deftest statements-test
   (is (= ["RETURN 1 AS ok" "MATCH (n)\nRETURN count(n)"]

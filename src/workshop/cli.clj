@@ -1,9 +1,11 @@
 (ns workshop.cli
-  "clojure -M:run <command>. The Makefile's clj-* targets call this."
+  "clojure -M:run <command>. The tasks in bb.edn call this."
   (:require [clojure.pprint :as pprint]
             [clojure.string :as str]
+            [workshop.dashboard :as dashboard]
             [workshop.gcp :as gcp]
-            [workshop.neo4j :as neo4j]))
+            [workshop.neo4j :as neo4j]
+            [workshop.status :as status]))
 
 (defn- print-rows
   [rows]
@@ -34,6 +36,16 @@
                          (doseq [{:keys [statement rows]} (neo4j/run-file driver cypher-path)]
                            (println (first (str/split-lines statement)))
                            (print-rows rows))))}
+   "status"    {:doc "Every connection check, once, as a table"
+                :run (fn [_]
+                       (print-rows (map #(select-keys % [:name :state :millis :summary])
+                                        (status/all-checks))))}
+   "dashboard" {:doc "Serve the status page on 127.0.0.1: dashboard [port]"
+                :run (fn [[port]]
+                       (let [listen-port (if port (parse-long port) dashboard/default-port)]
+                         (dashboard/start listen-port)
+                         (println (str "http://127.0.0.1:" listen-port "/  (ctrl-c stops it)"))
+                         @(promise)))}
    "datasets"  {:doc "List the workshop's datasets in Cloud Storage"
                 :run (fn [_]
                        (print-rows (gcp/list-objects (gcp/public-storage))))}

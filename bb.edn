@@ -10,6 +10,10 @@
              :task (clojure "-M:run" "counts")}
   cypher    {:doc "Run a Cypher file: bb cypher labs/lab-04-query.cypher"
              :task (apply clojure "-M:run" "cypher" *command-line-args*)}
+  status    {:doc "Every connection check, once, as a table"
+             :task (clojure "-M:run" "status")}
+  dashboard {:doc "Serve the status page on 127.0.0.1:8377: bb dashboard [port]"
+             :task (apply clojure "-M:run" "dashboard" *command-line-args*)}
   datasets  {:doc "List the workshop's datasets in Cloud Storage"
              :task (clojure "-M:run" "datasets")}
   peek      {:doc "First lines of a dataset: bb peek hands-on-lab/form13-2023.csv 3"

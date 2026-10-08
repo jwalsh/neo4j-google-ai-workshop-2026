@@ -84,3 +84,8 @@ queries go in; copies of their materials do not. One slide image is in
   `dev/user.clj`.
 - The dataset bucket lists and reads with no credentials: `bb datasets`,
   `bb peek`.
+- `bb status` and `bb dashboard`, with everything up. No check has been
+  seen to fail for real: the :down paths are untested against a dead
+  instance or a closed browser.
+- `LAB_EXPIRES_AT` in `.env` is typed in by hand from the lab's countdown
+  and is good to a few minutes.

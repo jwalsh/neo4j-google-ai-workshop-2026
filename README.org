@@ -79,6 +79,11 @@ official Java driver, =workshop.gcp= over Google's Cloud Storage client.
 REPL in =dev/user.clj=, where =(q "MATCH ...")= runs a statement and returns
 rows as maps.
 
+=bb status= runs every connection check once: the instance, the dataset
+bucket, the lab browser, the lab's remaining time, the environment, the
+checklist. =bb dashboard= serves the same as a page on
+=http://127.0.0.1:8377/= that reloads itself.
+
 ** Notes
 
 In =notes/=, one file per session or topic.

@@ -29,7 +29,9 @@ push.
 The Clojure tooling is the core; the Makefile's curl path stays as the check
 that needs no JVM. `bb tasks` lists it: `bb ping`, `bb databases`,
 `bb counts`, `bb cypher labs/x.cypher` (any number of statements),
-`bb datasets`, `bb peek OBJECT [lines]`, `bb test`, `bb nrepl`. Each task
+`bb datasets`, `bb peek OBJECT [lines]`, `bb test`, `bb nrepl`, and
+`bb status` (every connection check once) with `bb dashboard` (the same as a
+page on 127.0.0.1:8377, loopback only). Each task
 starts `clojure -M:run ...`; babashka is the runner, not the runtime, because
 the drivers are JVM libraries. A single test: `clojure -M:test -v
 workshop.env-test/parse-dotenv-test`.
@@ -45,7 +47,8 @@ workshop.env-test/parse-dotenv-test`.
 - `src/workshop/` is the Clojure core: `env` reads `.env`, `neo4j` wraps the
   official Java driver (`query` returns rows as maps), `gcp` wraps Google's
   Cloud Storage client (unauthenticated by default: the datasets are
-  public), `cli` is what `bb` calls. `dev/user.clj` is the REPL namespace;
+  public), `status` holds one check per dependency and `dashboard` renders
+  them; `cli` is what `bb` calls. `dev/user.clj` is the REPL namespace;
   `.dir-locals.el` makes `cider-jack-in` start in it.
 - `experiments/NNN-name/` is for exploration in anything else (Python, say).
   What survives is rewritten into `src/workshop/` in Clojure, ClojureScript

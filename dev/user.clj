@@ -5,10 +5,14 @@
     (q \"MATCH (m:Manager) WHERE m.name = $name RETURN m\" {:name \"...\"})
     (run-file \"labs/lab-03-connect.cypher\")
     (datasets)
+    (status)
+    (dashboard)
     (peek-dataset \"hands-on-lab/form13-2023.csv\")"
-  (:require [workshop.env :as env]
+  (:require [workshop.dashboard :as dashboard]
+            [workshop.env :as env]
             [workshop.gcp :as gcp]
-            [workshop.neo4j :as neo4j]))
+            [workshop.neo4j :as neo4j]
+            [workshop.status :as status]))
 
 (defonce ^:private session-driver (atom nil))
 
@@ -39,6 +43,18 @@
   ([object-name] (peek-dataset object-name 5))
   ([object-name line-count]
    (gcp/peek-object (gcp/public-storage) gcp/dataset-bucket object-name line-count)))
+
+(defonce ^:private stop-dashboard (atom nil))
+
+(defn dashboard
+  "Starts the status page, or restarts it after a change to its code."
+  ([] (dashboard dashboard/default-port))
+  ([port]
+   (when-let [stop @stop-dashboard] (stop))
+   (reset! stop-dashboard (dashboard/start port))
+   (str "http://127.0.0.1:" port "/")))
+
+(defn status [] (status/all-checks (driver)))
 
 (defn env-names
   "Which connection variables are set. Names only."
