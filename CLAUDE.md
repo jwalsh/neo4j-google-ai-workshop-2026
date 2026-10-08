@@ -23,6 +23,8 @@ and which connection variables are set, never their values. `gmake .env`
 starts `.env` from `.env.template`; `gmake ping` and
 `gmake cypher FILE=labs/x.cypher` run against the instance it names, through
 cypher-shell or, without it, Aura's Query API (one statement per file).
+`gmake data/<name>` fetches a workshop dataset into `data/` as a real file
+target: it runs once, and a failed transfer leaves nothing behind.
 `gmake guard-env` fails if `.env` is tracked or in history; run it before a
 push.
 

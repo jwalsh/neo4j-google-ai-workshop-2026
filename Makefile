@@ -9,7 +9,11 @@ SHELL := bash
 # and ping reports a dead database as a pass.
 .SHELLFLAGS := -o pipefail -c
 
+# The workshop's public datasets. `gmake data/<name>` fetches one.
+DATASET_URL ?= https://storage.googleapis.com/neo4j-datasets/hands-on-lab
+
 .DEFAULT_GOAL := help
+.DELETE_ON_ERROR:
 
 .PHONY: help deps todos agenda status ping cypher guard-env
 
@@ -38,6 +42,17 @@ RUN_CYPHER = if command -v cypher-shell >/dev/null; then \
 REQUIRE_NEO4J = for name in NEO4J_URI NEO4J_USERNAME NEO4J_PASSWORD; do \
 	    [ -n "$${!name}" ] || { echo "$$name is not set. gmake .env, then fill it in." >&2; exit 1; }; \
 	  done
+
+# A real file target, so it runs once: a second `gmake data/x` finds the file
+# and does nothing. The transfer lands in a .part file and is renamed when
+# whole, so a failed download never leaves a short file that looks done.
+# data/ is ignored by git.
+#   gmake data/Apple_10-K_2025_2_pages.pdf    Lab 6's two pages of a 10-K
+#   gmake data/form13-2023-05-11.csv          Lab 4's day of Form 13 filings
+data/%:
+	@mkdir -p $(@D)
+	curl -fsSL --retry 3 -o $@.part $(DATASET_URL)/$*
+	mv $@.part $@
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z0-9_.-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "%-12s %s\n", $$1, $$2}'

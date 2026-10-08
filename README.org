@@ -69,6 +69,7 @@ under management: who holds what.
 =gmake help= lists the targets. =gmake agenda= and =gmake todos= read the
 checklist above. =gmake .env= starts a credentials file from =.env.template=;
 =gmake ping= and =gmake cypher FILE=...= run against the instance it names.
+=gmake data/<name>= fetches one of the workshop's datasets into =data/=, once.
 The labs themselves need only a browser. My queries go in =labs/=, what bit
 goes in =.meta/findings.md=.
 
@@ -103,6 +104,7 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lab-03-connect-to-neo4j.org][Lab 3 - Connect to Neo4j]]: Connect, Query, and =SHOW DATABASES= two ways
 - [[file:notes/lab-04-query.org][Lab 4 - Query]]: the naive load, the keyed load, the counts, and what the file says locally
 - [[file:notes/lab-05-bloom.org][Lab 5 - Bloom]]: the path, the search, Degree Centrality sized on the scene, and degree without Bloom
+- [[file:notes/lab-06-document-intelligence.org][Lab 6 - Document Intelligence]]: not done, and why this account does not have the tool
 - [[file:notes/lecture-gemini-enterprise.org][Lecture - Gemini Enterprise]]: the Agent Platform slide, redrawn
 - [[file:notes/lecture-neo4j-and-ai.org][Lecture - Neo4j and AI]]: two reference architectures, redrawn
 - [[file:notes/screens.org][Screens]]: the consoles and the dashboard as they stood, for after the lab expires

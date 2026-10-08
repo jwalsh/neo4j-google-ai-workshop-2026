@@ -1,0 +1,49 @@
+#+TITLE: Lab 6 - Document Intelligence
+#+DATE: 2026-10-08
+
+From the lab text, =assignment-3-ai-and-agents/lab-6-document-intelligence=
+in the lab repository. Not done: the box in =README.org= is unticked.
+
+* What the lab does
+
+From the lab text: Document Intelligence is a tool in Aura, in private
+preview, that turns documents into a knowledge graph. The lab uploads two
+pages of Apple's 2025 10-K, asks for a graph model with the prompt "Extract
+products, services, segments and competition.", and looks at the model and a
+graph preview. The lab places it after two earlier approaches: LangChain
+pipelines, and Neo4j Labs' LLM Graph Builder.
+
+* Why it was not done
+
+The lab starts from "Document Intelligence" in Aura's left menu. This
+account's menu does not have it.
+
+| what                       | the lab's images          | this account            |
+|----------------------------+---------------------------+-------------------------|
+| organization               | Vocareum                  | test                    |
+| project                    | GCP marketplace project   | New project             |
+| billing shown              | monthly usage, in dollars | "Trial - 14 days left"  |
+| menu under Tools / Studio  | ends with Document Intelligence | ends with Dashboards |
+| =.../tools/document-intelligence= | the tool           | redirects to Instances  |
+
+From the lab text, the preview was "enabled for your account". The
+comparison says it is enabled for the marketplace organization, and that
+the sign-up in Lab 2 made a separate trial organization instead of joining
+it (findings 13 and 22). That is a reading of the differences above; nobody
+from the workshop has confirmed it.
+
+What would fix it, untried: going through "Manage on provider" from the
+Cloud console again and landing in the marketplace organization, or asking
+the instructor to enable the preview for this one. Either may mean a second
+instance and repeating Lab 4's load.
+
+* What is ready
+
+The PDF, with a real file target so it is fetched once:
+
+#+begin_src sh
+gmake data/Apple_10-K_2025_2_pages.pdf
+#+end_src
+
+The browser saves it as =hands-on-lab_Apple_10-K_2025_2_pages.pdf=, which
+is the name the lab's file picker step shows.

@@ -82,9 +82,12 @@ owner's. These are what that cost.
 22. **Aura has no "Document Intelligence" for this account.** Lab 6 starts
     from that sidebar entry, a private preview "enabled for your account".
     The lab's own images show an organization "New Organization" with a
-    project "Google Cloud marketplace project". This account has one
-    organization, "test", one project, "New project", on a trial, and the
-    sidebar ends at Dashboards. Read with finding 13: the sign-up seems to
+    project "Google Cloud marketplace project" (Lab 5's images) or
+    "Vocareum" and "GCP marketplace project" (Lab 6's), with usage billed
+    in dollars. This account has one organization, "test", one project,
+    "New project", on a trial, and the sidebar ends at Dashboards. The
+    tool's direct path, `/tools/document-intelligence`, redirects to
+    Instances. Read with finding 13: the sign-up seems to
     have made a fresh trial organization and not the marketplace one the
     preview is attached to. Not resolved.
 23. **A navigation that never fires "load" hangs the driver.** Going from
