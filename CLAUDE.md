@@ -31,7 +31,8 @@ that needs no JVM. `bb tasks` lists it: `bb ping`, `bb databases`,
 `bb counts`, `bb cypher labs/x.cypher` (any number of statements),
 `bb datasets`, `bb peek OBJECT [lines]`, `bb form13 [view]`, `bb test`,
 `bb repl`, and
-`bb status` (every connection check once) with `bb dashboard` (the same as a
+`bb redact IN.png OUT.png` (cover emails and `.env` secrets in a
+screenshot), `bb status` (every connection check once) with `bb dashboard` (the same as a
 page on 127.0.0.1:8377, loopback only). Each task
 starts `clojure -M:run ...`; babashka is the runner, not the runtime, because
 the drivers are JVM libraries. A single test: `clojure -M:test -v
@@ -56,6 +57,8 @@ workshop.env-test/parse-dotenv-test`.
   `.dir-locals.el` makes `cider-jack-in` start in it. `dev/explore.clj` is
   `(comment ...)` blocks per lab, evaluated a form at a time; a new lab
   gets a block there.
+- `resources/` is git-ignored and holds other people's material kept for
+  reference: the lab's step images, slides. Nothing in it is committed.
 - `experiments/NNN-name/` is for exploration in anything else (Python, say).
   What survives is rewritten into `src/workshop/` in Clojure, ClojureScript
   or babashka.
@@ -95,4 +98,9 @@ only when every box under it is ticked.
 - `.gitignore` already excludes `.env`, `.envrc.local`, `*.dump` and `/data/`.
   Aura credentials, database dumps and workshop datasets stay local; code in
   `labs/` reads connection details from the environment.
+- Take screenshots as the work goes: the Cloud console, Aura, and any Emacs
+  session. The lab environment expires, and the images are what is left.
+  Every screenshot goes through `bb redact IN OUT` and is then looked at
+  before it is added to `notes/img/`; a note links it, a lab's own note
+  when it belongs to a lab, `notes/screens.org` otherwise.
 - `gmake`, not `make`.

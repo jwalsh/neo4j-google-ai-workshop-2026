@@ -7,3 +7,5 @@
 .nrepl-port
 .lsp/
 .clj-kondo/.cache/
+# Other people's material kept for reference: lab step images, slides.
+/resources/

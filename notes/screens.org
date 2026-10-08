@@ -1,0 +1,30 @@
+#+TITLE: Screens
+#+DATE: 2026-10-08
+
+What the consoles looked like, kept because the lab account, the project and
+the instance are gone a few hours after the workshop. Each image went through
+=bb redact= and was looked at before it was added. Screens that belong to one
+lab are in that lab's note; these are the ones that belong to none.
+
+* 19:08, between Lab 4 and Lab 5
+
+[[file:img/state-gcp-console.png]]
+
+The Cloud console on the lab project. Nothing has been created in it: every
+lab so far ran in Aura.
+
+[[file:img/state-bloom-scene.png]]
+
+Bloom after "Show me a graph", with one company selected.
+
+[[file:img/state-dashboard.png]]
+
+=bb dashboard= at the same moment: Lab 4's load in the instance, the lab
+browser's tabs, a little over two hours of lab time left.
+
+* Still to capture
+
+- The Bloom search and Degree Centrality, once they are clicked through.
+- Labs 6 to 9: Document Intelligence, the agents, Gemini Enterprise.
+- An Emacs session: =cider-jack-in=, a block of =dev/explore.clj= evaluated.
+  There has not been one yet.

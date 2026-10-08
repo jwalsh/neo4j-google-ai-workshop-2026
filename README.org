@@ -103,4 +103,5 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lab-03-connect-to-neo4j.org][Lab 3 - Connect to Neo4j]]: Connect, Query, and =SHOW DATABASES= two ways
 - [[file:notes/lab-04-query.org][Lab 4 - Query]]: the naive load, the keyed load, the counts, and what the file says locally
 - [[file:notes/lab-05-bloom.org][Lab 5 - Bloom]]: as far as it was driven, and degree centrality without Bloom
+- [[file:notes/screens.org][Screens]]: the consoles and the dashboard as they stood, for after the lab expires
 - [[file:notes/resources.org][Resources from the slides]]: the Dataflow template and the Dataproc notebooks

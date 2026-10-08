@@ -67,7 +67,12 @@ owner's. These are what that cost.
     the search and the Degree Centrality panel were left to a person.
 18. **The account's email is in the header of every Query and Bloom
     screenshot.** "User: Aura (...)" sits on the instance bar. Each image
-    kept in `notes/img/` has that span painted over before it is added.
+    kept in `notes/img/` has that span painted over before it is added. At
+    first that was a rectangle at fixed coordinates, which holds only while
+    the layout does. `bb redact` replaced it: tesseract finds the words,
+    and anything that reads as an email or holds a value from `.env` is
+    covered, then the output is read again to check nothing is left. It
+    catches what OCR can read and no more, so the image is still looked at.
 
 ## Tooling
 

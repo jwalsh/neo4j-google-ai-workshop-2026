@@ -96,5 +96,8 @@ queries go in; copies of their materials do not. One slide image is in
 - `bb status` and `bb dashboard`, with everything up. No check has been
   seen to fail for real: the :down paths are untested against a dead
   instance or a closed browser.
+- `bb redact` on three screenshots, one of which had the account email:
+  covered, and nothing sensitive read back from the output. It has not met
+  a password or a small or low-contrast rendering of the email.
 - `LAB_EXPIRES_AT` in `.env` is typed in by hand from the lab's countdown
   and is good to a few minutes.
