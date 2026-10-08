@@ -48,3 +48,5 @@ TODO: the workshop's repositories, codelabs and datasets, as they are handed out
 ** Notes
 
 In =notes/=, one file per session or topic.
+
+- [[file:notes/architecture.org][What gets built]]: the architecture slide and where each lab sits on it
