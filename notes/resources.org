@@ -64,6 +64,31 @@ From =docs/testing-specs/=, the shape of the two files:
 - The test resources hold two families of spec, =compact-syntax= and
   =import-spec=. Which one a current job should use was not worked out.
 
+** The step-by-step guide
+
+From the post's links: =neo4j-partners/neo4j-google-cloud-dataflow=, cloned
+beside this repository and read at commit =ff76af0= (2024-05-22, so two
+years older than the template source above).
+
+From its READMEs:
+
+- Two walkthroughs on one dataset, the London transport network: BigQuery
+  to Neo4j, and Cloud Storage to Neo4j. It needs the Dataflow API enabled
+  in the project, and BigQuery's for the first.
+- A CSV source must have no header row and no empty rows. Column names go
+  in the spec's =ordered_field_names=.
+- Its Cloud Storage spec loads stations as a =node= target and the lines
+  between them with a =custom_query= target: Cypher over =$rows=, there
+  calling =apoc.create.relationship= to name the relationship after the
+  line.
+- =helper-scripts/neo4j_connection.py= turns the credentials file Aura
+  hands out into the connection JSON. It reads the same variable names this
+  repository's =.env= holds.
+
+What that means for the workshop's data: both Form 13 files have a header
+row, so they could not be a source as they sit in the bucket. A headerless
+copy in a bucket of one's own would be the first step.
+
 Beside Lab 4: the lab's keyed load is three passes, companies then managers
 then relationships, with a constraint on each key. In a job spec that is one
 text source and three targets in =merge= mode with =keys=. No such spec was
