@@ -25,6 +25,14 @@ account's menu does not have it.
 | billing shown              | monthly usage, in dollars | "Trial - 14 days left"  |
 | menu under Tools / Studio  | ends with Document Intelligence | ends with Dashboards |
 | =.../tools/document-intelligence= | the tool           | redirects to Instances  |
+| Import, "New data source", "Try it now" | not in the lab | redirects to Instances  |
+
+The last row is the product's own way in. Import's "New data source" dialog
+carries a banner, "Easily create knowledge graphs from unstructured data
+like PDF, TXT, and other file formats with Document Intelligence", with a
+"Try it now" button. The banner shows for this account; the button lands on
+Instances, the same as the direct path. The dialog's own local option takes
+.CSV and .TSV only.
 
 From the lab text, the preview was "enabled for your account". The
 comparison says it is enabled for the marketplace organization, and that
