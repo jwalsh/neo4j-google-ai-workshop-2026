@@ -11,13 +11,13 @@ Neo4j with the Graph Data Science client.
 * Hypothesis
 
 The core of that notebook needs neither Neo4j nor GDS: it is arithmetic on
-938 rows. Written plainly in Python and then ported to Clojure, the two
+392 rows, the metro areas of a 938-row file. Written plainly in Python and then ported to Clojure, the two
 produce the same edges.
 
 * What was kept and what was left out
 
-Kept, with the notebook's parameters: natural log of each figure, min-max
-scaling, 15 nearest neighbours by Euclidean distance, a cutoff at the first
+Kept, with the notebook's parameters: only rows whose name contains
+"Metro", natural log of each figure, min-max scaling, 15 nearest neighbours by Euclidean distance, a cutoff at the first
 percentile of similarity.
 
 Changed: the neighbours are exact. GDS kNN is approximate, so these edges
@@ -52,7 +52,17 @@ shasum /tmp/msa-python.tsv /tmp/msa-clojure.tsv
 - 2026-10-08. Boston's nearest: Seattle (0.942), Washington (0.926), Denver
   (0.897), San Diego, Portland.
 
+- 2026-10-08, later. Read the notebook itself from a local clone of
+  =cloud-dataproc= (commit =6a69184=). The first version had missed its
+  =WHERE row.name CONTAINS 'Metro'= and used all 938 rows. Fixed in both;
+  the gate passes again: 5,822 edges each (392 areas by 15, less the 58
+  under the cutoff), SHA-1 =398d5669f909...=. Boston's nearest are the same
+  five in the same order, with lower similarities (Seattle 0.923).
+- The census file in the repository is byte-identical to the URL the
+  notebook loads from (=smithna/datasets=).
+
 * What it is not
 
-Not a reproduction of the notebook's result. Nobody ran the notebook here,
-so "same as GDS" is untested. The port is =src/workshop/msa.clj=.
+Not a reproduction of the notebook's result. The notebook's stored outputs
+are empty, so there is nothing of its own to compare with, and nobody ran it
+here: "same as GDS" is untested. The port is =src/workshop/msa.clj=.

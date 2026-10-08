@@ -68,7 +68,7 @@
 ;; in memory. The census file is fetched as the experiment's README says.
 (comment
   (def similarity-edges (msa/edges "data/census_demographics_by_metro_area.csv"))
-  (count similarity-edges)                     ; => 13930
+  (count similarity-edges)                     ; => 5822
   (print-table (take 5 (msa/most-similar similarity-edges
                                          "Boston-Cambridge-Newton, MA-NH Metro Area")))
   :rcf)

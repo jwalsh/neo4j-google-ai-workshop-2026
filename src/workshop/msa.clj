@@ -1,14 +1,16 @@
 (ns workshop.msa
   "experiments/001-msa-similarity, ported: the core of the Dataproc
   similarity notebooks with no database. Natural log of four census
-  figures, min-max scaling, each area's 15 nearest neighbours by Euclidean
+  figures for the metro areas (micro areas dropped), min-max scaling, each area's 15 nearest neighbours by Euclidean
   distance, similarity 1 / (1 + distance), cutoff at the first percentile.
   The Python in the experiment is the reference; `edges` must print the same
   lines it does."
   (:require [clojure.data.csv :as csv]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [clojure.string :as str]))
 
 (def features ["population" "medianHouseholdIncome" "medianHomePrice" "percentOver25WithBachelors"])
+(def area-filter "Metro")
 (def top-k 15)
 (def cutoff-percentile 0.01)
 
@@ -16,10 +18,12 @@
   [csv-path]
   (with-open [reader (io/reader csv-path)]
     (let [[header & lines] (csv/read-csv reader)]
-      (mapv (fn [line]
-              (let [row (zipmap header line)]
-                {:name (row "name")
-                 :logs (mapv #(Math/log (parse-double (row %))) features)}))
+      (into []
+            (comp (map #(zipmap header %))
+                  (filter #(str/includes? (% "name") area-filter))
+                  (map (fn [row]
+                         {:name (row "name")
+                          :logs (mapv #(Math/log (parse-double (row %))) features)})))
             lines))))
 
 (defn min-max-scale

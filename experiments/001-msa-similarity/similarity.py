@@ -12,6 +12,7 @@ import math
 import sys
 
 FEATURES = ["population", "medianHouseholdIncome", "medianHomePrice", "percentOver25WithBachelors"]
+AREA_FILTER = "Metro"  # the notebook's WHERE row.name CONTAINS 'Metro': micro areas are dropped
 TOP_K = 15
 CUTOFF_PERCENTILE = 0.01
 
@@ -19,7 +20,7 @@ CUTOFF_PERCENTILE = 0.01
 def read_areas(csv_path):
     with open(csv_path, newline="") as csv_file:
         return [{"name": row["name"], "logs": [math.log(float(row[feature])) for feature in FEATURES]}
-                for row in csv.DictReader(csv_file)]
+                for row in csv.DictReader(csv_file) if AREA_FILTER in row["name"]]
 
 
 def min_max_scale(areas):
