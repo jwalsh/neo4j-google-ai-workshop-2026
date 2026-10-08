@@ -1,0 +1,27 @@
+* Prompts
+
+Every prompt a lab has a person type into a model, one file each, named for
+the lab and for what the prompt is for. The text is the lab's, from
+=neo4j-partners/hands-on-lab-neo4j-and-google= (Apache 2.0), unchanged. A
+file holds the prompt and nothing else, so code can read it and a diff shows
+when one was edited.
+
+Where a lab has a query and not a prompt, it is in =labs/= as Cypher.
+
+| file                                | lab | the step it belongs to                                 | goes to                        | run here |
+|-------------------------------------+-----+--------------------------------------------------------+--------------------------------+----------|
+| =lab-06-generate-model.txt=         |   6 | after "Generate model", the prompt box, before "Save"  | Document Intelligence          | yes, to the LLM Graph Builder instead (=experiments/005=) |
+| =lab-08-01-create-node.txt=         |   8 | first prompt to the agent; triggers "Authorize"        | Neo4j Agent, Gemini Enterprise | no       |
+| =lab-08-02-find-node.txt=           |   8 | checks the node the first prompt made                  | Neo4j Agent, Gemini Enterprise | no       |
+| =lab-08-03-describe-database.txt=   |   8 | asks what the shared database holds                    | Neo4j Agent, Gemini Enterprise | no       |
+| =lab-09-01-create-agent.txt=        |   9 | after "Create with AI", before "Create"                | Aura, Agents                   | no       |
+| =lab-09-02-uncommon-companies.txt=  |   9 | first question to the new agent                        | the Aura agent                 | no       |
+| =lab-09-03-choose-threshold.txt=    |   9 | the answer when the agent asks what "uncommon" means   | the Aura agent                 | no       |
+
+Naming: =lab-NN-= then, when a lab has several, a two-digit order, then what
+the prompt does in a few words. A prompt of our own, not from a lab, drops
+the lab number and says so on its first row here.
+
+When a prompt is run, its row gets the date and where the answer was
+recorded. A changed prompt is a new file, not an edit, when the old answer
+is kept anywhere.

@@ -113,12 +113,13 @@
          "language" ""}))
 
 (def lab-06
-  "Lab 6's document and prompt. The lab gives the prompt to Document
-  Intelligence; here it goes to the Graph Builder as extra instructions,
-  with the four things it names as the allowed labels."
+  "Lab 6's document and prompt. The prompt is the lab's, kept in prompts/;
+  the lab gives it to Document Intelligence, and here it goes to the Graph
+  Builder as extra instructions, with the things it names as the allowed
+  labels."
   {:object "Apple_10-K_2025_2_pages.pdf"
    :local-path "data/Apple_10-K_2025_2_pages.pdf"
-   :instructions "Extract products, services, segments and competition."
+   :prompt-path "prompts/lab-06-generate-model.txt"
    ;; Not Company: Lab 4 put a node key on (:Company {cusip}), and a
    ;; Company the model extracts from a 10-K has no CUSIP. The extraction
    ;; fails on the constraint. The filer and its rivals are Organization.
@@ -128,7 +129,8 @@
   "Uploads the lab's PDF and extracts a graph from it, unless the builder
   already lists the file as Completed. Returns the source's row."
   []
-  (let [{:keys [object local-path instructions allowed-nodes]} lab-06
+  (let [{:keys [object local-path prompt-path allowed-nodes]} lab-06
+        instructions (str/trim (slurp prompt-path))
         find-source (fn [] (first (filter #(= object (:fileName %)) (sources))))]
     (when-not (= "Completed" (:status (find-source)))
       ;; Upload every time: the backend drops its copy of the file when an

@@ -59,6 +59,11 @@ workshop.env-test/parse-dotenv-test`.
   `.dir-locals.el` makes `cider-jack-in` start in it. `dev/explore.clj` is
   `(comment ...)` blocks per lab, evaluated a form at a time; a new lab
   gets a block there.
+- `prompts/` holds every prompt a lab has a person type into a model, one
+  file each, named `lab-NN-[order-]what-it-does.txt`, indexed in
+  `prompts/README.org`. Code reads the prompt from the file. Queries are in
+  `labs/`, prompts are here, and both are committed: they are what makes a
+  lab repeatable.
 - `resources/` is git-ignored and holds other people's material kept for
   reference: the lab's step images, slides. Nothing in it is committed. A
   slide worth keeping is redrawn as mermaid in `notes/diagrams/` and the

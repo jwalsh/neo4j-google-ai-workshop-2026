@@ -1,0 +1,1 @@
+This database contains asset manager nodes.  Those are connected to company nodes by the owns relationship.  I'd like the understand what managers are picking uncommon companies.  I'd also like to understand what managers share these relatively uncommon companies.

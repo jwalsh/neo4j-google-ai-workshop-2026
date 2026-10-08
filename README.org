@@ -70,8 +70,9 @@ under management: who holds what.
 checklist above. =gmake .env= starts a credentials file from =.env.template=;
 =gmake ping= and =gmake cypher FILE=...= run against the instance it names.
 =gmake data/<name>= fetches one of the workshop's datasets into =data/=, once.
-The labs themselves need only a browser. My queries go in =labs/=, what bit
-goes in =.meta/findings.md=.
+The labs themselves need only a browser. The queries run go in =labs/=, the
+prompts typed into a model go in =prompts/=, one named file each, and what
+bit goes in =.meta/findings.md=.
 
 The same and more in Clojure, in =src/workshop/=: =workshop.neo4j= over the
 official Java driver, =workshop.gcp= over Google's Cloud Storage client.
@@ -86,9 +87,14 @@ file and =load= runs the keyed load only when they differ. =dev/explore.clj=
 is a page of =(comment ...)= blocks to evaluate one form at a time, lab by
 lab; =bb repl= starts the nREPL for it.
 
-=experiments/= holds exploration in other languages before it is ported:
-=001-msa-similarity= is the Dataproc notebook's similarity graph in Python,
-then in Clojure as =bb msa=.
+=experiments/= holds numbered experiments, each with a hypothesis, a gate
+and a dated log of what was tried:
+
+- =001-msa-similarity=: the Dataproc notebook's similarity graph in Python, then in Clojure as =bb msa=
+- =002-form13-rdf=: the Form 13 data as RDF triples with Jena and SPARQL
+- =003-form13-datalog=: as datoms in DataScript and triples in Asami
+- =004-form13-core-logic=: as core.logic facts
+- =005-graph-builder-api=: Lab 6's result through the LLM Graph Builder's API
 
 =bb status= runs every connection check once: the instance, the dataset
 bucket, the lab browser, the lab's remaining time, the environment, the
