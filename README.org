@@ -103,7 +103,7 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lab-03-connect-to-neo4j.org][Lab 3 - Connect to Neo4j]]: Connect, Query, and =SHOW DATABASES= two ways
 - [[file:notes/lab-04-query.org][Lab 4 - Query]]: the naive load, the keyed load, the counts, and what the file says locally
 - [[file:notes/lab-05-bloom.org][Lab 5 - Bloom]]: the path, the search, Degree Centrality sized on the scene, and degree without Bloom
-- [[file:notes/lecture-gemini-enterprise.org][Lecture - Gemini Enterprise]]: the Agent Platform slide as tables
+- [[file:notes/lecture-gemini-enterprise.org][Lecture - Gemini Enterprise]]: the Agent Platform slide, redrawn
 - [[file:notes/lecture-neo4j-and-ai.org][Lecture - Neo4j and AI]]: two reference architectures, redrawn
 - [[file:notes/screens.org][Screens]]: the consoles and the dashboard as they stood, for after the lab expires
 - [[file:notes/resources.org][Resources from the slides]]: the Dataflow template and the Dataproc notebooks

@@ -1,0 +1,59 @@
+%% Redrawn from the slide "Gemini Enterprise Agent Platform"
+%% (Lecture - Gemini Enterprise). Four bands of product names; the slide
+%% draws no arrows between them. (New) and (GA) are the slide's badges.
+flowchart TB
+  subgraph build["Build"]
+    direction TB
+    subgraph build_agents["Agents"]
+      agent_development_kit["Agent Development Kit (New)"]
+      third_party_frameworks["3P agent frameworks"]
+      agent_studio["Agent Studio"]
+      agent_garden["Agent Garden"]
+    end
+    subgraph model_garden["Gemini API and Model Garden"]
+      gemini_models["Gemini models"]
+      open_models["3P and open models"]
+      model_training["Model training"]
+      model_inference["Model inference"]
+    end
+    subgraph tools_data["Tools, data, and other agents"]
+      a2a["A2A"]
+      mcp["MCP"]
+      a2ui["A2UI"]
+      grounding["Grounding"]
+      search["Search"]
+      ap2_ucp["AP2 and UCP"]
+      rag["RAG"]
+      apis_connectors["APIs and connectors"]
+      cloud_marketplace["Cloud Marketplace"]
+    end
+  end
+
+  subgraph scale["Scale"]
+    agent_runtime["Agent Runtime (GA)"]
+    agent_sessions["Agent Sessions (GA)"]
+    agent_sandbox["Agent Sandbox (GA)"]
+    agent_memory_bank["Agent Memory Bank (GA)"]
+  end
+
+  subgraph govern["Govern"]
+    agent_gateway["Agent Gateway (New)"]
+    agent_identity["Agent Identity (GA)"]
+    agent_registry["Agent Registry (New)"]
+    agent_anomaly_detection["Agent Anomaly Detection (New)"]
+    model_armor["Model Armor"]
+    agent_policy["Agent Policy"]
+    agent_security["Agent Security (New)"]
+    agent_compliance["Agent Compliance"]
+  end
+
+  subgraph optimize["Optimize"]
+    agent_evaluation["Agent Evaluation (New)"]
+    agent_simulation["Agent Simulation (New)"]
+    agent_observability["Agent Observability (New)"]
+    agent_optimizer["Agent Optimizer (New)"]
+  end
+
+  build ~~~ scale
+  scale ~~~ govern
+  govern ~~~ optimize
