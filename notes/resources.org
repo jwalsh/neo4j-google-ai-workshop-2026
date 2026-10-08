@@ -1,0 +1,61 @@
+#+TITLE: Resources from the slides
+#+DATE: 2026-10-08
+
+Two things the slide deck pointed at, with what each turned out to be. Both
+are other ways to move data into Neo4j on Google Cloud; the labs use neither.
+
+* Dataflow template: Google Cloud to Neo4j
+
+From the slide deck: [[https://cloud.google.com/blog/topics/partners/neo4j-and-google-cloud-integration-using-dataflow-templates][How the new Google Cloud to Neo4j Dataflow template streamlines data movement]],
+Google Cloud blog, 2024-01-12, by Guhan Sivaji (Neo4j) and Mehran Nazir
+(Google Cloud).
+
+From the post:
+
+- A Dataflow template that moves data from BigQuery and Cloud Storage into
+  Neo4j, Aura included. Offered as a flex template and a classic one; the
+  post uses the flex template.
+- It is configured by two files: a Neo4j connection metadata file and a job
+  description file. The job is then started from the Dataflow "create job"
+  page in the Cloud console.
+- The post has no example of either file and states no limits. It sends the
+  reader to the documentation for both.
+
+Where the detail is, from the post's links:
+
+- [[https://cloud.google.com/dataflow/docs/guides/templates/provided/google-cloud-to-neo4j][Google Cloud to Neo4j template]], Google's reference for the parameters
+- [[https://neo4j.com/docs/dataflow-google-cloud/][Dataflow Flex Template for Google Cloud to Neo4j]], Neo4j's documentation
+- [[https://neo4j.com/docs/dataflow-bigquery/][Dataflow Flex Template for BigQuery to Neo4j]]
+- [[https://github.com/neo4j-partners/neo4j-google-cloud-dataflow][neo4j-partners/neo4j-google-cloud-dataflow]], the step-by-step guide
+
+Not read yet: those four. Not tried: the template. It needs a Dataflow job
+in the lab project, and nothing on this machine is signed in to it.
+
+How it sits beside Lab 4: Lab 4 has the database pull a CSV over https with
+=LOAD CSV=. The template is the other direction, a pipeline that reads the
+source and writes to the database, described in a job file.
+
+* Dataproc notebooks: a similarity graph from node properties
+
+From the slide deck: the Neo4j examples in
+[[https://github.com/GoogleCloudDataproc/cloud-dataproc/tree/master/notebooks/python/neo4j][GoogleCloudDataproc/cloud-dataproc, notebooks/python/neo4j]], maintained by
+Anthony Krinsky of Neo4j.
+
+From its README:
+
+- Three notebooks that do the same analysis three ways: with the Graph Data
+  Science Python client, with the plain Neo4j Python client, and with the
+  Spark connectors for Neo4j and BigQuery.
+- The analysis is Nathan Smith's "Create a similarity graph from node
+  properties with Neo4j": census figures for metropolitan statistical
+  areas, log-normalized, joined by K-nearest-neighbours on Euclidean
+  distance, then grouped with Louvain.
+- The data is in the repository:
+  =data/census_demographics_by_metro_area.csv=.
+- Its advice on which client: the GDS client unless Spark is involved; with
+  Spark, the connector for reads and writes plus a second client for
+  everything else.
+
+Tried here: =experiments/001-msa-similarity/= takes the core of it, the
+normalizing and the nearest neighbours, in Python and then in Clojure, with
+no database.

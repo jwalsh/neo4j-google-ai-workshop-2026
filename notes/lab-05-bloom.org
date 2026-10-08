@@ -1,0 +1,46 @@
+#+TITLE: Lab 5 - Bloom
+#+DATE: 2026-10-08
+
+From the lab text, =assignment-2-moving-data/lab-5-bloom= in the lab
+repository. Not finished: the box in =README.org= is unticked.
+
+* As far as it was driven
+
+Bloom opens from the sidebar. "Show me a graph" drew a scene of seven
+managers and seven companies.
+
+[[file:img/lab-05-show-me-a-graph.png]]
+
+The lab's next steps were not done by the agent: the Manager, OWNS, Company
+search, then Degree Centrality from the data science panel with size
+scaling. Bloom's search box would not take driven input (finding 17). They
+are a few clicks by hand, in the tab that is already open on Bloom.
+
+From the lab text, Degree Centrality "spins up an additional ephemeral
+instance running Neo4j Graph Analytics" and takes a few minutes. That
+matches what the instance says for itself: =gds.version()= fails with "Aura
+Graph Analytics is versionless" (finding 21).
+
+* Not in the lab: degree without Bloom
+
+Degree is a count, so the file and plain Cypher both give it.
+=bb form13 degree=, or the Lab 5 block in =dev/explore.clj=.
+
+| most companies held            | companies |
+|--------------------------------+-----------|
+| ENVESTNET ASSET MANAGEMENT INC |      1615 |
+| GUGGENHEIM CAPITAL LLC         |      1318 |
+| NOMURA ASSET MANAGEMENT CO LTD |      1019 |
+| M&T Bank Corp                  |       972 |
+
+| held by most managers | managers |
+|-----------------------+----------|
+| APPLE INC             |       22 |
+| MICROSOFT CORP        |       21 |
+| JOHNSON & JOHNSON     |       21 |
+| DISNEY WALT CO        |       20 |
+| JPMORGAN CHASE & CO   |       20 |
+
+The lab mentions "communities of managers who have similar holdings".
+Counting shared companies per pair of managers, Envestnet and Guggenheim
+share 1,099.
