@@ -1,0 +1,23 @@
+* AI Workshop with Neo4j and Google
+
+Boston AI Developers Group, through AICamp.
+Thursday, October 8, 2026, 1:30 PM EDT.
+
+- Event: https://www.aicamp.ai/event/eventdetails/W2026100810
+
+Address:
+Google Cambridge, 355 Main St
+Cambridge, Massachusetts
+
+Speakers: Ben Lackey, Neo4j. Upasana Pati, Google.
+
+A hands-on workshop on building AI agents backed by knowledge graphs,
+worked on real datasets.
+
+** Materials
+
+TODO: the workshop's repositories, codelabs and datasets, as they are handed out.
+
+** Notes
+
+In =notes/=, one file per session or topic.

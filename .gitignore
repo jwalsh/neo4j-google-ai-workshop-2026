@@ -1,0 +1,5 @@
+.env
+.envrc.local
+*.dump
+/data/
+.DS_Store
