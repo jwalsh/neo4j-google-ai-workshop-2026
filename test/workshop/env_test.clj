@@ -1,5 +1,6 @@
 (ns workshop.env-test
   (:require [clojure.test :refer [deftest is testing]]
+            [workshop.diagram :as diagram]
             [workshop.env :as env]
             [workshop.form13 :as form13]
             [workshop.neo4j :as neo4j]
@@ -61,6 +62,15 @@
                           (word [1 1 2] "id") (word [1 1 2] "USER123456")
                           (word [1 1 3] "user12") (word [1 1 3] "3456")
                           (word [1 1 4] "Instances")])))))))
+
+(deftest diagram-test
+  (let [mermaid (diagram/edges->mermaid
+                 [{:source "Home" :sourceLabel "Segment" :relationship "PRODUCT"
+                   :target "Homepod Mini" :targetLabel "Product"}])]
+    (is (re-find #"flowchart LR" mermaid))
+    (is (re-find #"n_home\[\"Home<br/><small>Segment</small>\"\]:::segment" mermaid))
+    (is (re-find #"n_home -- PRODUCT --> n_homepod_mini" mermaid))
+    (is (re-find #"classDef product" mermaid))))
 
 (deftest statements-test
   (is (= ["RETURN 1 AS ok" "MATCH (n)\nRETURN count(n)"]

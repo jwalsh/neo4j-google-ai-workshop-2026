@@ -57,6 +57,36 @@ the observation the lab ends on.
 It is a substitute. The box in =README.org= stays unticked: Document
 Intelligence itself was never opened.
 
+** The picture the lab ends on
+
+From the lab text: "We can see the node for the home category includes
+streaming and wireless devices such as the HomePod, HomePod mini and Apple
+TV." The lab's own image of that is kept locally as
+=resources/lab-06-document-intelligence/15.png=. Ours, two ways.
+
+Drawn from the query's rows by =workshop.diagram=, as
+[[file:diagrams/lab-06-home-category.mmd][diagrams/lab-06-home-category.mmd]]:
+
+[[file:img/lab-06-home-category.png]]
+
+The same subgraph in the console's Query tool,
+=labs/lab-06/05-home-graph.cypher=:
+
+[[file:img/lab-06-home-graph-console.png]]
+
+The console captions each node with its description and not its name: the
+middle node, "Includes Apple TV…", is Home; the two "High-fidelity
+wireless…" are the HomePod and the HomePod mini; "The Company's med…" is
+Apple TV 4K, joined to tvOS.
+
+Beside the lab's image: there, Home reaches the three products through two
+category nodes, media streaming and high-fidelity wireless, by
+INCLUDES_CATEGORY and IS_A_TYPE_OF. Here the same two phrases are in the
+products' descriptions and Home points at the products directly with a
+relationship named PRODUCT. Same reading of the same two pages, a different
+model of it: Document Intelligence proposed a schema, and here the labels
+were handed over and the relationship types left to the model.
+
 * What is ready
 
 The PDF, with a real file target so it is fetched once:

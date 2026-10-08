@@ -54,11 +54,16 @@ owner's. These are what that cost.
     nowhere, twice, with no error. Calling `focus()` on `.cm-content` and
     then typing worked. Read the editor back before pressing Run.
 
-16. **Read back the end of the editor, not the start.** Lab 4's last
-    statement went in with a stray `t` after its semicolon, which the Query
-    tool ran as a second statement and failed. The check before Run looked
-    only at the first words. Where the `t` came from is not known. The real
-    statement had already succeeded, so nothing was lost.
+16. **The driver stole the keyboard.** Lab 4's last statement went in with
+    a stray `t` after its semicolon, which the Query tool ran as a second
+    statement and failed. Three hours later it happened again, `thi` this
+    time, and that gave the cause: every script called `bring_to_front()`,
+    which raises the lab browser over whatever the owner is typing in, and
+    their next keystrokes land in the page. The call is gone from the
+    scripts still in use; text goes in with `insert_text`, which does not
+    need focus. The query runner now compares the whole editor with the
+    statement and, if they differ, clears it and does not run. An agent
+    driving a window on a machine someone is using must not take focus.
 17. **Bloom's search was reported as undrivable, and the fault was the
     driver's.** Four attempts failed and the entry first written here blamed
     Bloom. The cause: clicks were placed by converting screenshot
