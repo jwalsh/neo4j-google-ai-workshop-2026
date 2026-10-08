@@ -3,3 +3,7 @@
 *.dump
 /data/
 .DS_Store
+.cpcache/
+.nrepl-port
+.lsp/
+.clj-kondo/.cache/

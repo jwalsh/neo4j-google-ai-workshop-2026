@@ -1,0 +1,24 @@
+{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.12.0"}
+        ;; The official Neo4j driver, over Bolt. No Clojure wrapper.
+        org.neo4j.driver/neo4j-java-driver {:mvn/version "5.28.15"}
+        ;; Google's Cloud Storage client, for the workshop's dataset bucket.
+        com.google.cloud/google-cloud-storage {:mvn/version "2.75.0"}
+        ;; Both clients log through SLF4J; this keeps them quiet.
+        org.slf4j/slf4j-nop {:mvn/version "2.0.20"}}
+ :aliases
+ {;; clojure -M:run ping
+  :run {:main-opts ["-m" "workshop.cli"]}
+  ;; dev/user.clj: what a REPL starts in. CIDER jacks in with this alias
+  ;; (see .dir-locals.el).
+  :dev {:extra-paths ["dev" "test"]}
+  ;; clojure -M:dev:nrepl, then cider-connect. Writes .nrepl-port.
+  :nrepl {:extra-deps {nrepl/nrepl {:mvn/version "1.8.0"}
+                       cider/cider-nrepl {:mvn/version "0.63.1"}}
+          :main-opts ["-m" "nrepl.cmdline"
+                      "--middleware" "[cider.nrepl/cider-middleware]"]}
+  ;; clojure -M:test
+  :test {:extra-paths ["test"]
+         :extra-deps {io.github.cognitect-labs/test-runner
+                      {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+         :main-opts ["-m" "cognitect.test-runner"]}}}

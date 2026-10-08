@@ -1,0 +1,20 @@
+;; Task runner only. The drivers are JVM libraries, so each task starts
+;; `clojure` with an alias from deps.edn; nothing here runs them in babashka.
+{:tasks
+ {:requires ([babashka.tasks :refer [clojure]])
+  ping      {:doc "RETURN 1 against the instance in .env"
+             :task (clojure "-M:run" "ping")}
+  databases {:doc "SHOW DATABASES"
+             :task (clojure "-M:run" "databases")}
+  counts    {:doc "Node counts by label, relationship counts by type"
+             :task (clojure "-M:run" "counts")}
+  cypher    {:doc "Run a Cypher file: bb cypher labs/lab-04-query.cypher"
+             :task (apply clojure "-M:run" "cypher" *command-line-args*)}
+  datasets  {:doc "List the workshop's datasets in Cloud Storage"
+             :task (clojure "-M:run" "datasets")}
+  peek      {:doc "First lines of a dataset: bb peek hands-on-lab/form13-2023.csv 3"
+             :task (apply clojure "-M:run" "peek" *command-line-args*)}
+  test      {:doc "Unit tests. They touch no network."
+             :task (clojure "-M:test")}
+  nrepl     {:doc "An nREPL with CIDER's middleware, for cider-connect"
+             :task (clojure "-M:dev:nrepl")}}}
