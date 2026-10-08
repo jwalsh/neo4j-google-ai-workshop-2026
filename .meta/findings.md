@@ -54,6 +54,21 @@ owner's. These are what that cost.
     nowhere, twice, with no error. Calling `focus()` on `.cm-content` and
     then typing worked. Read the editor back before pressing Run.
 
+16. **Read back the end of the editor, not the start.** Lab 4's last
+    statement went in with a stray `t` after its semicolon, which the Query
+    tool ran as a second statement and failed. The check before Run looked
+    only at the first words. Where the `t` came from is not known. The real
+    statement had already succeeded, so nothing was lost.
+17. **Bloom's search box did not take driven input.** The visible input is a
+    disabled placeholder; a click by position opens the suggestions, but
+    Tab, Enter and clicks on the suggestion rows (tried as `role=option` and
+    as list items) never added a term, in four attempts. "Show me a graph"
+    is an ordinary button and worked. Bloom is point-and-click on a canvas:
+    the search and the Degree Centrality panel were left to a person.
+18. **The account's email is in the header of every Query and Bloom
+    screenshot.** "User: Aura (...)" sits on the instance bar. Each image
+    kept in `notes/img/` has that span painted over before it is added.
+
 ## Tooling
 
 9. **`curl | jq` passed a dead database.** `gmake ping` printed curl's "Could
@@ -77,3 +92,17 @@ owner's. These are what that cost.
     "Trial - 14 days left", although the listing says the organization has
     purchased. Nothing asked for a card. Whether the usage reaches the
     marketplace subscription is not something this session can see.
+19. **The Query API reports a failed statement with HTTP 200.** The body
+    carries an `errors` array beside an empty `data`. `gmake cypher` piped
+    it through `jq '.data // .'`, printed the empty data and exited 0, for a
+    statement that had failed. The jq filter now fails the recipe when
+    `errors` is not empty. Same shape as finding 9, one layer up: the
+    transport succeeded and the question was whether the statement did.
+20. **Lab 4 says "full year" and loads the day file.** The text of "More
+    Performant Load" introduces `form13-2023.csv`, a million rows, and all
+    three of its statements name `form13-2023-05-11.csv`. The statements
+    were run as written. The result is the day's 7,381 holdings, keyed.
+21. **`gds.version()` exists and refuses.** It fails with "Aura Graph
+    Analytics is versionless": the namespace is there on AuraDB
+    Professional, the plugin is not. Graph algorithms mean a Graph
+    Analytics session, which is what Bloom starts in Lab 5.

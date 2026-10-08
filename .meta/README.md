@@ -23,12 +23,15 @@ queries go in; copies of their materials do not. One slide image is in
 
 ## Where things stand (2026-10-08)
 
-- The workshop is in progress. Labs 1 to 3 are done: the lab account is
+- The workshop is in progress. Labs 1 to 4 are done: the lab account is
   signed in to a Chromium with its own empty profile, one AuraDB
   Professional instance is RUNNING in us-east1 with its credentials in
-  `.env`, and `SHOW DATABASES` returns `neo4j` and `system` from the
-  console's Query tool and from `gmake cypher` alike. The database is empty.
-  The lecture in Assignment 1 is unticked: it is slides, and the owner's.
+  `.env`, and the database holds Lab 4's keyed load: 2,251 companies, 28
+  managers, 7,381 OWNS, two node-key constraints. `bb form13 verify` checks
+  that against the file. The lectures are unticked: slides, and the owner's.
+- Lab 5 is half done. Bloom opened and "Show me a graph" drew a scene; the
+  search and the Degree Centrality steps were not driven (finding 17) and
+  are the owner's to click.
 - The lab account, the project and the instance expire with the lab, about
   five hours from 16:23 EDT. After that `.env` holds dead values and
   `gmake ping` fails; that is expected, not a regression.
@@ -67,8 +70,12 @@ queries go in; copies of their materials do not. One slide image is in
   first needs application default credentials for the lab account, which
   exists only in the driven browser; nothing on this machine can call the
   lab project's own APIs yet.
-- `workshop.neo4j/->clj` has only converted scalars: the database is empty,
-  so no node, relationship or path has been through it.
+- `workshop.form13/load!` has only taken its already-loaded branch: the
+  load itself was run from the console. The files it would run are the
+  ones that were run there.
+- `workshop.form13/value-scale` is an inference from the numbers.
+- `experiments/001-msa-similarity` shows the Python and the Clojure agree
+  with each other. Neither was compared with the notebook it came from.
 - `cider-jack-in` was not run in a live Emacs. Checked in batch: the
   `.dir-locals.el` values are accepted as safe and applied, and
   `clojure -M:dev:nrepl` starts with CIDER's middleware.
@@ -84,6 +91,8 @@ queries go in; copies of their materials do not. One slide image is in
   `dev/user.clj`.
 - The dataset bucket lists and reads with no credentials: `bb datasets`,
   `bb peek`.
+- `workshop.neo4j/->clj` on a path of two nodes and a relationship.
+- `bb form13` views, and `verify` agreeing with the database after Lab 4.
 - `bb status` and `bb dashboard`, with everything up. No check has been
   seen to fail for real: the :down paths are untested against a dead
   instance or a closed browser.

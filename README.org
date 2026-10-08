@@ -34,7 +34,7 @@ From the class page, "Neo4j and Google".
 
 *** TODO Assignment 2 - Moving Data
 - [ ] Lecture - Moving Data
-- [ ] Lab 4 - Query
+- [X] Lab 4 - Query
 - [ ] Lab 5 - Bloom
 
 *** TODO Assignment 3 - AI and Agents
@@ -58,7 +58,7 @@ Ungrouped on the class page.
 - Datasets, public objects in the =neo4j-datasets= bucket under
   =https://storage.googleapis.com/neo4j-datasets/hands-on-lab/=:
   - =form13-2023-05-11.csv=, one day of SEC Form 13 filings, Lab 4's first load
-  - =form13-2023.csv=, the year, Lab 4's second load
+  - =form13-2023.csv=, the year. Lab 4's text says its second load uses this; its statements name the day file again
   - =Apple_10-K_2025_2_pages.pdf=, Lab 6
 
 The data is quarterly filings to SEC EDGAR by asset managers with over $100m
@@ -79,6 +79,16 @@ official Java driver, =workshop.gcp= over Google's Cloud Storage client.
 REPL in =dev/user.clj=, where =(q "MATCH ...")= runs a statement and returns
 rows as maps.
 
+=bb form13= explores Lab 4's day file locally, with no database: =summary=,
+=top=, =degree=, =variants=, =odd=; =verify= compares the database with the
+file and =load= runs the keyed load only when they differ. =dev/explore.clj=
+is a page of =(comment ...)= blocks to evaluate one form at a time, lab by
+lab; =bb repl= starts the nREPL for it.
+
+=experiments/= holds exploration in other languages before it is ported:
+=001-msa-similarity= is the Dataproc notebook's similarity graph in Python,
+then in Clojure as =bb msa=.
+
 =bb status= runs every connection check once: the instance, the dataset
 bucket, the lab browser, the lab's remaining time, the environment, the
 checklist. =bb dashboard= serves the same as a page on
@@ -91,3 +101,6 @@ In =notes/=, one file per session or topic.
 - [[file:notes/architecture.org][What gets built]]: the architecture slide and where each lab sits on it
 - [[file:notes/lab-02-deploy-neo4j.org][Lab 2 - Deploy Neo4j]]: the path taken, where it left the lab's text, and the check
 - [[file:notes/lab-03-connect-to-neo4j.org][Lab 3 - Connect to Neo4j]]: Connect, Query, and =SHOW DATABASES= two ways
+- [[file:notes/lab-04-query.org][Lab 4 - Query]]: the naive load, the keyed load, the counts, and what the file says locally
+- [[file:notes/lab-05-bloom.org][Lab 5 - Bloom]]: as far as it was driven, and degree centrality without Bloom
+- [[file:notes/resources.org][Resources from the slides]]: the Dataflow template and the Dataproc notebooks
