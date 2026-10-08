@@ -5,6 +5,7 @@
         ;; Google's Cloud Storage client, for the workshop's dataset bucket.
         com.google.cloud/google-cloud-storage {:mvn/version "2.75.0"}
         org.clojure/data.csv {:mvn/version "1.1.0"}
+        org.clojure/data.json {:mvn/version "2.5.1"}
         ;; Both clients log through SLF4J; this keeps them quiet.
         org.slf4j/slf4j-nop {:mvn/version "2.0.20"}}
  :aliases

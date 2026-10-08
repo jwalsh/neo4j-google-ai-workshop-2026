@@ -35,8 +35,11 @@ early on was removed from the tree on 2026-10-08; it is still in history
 - Lab 5 is done: the Manager, OWNS, Company search and Degree Centrality
   with size scaling, in Bloom. A 4GB Graph Analytics session was left
   running.
-- Lab 6 looks blocked: this Aura account has no Document Intelligence in
-  its sidebar (finding 22).
+- Lab 6 is blocked as written: this Aura account has no Document
+  Intelligence (finding 22). Its result was reproduced through the LLM
+  Graph Builder's API (`experiments/005-graph-builder-api/`), which wrote
+  Document, Chunk and 71 entity nodes into the same database. Lab 4's
+  counts are unchanged; `bb counts` now lists both graphs.
 - The lab account, the project and the instance expire with the lab, about
   five hours from 16:23 EDT. After that `.env` holds dead values and
   `gmake ping` fails; that is expected, not a regression.

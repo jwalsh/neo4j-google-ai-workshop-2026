@@ -5,6 +5,7 @@
   (:require [clojure.pprint :refer [print-table]]
             [user :refer [counts dashboard holdings peek-dataset q run-file status]]
             [workshop.form13 :as form13]
+            [workshop.graph-builder :as builder]
             [workshop.msa :as msa]
             [workshop.neo4j :as neo4j]))
 
@@ -71,6 +72,24 @@
   (count similarity-edges)                     ; => 5822
   (print-table (take 5 (msa/most-similar similarity-edges
                                          "Boston-Cambridge-Newton, MA-NH Metro Area")))
+  :rcf)
+
+;; Lab 6 by another road: the LLM Graph Builder's API (experiments/005).
+;; Needs the login token; see workshop.graph-builder's docstring.
+(comment
+  (builder/connect)
+  (builder/token-limits)
+  (map #(select-keys % [:fileName :status :nodeCount :relationshipCount]) (builder/sources))
+  (builder/run-lab-06!)                        ; a no-op once Completed
+  (print-table (run-file "labs/lab-06/03-entities-by-label.cypher"))
+  (print-table (q "MATCH (category:__Entity__ {id: 'Home'})-[relationship]->(member)
+                   RETURN type(relationship) AS relationship, member.id AS member"))
+  ;; from a chunk of text to what was read out of it
+  (q "MATCH (chunk:Chunk)-[:HAS_ENTITY]->(entity)
+      RETURN chunk.position AS chunk, collect(entity.id)[..8] AS entities
+      ORDER BY chunk")
+  ;; Lab 4's constraint is why the builder was not allowed the label Company
+  (q "SHOW CONSTRAINTS YIELD name, type, labelsOrTypes, properties")
   :rcf)
 
 ;; Values that come back from the driver

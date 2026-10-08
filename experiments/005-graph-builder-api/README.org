@@ -1,0 +1,117 @@
+#+TITLE: 005 - Lab 6 through the LLM Graph Builder's API
+#+DATE: 2026-10-08
+
+* Source
+
+Lab 6 uses Document Intelligence, a private preview in Aura that this
+account does not have (finding 22, =notes/lab-06-document-intelligence.org=).
+The lab text names its predecessor: Neo4j Labs' LLM Knowledge Graph Builder,
+hosted at =llm-graph-builder.neo4jlabs.com=, source at
+=neo4j-labs/llm-graph-builder=.
+
+* Hypothesis
+
+The hosted Graph Builder can do what Lab 6 does, to the same PDF with the
+same prompt, against our own instance, and it can be driven from Clojure
+through its backend's HTTP API with no clicking after the login.
+
+* Gate
+
+The lab ends on one observation: the Home category includes the HomePod,
+the HomePod mini and Apple TV. The gate is that a query of our database
+returns those three under Home, after an extraction started from the REPL.
+
+* Result
+
+Passed, on the sixth attempt. =labs/lab-06/01-home-category.cypher= returns
+Home with Apple Tv 4K, Homepod and Homepod Mini. The code is
+=src/workshop/graph_builder.clj=; =(run-lab-06!)= is the whole lab.
+
+What it wrote, beside Lab 4's graph and without changing it (2,251 Company,
+28 Manager, 7,381 OWNS before and after):
+
+| label        | nodes |   | relationship | count |
+|--------------+-------+---+--------------+-------|
+| Document     |     1 |   | PART_OF      |     9 |
+| Chunk        |     9 |   | NEXT_CHUNK   |     8 |
+| Product      |    36 |   | FIRST_CHUNK  |     1 |
+| Segment      |    16 |   | HAS_ENTITY   |    82 |
+| Service      |    13 |   | 13 entity-to-entity types | 73 |
+| Organization |     5 |   |              |       |
+| Competitor   |     1 |   |              |       |
+
+Every entity also carries =__Entity__=. Only the chunks carry an embedding:
+384 numbers each, from all-MiniLM-L6-v2. The builder also made three vector
+indexes and a uniqueness constraint on =__Entity__.id=. The run took 32
+seconds and 40,497 tokens of Gemini 3.5 flash, against a daily allowance of
+250,000.
+
+* Log of attempts
+
+Each is something that was tried, what came back, and what it meant. In
+order, all on 2026-10-08.
+
+1. *Open the page.* It opens read-only with a tour over it. "Login" goes to
+   Neo4j's sign-on (Auth0); "Continue with Google" with the lab account went
+   straight through, no consent screen.
+2. *Connect in the page, watching the network.* Dropping the Aura
+   credentials file on the dialog fills every field. Connecting made form
+   POSTs to =prod-backend-967196130891.us-central1.run.app=: =/connect=,
+   =/fetch_embedding_model=, =/get_token_limits=, =/sources_list=. That is
+   the API. Everything after this was code.
+3. *Call =/sources_list= with curl, no token.* "Unauthorized: Missing bearer
+   token in Authorization header". The token is in the page's localStorage
+   under the Auth0 SPA key; it is 468 characters and lasts 86,400 seconds.
+   Copied to =resources/credentials/graph-builder-token= (ignored). With it,
+   the call succeeds. The password works plain or base64-encoded; the front
+   end sends base64.
+4. *Upload, then =/extract= with the fields the source lists as required.*
+   Failed: "'NoneType' object has no attribute 'lower'". The document and
+   its nine chunks were already written when it failed. The missing fields
+   were =embedding_provider= and =embedding_model=, optional in the
+   signature and not optional in fact. Their values are what
+   =/fetch_embedding_model= answers.
+5. *=/extract= again, without uploading again.* Failed: "File does not
+   exist, Please re-upload the file and try again." The backend drops its
+   copy of the file when an extraction fails. Upload every time.
+6. *Upload and extract, with "Company" among the allowed labels.* Failed in
+   the database, not in the builder: =Neo.ClientError.Schema.
+   ConstraintValidationFailed=, "Node with label Company must have the
+   property cusip". Lab 4's node key on =(:Company {cusip})= applies to any
+   node that takes the label, and a company read out of a 10-K has no CUSIP.
+7. *The same with "Organization" in place of "Company".* Completed.
+
+* What the failures say
+
+- Attempt 6 is the one worth keeping. Two loads into one database met on a
+  label, and the constraint from the first decided what the second could
+  write. The fix here was a different label. The honest fix is to decide
+  whether an extracted "Apple" and Form 13's "APPLE INC" are the same node,
+  which needs the CUSIP the document does not give.
+- Attempts 4 and 5 are an API used by one client, its own front end. What
+  the front end always sends has become required, and the signature does
+  not say so.
+- The extraction is not the lab's tool. Document Intelligence proposes a
+  model and previews a graph without writing; this writes. The labels were
+  given, not proposed.
+
+* Run
+
+#+begin_src sh
+gmake data/Apple_10-K_2025_2_pages.pdf
+# log in at llm-graph-builder.neo4jlabs.com once, copy the access token to
+# the file GRAPH_BUILDER_TOKEN_FILE names in .env
+clojure -M:dev -e "(require '[workshop.graph-builder :as b]) (prn (:status (b/run-lab-06!)))"
+bb cypher labs/lab-06/01-home-category.cypher
+#+end_src
+
+Run again, =run-lab-06!= sees the source is Completed and does nothing.
+
+* What it is not
+
+Not Lab 6. Not tested for a file over 1 MB: the front end uploads in 1 MB
+chunks and =upload!= sends one. Not repeatable without a person: the token
+comes from a browser login and expires in a day. The model's output was not
+checked against the PDF beyond the Home category; "Company" and
+"Competitors" came out as entities named for the words, which is the kind of
+thing a reading of the other 70 would find more of.

@@ -132,3 +132,15 @@ owner's. These are what that cost.
     Analytics is versionless": the namespace is there on AuraDB
     Professional, the plugin is not. Graph algorithms mean a Graph
     Analytics session, which is what Bloom starts in Lab 5.
+24. **A constraint from one load decided what the next could write.** Lab
+    4's node key on `(:Company {cusip})` made the Graph Builder's extraction
+    fail the moment the model produced a `Company` from the 10-K: no CUSIP,
+    no node. Nothing in either tool mentions the other. Before a second
+    source writes into a database, list its constraints and keep the new
+    labels clear of them, or decide on purpose that they are the same thing.
+25. **"Optional" in the signature, required in fact.** The Graph Builder's
+    `/extract` lists the embedding fields as optional and dies on a `None`
+    without them, after writing half its output. Its only client always
+    sends them. For an API with one client, read what the client sends, not
+    what the signature permits: watching the page's own requests was the
+    fastest documentation there was.

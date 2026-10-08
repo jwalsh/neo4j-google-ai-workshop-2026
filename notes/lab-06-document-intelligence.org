@@ -45,6 +45,18 @@ Cloud console again and landing in the marketplace organization, or asking
 the instructor to enable the preview for this one. Either may mean a second
 instance and repeating Lab 4's load.
 
+* Done another way
+
+The lab's result was reproduced with the tool the lab names as Document
+Intelligence's predecessor, the LLM Graph Builder, driven through its API
+from Clojure: =experiments/005-graph-builder-api/=, with the seven attempts
+it took. The same PDF and the same prompt gave 71 entities, and the Home
+category includes the HomePod, the HomePod mini and Apple TV 4K, which is
+the observation the lab ends on.
+
+It is a substitute. The box in =README.org= stays unticked: Document
+Intelligence itself was never opened.
+
 * What is ready
 
 The PDF, with a real file target so it is fetched once:
