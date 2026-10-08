@@ -1,0 +1,11 @@
+* Labs
+
+The owner's own queries and scripts, one file per lab, named for the lab on
+the class page: =lab-04-query.cypher=, =lab-06-document-intelligence.py=.
+
+Run a Cypher file with =gmake cypher FILE=labs/lab-04-query.cypher=. Without
+cypher-shell that goes through the Query API, which takes one statement per
+request, so keep one statement per file or install cypher-shell.
+
+Connection details come from the environment (=.env=, see =.env.template=).
+Nothing here holds a URI, a password or a project id.
