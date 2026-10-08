@@ -10,6 +10,7 @@
     (peek-dataset \"hands-on-lab/form13-2023.csv\")"
   (:require [workshop.dashboard :as dashboard]
             [workshop.env :as env]
+            [workshop.form13 :as form13]
             [workshop.gcp :as gcp]
             [workshop.neo4j :as neo4j]
             [workshop.status :as status]))
@@ -55,6 +56,11 @@
    (str "http://127.0.0.1:" port "/")))
 
 (defn status [] (status/all-checks (driver)))
+
+(defn holdings
+  "The Form 13 day file as maps, from data/ (downloaded on first use)."
+  []
+  @form13/rows)
 
 (defn env-names
   "Which connection variables are set. Names only."

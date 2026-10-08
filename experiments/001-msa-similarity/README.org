@@ -1,0 +1,58 @@
+#+TITLE: 001 - MSA similarity, Python then Clojure
+#+DATE: 2026-10-08
+
+* Source
+
+The Neo4j examples in =GoogleCloudDataproc/cloud-dataproc=,
+=notebooks/python/neo4j= (see =notes/resources.org=). Notebook 1.1 builds a
+similarity graph of metropolitan areas from four census figures, inside
+Neo4j with the Graph Data Science client.
+
+* Hypothesis
+
+The core of that notebook needs neither Neo4j nor GDS: it is arithmetic on
+938 rows. Written plainly in Python and then ported to Clojure, the two
+produce the same edges.
+
+* What was kept and what was left out
+
+Kept, with the notebook's parameters: natural log of each figure, min-max
+scaling, 15 nearest neighbours by Euclidean distance, a cutoff at the first
+percentile of similarity.
+
+Changed: the neighbours are exact. GDS kNN is approximate, so these edges
+are not expected to match the notebook's one for one. Similarity is
+1 / (1 + distance), which is how GDS turns a Euclidean distance into a
+similarity; that is from GDS's documentation as remembered, not checked
+today.
+
+Left out: Louvain, and writing anything to a database. The lab instance is
+in use for the labs and has no GDS plugin (finding 21).
+
+* Gate
+
+The Python and the Clojure print byte-identical TSV: source, target,
+similarity to nine places, sorted.
+
+* Run
+
+#+begin_src sh
+curl -fsSL -o data/census_demographics_by_metro_area.csv \
+  https://raw.githubusercontent.com/GoogleCloudDataproc/cloud-dataproc/master/notebooks/python/neo4j/data/census_demographics_by_metro_area.csv
+python3 experiments/001-msa-similarity/similarity.py data/census_demographics_by_metro_area.csv > /tmp/msa-python.tsv
+bb msa data/census_demographics_by_metro_area.csv > /tmp/msa-clojure.tsv
+shasum /tmp/msa-python.tsv /tmp/msa-clojure.tsv
+#+end_src
+
+* Log
+
+- 2026-10-08. Passed on the first run: 13,930 edges from each, same SHA-1
+  (=7470f79b7300...=). Rounding to nine places before sorting is what makes
+  that robust to the last bit of =log=; without it the gate was never tried.
+- 2026-10-08. Boston's nearest: Seattle (0.942), Washington (0.926), Denver
+  (0.897), San Diego, Portland.
+
+* What it is not
+
+Not a reproduction of the notebook's result. Nobody ran the notebook here,
+so "same as GDS" is untested. The port is =src/workshop/msa.clj=.

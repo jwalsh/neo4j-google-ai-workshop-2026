@@ -3,7 +3,9 @@
   (:require [clojure.pprint :as pprint]
             [clojure.string :as str]
             [workshop.dashboard :as dashboard]
+            [workshop.form13 :as form13]
             [workshop.gcp :as gcp]
+            [workshop.msa :as msa]
             [workshop.neo4j :as neo4j]
             [workshop.status :as status]))
 
@@ -46,6 +48,27 @@
                          (dashboard/start listen-port)
                          (println (str "http://127.0.0.1:" listen-port "/  (ctrl-c stops it)"))
                          @(promise)))}
+   "form13"    {:doc "The Form 13 day file, locally: form13 [summary|top|degree|variants|odd|verify|load]"
+                :run (fn [[view]]
+                       (let [holdings @form13/rows]
+                         (case (or view "summary")
+                           "summary" (pprint/pprint (form13/summary holdings))
+                           "top" (print-rows (form13/top-holdings holdings))
+                           "degree" (do (print-rows (form13/manager-degree holdings))
+                                        (print-rows (form13/company-degree holdings)))
+                           "variants" (print-rows (form13/name-variants holdings))
+                           "odd" (print-rows (form13/odd-prices holdings))
+                           "verify" (with-open [driver (neo4j/connect)]
+                                      (pprint/pprint (form13/verify driver holdings)))
+                           "load" (with-open [driver (neo4j/connect)]
+                                    (pprint/pprint (form13/load! driver holdings)))
+                           (throw (ex-info (str "form13 has no view " view) {})))))}
+   "msa"       {:doc "Similarity edges for a census file, as TSV: msa data/census_demographics_by_metro_area.csv"
+                :run (fn [[csv-path]]
+                       (when-not csv-path
+                         (throw (ex-info "msa needs a census csv." {})))
+                       (doseq [[source-name target-name edge-similarity] (msa/edges csv-path)]
+                         (println (format "%s\t%s\t%.9f" source-name target-name edge-similarity))))}
    "datasets"  {:doc "List the workshop's datasets in Cloud Storage"
                 :run (fn [_]
                        (print-rows (gcp/list-objects (gcp/public-storage))))}

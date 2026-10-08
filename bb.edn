@@ -20,5 +20,10 @@
              :task (apply clojure "-M:run" "peek" *command-line-args*)}
   test      {:doc "Unit tests. They touch no network."
              :task (clojure "-M:test")}
-  nrepl     {:doc "An nREPL with CIDER's middleware, for cider-connect"
-             :task (clojure "-M:dev:nrepl")}}}
+  form13    {:doc "The Form 13 day file, locally: bb form13 [summary|verify|load|top|variants|odd]"
+             :task (apply clojure "-M:run" "form13" *command-line-args*)}
+  msa       {:doc "Similarity edges for a census file, as TSV (experiments/001-msa-similarity)"
+             :task (apply clojure "-M:run" "msa" *command-line-args*)}
+  repl      {:doc "An nREPL in dev/user.clj with CIDER's middleware, for cider-connect"
+             :override-builtin true
+             :task (clojure "-M:dev:repl")}}}

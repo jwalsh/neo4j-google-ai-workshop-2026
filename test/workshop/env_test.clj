@@ -1,6 +1,7 @@
 (ns workshop.env-test
   (:require [clojure.test :refer [deftest is testing]]
             [workshop.env :as env]
+            [workshop.form13 :as form13]
             [workshop.neo4j :as neo4j]
             [workshop.status :as status]))
 
@@ -34,6 +35,18 @@
          (status/checklist (str "* Top\n- [ ] not under an assignment\n"
                                 "*** TODO Assignment 1\n- [X] Lab 1\n- [ ] Lab 2\n"
                                 "*** DONE Assignment 2\n- [x] Lab 3\n")))))
+
+(def sample-holdings
+  [{:manager "A" :cusip "1" :company "ACME INC" :quarter "2023-03-31" :value 2000.0 :shares 1}
+   {:manager "A" :cusip "2" :company "BOLT CO" :quarter "2023-03-31" :value 50000.0 :shares 1000}
+   {:manager "B" :cusip "1" :company "Acme, Inc." :quarter "2023-03-31" :value 100000.0 :shares 2000}])
+
+(deftest form13-test
+  (is (= {:companies 2 :managers 2 :owns 3} (form13/expected-counts sample-holdings)))
+  (is (= [{:cusip "1" :names "ACME INC / Acme, Inc."}] (form13/name-variants sample-holdings)))
+  (is (= ["A" "B"] (map :manager (form13/manager-degree sample-holdings))))
+  (is (= [{:company "ACME INC" :cusip "1" :managers 2}] (form13/company-degree sample-holdings 1)))
+  (is (= ["ACME INC"] (map :company (form13/odd-prices sample-holdings 1.0)))))
 
 (deftest statements-test
   (is (= ["RETURN 1 AS ok" "MATCH (n)\nRETURN count(n)"]
