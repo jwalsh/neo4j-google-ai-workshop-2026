@@ -28,8 +28,47 @@ Where the detail is, from the post's links:
 - [[https://neo4j.com/docs/dataflow-bigquery/][Dataflow Flex Template for BigQuery to Neo4j]]
 - [[https://github.com/neo4j-partners/neo4j-google-cloud-dataflow][neo4j-partners/neo4j-google-cloud-dataflow]], the step-by-step guide
 
-Not read yet: those four. Not tried: the template. It needs a Dataflow job
-in the lab project, and nothing on this machine is signed in to it.
+Not read yet: those four pages. Not tried: the template. It needs a
+Dataflow job in the lab project, and nothing on this machine is signed in to
+it.
+
+** The template's source
+
+Not from the slides: =GoogleCloudPlatform/DataflowTemplates=,
+=v2/googlecloud-to-neo4j=, cloned beside this repository by ghq and read at
+commit =31539a22d= (2026-10-08). It fills in what the post leaves out.
+
+From its generated README, the parameters:
+
+- =jobSpecUri=, required: the JSON that describes sources, Neo4j targets and
+  actions.
+- =neo4jConnectionUri= or =neo4jConnectionSecretId=: the connection file, or
+  a Secret Manager secret holding the same thing.
+- =optionsJson=: runtime tokens the spec can refer to as =$name=.
+- =readQuery= and =inputFilePattern=: overrides for a SQL source and a text
+  source.
+
+From =docs/testing-specs/=, the shape of the two files:
+
+- The connection file has five keys: =server_url=, =database=, =auth_type=,
+  =username=, =pwd=. The same five facts as this repository's =.env=, and
+  the password is in it in the clear, which is what the secret parameter is
+  for.
+- A job spec has =config= (=reset_db=, =index_all_properties=, batch sizes
+  and parallelism for node and edge writes), =sources= (=text= with a
+  =gs://= URI, a delimiter and ordered field names, or BigQuery), =targets=
+  (=node= and edge entries, each with a source, a =mode= such as =merge=, an
+  optional =transform= with grouping and SQL-style aggregations, and
+  =mappings= of labels, keys, indexed and typed properties), and =actions=
+  (=cypher= or =http_get=, run after =start= or after =loads=).
+- The test resources hold two families of spec, =compact-syntax= and
+  =import-spec=. Which one a current job should use was not worked out.
+
+Beside Lab 4: the lab's keyed load is three passes, companies then managers
+then relationships, with a constraint on each key. In a job spec that is one
+text source and three targets in =merge= mode with =keys=. No such spec was
+written here: there is nothing to run it on, and an untested spec is not a
+note.
 
 How it sits beside Lab 4: Lab 4 has the database pull a CSV over https with
 =LOAD CSV=. The template is the other direction, a pipeline that reads the
