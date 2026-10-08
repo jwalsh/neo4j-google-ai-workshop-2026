@@ -14,6 +14,33 @@ Speakers: Ben Lackey, Neo4j. Upasana Pati, Google.
 A hands-on workshop on building AI agents backed by knowledge graphs,
 worked on real datasets.
 
+** Assignments
+
+From the class page, "Neo4j and Google".
+
+*** TODO Assignment 1 - Getting Started
+- [ ] Lecture - Introduction to Neo4j
+- [ ] Lab 1 - Sign In
+- [ ] Lab 2 - Deploy Neo4j
+- [ ] Lab 3 - Connect to Neo4j
+
+*** TODO Assignment 2 - Moving Data
+- [ ] Lecture - Moving Data
+- [ ] Lab 4 - Query
+- [ ] Lab 5 - Bloom
+
+*** TODO Assignment 3 - AI and Agents
+- [ ] Lecture - Gemini Enterprise
+- [ ] Lecture - Neo4j and AI
+- [ ] Lab 6 - Document Intelligence
+- [ ] Lab 7 - Deploy Neo4j Agent
+- [ ] Lab 8 - Use Neo4j Agent
+- [ ] Lab 9 - Aura Agents
+- [ ] Lecture - Next Steps
+
+*** TODO Cloud Environment
+Ungrouped on the class page.
+
 ** Materials
 
 TODO: the workshop's repositories, codelabs and datasets, as they are handed out.
