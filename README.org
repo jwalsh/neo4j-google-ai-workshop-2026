@@ -1,3 +1,11 @@
+#+TITLE: AI Workshop with Neo4j and Google
+#+DATE: 2026-10-08
+#+STARTUP: overview
+
+Notes and my own queries from a three-hour hands-on lab on Neo4j Aura and
+Gemini Enterprise. The lab's own instructions live in its repository, linked
+under Materials; nothing of theirs is copied here beyond one slide.
+
 * AI Workshop with Neo4j and Google
 
 Boston AI Developers Group, through AICamp.
@@ -20,9 +28,9 @@ From the class page, "Neo4j and Google".
 
 *** TODO Assignment 1 - Getting Started
 - [ ] Lecture - Introduction to Neo4j
-- [ ] Lab 1 - Sign In
-- [ ] Lab 2 - Deploy Neo4j
-- [ ] Lab 3 - Connect to Neo4j
+- [X] Lab 1 - Sign In
+- [X] Lab 2 - Deploy Neo4j
+- [X] Lab 3 - Connect to Neo4j
 
 *** TODO Assignment 2 - Moving Data
 - [ ] Lecture - Moving Data
@@ -43,10 +51,31 @@ Ungrouped on the class page.
 
 ** Materials
 
-TODO: the workshop's repositories, codelabs and datasets, as they are handed out.
+- Lab repository: https://github.com/neo4j-partners/hands-on-lab-neo4j-and-google
+  (Apache 2.0). =ghq get= it and read each lab at
+  =assignment-N-*/lab-N-*/docs/README.md=. The lectures there are embedded
+  Google Slides, one link per =lecture-*/docs/README.md=.
+- Datasets, public objects in the =neo4j-datasets= bucket under
+  =https://storage.googleapis.com/neo4j-datasets/hands-on-lab/=:
+  - =form13-2023-05-11.csv=, one day of SEC Form 13 filings, Lab 4's first load
+  - =form13-2023.csv=, the year, Lab 4's second load
+  - =Apple_10-K_2025_2_pages.pdf=, Lab 6
+
+The data is quarterly filings to SEC EDGAR by asset managers with over $100m
+under management: who holds what.
+
+** Tooling
+
+=gmake help= lists the targets. =gmake agenda= and =gmake todos= read the
+checklist above. =gmake .env= starts a credentials file from =.env.template=;
+=gmake ping= and =gmake cypher FILE=...= run against the instance it names.
+The labs themselves need only a browser. My queries go in =labs/=, what bit
+goes in =.meta/findings.md=.
 
 ** Notes
 
 In =notes/=, one file per session or topic.
 
 - [[file:notes/architecture.org][What gets built]]: the architecture slide and where each lab sits on it
+- [[file:notes/lab-02-deploy-neo4j.org][Lab 2 - Deploy Neo4j]]: the path taken, where it left the lab's text, and the check
+- [[file:notes/lab-03-connect-to-neo4j.org][Lab 3 - Connect to Neo4j]]: Connect, Query, and =SHOW DATABASES= two ways
