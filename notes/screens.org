@@ -19,14 +19,14 @@ Bloom after "Show me a graph", with one company selected.
 
 [[file:img/state-dashboard.png]]
 
-=bb dashboard= at the same moment: Lab 4's load in the instance, the lab
-browser's tabs, a little over two hours of lab time left.
+=bb dashboard=, retaken ten minutes before the instance expired: both
+graphs in the instance, each lab's status, the lab browser's tabs.
 
-* Still to capture
+* Not captured
 
-- Labs 6 to 9: Document Intelligence, the agents, Gemini Enterprise.
-- An Emacs session: =cider-jack-in=, a block of =dev/explore.clj= evaluated.
-  There has not been one yet.
+- Lab 6 as written: this account had no Document Intelligence. Its stand-in
+  and Labs 7 to 9 have their images in their own notes.
+- Emacs against Aura. The one session below is on the local graph.
 
 * Emacs and CIDER on the local graph
 
