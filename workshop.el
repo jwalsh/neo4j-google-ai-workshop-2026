@@ -61,6 +61,15 @@ more entry here and one more env file.")
                                     (buffer-local-value 'default-directory repl-buffer))))
                 (ignore-errors (cider-repls 'clj)))))
 
+(defvar workshop-dashboard-port 8377
+  "The port the status page is served on.")
+
+(defun workshop--listening-p (port)
+  "Whether something on this machine accepts connections on PORT."
+  (ignore-errors
+    (delete-process (open-network-stream "workshop-probe" nil "127.0.0.1" port))
+    t))
+
 (defun workshop--port ()
   "The port in .nrepl-port if something is listening on it, or nil."
   (let ((port-file (workshop--path ".nrepl-port")))
@@ -69,10 +78,7 @@ more entry here and one more env file.")
                                       (insert-file-contents port-file)
                                       (buffer-string)))))
         ;; A REPL that was killed leaves its port file behind.
-        (when (and (> port 0)
-                   (ignore-errors
-                     (delete-process (open-network-stream "workshop-probe" nil "localhost" port))
-                     t))
+        (when (and (> port 0) (workshop--listening-p port))
           port)))))
 
 (defun workshop--eval (form)
@@ -87,6 +93,10 @@ Returns the printed value, or signals an error with what the REPL said."
 (defun workshop-layout ()
   "Show the page on the left and the REPL on the right, alone in the frame."
   (interactive)
+  ;; A connection can arrive while the minibuffer is selected, and the
+  ;; minibuffer cannot be made the only window.
+  (when (window-minibuffer-p)
+    (select-window (or (minibuffer-selected-window) (frame-first-window))))
   (delete-other-windows)
   (find-file (workshop--path workshop-page))
   (let ((repl (workshop--repl)))
@@ -128,9 +138,14 @@ jacks in with the alias .dir-locals.el names."
 
 ;;;###autoload
 (defun workshop-dashboard ()
-  "Start, or restart, the status page from the REPL and open it in a browser."
+  "Open the status page in a browser, starting it from the REPL if need be.
+A page already being served, by this REPL or by bb dashboard in a terminal,
+is opened as it is: a second one could not take the same port."
   (interactive)
-  (browse-url (read (workshop--eval "(dashboard)"))))
+  (let ((url (format "http://127.0.0.1:%d/" workshop-dashboard-port)))
+    (unless (workshop--listening-p workshop-dashboard-port)
+      (workshop--eval (format "(dashboard %d)" workshop-dashboard-port)))
+    (browse-url url)))
 
 (provide 'workshop)
 
