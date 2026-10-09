@@ -1,0 +1,123 @@
+MATCH (cited:Paper)<-[:CITES]-(citing:Paper)
+
+|     :arxiv |                                                       :paper | :citedBy |
+|------------+--------------------------------------------------------------+----------|
+| 2310.06770 | SWE-bench: Can Language Models Resolve Real-World GitHub Iss |       19 |
+| 2305.16291 | Voyager: An Open-Ended Embodied Agent with Large Language Mo |       16 |
+| 2405.15793 | SWE-agent: Agent-Computer Interfaces Enable Automated Softwa |       14 |
+| 2602.12670 | SkillsBench: Benchmarking How Well Agent Skills Work Across  |       12 |
+| 2303.11366 | Reflexion: an autonomous agent with dynamic memory and self- |        9 |
+| 2310.03714 | DSPy: Compiling Declarative Language Model Calls into Self-I |        8 |
+| 2407.01489 | Agentless: Demystifying LLM-based Software Engineering Agent |        8 |
+| 2211.01910 |       Large Language Models Are Human-Level Prompt Engineers |        7 |
+| 2310.02304 | Self-Taught Optimizer (STOP): Recursively Self-Improving Cod |        7 |
+| 2406.12045 | $\tau$-bench: A Benchmark for Tool-Agent-User Interaction in |        7 |
+| 2507.19457 | GEPA: Reflective Prompt Evolution Can Outperform Reinforceme |        7 |
+| 2602.20867 |         SoK: Agentic Skills -- Beyond Tool Use in LLM Agents |        6 |
+MATCH (a:Category)<-[:IN]-(:Paper)-[:CITES]->(:Paper)-[:IN]->(b:Category)
+
+| :citing | :cited | :citations |
+|---------+--------+------------|
+|     SKO |    SKE |          8 |
+|     APO |    APO |          6 |
+|     SKO |    SKO |          6 |
+|     ROU |    SKE |          6 |
+|     SKE |    SKE |          5 |
+|     SKS |    SKS |          5 |
+|     RLG |     SI |          4 |
+|      SI |    SKO |          4 |
+|     SKE |    SKO |          4 |
+|     SKE |    CTX |          3 |
+|     SKO |    SKS |          3 |
+|     RLG |    EVM |          3 |
+|     CTX |    CTX |          3 |
+|      SI |     SI |          3 |
+|      SI |    APO |          3 |
+MATCH (x:Collection)<-[:IN]-(citing:Paper)-[:CITES]->(cited:Paper)-[:IN]->(y:Collection)
+
+| :fromCollection |                                  :citing |                                   :cited | :inCollection |
+|-----------------+------------------------------------------+------------------------------------------+---------------|
+|   skills-papers | SEAGym: An Evaluation Environment for Se | $\tau$-bench: A Benchmark for Tool-Agent |        triage |
+|   skills-papers |   Self-Challenging Language Model Agents | $\tau$-bench: A Benchmark for Tool-Agent |        triage |
+|   skills-papers | Survey on Evaluation of LLM-based Agents | $\tau$-bench: A Benchmark for Tool-Agent |        triage |
+|   skills-papers | The Scaling Laws of Skills in LLM Agent  | $\tau$-bench: A Benchmark for Tool-Agent |        triage |
+|   skills-papers | SkillTV-Bench: Benchmarking How Well Jud | $\tau$-bench: A Benchmark for Tool-Agent |        triage |
+|          triage | CRMArena-Pro: Holistic Assessment of LLM | $\tau$-bench: A Benchmark for Tool-Agent | skills-papers |
+|          triage | CRMArena: Understanding the Capacity of  | $\tau$-bench: A Benchmark for Tool-Agent | skills-papers |
+|   skills-papers | Darwin Godel Machine: Open-Ended Evoluti | Agentless: Demystifying LLM-based Softwa |        triage |
+|   skills-papers |                    Code as Agent Harness | Agentless: Demystifying LLM-based Softwa |        triage |
+|   skills-papers | Building to the Test: Coding Agents Deli | Agentless: Demystifying LLM-based Softwa |        triage |
+|   skills-papers | Survey on Evaluation of LLM-based Agents | Agentless: Demystifying LLM-based Softwa |        triage |
+|   skills-papers | Survey on Evaluation of LLM-based Agents | CRMArena: Understanding the Capacity of  |        triage |
+|          triage | To CoT or not to CoT? Chain-of-thought h | Judging LLM-as-a-judge with MT-Bench and | skills-papers |
+|          triage | To CoT or not to CoT? Chain-of-thought h | Large Language Models Are Human-Level Pr | skills-papers |
+|   skills-papers |                    Code as Agent Harness | LocAgent: Graph-Guided LLM Agents for Co |        triage |
+MATCH (p:Paper) WHERE NOT (p)-[:CITES]-(:Paper)
+
+|     :arxiv | :category |                                                       :paper |
+|------------+-----------+--------------------------------------------------------------|
+| 1801.01275 |           | DeepTriage: Exploring the Effectiveness of Deep Learning for |
+| 1807.01337 |           | COTA: Improving the Speed and Accuracy of Customer Support t |
+| 2005.04118 |       MUT | Beyond Accuracy: Behavioral Testing of NLP models with Check |
+| 2209.11055 |           |                  Efficient Few-Shot Learning Without Prompts |
+| 2308.10022 |           | Cupid: Leveraging ChatGPT for More Accurate Duplicate Bug Re |
+| 2310.06913 |           | A Comparative Study of Transformer-based Neural Text Represe |
+| 2406.08660 |           | Fine-Tuned 'Small' LLMs (Still) Significantly Outperform Zer |
+| 2408.02442 |           | Let Me Speak Freely? A Study on the Impact of Format Restric |
+| 2410.21333 |           | Mind Your Step (by Step): Chain-of-Thought can Reduce Perfor |
+| 2412.13663 |           | Smarter, Better, Faster, Longer: A Modern Bidirectional Enco |
+| 2508.00957 |           | Small sample-based adaptive text classification through iter |
+| 2508.21156 |           | Automated Bug Triaging using Instruction-Tuned Large Languag |
+| 2511.20667 |           | A centroid based framework for text classification in ITSM e |
+| 2603.05399 |       JDG | Judge Reliability Harness: Stress Testing the Reliability of |
+| 2605.10039 |       INS | Instruction Adherence in Coding Agent Configuration Files: A |
+| 2605.22175 |       MUT | SWE-Mutation: Can LLMs Generate Reliable Test Suites in Soft |
+| 2606.26356 |       INS | Instruction Bleed: Cross-Module Interference in Prompt-Compo |
+| 2608.01347 |       INS | Same Task, Different Work: Prompt-Induced Waste in Coding Ag |
+MATCH (p:Paper)-[:IN]->(c:Category) WHERE p.verdict IS NOT NULL
+
+| :category |       :verdict | :papers |
+|-----------+----------------+---------|
+|       APO |        correct |       3 |
+|       APO |      corrected |       2 |
+|       CTX |        correct |       1 |
+|       CTX | needs-citation |       2 |
+|       EVM |        correct |       2 |
+|       EVM |      corrected |       3 |
+|       INS |        correct |       2 |
+|       INS |      corrected |       1 |
+|       INS | needs-citation |       1 |
+|       JDG |        correct |       1 |
+|       JDG |      corrected |       3 |
+|       MEM |        correct |       1 |
+|       MEM |      corrected |       1 |
+|       MUT |        correct |       1 |
+|       MUT |      corrected |       2 |
+|       RLG |        correct |       1 |
+|       RLG |      corrected |       3 |
+|       ROU |      corrected |       3 |
+|       ROU | needs-citation |       1 |
+|        SI |        correct |       4 |
+|       SKE |        correct |       4 |
+|       SKE |      corrected |       1 |
+|       SKE | needs-citation |       1 |
+|       SKO |        correct |       2 |
+|       SKO |      corrected |       2 |
+|       SKO | needs-citation |       1 |
+|       SKS |        correct |       4 |
+|       SKS |      corrected |       1 |
+MATCH (a:Author)-[:WROTE]->(p:Paper)
+
+|             :author | :papers |
+|---------------------+---------|
+|      Ghosh, Supriyo |       2 |
+|  Huang, Kung-Hsiang |       2 |
+|          Mao, Yixin |       2 |
+| Narasimhan, Karthik |       2 |
+|  Prabhakar, Akshara |       2 |
+|   Rajmohan, Saravan |       2 |
+|    Savarese, Silvio |       2 |
+|     Wu, Chien-Sheng |       2 |
+|      Xiong, Caiming |       2 |
+|         Yao, Shunyu |       2 |
+|       Zhang, Xuchao |       2 |

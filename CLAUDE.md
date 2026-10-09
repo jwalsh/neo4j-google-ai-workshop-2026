@@ -39,8 +39,8 @@ screenshot), `bb status` (every connection check once) with `bb dashboard` (the 
 page on 127.0.0.1:8377, loopback only, with `/data`, `/ask` and `/traces`
 beside it), `bb ask QUESTION` (a local model chooses one of the Lab 9
 agent's Cypher templates), `bb local` (an embedded Neo4j on
-localhost:7688), and `bb papers where|list|fetch` (arXiv papers a `.bib`
-names, kept in the XDG cache; this one runs in babashka itself, from `bb/`).
+localhost:7688), and `bb papers where|list|fetch|add DIR|index` (arXiv papers a `.bib`
+names or a directory holds, kept in the XDG cache; this one runs in babashka itself, from `bb/`).
 `WORKSHOP_ENV=local-graph.env` points every command at the local server in
 place of `.env`. `OLLAMA_URL` and `OLLAMA_MODEL` choose the model; the
 default is this machine. Do not run a model on this machine unless asked:

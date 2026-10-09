@@ -115,11 +115,15 @@ One second dataset exists: a reading list. =bb papers fetch= keeps the arXiv
 papers a =.bib= names in =$XDG_CACHE_HOME/workshop-papers=, outside the
 repository, so worktrees and agents share one copy and a container mounts
 one directory. =workshop.papers= makes Paper, Author, WROTE and CITES from
-it with no model and loads them beside the Form 13 graph. The model's layer
+it with no model and loads them beside the Form 13 graph: 80 papers from
+two reading lists and 165 citations among them, asked about in
+=labs/papers/01-questions.cypher=. The model's layer
 on top did not pass its gate (=experiments/010-papers-dataset=).
 
 #+begin_src sh
 bb papers where        # the cache and the .bib in use
 bb papers fetch        # once; again is a no-op
 PAPERS_BIB=other.bib bb papers list
+bb papers add ~/some/directory-of-pdfs   # <arxiv-id>-name.pdf, a subdirectory is a category
+bb papers index        # everything cached, from every collection
 #+end_src

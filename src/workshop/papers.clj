@@ -70,10 +70,16 @@
 
 (defn graph
   "Layers one and two as data:
-  {:papers [...] :authors [...] :wrote [[author arxiv]] :cites [[arxiv arxiv]]}."
+  {:papers [...] :authors [...] :wrote [[author arxiv]] :cites [[arxiv arxiv]]
+   :filed [[arxiv \"Collection\"|\"Category\" name]]}. A collection is where
+  a paper came from, a category is the directory it was filed under."
   ([] (graph (index)))
   ([papers]
-   {:papers (mapv #(select-keys % [:arxiv :title :year :url]) papers)
+   {:papers (mapv #(select-keys % [:arxiv :title :year :url :verdict :why]) papers)
+    :filed (vec (for [{:keys [arxiv collections categories]} papers
+                      [kind names] [["Collection" collections] ["Category" categories]]
+                      group-name names]
+                  [arxiv kind group-name]))
     :authors (vec (sort (distinct (remove #{"others"} (mapcat :authors papers)))))
     :wrote (vec (for [{:keys [arxiv authors]} papers
                       author authors
@@ -91,16 +97,22 @@
 
 (defn load!
   "MERGEs a graph into the database: (:Paper {arxiv}), (:Author {name}),
-  WROTE, CITES, and when given, (:Topic {name}) with MENTIONS. Running it
+  WROTE, CITES, (:Collection {name}) and (:Category {name}) with IN, and
+  when given, (:Topic {name}) with MENTIONS. Running it
   twice changes nothing. Returns what the database then holds."
   ([driver paper-graph] (load! driver paper-graph nil))
-  ([driver {:keys [papers wrote cites]} mention-rows]
+  ([driver {:keys [papers wrote cites filed]} mention-rows]
    (neo4j/query driver "CREATE CONSTRAINT paper_arxiv IF NOT EXISTS FOR (p:Paper) REQUIRE p.arxiv IS UNIQUE")
    (neo4j/query driver "CREATE CONSTRAINT author_name IF NOT EXISTS FOR (a:Author) REQUIRE a.name IS UNIQUE")
    (neo4j/query driver "CREATE CONSTRAINT topic_name IF NOT EXISTS FOR (t:Topic) REQUIRE t.name IS UNIQUE")
    (neo4j/query driver
-                "UNWIND $papers AS row MERGE (p:Paper {arxiv: row.arxiv}) SET p.title = row.title, p.year = row.year, p.url = row.url"
-                {:papers (mapv #(update-keys % name) papers)})
+                "UNWIND $papers AS row MERGE (p:Paper {arxiv: row.arxiv}) SET p += row"
+                {:papers (mapv #(update-keys (into {} (remove (comp nil? val)) %) name) papers)})
+   (doseq [[kind rows] (group-by second filed)]
+     (neo4j/query driver
+                  (str "UNWIND $rows AS row MATCH (p:Paper {arxiv: row[0]}) "
+                       "MERGE (g:`" kind "` {name: row[2]}) MERGE (p)-[:IN]->(g)")
+                  {:rows rows}))
    (neo4j/query driver
                 "UNWIND $rows AS row MERGE (a:Author {name: row[0]}) WITH a, row MATCH (p:Paper {arxiv: row[1]}) MERGE (a)-[:WROTE]->(p)"
                 {:rows wrote})

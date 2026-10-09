@@ -37,7 +37,7 @@
   local     {:doc "Neo4j in this machine's JVM on bolt://localhost:7688, loaded and checked, until ctrl-c (experiments/008)"
              :task (do (shell {:dir "experiments/008-local-graph-dx"} "clojure" "-M:gate")
                        (shell {:dir "experiments/008-local-graph-dx"} "clojure" "-M:serve"))}
-  papers    {:doc "arXiv papers a .bib names, fetched once into the XDG cache: bb papers where|list|fetch [n]"
+  papers    {:doc "arXiv papers a .bib names, fetched once into the XDG cache: bb papers where|list|fetch [n]|add DIR|index"
              :requires ([papers])
              :task (apply papers/-main *command-line-args*)}
   repl      {:doc "An nREPL in dev/user.clj with CIDER's middleware, for cider-connect"

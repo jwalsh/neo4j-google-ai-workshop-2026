@@ -106,21 +106,87 @@
                     (fs/move partial-file target {:replace-existing true})
                     target)))))
 
+(defn index
+  "The cache's index: every paper there, from every collection."
+  []
+  (let [index-path (fs/path (cache-dir) "index.edn")]
+    (if (fs/exists? index-path) (edn/read-string (slurp (str index-path))) [])))
+
 (defn- write-index!
-  [papers]
+  "Merges papers into the index by arXiv identifier and writes it whole. A
+  paper already indexed keeps what it had and gains what is new: a second
+  collection, a category, a title. Only papers whose PDF is cached are kept."
+  [collection papers]
   (let [index-path (fs/path (cache-dir) "index.edn")
-        partial-file (str index-path ".part")]
-    (spit partial-file
-          (with-out-str
-            (pprint/pprint
-             (vec (for [{:keys [arxiv] :as paper} papers
-                        :when (cached? (pdf-path arxiv))]
-                    (assoc (select-keys paper [:arxiv :keys :title :authors :year :url])
-                           :pdf (str (pdf-path arxiv))
-                           :pdf-bytes (fs/size (pdf-path arxiv))
-                           :text (when (cached? (text-path arxiv)) (str (text-path arxiv)))))))))
+        partial-file (str index-path ".part")
+        existing (into {} (map (juxt :arxiv identity)) (index))
+        merged (reduce (fn [by-id {:keys [arxiv] :as paper}]
+                         (let [before (by-id arxiv)]
+                           (assoc by-id arxiv
+                                  (-> (merge before (into {} (remove (comp nil? val)) paper))
+                                      (assoc :collections (vec (sort (distinct (conj (:collections before []) collection))))
+                                             :categories (vec (sort (distinct (concat (:categories before) (:categories paper)))))
+                                             :pdf (str (pdf-path arxiv))
+                                             :pdf-bytes (when (cached? (pdf-path arxiv)) (fs/size (pdf-path arxiv)))
+                                             :text (when (cached? (text-path arxiv)) (str (text-path arxiv))))))))
+                       existing
+                       (filter #(cached? (pdf-path (:arxiv %))) papers))]
+    (spit partial-file (with-out-str (pprint/pprint (vec (sort-by :arxiv (vals merged))))))
     (fs/move partial-file index-path {:replace-existing true})
     (str index-path)))
+
+(defn- collection-name
+  "A short name for where papers came from: the directory holding the .bib,
+  or the directory of PDFs. A gist's directory is a hash, so PAPERS_COLLECTION
+  can say something better."
+  [source-path]
+  (or (System/getenv "PAPERS_COLLECTION")
+      (let [source (fs/absolutize source-path)]
+        (str (fs/file-name (if (fs/directory? source) source (fs/parent source)))))))
+
+(defn org-index
+  "What an org index in a directory of papers says about each, by arXiv
+  identifier: {:title :verdict :why}. It reads a heading, then the first
+  following line that names an arXiv identifier, then a `Why read it`
+  item. A directory without such a file gives an empty map."
+  [directory]
+  (let [index-file (fs/path directory "index.org")]
+    (if-not (fs/exists? index-file)
+      {}
+      (->> (str/split (slurp (str index-file)) #"(?m)^\*\* ")
+           rest
+           (keep (fn [section]
+                   (when-let [arxiv-id (second (re-find #"arXiv (\d{4}\.\d{4,5})" section))]
+                     [arxiv-id {:title (str/trim (first (str/split-lines section)))
+                                :verdict (second (re-find #"verdict \*([^*]+)\*" section))
+                                :why (some-> (re-find #"(?m)^- Why read it :: (.*)$" section) second str/trim)}])))
+           (into {})))))
+
+(defn add!
+  "Takes a directory of PDFs named <arxiv-id>-<anything>.pdf into the cache.
+  A subdirectory's name is the paper's category. A PDF already cached is
+  not copied again. Returns one row per paper found."
+  [directory]
+  (fs/create-dirs (fs/path (cache-dir) "arxiv"))
+  (let [described (org-index directory)
+        found (for [pdf-file (sort (filter #(= "pdf" (fs/extension %)) (file-seq (fs/file directory))))
+                    :let [arxiv-id (second (re-find #"^(\d{4}\.\d{4,5})" (str (fs/file-name pdf-file))))]
+                    :when arxiv-id]
+                (let [parent-name (str (fs/file-name (fs/parent pdf-file)))
+                      outcome (if (cached? (pdf-path arxiv-id))
+                                :cached
+                                (do (fs/copy pdf-file (pdf-path arxiv-id)) :copied))]
+                  (text! arxiv-id)
+                  (merge {:arxiv arxiv-id
+                          :url (str "https://arxiv.org/abs/" arxiv-id)
+                          :categories (when-not (fs/same-file? (fs/parent pdf-file) directory) [parent-name])
+                          :pdf-outcome outcome}
+                         (described arxiv-id))))]
+    (write-index! (collection-name directory) (map #(dissoc % :pdf-outcome) found))
+    (vec (for [{:keys [arxiv categories pdf-outcome title]} found]
+           {:arxiv arxiv :category (first categories) :pdf pdf-outcome
+            :text (if (cached? (text-path arxiv)) :yes :no)
+            :title (some-> title (subs 0 (min 56 (count title))))}))))
 
 (defn fetch!
   "Fetches every arXiv paper the bibliography names and has not cached, at
@@ -143,14 +209,8 @@
                        :pdf outcome
                        :text (if (cached? (text-path arxiv)) :yes :no)
                        :title (some-> title (subs 0 (min 60 (count title))))})))]
-    (write-index! papers)
+    (write-index! (collection-name bib-path) (map #(dissoc % :key :kind) papers))
     rows))
-
-(defn index
-  "The cache's index: what is there, as written by the last fetch."
-  []
-  (let [index-path (fs/path (cache-dir) "index.edn")]
-    (when (fs/exists? index-path) (edn/read-string (slurp (str index-path))))))
 
 (defn -main
   [& [command argument]]
@@ -167,6 +227,14 @@
                 (pprint/print-table rows)
                 (println (count (filter #(#{:cached :fetched} (:pdf %)) rows)) "of" (count rows)
                          "in" (cache-dir)))
-      (do (println "usage: bb papers where | list | fetch [max-requests]")
+      "add" (let [rows (add! (or argument (throw (ex-info "add needs a directory of PDFs." {}))))]
+              (pprint/print-table rows)
+              (println (count rows) "papers from" argument "; index has" (count (index))))
+      "index" (pprint/print-table
+               [:arxiv :collections :categories :verdict :title]
+               (for [paper (index)]
+                 (update paper :title #(some-> % (subs 0 (min 50 (count %)))))))
+      (do (println "usage: bb papers where | list | fetch [max-requests] | add DIRECTORY | index")
           (println "  PAPERS_BIB    the .bib to read (default: the triage survey's, under ghq)")
-          (println "  PAPERS_CACHE  where to keep papers (default: $XDG_CACHE_HOME/workshop-papers)")))))
+          (println "  PAPERS_CACHE  where to keep papers (default: $XDG_CACHE_HOME/workshop-papers)")
+          (println "  PAPERS_COLLECTION  a name for this source in the index (default: its directory's name)")))))

@@ -42,6 +42,41 @@ Layers one and two passed. Layer three did not.
 model gave it, model =qwen2.5-coder:7b-instruct-q4_K_M= on another host,
 27 calls, median 6.6 s.
 
+* A second collection, the same afternoon
+
+A directory of 54 PDFs on agent skills, filed in 13 category directories
+with an =index.org= giving each paper's title, a verdict from an earlier
+verification pass and a reason to read it. =bb papers add DIRECTORY= takes
+it into the same cache: a file named =<arxiv-id>-anything.pdf= is a paper,
+its directory is its category, and the org index supplies the rest. One
+paper, tau-bench, was already there from the first collection; the index
+now holds 80.
+
+| what                                | count |
+|-------------------------------------+-------|
+| papers                              |    80 |
+| CITES within the 80                 |   165 |
+| Collection and Category memberships |   135 |
+| authors                             |   123 |
+
+The authors are the first collection's only: a directory of PDFs names no
+authors and nothing here reads them out of a PDF.
+
+=labs/papers/01-questions.cypher= asks six questions; the answers on the day
+are =examples/papers-questions.txt=. Three of them:
+
+- The reading list leans on SWE-bench (cited by 19 of the 80), Voyager (16),
+  SWE-agent (14) and SkillsBench (12).
+- By category, skill creation (SKO) cites skill evaluation (SKE) most, 8
+  times, and routing (ROU) cites SKE 6 times: the evaluation papers are what
+  the others stand on.
+- Eighteen papers neither cite nor are cited within the set. Thirteen are
+  from the triage list, which is the older and more scattered of the two.
+
+Not checked: the 165 edges were not read one by one. A title match can be
+wrong when a title is a common phrase, and the "joins two collections"
+question counts tau-bench as a bridge only because it is filed in both.
+
 * What layer three got wrong
 
 Nothing was invented: no name was dropped by the text check, in 27 papers.
@@ -77,6 +112,11 @@ needed no model, connects the same papers better.
    one model, one pass.
 5. Loaded into the embedded Neo4j beside the Form 13 graph; the second load
    returned the same five counts.
+6. =bb papers add= first found no PDFs: a glob of =**.pdf= does not descend
+   in babashka's =fs/glob=. Replaced with a walk of the directory.
+7. The index was rewritten from one bibliography on every fetch, which
+   would have dropped a second collection. It now merges by identifier.
+8. 54 papers added, 80 indexed, 165 citations. Second =add=: all cached.
 
 * Not done
 

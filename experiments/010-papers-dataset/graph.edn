@@ -9,6 +9,12 @@
    "COTA: Improving the Speed and Accuracy of Customer Support through Ranking and Deep Networks",
    :year "2018",
    :url "https://arxiv.org/abs/1807.01337"}
+  {:arxiv "2005.04118",
+   :title
+   "Beyond Accuracy: Behavioral Testing of NLP models with CheckList",
+   :url "https://arxiv.org/abs/2005.04118",
+   :verdict "correct",
+   :why "the classic of behavioral testing (CheckList)"}
   {:arxiv "2012.03665",
    :title
    "DeepTriage: Automated Transfer Assistance for Incidents in Cloud Services",
@@ -18,21 +24,67 @@
    :title "Efficient Few-Shot Learning Without Prompts",
    :year "2022",
    :url "https://arxiv.org/abs/2209.11055"}
+  {:arxiv "2210.10760",
+   :title "Scaling Laws for Reward Model Overoptimization",
+   :url "https://arxiv.org/abs/2210.10760",
+   :verdict "correct",
+   :why
+   "Goodhart's law measured: over-optimizing a reward model; the most-cited paper in its section"}
+  {:arxiv "2211.01910",
+   :title "Large Language Models Are Human-Level Prompt Engineers",
+   :url "https://arxiv.org/abs/2211.01910",
+   :verdict "corrected",
+   :why
+   "the founding paper of automatic prompt engineering; the most-cited paper in its section"}
   {:arxiv "2301.03797",
    :title
    "Recommending Root-Cause and Mitigation Steps for Cloud Incidents using Large Language Models",
    :year "2023",
    :url "https://arxiv.org/abs/2301.03797"}
+  {:arxiv "2303.11366",
+   :title
+   "Reflexion: an autonomous agent with dynamic memory and self-reflection",
+   :url "https://arxiv.org/abs/2303.11366",
+   :verdict "correct",
+   :why
+   "verbal self-reflection as memory; the most-cited paper in its section"}
   {:arxiv "2305.15778",
    :title
    "Automatic Root Cause Analysis via Large Language Models for Cloud Incidents",
    :year "2024",
    :url "https://arxiv.org/abs/2305.15778"}
+  {:arxiv "2305.16291",
+   :title
+   "Voyager: An Open-Ended Embodied Agent with Large Language Models",
+   :url "https://arxiv.org/abs/2305.16291",
+   :verdict "needs-citation",
+   :why
+   "the origin of the \"skill library\" idea (Minecraft); the most-cited paper in its section"}
+  {:arxiv "2306.05685",
+   :title "Judging LLM-as-a-judge with MT-Bench and Chatbot Arena",
+   :url "https://arxiv.org/abs/2306.05685",
+   :verdict "corrected",
+   :why
+   "the founding LLM-as-judge paper (MT-Bench, Chatbot Arena); 11k+ citations"}
   {:arxiv "2308.10022",
    :title
    "Cupid: Leveraging ChatGPT for More Accurate Duplicate Bug Report Detection",
    :year "2024",
    :url "https://arxiv.org/abs/2308.10022"}
+  {:arxiv "2310.02304",
+   :title
+   "Self-Taught Optimizer (STOP): Recursively Self-Improving Code Generation",
+   :url "https://arxiv.org/abs/2310.02304",
+   :verdict "correct",
+   :why
+   "an early recursive self-improver that also measures sandbox escapes"}
+  {:arxiv "2310.03714",
+   :title
+   "DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines",
+   :url "https://arxiv.org/abs/2310.03714",
+   :verdict "correct",
+   :why
+   "the programming model: compile LM pipelines against a metric (DSPy)"}
   {:arxiv "2310.06770",
    :title
    "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
@@ -43,6 +95,20 @@
    "A Comparative Study of Transformer-based Neural Text Representation Techniques on Bug Triaging",
    :year "2023",
    :url "https://arxiv.org/abs/2310.06913"}
+  {:arxiv "2403.02691",
+   :title
+   "InjecAgent: Benchmarking Indirect Prompt Injections in Tool-Integrated Large Language Model Agents",
+   :url "https://arxiv.org/abs/2403.02691",
+   :verdict "correct",
+   :why
+   "the baseline for indirect prompt injection in tool-using agents; the most-cited paper in its section"}
+  {:arxiv "2405.15793",
+   :title
+   "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+   :url "https://arxiv.org/abs/2405.15793",
+   :verdict "needs-citation",
+   :why
+   "a classic: the agent-computer interface matters as much as the model"}
   {:arxiv "2406.01789",
    :title
    "AI-based Classification of Customer Support Tickets: State of the Art and Implementation with AutoML",
@@ -57,7 +123,10 @@
    :title
    "$\\tau$-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains",
    :year "2024",
-   :url "https://arxiv.org/abs/2406.12045"}
+   :url "https://arxiv.org/abs/2406.12045",
+   :verdict "corrected",
+   :why
+   "a widely used agent benchmark that popularized pass^k consistency"}
   {:arxiv "2407.01489",
    :title
    "Agentless: Demystifying LLM-based Software Engineering Agents",
@@ -68,11 +137,23 @@
    "Let Me Speak Freely? A Study on the Impact of Format Restrictions on Performance of Large Language Models",
    :year "2024",
    :url "https://arxiv.org/abs/2408.02442"}
+  {:arxiv "2409.07429",
+   :title "Agent Workflow Memory",
+   :url "https://arxiv.org/abs/2409.07429",
+   :verdict "corrected",
+   :why "workflows induced from experience: a close cousin of skills"}
   {:arxiv "2409.12183",
    :title
    "To CoT or not to CoT? Chain-of-thought helps mainly on math and symbolic reasoning",
    :year "2024",
    :url "https://arxiv.org/abs/2409.12183"}
+  {:arxiv "2410.20274",
+   :title
+   "Library Learning Doesn't: The Curious Case of the Single-Use \"Library\"",
+   :url "https://arxiv.org/abs/2410.20274",
+   :verdict "corrected",
+   :why
+   "a negative result worth knowing: learned \"libraries\" are mostly single-use"}
   {:arxiv "2410.21333",
    :title
    "Mind Your Step (by Step): Chain-of-Thought can Reduce Performance on Tasks where Thinking Makes Humans Worse",
@@ -83,6 +164,11 @@
    "CRMArena: Understanding the Capacity of LLM Agents to Perform Professional CRM Tasks in Realistic Environments",
    :year "2025",
    :url "https://arxiv.org/abs/2411.02305"}
+  {:arxiv "2411.15594",
+   :title "A Survey on LLM-as-a-Judge",
+   :url "https://arxiv.org/abs/2411.15594",
+   :verdict "correct",
+   :why "a survey map of LLM-as-judge"}
   {:arxiv "2412.13663",
    :title
    "Smarter, Better, Faster, Longer: A Modern Bidirectional Encoder for Fast, Memory Efficient, and Long Context Finetuning and Inference",
@@ -92,6 +178,12 @@
    :title "Evaluating Agent-based Program Repair at Google",
    :year "2025",
    :url "https://arxiv.org/abs/2501.07531"}
+  {:arxiv "2501.12862",
+   :title "Mutation-Guided LLM-based Test Generation at Meta",
+   :url "https://arxiv.org/abs/2501.12862",
+   :verdict "corrected",
+   :why
+   "the industrial template for break-it-and-see: targeted mutants, then tests that kill them (Meta)"}
   {:arxiv "2502.00350",
    :title
    "OrcaLoca: An LLM Agent Framework for Software Issue Localization",
@@ -101,6 +193,11 @@
    :title "LocAgent: Graph-Guided LLM Agents for Code Localization",
    :year "2025",
    :url "https://arxiv.org/abs/2503.09089"}
+  {:arxiv "2503.16416",
+   :title "Survey on Evaluation of LLM-based Agents",
+   :url "https://arxiv.org/abs/2503.16416",
+   :verdict "correct",
+   :why "a survey map of agent evaluation"}
   {:arxiv "2504.08475",
    :title
    "TickIt: Leveraging Large Language Models for Automated Ticket Escalation",
@@ -111,26 +208,412 @@
    "CRMArena-Pro: Holistic Assessment of LLM Agents Across Diverse Business Scenarios and Interactions",
    :year "2025",
    :url "https://arxiv.org/abs/2505.18878"}
+  {:arxiv "2505.22954",
+   :title
+   "Darwin Godel Machine: Open-Ended Evolution of Self-Improving Agents",
+   :url "https://arxiv.org/abs/2505.22954",
+   :verdict "correct",
+   :why
+   "the flagship open-ended self-improving coding agent (Darwin Godel Machine)"}
+  {:arxiv "2506.01716",
+   :title "Self-Challenging Language Model Agents",
+   :url "https://arxiv.org/abs/2506.01716",
+   :verdict "corrected",
+   :why
+   "agents that write their own training tasks; the most-cited method in its section"}
+  {:arxiv "2507.19457",
+   :title
+   "GEPA: Reflective Prompt Evolution Can Outperform Reinforcement Learning",
+   :url "https://arxiv.org/abs/2507.19457",
+   :verdict "corrected",
+   :why
+   "the current reflective optimizer (GEPA) that most 2026 papers compare against"}
   {:arxiv "2508.00957",
    :title
    "Small sample-based adaptive text classification through iterative and contrastive description refinement",
    :year "2025",
    :url "https://arxiv.org/abs/2508.00957"}
+  {:arxiv "2508.07407",
+   :title
+   "A Comprehensive Survey of Self-Evolving AI Agents: A New Paradigm Bridging Foundation Models and Lifelong Agentic Systems",
+   :url "https://arxiv.org/abs/2508.07407",
+   :verdict "correct",
+   :why "a survey map of self-evolving agents"}
   {:arxiv "2508.21156",
    :title
    "Automated Bug Triaging using Instruction-Tuned Large Language Models",
    :year "2025",
    :url "https://arxiv.org/abs/2508.21156"}
+  {:arxiv "2510.04618",
+   :title
+   "Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models",
+   :url "https://arxiv.org/abs/2510.04618",
+   :verdict "needs-citation",
+   :why
+   "contexts as evolving playbooks; the most-cited recent context-engineering method"}
   {:arxiv "2511.20667",
    :title
    "A centroid based framework for text classification in ITSM environments",
    :year "2025",
    :url "https://arxiv.org/abs/2511.20667"}
+  {:arxiv "2512.13598",
+   :title
+   "Textual Gradients are a Flawed Metaphor for Automatic Prompt Optimization",
+   :url "https://arxiv.org/abs/2512.13598",
+   :verdict "correct",
+   :why
+   "a rigorous critique: textual \"gradients\" do not behave like gradients"}
+  {:arxiv "2602.06547",
+   :title
+   "Malicious Agent Skills in the Wild: A Large-Scale Security Empirical Study",
+   :url "https://arxiv.org/abs/2602.06547",
+   :verdict "correct",
+   :why "how common malicious skills are, measured in the wild"}
+  {:arxiv "2602.07150",
+   :title "On Randomness in Agentic Evals",
+   :url "https://arxiv.org/abs/2602.07150",
+   :verdict "corrected",
+   :why
+   "read before trusting any \"lift\": single-run agent scores swing 2-6 points"}
+  {:arxiv "2602.12670",
+   :title
+   "SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks",
+   :url "https://arxiv.org/abs/2602.12670",
+   :verdict "correct",
+   :why
+   "the de facto skill benchmark: 30+ papers in this corpus evaluate on it; curated vs self-generated skills"}
+  {:arxiv "2602.20156",
+   :title
+   "Skill-Inject: Measuring Agent Vulnerability to Skill File Attacks",
+   :url "https://arxiv.org/abs/2602.20156",
+   :verdict "correct",
+   :why "how easily agents follow instructions hidden in skill files"}
+  {:arxiv "2602.20867",
+   :title "SoK: Agentic Skills -- Beyond Tool Use in LLM Agents",
+   :url "https://arxiv.org/abs/2602.20867",
+   :verdict "correct",
+   :why
+   "start here for vocabulary: a map of skill design patterns and the skill lifecycle"}
+  {:arxiv "2602.22480",
+   :title "VeRO: An Evaluation Harness for Agents to Optimize Agents",
+   :url "https://arxiv.org/abs/2602.22480",
+   :verdict "corrected",
+   :why
+   "reproducible agent optimization: versioned snapshots and a fixed evaluation boundary"}
+  {:arxiv "2603.05399",
+   :title
+   "Judge Reliability Harness: Stress Testing the Reliability of LLM Judges",
+   :url "https://arxiv.org/abs/2603.05399",
+   :verdict "corrected",
+   :why
+   "evaluator mutation for judges: perturb responses and check that verdicts flip"}
+  {:arxiv "2603.15401",
+   :title
+   "SWE-Skills-Bench: Do Agent Skills Actually Help in Real-World Software Engineering?",
+   :url "https://arxiv.org/abs/2603.15401",
+   :verdict "correct",
+   :why
+   "the sobering result: 39 of 49 real skills add nothing to SWE tasks"}
+  {:arxiv "2603.22455",
+   :title "SkillRouter: Skill Routing for LLM Agents at Scale",
+   :url "https://arxiv.org/abs/2603.22455",
+   :verdict "corrected",
+   :why
+   "why descriptions are not enough: hiding the skill body costs 31-44 points of routing accuracy"}
+  {:arxiv "2604.01687",
+   :title
+   "CoEvoSkills: Self-Evolving Agent Skills via Co-Evolutionary Verification",
+   :url "https://arxiv.org/abs/2604.01687",
+   :verdict "correct",
+   :why
+   "an optimizer that tests its tests: the skill generator and its verifier co-evolve"}
+  {:arxiv "2604.02837",
+   :title
+   "Towards Secure Agent Skills: Architecture, Threat Taxonomy, and Security Analysis",
+   :url "https://arxiv.org/abs/2604.02837",
+   :verdict "corrected",
+   :why "a threat taxonomy for agent skills"}
+  {:arxiv "2604.11088",
+   :title
+   "Do Agent Rules Shape or Distort? Guardrails Beat Guidance in Coding Agents",
+   :url "https://arxiv.org/abs/2604.11088",
+   :verdict "corrected",
+   :why
+   "a practical finding for rule files: guardrails beat guidance in coding agents"}
   {:arxiv "2604.12108",
    :title
    "LLM-Based Automated Diagnosis of Integration Test Failures at Google",
    :year "2026",
-   :url "https://arxiv.org/abs/2604.12108"}],
+   :url "https://arxiv.org/abs/2604.12108"}
+  {:arxiv "2604.14585",
+   :title
+   "Prompt Optimization Is a Coin Flip: Diagnosing When It Helps in Compound AI Systems",
+   :url "https://arxiv.org/abs/2604.14585",
+   :verdict "correct",
+   :why
+   "the needed skepticism: prompt optimization is often a coin flip, plus a headroom test to predict when it helps"}
+  {:arxiv "2605.05726",
+   :title
+   "SkillRet: A Large-Scale Benchmark for Skill Retrieval in LLM Agents",
+   :url "https://arxiv.org/abs/2605.05726",
+   :verdict "needs-citation",
+   :why
+   "the routing benchmark: large-scale skill retrieval, one of the most rigorous papers in its section"}
+  {:arxiv "2605.10039",
+   :title
+   "Instruction Adherence in Coding Agent Configuration Files: A Factorial Study of Four File-Structure Variables",
+   :url "https://arxiv.org/abs/2605.10039",
+   :verdict "correct",
+   :why
+   "directly about the files you write: a factorial study of CLAUDE.md/AGENTS.md structure (mostly null effects)"}
+  {:arxiv "2605.16508",
+   :title "The Scaling Laws of Skills in LLM Agent Systems",
+   :url "https://arxiv.org/abs/2605.16508",
+   :verdict "corrected",
+   :why
+   "what happens as libraries grow: scaling behavior of skill systems"}
+  {:arxiv "2605.18747",
+   :title "Code as Agent Harness",
+   :url "https://arxiv.org/abs/2605.18747",
+   :verdict "correct",
+   :why "a framing survey: code as the agent harness"}
+  {:arxiv "2605.22175",
+   :title
+   "SWE-Mutation: Can LLMs Generate Reliable Test Suites in Software Engineering?",
+   :url "https://arxiv.org/abs/2605.22175",
+   :verdict "corrected",
+   :why "mutants that try to fool LLM-written test suites"}
+  {:arxiv "2606.15242",
+   :title
+   "Benign in Isolation, Harmful in Composition: Security Risks in Agent Skill Ecosystems",
+   :url "https://arxiv.org/abs/2606.15242",
+   :verdict "correct",
+   :why
+   "composition risk: skills that are benign alone can be harmful together"}
+  {:arxiv "2606.17546",
+   :title
+   "SEAGym: An Evaluation Environment for Self-Evolving LLM Agents",
+   :url "https://arxiv.org/abs/2606.17546",
+   :verdict "corrected",
+   :why "a gym built specifically for self-evolving agents"}
+  {:arxiv "2606.26356",
+   :title
+   "Instruction Bleed: Cross-Module Interference in Prompt-Composed Agentic Systems",
+   :url "https://arxiv.org/abs/2606.26356",
+   :verdict "correct",
+   :why
+   "why skills interfere: editing one prompt module silently shifts the behavior of others"}
+  {:arxiv "2606.28430",
+   :title
+   "Building to the Test: Coding Agents Deliver What You Check, Not What You Requested",
+   :url "https://arxiv.org/abs/2606.28430",
+   :verdict "corrected",
+   :why
+   "break-it-and-see in practice: agents build to the test, shown by no-op'ing code and re-running tests"}
+  {:arxiv "2606.30775",
+   :title
+   "A Single Rewrite Suffices: Empirical Lessons from Production Skill Description Optimization",
+   :url "https://arxiv.org/abs/2606.30775",
+   :verdict "corrected",
+   :why
+   "practical and cheap: one LLM rewrite of a skill description matches hand-tuning in production"}
+  {:arxiv "2607.10113",
+   :title
+   "Dynamic Agent Skills: A Lifecycle Survey and Taxonomy of Evolving Skill Libraries",
+   :url "https://arxiv.org/abs/2607.10113",
+   :verdict "correct",
+   :why
+   "the map of evolving skill libraries: a lifecycle taxonomy over 124 papers"}
+  {:arxiv "2608.01347",
+   :title
+   "Same Task, Different Work: Prompt-Induced Waste in Coding Agents",
+   :url "https://arxiv.org/abs/2608.01347",
+   :verdict "needs-citation",
+   :why
+   "one of 6 papers using all five rigor practices; preregistered: prompt wording changes cost, not success"}
+  {:arxiv "2608.05573",
+   :title
+   "SkillTV-Bench: Benchmarking How Well Judges Perform on Skill-Augmented Agentic Execution",
+   :url "https://arxiv.org/abs/2608.05573",
+   :verdict "corrected",
+   :why
+   "judges for skill-augmented runs; one of the newest core papers"}
+  {:arxiv "2608.06301",
+   :title "HarnessOpt-Bench: Evaluating LLMs at Harness Optimization",
+   :url "https://arxiv.org/abs/2608.06301",
+   :verdict "correct",
+   :why
+   "measures how well an LLM can optimize a harness, with a held-out test the optimizer never sees"}
+  {:arxiv "2608.07449",
+   :title
+   "SkillProx: Self-Evolving Agent Skills via Proximal Textual Gradient Descent",
+   :url "https://arxiv.org/abs/2608.07449",
+   :verdict "corrected",
+   :why
+   "optimization with guardrails: leave-one-out audit of skill units plus validation-gated rollback"}
+  {:arxiv "2608.08453",
+   :title
+   "What Keeps Agent Skills from Being Reusable? Evidence from 138K SKILL.md Files",
+   :url "https://arxiv.org/abs/2608.08453",
+   :verdict "correct",
+   :why
+   "skill quality at scale: defects in 138K SKILL.md files, with fixtures that test each defect detector"}
+  {:arxiv "2608.23067",
+   :title
+   "Signal or Noise? A Benchmark Study of Agent Skills in Web Development",
+   :url "https://arxiv.org/abs/2608.23067",
+   :verdict "needs-citation",
+   :why
+   "the rigor model: the only benchmark with a length-matched placebo skill and leave-one-out ablations"}
+  {:arxiv "2609.08175",
+   :title
+   "Safe Harness Self-Evolution: A Theoretical Analysis of Feasibility and Limits",
+   :url "https://arxiv.org/abs/2609.08175",
+   :verdict "correct",
+   :why
+   "the newest theory: what safe harness self-evolution can and cannot guarantee"}
+  {:arxiv "2609.08944",
+   :title "SkillAdam: Stable and Efficient Skill Evolution for Agents",
+   :url "https://arxiv.org/abs/2609.08944",
+   :verdict "corrected",
+   :why
+   "found by hand (log 0048): optimizer-style skill evolution, borrowing ideas from Adam"}],
+ :filed
+ [["1801.01275" "Collection" "triage"]
+  ["1807.01337" "Collection" "triage"]
+  ["2005.04118" "Collection" "skills-papers"]
+  ["2005.04118" "Category" "MUT"]
+  ["2012.03665" "Collection" "triage"]
+  ["2209.11055" "Collection" "triage"]
+  ["2210.10760" "Collection" "skills-papers"]
+  ["2210.10760" "Category" "EVM"]
+  ["2211.01910" "Collection" "skills-papers"]
+  ["2211.01910" "Category" "APO"]
+  ["2301.03797" "Collection" "triage"]
+  ["2303.11366" "Collection" "skills-papers"]
+  ["2303.11366" "Category" "MEM"]
+  ["2305.15778" "Collection" "triage"]
+  ["2305.16291" "Collection" "skills-papers"]
+  ["2305.16291" "Category" "SKO"]
+  ["2306.05685" "Collection" "skills-papers"]
+  ["2306.05685" "Category" "JDG"]
+  ["2308.10022" "Collection" "triage"]
+  ["2310.02304" "Collection" "skills-papers"]
+  ["2310.02304" "Category" "SI"]
+  ["2310.03714" "Collection" "skills-papers"]
+  ["2310.03714" "Category" "APO"]
+  ["2310.06770" "Collection" "triage"]
+  ["2310.06913" "Collection" "triage"]
+  ["2403.02691" "Collection" "skills-papers"]
+  ["2403.02691" "Category" "SKS"]
+  ["2405.15793" "Collection" "skills-papers"]
+  ["2405.15793" "Category" "CTX"]
+  ["2406.01789" "Collection" "triage"]
+  ["2406.08660" "Collection" "triage"]
+  ["2406.12045" "Collection" "skills-papers"]
+  ["2406.12045" "Collection" "triage"]
+  ["2406.12045" "Category" "EVM"]
+  ["2407.01489" "Collection" "triage"]
+  ["2408.02442" "Collection" "triage"]
+  ["2409.07429" "Collection" "skills-papers"]
+  ["2409.07429" "Category" "MEM"]
+  ["2409.12183" "Collection" "triage"]
+  ["2410.20274" "Collection" "skills-papers"]
+  ["2410.20274" "Category" "SKE"]
+  ["2410.21333" "Collection" "triage"]
+  ["2411.02305" "Collection" "triage"]
+  ["2411.15594" "Collection" "skills-papers"]
+  ["2411.15594" "Category" "JDG"]
+  ["2412.13663" "Collection" "triage"]
+  ["2501.07531" "Collection" "triage"]
+  ["2501.12862" "Collection" "skills-papers"]
+  ["2501.12862" "Category" "MUT"]
+  ["2502.00350" "Collection" "triage"]
+  ["2503.09089" "Collection" "triage"]
+  ["2503.16416" "Collection" "skills-papers"]
+  ["2503.16416" "Category" "EVM"]
+  ["2504.08475" "Collection" "triage"]
+  ["2505.18878" "Collection" "triage"]
+  ["2505.22954" "Collection" "skills-papers"]
+  ["2505.22954" "Category" "SI"]
+  ["2506.01716" "Collection" "skills-papers"]
+  ["2506.01716" "Category" "RLG"]
+  ["2507.19457" "Collection" "skills-papers"]
+  ["2507.19457" "Category" "APO"]
+  ["2508.00957" "Collection" "triage"]
+  ["2508.07407" "Collection" "skills-papers"]
+  ["2508.07407" "Category" "SI"]
+  ["2508.21156" "Collection" "triage"]
+  ["2510.04618" "Collection" "skills-papers"]
+  ["2510.04618" "Category" "CTX"]
+  ["2511.20667" "Collection" "triage"]
+  ["2512.13598" "Collection" "skills-papers"]
+  ["2512.13598" "Category" "APO"]
+  ["2602.06547" "Collection" "skills-papers"]
+  ["2602.06547" "Category" "SKS"]
+  ["2602.07150" "Collection" "skills-papers"]
+  ["2602.07150" "Category" "EVM"]
+  ["2602.12670" "Collection" "skills-papers"]
+  ["2602.12670" "Category" "SKE"]
+  ["2602.20156" "Collection" "skills-papers"]
+  ["2602.20156" "Category" "SKS"]
+  ["2602.20867" "Collection" "skills-papers"]
+  ["2602.20867" "Category" "SKE"]
+  ["2602.22480" "Collection" "skills-papers"]
+  ["2602.22480" "Category" "RLG"]
+  ["2603.05399" "Collection" "skills-papers"]
+  ["2603.05399" "Category" "JDG"]
+  ["2603.15401" "Collection" "skills-papers"]
+  ["2603.15401" "Category" "SKE"]
+  ["2603.22455" "Collection" "skills-papers"]
+  ["2603.22455" "Category" "ROU"]
+  ["2604.01687" "Collection" "skills-papers"]
+  ["2604.01687" "Category" "SKO"]
+  ["2604.02837" "Collection" "skills-papers"]
+  ["2604.02837" "Category" "SKS"]
+  ["2604.11088" "Collection" "skills-papers"]
+  ["2604.11088" "Category" "INS"]
+  ["2604.12108" "Collection" "triage"]
+  ["2604.14585" "Collection" "skills-papers"]
+  ["2604.14585" "Category" "APO"]
+  ["2605.05726" "Collection" "skills-papers"]
+  ["2605.05726" "Category" "ROU"]
+  ["2605.10039" "Collection" "skills-papers"]
+  ["2605.10039" "Category" "INS"]
+  ["2605.16508" "Collection" "skills-papers"]
+  ["2605.16508" "Category" "ROU"]
+  ["2605.18747" "Collection" "skills-papers"]
+  ["2605.18747" "Category" "CTX"]
+  ["2605.22175" "Collection" "skills-papers"]
+  ["2605.22175" "Category" "MUT"]
+  ["2606.15242" "Collection" "skills-papers"]
+  ["2606.15242" "Category" "SKS"]
+  ["2606.17546" "Collection" "skills-papers"]
+  ["2606.17546" "Category" "RLG"]
+  ["2606.26356" "Collection" "skills-papers"]
+  ["2606.26356" "Category" "INS"]
+  ["2606.28430" "Collection" "skills-papers"]
+  ["2606.28430" "Category" "EVM"]
+  ["2606.30775" "Collection" "skills-papers"]
+  ["2606.30775" "Category" "ROU"]
+  ["2607.10113" "Collection" "skills-papers"]
+  ["2607.10113" "Category" "SKO"]
+  ["2608.01347" "Collection" "skills-papers"]
+  ["2608.01347" "Category" "INS"]
+  ["2608.05573" "Collection" "skills-papers"]
+  ["2608.05573" "Category" "JDG"]
+  ["2608.06301" "Collection" "skills-papers"]
+  ["2608.06301" "Category" "RLG"]
+  ["2608.07449" "Collection" "skills-papers"]
+  ["2608.07449" "Category" "SKO"]
+  ["2608.08453" "Collection" "skills-papers"]
+  ["2608.08453" "Category" "SKE"]
+  ["2608.23067" "Collection" "skills-papers"]
+  ["2608.23067" "Category" "SKE"]
+  ["2609.08175" "Collection" "skills-papers"]
+  ["2609.08175" "Category" "SI"]
+  ["2609.08944" "Collection" "skills-papers"]
+  ["2609.08944" "Category" "SKO"]],
  :authors
  ["Agarwal, Divyansh"
   "Ahmed, Toufique"
@@ -392,19 +875,167 @@
   ["Dalloro, Livio" "2604.12108"]],
  :cites
  [["2305.15778" "2301.03797"]
+  ["2305.16291" "2303.11366"]
+  ["2310.02304" "2211.01910"]
+  ["2310.02304" "2303.11366"]
+  ["2310.02304" "2305.16291"]
+  ["2310.02304" "2310.06770"]
+  ["2310.03714" "2303.11366"]
+  ["2403.02691" "2306.05685"]
+  ["2405.15793" "2310.02304"]
+  ["2405.15793" "2310.06770"]
   ["2406.01789" "2012.03665"]
+  ["2406.12045" "2303.11366"]
   ["2406.12045" "2310.06770"]
   ["2407.01489" "2310.06770"]
+  ["2407.01489" "2405.15793"]
+  ["2409.07429" "2305.16291"]
+  ["2409.12183" "2211.01910"]
+  ["2409.12183" "2306.05685"]
+  ["2410.20274" "2305.16291"]
+  ["2410.20274" "2310.02304"]
   ["2411.02305" "2406.12045"]
+  ["2411.15594" "2210.10760"]
+  ["2411.15594" "2306.05685"]
+  ["2501.07531" "2405.15793"]
   ["2501.07531" "2407.01489"]
+  ["2501.12862" "2411.15594"]
   ["2502.00350" "2310.06770"]
+  ["2502.00350" "2405.15793"]
   ["2502.00350" "2407.01489"]
   ["2503.09089" "2310.06770"]
+  ["2503.09089" "2405.15793"]
   ["2503.09089" "2407.01489"]
   ["2503.09089" "2502.00350"]
+  ["2503.16416" "2310.06770"]
+  ["2503.16416" "2406.12045"]
+  ["2503.16416" "2407.01489"]
+  ["2503.16416" "2411.02305"]
+  ["2504.08475" "2303.11366"]
   ["2504.08475" "2406.01789"]
   ["2505.18878" "2406.12045"]
   ["2505.18878" "2411.02305"]
+  ["2505.22954" "2305.16291"]
+  ["2505.22954" "2310.02304"]
+  ["2505.22954" "2310.03714"]
+  ["2505.22954" "2310.06770"]
+  ["2505.22954" "2405.15793"]
+  ["2505.22954" "2407.01489"]
+  ["2506.01716" "2310.06770"]
+  ["2506.01716" "2406.12045"]
+  ["2507.19457" "2211.01910"]
+  ["2507.19457" "2310.03714"]
+  ["2507.19457" "2409.07429"]
+  ["2508.07407" "2211.01910"]
+  ["2508.07407" "2305.16291"]
+  ["2508.07407" "2310.06770"]
+  ["2508.07407" "2503.16416"]
+  ["2508.07407" "2505.22954"]
+  ["2510.04618" "2306.05685"]
+  ["2510.04618" "2405.15793"]
+  ["2510.04618" "2507.19457"]
+  ["2512.13598" "2211.01910"]
+  ["2512.13598" "2310.02304"]
+  ["2512.13598" "2310.03714"]
+  ["2512.13598" "2505.22954"]
+  ["2602.07150" "2310.06770"]
+  ["2602.07150" "2405.15793"]
+  ["2602.12670" "2305.16291"]
+  ["2602.12670" "2310.03714"]
+  ["2602.12670" "2310.06770"]
+  ["2602.12670" "2405.15793"]
+  ["2602.20867" "2303.11366"]
+  ["2602.20867" "2305.16291"]
+  ["2602.20867" "2310.06770"]
+  ["2602.20867" "2405.15793"]
+  ["2602.20867" "2503.16416"]
+  ["2602.20867" "2602.12670"]
+  ["2602.22480" "2310.02304"]
+  ["2602.22480" "2405.15793"]
+  ["2603.15401" "2305.16291"]
+  ["2603.15401" "2310.06770"]
+  ["2603.15401" "2405.15793"]
+  ["2603.15401" "2602.12670"]
+  ["2603.22455" "2602.12670"]
+  ["2604.01687" "2305.16291"]
+  ["2604.01687" "2602.12670"]
+  ["2604.01687" "2602.20867"]
+  ["2604.02837" "2403.02691"]
+  ["2604.02837" "2602.06547"]
+  ["2604.02837" "2602.20156"]
+  ["2604.11088" "2211.01910"]
+  ["2604.11088" "2310.03714"]
+  ["2604.11088" "2310.06770"]
+  ["2604.11088" "2405.15793"]
   ["2604.12108" "2310.06770"]
   ["2604.12108" "2407.01489"]
-  ["2604.12108" "2501.07531"]]}
+  ["2604.12108" "2501.07531"]
+  ["2604.14585" "2211.01910"]
+  ["2604.14585" "2310.03714"]
+  ["2605.05726" "2305.16291"]
+  ["2605.05726" "2602.12670"]
+  ["2605.05726" "2602.20867"]
+  ["2605.05726" "2603.15401"]
+  ["2605.05726" "2603.22455"]
+  ["2605.16508" "2303.11366"]
+  ["2605.16508" "2305.16291"]
+  ["2605.16508" "2406.12045"]
+  ["2605.16508" "2503.16416"]
+  ["2605.16508" "2602.12670"]
+  ["2605.16508" "2602.20867"]
+  ["2605.16508" "2603.22455"]
+  ["2605.18747" "2305.16291"]
+  ["2605.18747" "2310.06770"]
+  ["2605.18747" "2405.15793"]
+  ["2605.18747" "2407.01489"]
+  ["2605.18747" "2503.09089"]
+  ["2605.18747" "2507.19457"]
+  ["2605.18747" "2510.04618"]
+  ["2606.15242" "2403.02691"]
+  ["2606.15242" "2602.20156"]
+  ["2606.15242" "2602.20867"]
+  ["2606.17546" "2305.16291"]
+  ["2606.17546" "2406.12045"]
+  ["2606.17546" "2409.07429"]
+  ["2606.17546" "2503.16416"]
+  ["2606.17546" "2508.07407"]
+  ["2606.28430" "2210.10760"]
+  ["2606.28430" "2303.11366"]
+  ["2606.28430" "2310.06770"]
+  ["2606.28430" "2405.15793"]
+  ["2606.28430" "2407.01489"]
+  ["2606.30775" "2303.11366"]
+  ["2606.30775" "2310.03714"]
+  ["2606.30775" "2507.19457"]
+  ["2607.10113" "2305.16291"]
+  ["2607.10113" "2508.07407"]
+  ["2607.10113" "2602.06547"]
+  ["2607.10113" "2602.12670"]
+  ["2607.10113" "2602.20156"]
+  ["2607.10113" "2602.20867"]
+  ["2607.10113" "2603.15401"]
+  ["2607.10113" "2603.22455"]
+  ["2607.10113" "2604.01687"]
+  ["2607.10113" "2604.02837"]
+  ["2608.05573" "2406.12045"]
+  ["2608.05573" "2507.19457"]
+  ["2608.05573" "2602.12670"]
+  ["2608.06301" "2310.02304"]
+  ["2608.06301" "2310.03714"]
+  ["2608.06301" "2310.06770"]
+  ["2608.06301" "2505.22954"]
+  ["2608.06301" "2507.19457"]
+  ["2608.07449" "2507.19457"]
+  ["2608.07449" "2602.12670"]
+  ["2608.07449" "2602.20867"]
+  ["2608.07449" "2604.01687"]
+  ["2608.08453" "2602.12670"]
+  ["2608.08453" "2602.20156"]
+  ["2608.23067" "2602.12670"]
+  ["2608.23067" "2603.15401"]
+  ["2609.08175" "2305.16291"]
+  ["2609.08175" "2310.02304"]
+  ["2609.08944" "2305.16291"]
+  ["2609.08944" "2507.19457"]
+  ["2609.08944" "2602.12670"]
+  ["2609.08944" "2604.01687"]]}
