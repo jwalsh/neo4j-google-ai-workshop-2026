@@ -1,0 +1,162 @@
+#+TITLE: 008 - the day file, asked from Org
+#+DATE: 2026-10-08
+#+PROPERTY: header-args:clojure :backend cider :results value pp :exports both
+#+PROPERTY: header-args:sh :results output verbatim :exports both
+
+Three ways to put a question to the local database from this file. All of
+them want a CIDER REPL jacked in from this directory first (=C-c M-j= from
+any file here; =.dir-locals.el= picks this =deps.edn= and the =:dev= alias).
+The database lives in that REPL's JVM.
+
+The results below were written by =emacs --batch= on 2026-10-08, connected to
+=clojure -M:dev:repl=. Nobody has pressed =C-c C-c= in this file by hand.
+
+* Start
+
+The alias first, in a block of its own. =ob-clojure= wraps a block's whole
+body in one form before sending it, so a =require= and a use of the alias it
+makes cannot share a block: the form fails to compile.
+
+#+name: alias
+#+begin_src clojure :results silent
+(require '[local-graph.session :as session])
+#+end_src
+
+Server, driver, load unless loaded, verify. Safe to run again.
+
+#+name: up
+#+begin_src clojure
+(-> (session/up!) (select-keys [:port :verification]))
+#+end_src
+
+#+RESULTS: up
+: {:port 7688,
+:  :verification
+:  {:expected {:companies 2251, :managers 28, :owns 7381},
+:   :actual {:companies 2251, :managers 28, :owns 7381},
+:   :loaded? true}}
+
+* Clojure blocks: ob-clojure through CIDER
+
+=ob-clojure= ships with Org. Its backend on this machine defaults to
+babashka, which has no Neo4j driver, so the file's header sets
+=:backend cider=.
+
+#+name: nvidia
+#+begin_src clojure
+(session/q "MATCH (m:Manager)-[o:OWNS]->(c:Company {companyName: $name})
+            RETURN m.managerName AS manager, o.shares AS shares
+            ORDER BY shares DESC LIMIT 3"
+           {:name "NVIDIA CORPORATION"})
+#+end_src
+
+#+RESULTS: nvidia
+: [{:manager "ENVESTNET ASSET MANAGEMENT INC", :shares 3817564}
+:  {:manager "NATIXIS ADVISORS, L.P.", :shares 1870774}
+:  {:manager "NOMURA ASSET MANAGEMENT CO LTD", :shares 1421161}]
+
+=print-table= already writes Org's table syntax, so =:results output raw=
+makes a table of any rows. (=:results value table= on a vector of vectors
+did not: Org 9.8.7 stopped with =search-failed "|"=.)
+
+#+name: company-degree
+#+begin_src clojure :results output raw
+(clojure.pprint/print-table
+ (session/q "MATCH (c:Company)<-[:OWNS]-(m:Manager)
+             RETURN c.companyName AS company, count(m) AS managers
+             ORDER BY managers DESC, company LIMIT 5"))
+#+end_src
+
+#+RESULTS: company-degree
+
+|            :company | :managers |
+|---------------------+-----------|
+|           APPLE INC |        22 |
+|   JOHNSON & JOHNSON |        21 |
+|      MICROSOFT CORP |        21 |
+|      DISNEY WALT CO |        20 |
+| JPMORGAN CHASE & CO |        20 |
+
+* Cypher blocks, through the same REPL
+
+=ob-cypher-cider.el= in this directory is thirty lines: it hands a cypher
+block's body to =local-graph.session/org-table= over nREPL. Evaluate this
+once per Emacs session:
+
+#+name: load-ob-cypher-cider
+#+begin_src emacs-lisp :results silent
+(load-file (expand-file-name "ob-cypher-cider.el" default-directory))
+#+end_src
+
+#+name: shared-holdings
+#+begin_src cypher
+MATCH (a:Manager)-[:OWNS]->(c:Company)<-[:OWNS]-(b:Manager)
+WHERE a.managerName < b.managerName
+RETURN a.managerName AS a, b.managerName AS b, count(c) AS shared
+ORDER BY shared DESC LIMIT 5
+#+end_src
+
+#+RESULTS: shared-holdings
+| a                              | b                              | shared |
+|--------------------------------+--------------------------------+--------|
+| ENVESTNET ASSET MANAGEMENT INC | GUGGENHEIM CAPITAL LLC         |   1099 |
+| ENVESTNET ASSET MANAGEMENT INC | NOMURA ASSET MANAGEMENT CO LTD |    957 |
+| ENVESTNET ASSET MANAGEMENT INC | M&T Bank Corp                  |    906 |
+| GUGGENHEIM CAPITAL LLC         | NOMURA ASSET MANAGEMENT CO LTD |    831 |
+| M&T Bank Corp                  | NOMURA ASSET MANAGEMENT CO LTD |    782 |
+
+=:var= becomes a Cypher parameter:
+
+#+name: holders
+#+begin_src cypher :var name="APPLE INC"
+MATCH (m:Manager)-[o:OWNS]->(c:Company {companyName: $name})
+RETURN m.managerName AS manager, o.value AS value, o.reportCalendarOrQuarter AS quarter
+ORDER BY value DESC LIMIT 3
+#+end_src
+
+#+RESULTS: holders
+| manager                        |           value |    quarter |
+|--------------------------------+-----------------+------------|
+| ENVESTNET ASSET MANAGEMENT INC | 1594736594000.0 | 2023-03-31 |
+| M&T Bank Corp                  | 1054757624000.0 | 2023-03-31 |
+| NOMURA ASSET MANAGEMENT CO LTD | 1020780140000.0 | 2023-03-31 |
+
+* sh blocks: cypher-shell from Maven Central
+
+=bin/cypher-shell= runs the =org.neo4j/cypher-shell= jar on the JVM already
+here; nothing is installed. It connects over Bolt to the server the REPL
+started, so it works while the REPL is up. About a second a call, nearly all of
+it the JVM starting.
+
+#+name: constraints
+#+begin_src sh
+bin/cypher-shell -a bolt://localhost:7688 --format plain \
+  'SHOW CONSTRAINTS YIELD name, type, labelsOrTypes, properties'
+#+end_src
+
+#+RESULTS: constraints
+: name, type, labelsOrTypes, properties
+: "unique_company_id", "UNIQUENESS", ["Company"], ["cusip"]
+: "unique_manager", "UNIQUENESS", ["Manager"], ["managerName"]
+
+A file from =cypher/=, with its parameter. The lab's own
+=../../labs/lab-04/06-relationships.cypher= runs the same way with no =-P=,
+and fetches the CSV over https to do it.
+
+#+name: load-file
+#+begin_src sh
+bin/cypher-shell -a bolt://localhost:7688 --format verbose \
+  -P "{csvUrl: 'file://$(cd ../.. && pwd)/data/form13-2023-05-11.csv'}" \
+  -f cypher/04-relationships.cypher 2>&1 | tail -1
+#+end_src
+
+#+RESULTS: load-file
+: Set 14762 properties
+
+* Stop
+
+Not run by the batch pass, which stops the server by ending the REPL.
+
+#+begin_src clojure :eval never
+(session/down!)
+#+end_src

@@ -1,0 +1,34 @@
+;; Self-contained: the repository root's deps.edn is used, not changed. Run
+;; from this directory. Versions are the latest on Maven Central as of
+;; 2026-10-08 (repo1.maven.org/maven2/org/neo4j/neo4j/maven-metadata.xml).
+{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.12.0"}
+        ;; The repository itself: workshop.neo4j (the driver wrapper),
+        ;; workshop.form13 (verify), workshop.env. Brings the Java driver.
+        workshop/workshop {:local/root "../.."}
+        ;; Neo4j Community as a library, GPL-3.0: the embedded server.
+        ;; With the root, 355 jars and 266 MB on the classpath; the first
+        ;; resolve took 3 min 47 s here.
+        org.neo4j/neo4j {:mvn/version "2026.09.0"}}
+ :aliases
+ {;; dev/local_graph/explore.clj: rich comments for CIDER. cider-jack-in uses
+  ;; this alias (see .dir-locals.el).
+  :dev {:extra-paths ["dev"]}
+  ;; clojure -M:gate            page cache sized by Neo4j
+  ;; clojure -M:small:gate 64m  512 MB heap, 64 MB page cache
+  :gate {:main-opts ["-m" "local-graph.gate"]}
+  :small {:jvm-opts ["-Xmx512m"]}
+  ;; clojure -M:serve: the server alone, on the store the gate left, until
+  ;; Ctrl-C. For cypher-shell and Org sh blocks.
+  :serve {:main-opts ["-m" "local-graph.embedded"]}
+  ;; clojure -M:dev:repl, then cider-connect. Same alias name as the root.
+  :repl {:extra-deps {nrepl/nrepl {:mvn/version "1.8.0"}
+                      cider/cider-nrepl {:mvn/version "0.63.1"}}
+         :main-opts ["-m" "nrepl.cmdline"
+                     "--middleware" "[cider.nrepl/cider-middleware]"]}
+  ;; cypher-shell from Maven Central, on the JVM already here; nothing is
+  ;; installed. bin/cypher-shell reads this alias's classpath and calls the
+  ;; jar's main class. Its own alias: it must not share a classpath with the
+  ;; server.
+  :cypher-shell {:replace-deps {org.neo4j/cypher-shell {:mvn/version "2026.09.0"}}
+                 :replace-paths []}}}

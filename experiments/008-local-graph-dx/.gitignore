@@ -1,0 +1,5 @@
+scratch/
+.cpcache/
+.nrepl-port
+.lsp/
+.clj-kondo/.cache/

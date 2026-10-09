@@ -1,0 +1,319 @@
+#+TITLE: 008 - A local graph to explore before the cloud one
+#+DATE: 2026-10-08
+
+* Source
+
+The owner's question: what does local development look like for this kind
+of data, with other tools, before any cloud instance. It came with a page of
+notes on engines and Emacs packages, all unverified; they are the claims
+table below. The data is Lab 4's day of Form 13 filings,
+=data/form13-2023-05-11.csv=, and the load is the lab's four files in
+=labs/lab-04/=. Everything so far ran against a hosted Aura instance that
+expires tonight.
+
+* Hypothesis
+
+The lab's load can run on this laptop with nothing installed system-wide,
+be checked by the repository's own =workshop.form13/verify= through the
+repository's own driver wrapper, and be driven from CIDER and Org the way
+=dev/explore.clj= drives Aura.
+
+* Gate
+
+=workshop.form13/verify= on a local database returns =:loaded? true=: 2,251
+Company, 28 Manager, 7,381 OWNS, the counts the file implies. Reached
+through =workshop.neo4j/connect= with an explicit env map, never =.env=.
+
+* Result
+
+Passed on three servers. None of them ran the lab's four files unchanged.
+
+| server                                | gate   | lab files unchanged                     | load      | to ready                     |
+|---------------------------------------+--------+-----------------------------------------+-----------+------------------------------|
+| Neo4j Community 2026.09.0, in the JVM | passed | 2 of 4 by the wrapper, 3 of 4 as Cypher | 2.1-2.4 s | 4.0-10.9 s                   |
+| Neo4j Community 2026.09.0, podman     | passed | not tried, same server                  | 2.7 s     | 7.7 s after =podman run=     |
+| Memgraph 3.13.1, podman               | passed | 0 of 4                                  | 0.15 s    | under 1 s after =podman run= |
+
+The one to use is the first: =org.neo4j/neo4j= from Maven Central is the
+whole Community server as a library, started from Clojure with Bolt on
+=localhost:7688=. =clojure -M:gate= is the proof; =dev/local_graph/explore.clj=
+and =explore.org= are the working surfaces.
+
+What had to change for Neo4j Community (=cypher/01= to =04=):
+
+- =IS NODE KEY= became =IS UNIQUE=. Node keys and existence constraints are
+  Enterprise; Aura is Enterprise. This is the only change to the Cypher that
+  was forced.
+- The https URL became =$csvUrl=, a =file:= URL to the copy in =data/=. Not
+  forced: the lab's https statements run locally. Chosen because the load
+  then takes 2 s and no network, and because attempt 8 below is what the
+  network can do.
+- The caller changed, not the statement, for =CALL (row) { } IN
+  TRANSACTIONS=: Neo4j refuses it inside a managed transaction, which is
+  what =workshop.neo4j/query= opens. =local-graph.lab/run-file= sends such
+  statements through an auto-commit session.
+
+Measured, embedded, on this machine (M-series, 16 GB, Temurin 21.0.4), from
+three runs of =clojure -M:gate= and one REPL session:
+
+| what                                     | measured                               |
+|------------------------------------------+----------------------------------------|
+| start, existing or empty store           | 4.0-4.6 s five times; 7.2, 8.3, 10.9 s |
+| load from the local file, cold JVM       | 2.11, 2.15, 2.37 s                     |
+| load again in a warm REPL after a delete | 0.80 s                                 |
+| a second load over a loaded database     | 0.46-0.53 s, counts unchanged          |
+| the four exploration queries, first run  | 54-295 ms                              |
+| the same, second run                     | 8-39 ms                                |
+| heap in use after the load, after a GC   | 61-66 MB                               |
+| resident memory of the JVM               | 470-670 MB                             |
+| with =-Xmx512m= and a 64 MB page cache   | gate passes; 548-575 MB resident       |
+| store on disk                            | 5.7 MB                                 |
+| stop                                     | 11.1 s, every time                     |
+| the whole gate, JVM start to exit        | 23.5 s                                 |
+| first dependency resolve                 | 3 min 47 s; 355 jars, 266 MB           |
+
+* Claims
+
+The owner's notes, each checked or not. "Ran" means it was seen here.
+
+| claim                                                                           | verdict                        | how                                                                                                                                  |
+|---------------------------------------------------------------------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------------------------|
+| No official "Neo4j Lite"                                                        | not checkable as stated        | The nearest thing exists: Community as an embeddable library, used here                                                              |
+| Kùzu's repository was archived 2025-10-10                                       | verified                       | GitHub API, =kuzudb/kuzu=: archived, last push 2025-10-10                                                                            |
+| dbdb.io says Kùzu was acquired and closed by Apple                              | verified that it says so       | dbdb.io/db/ladybugdb. The acquisition itself was not checked elsewhere                                                               |
+| LadybugDB: revival fork, 2025, embedded, MIT, C++                               | verified                       | dbdb.io; GitHub API, =LadybugDB/ladybug=, created 2025-10-07, MIT                                                                    |
+| LadybugDB's last commit was 2026-10-05                                          | wrong, stale                   | Last commit 2026-10-09T00:34Z, during this experiment                                                                                |
+| MacPorts packages it as =ladybug=                                               | verified                       | ports.macports.org, 0.20.2. Homebrew has it too, 0.21.2, unmentioned in the notes                                                    |
+| RyuGraph: a Kùzu fork introduced by Predictable Labs in October 2025            | verified                       | Their post is dated 2025-10-27. Last push to the repository 2026-01-20; its LICENSE is Kùzu's MIT text                               |
+| Kùzu-family engines need a declared schema and COPY FROM                        | not run                        | LadybugDB's CSV page shows only CREATE NODE TABLE then COPY FROM. It also has LOAD FROM to scan a file with no table                 |
+| Memgraph is one container that speaks Bolt                                      | ran                            | =memgraph/memgraph= 3.13.1; the Neo4j Java driver connects                                                                           |
+| cypher-shell connects to Memgraph                                               | wrong here                     | cypher-shell 2026.09.0: "There is no procedure named 'db.ping'"                                                                      |
+| Memgraph supports LOAD CSV and MERGE                                            | ran, with a different LOAD CSV | =LOAD CSV FROM x WITH HEADER=, not =WITH HEADERS FROM x=                                                                             |
+| Memgraph's constraint DDL differs from Neo4j 5                                  | half wrong                     | It accepts Neo4j 5's =CREATE CONSTRAINT name IF NOT EXISTS FOR ... REQUIRE ... IS UNIQUE= as written. It has no =IS NODE KEY=        |
+| FalkorDB is a Redis module that runs openCypher                                 | not run                        | Its README says its commands are called from any Redis client                                                                        |
+| Apache AGE runs openCypher inside SQL calls                                     | not run                        | Its README: =SELECT * FROM cypher('graph', $$ ... $$)=                                                                               |
+| =neo4j:5= Community in Docker is the closest match                              | half right                     | Closest engine, but Community is not Aura: the lab's first file fails on it. =neo4j:5= was not pulled; =2026.09.0-community= was     |
+| It starts in about 10 seconds                                                   | ran: 7.7 s                     | =podman run= to "Started." in the log                                                                                                |
+| It needs about 512 MB of heap                                                   | ran: less                      | Embedded, the gate passes at =-Xmx512m= with 65 MB of heap in use. The container sat at 463 MB after start and 614 MB after the load |
+| cypher-ts-mode: tree-sitter, Emacs 29+, MELPA, =cypher-ts-mode-install-grammar= | verified, and ran in batch     | MELPA 20260817.1627; source on Codeberg. See Emacs below for what it parses                                                          |
+| cypher-mode (fxbois) is the older alternative                                   | verified                       | MELPA 20151110.1142; repository last pushed 2023-01-17                                                                               |
+| ob-cypher (zweifisch, MELPA) predates Neo4j 5                                   | verified                       | MELPA 20200521.936. Its two transports are =/db/data/transaction/commit= and =neo4j-shell=                                           |
+| n4js (MELPA) is comint over the old neo4j-shell                                 | verified                       | MELPA 20150714.231; =n4js-cli-program= defaults to "neo4j-shell"                                                                     |
+| An Org sh block piping to cypher-shell avoids the old packages                  | ran                            | =explore.org=, with cypher-shell from Maven Central                                                                                  |
+| Source: community.neo4j.com "Recent Emacs mode for Cypher files?"               | not checked                    | No URL in the notes; a guessed one was a 404                                                                                         |
+
+* Emacs
+
+Checked with =emacs --batch= (Emacs 32.0.50, Org 9.8.7) and an init
+directory under =scratch/=, reading packages from =~/.emacs.d/elpa= and
+writing nothing there. Nobody opened a window. Interactive use was not
+exercised: no =cider-jack-in=, no =C-c C-c=, no font-lock looked at.
+
+- Installed in =~/.emacs.d/elpa=: cider, clojure-mode, lsp-mode, and CIDER's
+  dependencies. None of cypher-ts-mode, cypher-mode, ob-cypher, n4js.
+- All four are on MELPA today, at the versions in the table above.
+- cypher-ts-mode byte-compiles, its grammar (=taekwombo/tree-sitter-cypher=)
+  built into =scratch/treesit=, and the mode turns on. The grammar is
+  openCypher 9: every one of the lab's four load files parses with ERROR
+  nodes, at =CONSTRAINT= in one and at =LOAD CSV= in three. Whether the
+  highlighting is still good enough to read is a question for eyes.
+  To try it: =(package-install 'cypher-ts-mode)=, then
+  =M-x cypher-ts-mode-install-grammar=.
+- cypher-mode, n4js and ob-cypher byte-compile and load on Emacs 32, with a
+  missing lexical-binding warning each. ob-cypher was not run against the
+  local server. It has two transports, the =/db/data/transaction/commit=
+  HTTP path and the =neo4j-shell= program; neither is part of what was
+  started here, and from memory both went with Neo4j 4.
+- =ob-clojure= ships with Org and is what this repository wants. Two things
+  bit, both recorded in =explore.org=: its backend defaults to babashka
+  here, so the file sets =:backend cider=; and it wraps a block's body in
+  one form, so a =require= and a use of its alias cannot share a block.
+- =ob-cypher-cider.el= in this directory gives real =#+begin_src cypher=
+  blocks, with =:var= as parameters, by handing the body to the REPL. It
+  byte-compiles, and its blocks ran in batch.
+- =explore.org= holds seven results, written by the batch run through a
+  CIDER connection to =clojure -M:dev:repl=: three Clojure, two Cypher, two
+  sh blocks through =bin/cypher-shell=.
+- =.dir-locals.el=: its values were applied in batch under
+  =enable-local-variables :safe=, so opening a file here will not prompt.
+
+* Log of attempts
+
+In order, all on 2026-10-08.
+
+1. *What is here.* Java 21, Clojure CLI, bb, node 26, python 3.14, uv,
+   Homebrew, Emacs. No MacPorts, colima, OrbStack, cypher-shell. Docker
+   Desktop is installed and not running; it was left alone. podman 5.4.2
+   has a machine, stopped. Homebrew has formulas for =neo4j=, =cypher-shell=
+   (both want =openjdk@21=), =ladybug=, and =kuzu= (deprecated, to be
+   disabled 2027-01-20); none for Memgraph or FalkorDB. Nothing was
+   installed from Homebrew.
+2. *Embedded Community, the lab's four files, unchanged, through
+   =workshop.neo4j/run-file=.* =03-constraints=: failed, "51N27: Key
+   constraint is not supported in community edition". =04-companies=: ran,
+   12.6 s, most of it the download and a MERGE with no index.
+   =05-managers=: ran, 1.3 s. =06-relationships=: failed, "A query with
+   'CALL { ... } IN TRANSACTIONS' can only be executed in an implicit
+   transaction".
+3. *=verify= at that point said 0 / 0 / 0*, with 2,251 companies and 28
+   managers in the database. Its query ends in a MATCH on OWNS; with no
+   relationships it returns no row, and no row is read as zeros.
+4. *=06-relationships= unchanged, through an auto-commit session.* Ran, 5.1
+   s. Gate passed, with no constraints at all. Then =IS UNIQUE=: accepted.
+   =IS NOT NULL=: refused, Enterprise again.
+5. *The local files, =clojure -M:gate=.* Passed. Numbers in the table above.
+6. *The same at =-Xmx512m= with a 64 MB page cache.* Passed, same timings.
+7. *cypher-shell without installing it.* =org.neo4j/cypher-shell= is on
+   Maven Central. =clojure -M -m org.neo4j.shell.Main= fails, since =-m= wants a
+   Clojure namespace; =bin/cypher-shell= takes the alias's classpath and
+   calls =java=. About one second a call. It runs the lab's
+   =06-relationships.cypher= as written: cypher-shell auto-commits.
+8. *Walking every form in the CIDER file, while a 700 MB image was
+   downloading.* The lab's https statement sat in an SSL read for over five
+   minutes; curl fetched the same URL in 1.7 s at the same moment. LOAD CSV
+   over https has no read timeout that showed itself. Killed the JVM. Run
+   again, every form evaluated, that one in 4.8 s.
+9. *The lab's node-key file, after the local load.* Returned =[]=, no
+   error, and created nothing: =IF NOT EXISTS= found the UNIQUE constraint
+   with the same name and stopped. The same file threw in attempt 2. A
+   constraint name is not a constraint.
+10. *=podman machine start=.* 9.9 s, no window, no prompt.
+    =neo4j:2026.09.0-community= took 10 min 14 s to pull.
+11. *Neo4j in podman with the import directory mounted read-only.* Exited:
+    the image's entrypoint chowns the import directory. Mounted writable:
+    "Started." in 7.7 s. =LOAD CSV FROM 'file:///form13-2023-05-11.csv'=
+    resolves inside the import directory. Gate passed: load 2.69 s, first
+    query 2.7 s, later ones 16-28 ms.
+12. *Memgraph, through the wrapper as it is.* Every query failed after 30 s
+    of retries: 'Tried to retrieve an unknown database "neo4j"', which the
+    driver treats as transient. =workshop.neo4j/query= takes the database
+    name from =.env= or the environment, not from the map =connect= was
+    given. =local-graph.lab/with-database= rebinds the var behind it.
+13. *Memgraph, the lab's four files unchanged.* All four failed to parse:
+    =NODE= in the first, =WITH HEADERS FROM= in the other three.
+14. *Memgraph, statement by statement.* Neo4j 5's UNIQUE syntax: accepted.
+    A =file:///= path: "CSV file not found"; a plain path works. The
+    companies MERGE: 3.9 s. SHOW INDEX INFO was empty: a uniqueness
+    constraint there does not make an index. With one, 54 ms.
+15. *Memgraph gate.* Failed first: "Constraint manipulation is not allowed
+    in multicommand transactions". Schema statements went to auto-commit;
+    passed, with the lab's relationship statement taking 8.7 s.
+16. *Why 8.7 s.* The same body four ways on an indexed, loaded database:
+    plain 89 ms, =USING PERIODIC COMMIT 1000= 58 ms, =CALL (row) { } IN
+    TRANSACTIONS= 8.8 s, =CALL (row) { }= with no batching 9.4 s. The
+    subquery is the cost. =cypher/memgraph/04= uses periodic commit; the
+    gate passed again, load 152 ms.
+17. *=verify= from the repository root*, with the root's own driver
+    (5.28.15), against =clojure -M:serve=. =:loaded? true=. Worth doing
+    because the experiment's classpath resolves the driver to 6.2.1, which
+    the embedded server brings; the wrapper's code is the repository's but
+    the jar under it is not.
+18. *Org in batch.* Three failures before it ran: a native-compilation
+    trampoline error (off for batch), the =require= that could not share a
+    block, and =:results value table=, which stopped Org with
+    =search-failed "|"=. =print-table= with =:results output raw= makes the
+    table instead.
+
+* What the failures say
+
+- Attempts 2 and 9 are the ones to keep. A local Community server is not a
+  small Aura: the lab's first statement is an Enterprise feature, and a
+  load written against the local one will run on Aura while a load written
+  for Aura will not run here. The constraint that stopped the Graph Builder
+  in experiment 005, attempt 6, would not have existed locally.
+- Attempts 2, 3 and 12 are about this repository, not about the engines.
+  =workshop.form13/load!= has only ever taken its already-loaded branch
+  (=.meta/README.md= says so). Run for real it would stop at the fourth
+  file, by the rule Neo4j stated in attempt 2; that was not tried against
+  Aura. =verify= reports a half load as an empty database. =query= cannot
+  be pointed at a database by the map given to =connect=. None of the three
+  was changed: =src/= was out of bounds here.
+- Attempt 16: "Bolt-compatible" and "accepts the syntax" are two claims,
+  and neither is "behaves the same". Memgraph took the lab's statement and
+  was a hundred times slower on it than on its own idiom.
+- Attempt 8: a local file is not only faster.
+
+* Installed
+
+Nothing system-wide, nothing with sudo, nothing from Homebrew, nothing in
+=~/.emacs.d=.
+
+| what                                                         | where                                                        | to remove                                                                        |
+|--------------------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------------------------|
+| Neo4j Community, cypher-shell and their dependencies as jars | =~/.m2/repository= (80 MB under =org/neo4j=, more elsewhere) | =rm -rf ~/.m2/repository/org/neo4j=; the rest is shared with other projects      |
+| =neo4j:2026.09.0-community=, 704 MB                          | podman machine                                               | =podman machine start && podman rmi docker.io/library/neo4j:2026.09.0-community= |
+| =memgraph/memgraph:latest=, 662 MB                           | podman machine                                               | =podman rmi docker.io/memgraph/memgraph:latest=                                  |
+| stores, the copied CSV, a tree-sitter grammar, fetched elisp | =scratch/= here, 12 MB, git-ignored                          | =rm -rf scratch=                                                                 |
+
+Left running: nothing. Both containers were stopped and removed, the podman
+machine is stopped as it was found, and ports 7688 to 7690 are free.
+
+* Run
+
+From this directory.
+
+#+begin_src sh
+gmake -C ../.. data/form13-2023-05-11.csv   # once, if data/ is empty
+clojure -M:gate                             # empty store, load, verify, queries, stop
+clojure -M:small:gate 64m                   # the same in 512 MB of heap
+clojure -M:serve                            # the server alone, until Ctrl-C
+bin/cypher-shell -a bolt://localhost:7688 --format plain 'MATCH (n) RETURN count(n)'
+#+end_src
+
+In Emacs: open =dev/local_graph/explore.clj=, =cider-jack-in=, evaluate
+=(session/up!)= and work down. =explore.org= uses the same REPL.
+
+The containers, for the record:
+
+#+begin_src sh
+podman machine start
+mkdir -p scratch/import && cp ../../data/form13-2023-05-11.csv scratch/import/
+podman run -d --name local-graph-neo4j -p 127.0.0.1:7689:7687 \
+  -e NEO4J_AUTH=neo4j/local-graph-008 \
+  -v "$PWD/scratch/import:/var/lib/neo4j/import" neo4j:2026.09.0-community
+clojure -M:gate bolt bolt://localhost:7689 neo4j local-graph-008 file:///form13-2023-05-11.csv
+
+podman run -d --name local-graph-memgraph -p 127.0.0.1:7690:7687 \
+  -v "$PWD/scratch/import:/import-data" memgraph/memgraph:latest
+clojure -M:gate bolt bolt://localhost:7690 - - /import-data/form13-2023-05-11.csv cypher/memgraph memgraph
+
+podman rm -f local-graph-neo4j local-graph-memgraph && podman machine stop
+#+end_src
+
+* Recommendation
+
+For exploring data of this size before there is a cloud instance: embedded
+Neo4j Community in the REPL. It is the lab's engine and the lab's Cypher,
+it needs nothing this machine lacks, it starts in the time CIDER takes to
+connect, and the database's lifetime is the REPL's. Before even that,
+=workshop.form13= on the parsed file, and experiments 002 to 004, answer
+most questions with no database at all; the graph earns its place at the
+first variable-length path.
+
+Write constraints as =IS UNIQUE= locally and expect to tighten them to node
+keys on Aura. Keep =verify= as the check that both hold the same thing.
+
+A container is worth it only for a server other tools must reach, or for a
+second engine. Memgraph is the fast one here and the one that needs the
+load rewritten. A Kùzu-family engine was not tried; by its documentation it
+would need a schema declared first, which for this data is a different
+exercise from the lab's.
+
+What the cloud instance is still needed for: node keys and existence
+constraints as the lab writes them; Bloom (Lab 5) and the Graph Analytics
+session behind its centrality; Document Intelligence and the Aura Agent
+(Labs 6 and 9); the Query API that =gmake cypher= falls back to; and
+anything Gemini Enterprise has to reach (Labs 7 and 8), which cannot see
+=localhost=. None of those was looked for locally.
+
+* What it is not
+
+Not Aura, and not Enterprise: the Enterprise image wants a licence accepted
+and was not run. Not a benchmark: one small file, cold JVMs, single runs,
+and a podman VM with 4 GB between the containers and the hardware. Not a
+test of Kùzu, LadybugDB, RyuGraph, FalkorDB or AGE, none of which ran. Not
+checked in a live Emacs. Not a fix for the three things attempt 2, 3 and 12
+found in =src/workshop/=. =neo4j:5=, the tag the notes name, was not
+pulled. The graph data science library, APOC and vector indexes were not
+tried on the embedded server. The Org results are from one batch run;
+=explore.org= will be rewritten the first time someone executes it by hand.

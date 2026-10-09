@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# cypher-shell without installing it: the jar from Maven Central
+# (org.neo4j/cypher-shell, GPL-3.0), on the JVM and the Clojure CLI already
+# here. The classpath comes from this directory's deps.edn, alias
+# :cypher-shell, and is cached after the first call.
+#
+#   bin/cypher-shell -a bolt://localhost:7688 --format plain 'RETURN 1 AS ok'
+#   bin/cypher-shell -a bolt://localhost:7688 -P "csvUrl => 'file:///...'" -f cypher/02-companies.cypher
+set -euo pipefail
+experiment_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+shell_classpath="$(cd "$experiment_directory" && clojure -Spath -A:cypher-shell)"
+exec java -cp "$shell_classpath" org.neo4j.shell.Main "$@"
