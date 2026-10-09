@@ -7,7 +7,7 @@
     (:Route)-[:ON]->(:Line)                     Green Line B is on the Green Line
     (:Stop)-[:IN]->(:Station)                   a platform is in Park Street
     (:Route)-[:CALLS_AT {direction sequence}]->(:Stop)
-    (:Stop)-[:NEXT {route direction}]->(:Stop)  as one typical trip runs
+    (:Stop)-[:NEXT {route direction}]->(:Stop)  as a typical trip of each branch runs
     (:Route)-[:SERVES {sequence}]->(:Station)   derived: the stops' stations
     (:Station)-[:CONNECTS {route routeName line kind color}]->(:Station)
 
@@ -44,10 +44,12 @@
    (let [station-of (into {} (map (juxt :id :parent)) stops)
          route-by-id (into {} (map (juxt :id identity)) routes)
          line-name (into {} (map (juxt :id :name)) lines)
-         trips (group-by (fn [[route-id direction]] [route-id direction]) (sort calls))
-         next-stops (vec (for [[[route-id direction] trip-calls] trips
-                               [[_ _ _ from-stop] [_ _ _ to-stop]] (partition 2 1 trip-calls)]
-                           [from-stop to-stop route-id direction]))]
+         ;; one trip per typical pattern: a route with two branches has two
+         ;; in each direction, and stops are in order only within a trip
+         trips (group-by (fn [[route-id direction trip-id]] [route-id direction trip-id]) (sort calls))
+         next-stops (vec (distinct (for [[[route-id direction] trip-calls] trips
+                                         [from-call to-call] (partition 2 1 trip-calls)]
+                                     [(peek from-call) (peek to-call) route-id direction])))]
      {:lines lines
       :routes routes
       :stations stations
@@ -55,11 +57,18 @@
       :calls calls
       :next next-stops
       ;; a station's place on a route is its place in direction 0, or in
-      ;; whichever direction the route has
-      :serves (vec (for [[route-id route-calls] (group-by first (sort calls))
-                         :let [direction (apply min (map second route-calls))]
-                         [position station-id] (->> route-calls
-                                                    (filter #(= direction (second %)))
+      ;; whichever direction the route has; a branch's stations follow the
+      ;; trunk's
+      :serves (vec (for [[route-id route-calls] (group-by first calls)
+                         :let [direction (apply min (map second route-calls))
+                               ;; the longest trip first, then what the branches add
+                               branch-trips (->> route-calls
+                                                 (filter #(= direction (second %)))
+                                                 (group-by #(nth % 2))
+                                                 vals
+                                                 (sort-by (comp - count)))]
+                         [position station-id] (->> branch-trips
+                                                    (mapcat sort)
                                                     (map (comp station-of peek))
                                                     distinct
                                                     (map-indexed vector))]
@@ -102,8 +111,8 @@
                       "WITH p, row MATCH (s:Station {id: row.parent}) MERGE (p)-[:IN]->(s)")
                  {:rows (rows stops)}))
   (neo4j/query driver
-               (str "UNWIND $rows AS row MATCH (r:Route {id: row[0]}), (p:Stop {id: row[3]}) "
-                    "MERGE (r)-[c:CALLS_AT {direction: row[1]}]->(p) SET c.sequence = row[2]")
+               (str "UNWIND $rows AS row MATCH (r:Route {id: row[0]}), (p:Stop {id: row[4]}) "
+                    "MERGE (r)-[c:CALLS_AT {direction: row[1]}]->(p) SET c.sequence = row[3]")
                {:rows calls})
   (neo4j/query driver
                (str "UNWIND $rows AS row MATCH (a:Stop {id: row[0]}), (b:Stop {id: row[1]}) "

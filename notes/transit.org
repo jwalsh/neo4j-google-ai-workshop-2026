@@ -47,8 +47,8 @@ function in Cypher.
 | Routes                      | 22 (3 subway, 5 light rail, 14 commuter rail) |
 | Stations                    | 254   |
 | Stops                       | 483   |
-| NEXT, between stops         | 699   |
-| CONNECTS, between stations  | 620   |
+| NEXT, between stops         | 622   |
+| CONNECTS, between stations  | 616   |
 
 A fourth embedded Neo4j holds it, on =localhost:7691=:
 
@@ -69,6 +69,16 @@ longitude into x and y and writes SVG. No tiles, no script, no outside
 service. A name is drawn where lines meet and where a route ends; the rest
 are on hover. Three views: subway and light rail, commuter rail, all of it.
 
+[[file:img/dashboard-map-all-rail.png]]
+
+All of it. The first drawing of this view was wrong, and showed it: the
+Newburyport/Rockport line zigzagged between its two branches and a fan of
+straight lines ran to Providence. A route with branches has one typical
+trip for each, and their stops had been put in one order by sequence
+number. The trip is now kept with each call, and stops follow one another
+only within a trip. The picture found a fault in the graph that a count
+would not have: 699 =NEXT= edges looked as plausible as 622.
+
 Query and Bloom would not have drawn this. They lay a graph out by force,
 and the Red Line comes out as a tangle. The coordinates are in the graph;
 placing nodes by them is the page's job.
@@ -88,10 +98,14 @@ rail left out, gives:
 |------+-------------------+-------------------+-------------|
 |    1 | Maverick          | Aquarium          | Blue Line   |
 |    2 | Aquarium          | State             | Blue Line   |
-|    3 | State             | Downtown Crossing | Orange Line |
-|    4 | Downtown Crossing | Park Street       | Red Line    |
+|    3 | State             | Government Center | Blue Line   |
+|    4 | Government Center | Park Street       | Green Line  |
 |    5 | Park Street       | Charles/MGH       | Red Line    |
 |    6 | Charles/MGH       | Kendall/MIT       | Red Line    |
+
+Six steps, with one stop on the Green Line between the two. Changing at
+State for one stop of the Orange Line is as short, and =shortestPath=
+returns whichever it finds first.
 
 "Kendall" in the question is "Kendall/MIT" in the graph; the agent's
 resolution step finds it, as it found "ALLSTATE CORP" for the filings.

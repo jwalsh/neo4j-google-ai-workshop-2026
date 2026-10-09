@@ -13,8 +13,17 @@
    :stations [{:id "s1" :name "One"} {:id "s2" :name "Two"} {:id "s3" :name "Three"}]
    :stops [{:id "1n" :parent "s1"} {:id "1s" :parent "s1"} {:id "2n" :parent "s2"} {:id "2s" :parent "s2"}
            {:id "2e" :parent "s2"} {:id "3e" :parent "s3"}]
-   :calls [["R" 0 1 "1s"] ["R" 0 2 "2s"] ["R" 1 1 "2n"] ["R" 1 2 "1n"]
-           ["B" 0 10 "2e"] ["B" 0 20 "3e"]]})
+   :calls [["R" 0 "r-south" 1 "1s"] ["R" 0 "r-south" 2 "2s"] ["R" 1 "r-north" 1 "2n"] ["R" 1 "r-north" 2 "1n"]
+           ["B" 0 "b-main" 10 "2e"] ["B" 0 "b-main" 20 "3e"]]})
+
+(def branching
+  "One route, one direction, two branches after a shared first stop: two
+  trips whose sequence numbers overlap, as the Red Line's do."
+  {:lines [{:id "line-R" :name "Red Line"}]
+   :routes [{:id "R" :name "Red Line" :kind "subway" :color "#DA291C" :line "line-R"}]
+   :stops (for [id ["t" "a1" "a2" "b1"]] {:id id :parent (str "S" id)})
+   :calls [["R" 0 "to-a" 1 "t"] ["R" 0 "to-a" 2 "a1"] ["R" 0 "to-a" 3 "a2"]
+           ["R" 0 "to-b" 1 "t"] ["R" 0 "to-b" 2 "b1"]]})
 
 (deftest graph-test
   (let [projection (mbta/graph network)]
@@ -27,6 +36,14 @@
              (set (:connects projection)))))
     (testing "a station's place on a route is its place in direction 0"
       (is (= #{["R" "s1" 0] ["R" "s2" 1] ["B" "s2" 0] ["B" "s3" 1]} (set (:serves projection)))))))
+
+(deftest branches-test
+  (let [projection (mbta/graph branching)]
+    (testing "stops follow one another within a trip, never from one branch to the other"
+      (is (= #{["t" "a1" "R" 0] ["a1" "a2" "R" 0] ["t" "b1" "R" 0]} (set (:next projection))))
+      (is (= #{["St" "Sa1"] ["Sa1" "Sa2"] ["St" "Sb1"]} (set (map #(subvec % 0 2) (:connects projection))))))
+    (testing "the longer branch gives the order, the other's stations follow"
+      (is (= [["R" "St" 0] ["R" "Sa1" 1] ["R" "Sa2" 2] ["R" "Sb1" 3]] (sort-by peek (:serves projection)))))))
 
 (deftest mbta-agent-test
   (let [guide (agent/load-agent "agents/mbta.agent.json")

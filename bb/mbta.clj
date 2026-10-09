@@ -63,7 +63,9 @@
 (defn network
   "The rail network from the cached feed, as data:
   {:feed :lines :routes :stations :stops :calls}. A call is one stop of one
-  representative trip: [route-id direction-id sequence stop-id]."
+  representative trip: [route-id direction-id trip-id sequence stop-id]. The
+  trip is kept because a route with branches has a typical pattern for
+  each, and the order of stops means something only within one."
   []
   (with-open [feed (ZipFile. (str (zip-path)))]
     (let [table (fn [file-name keep-row] (with-table feed file-name #(into [] (keep keep-row) %)))
@@ -86,7 +88,8 @@
           calls (table "stop_times.txt"
                        (fn [row]
                          (when-let [{:keys [route direction]} (pattern-of (row "trip_id"))]
-                           [route (parse-long direction) (parse-long (row "stop_sequence")) (row "stop_id")])))
+                           [route (parse-long direction) (row "trip_id")
+                            (parse-long (row "stop_sequence")) (row "stop_id")])))
           called (set (map peek calls))
           all-stops (table "stops.txt"
                            (fn [row]
