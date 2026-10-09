@@ -7,7 +7,8 @@
     (:Shelf)<-[:ON]-(:Book)-[:HAS]->(:Heading)-[:HAS]->(:Heading)
     (:Heading)-[:ABOUT]->(:Term)
 
-  A Term is a word that the headings of at least two books use. Nothing
+  A Term is a word, or a run of two or three words, that the headings of
+  at least two books use. Nothing
   here reads a book's text and no model is involved: similarity by meaning
   is another tool's job, and this is the part of a library a graph database
   holds without one. Which books share vocabulary, which term bridges two
@@ -47,29 +48,59 @@
              "getting started basics basic simple example examples working work works make making take look does "
              "putting together going beyond understanding know need things thing really just also back up out new way ways "
              "edition online liveBook forum discussion code table figure copyright dedication colophon glossary organized "
-             "should read who roadmap")
+             "should read who roadmap acknowledgment content illustration learning.oreilly")
         #"\s+")))
 
 (def singular-in-s
   "Words that end in s and are not plurals."
   #{"kubernetes" "analysis" "series" "status" "bias" "redis" "postgres" "basis" "synthesis" "devops"
-    "llmops" "mlops" "nerves" "kinesis" "lens" "atlas" "pandas" "keras" "axis" "always" "across"})
+    "llmops" "mlops" "nerves" "kinesis" "lens" "atlas" "pandas" "keras" "axis" "always" "across"
+    "alias" "canvas" "thesis" "emphasis" "diagnosis" "chaos" "corpus" "focus" "census" "consensus"})
+
+(defn singular
+  "A word with a plural ending folded: -ies to -y, -ches -shes -xes -sses
+  to their stem, a plain -s dropped. Words in -ous, -ss, -us and -is are
+  left alone, as are the known exceptions. Found wanting by experiment 011:
+  the first rule dropped every final s and made \"anonymou\" and
+  \"approache\"."
+  [word]
+  (cond
+    (or (singular-in-s word) (< (count word) 5)) word
+    (re-find #"(ous|ss|us|is)$" word) word
+    (str/ends-with? word "ies") (str (subs word 0 (- (count word) 3)) "y")
+    (re-find #"(ch|sh|x|ss|z)es$" word) (subs word 0 (- (count word) 2))
+    (str/ends-with? word "s") (subs word 0 (dec (count word)))
+    :else word))
+
+(defn- tokens
+  "A heading's words in order, lower-case and singular, with nil where a
+  stop word or a number stood, so that neighbours stay neighbours."
+  [heading-title]
+  (->> (re-seq #"[A-Za-z0-9][A-Za-z0-9+#.-]*[A-Za-z0-9+#]|[A-Za-z]" (str heading-title))
+       (map str/lower-case)
+       (map #(str/replace % #"[.-]+$" ""))
+       (map (fn [word]
+              (when (and (re-find #"^[a-z]" word) (not (stop-words word)))
+                (let [folded (singular word)]
+                  (when (and (not (stop-words folded)) (>= (count folded) 4)) folded)))))))
 
 (defn words
   "The subject words of a heading: lower-case, four letters or more, no
-  numbers, no stop words, plurals folded by dropping a final s."
+  numbers, no stop words, plurals folded."
   [heading-title]
-  (->> (re-seq #"[A-Za-z][A-Za-z+#.-]*[A-Za-z+#]" (str heading-title))
-       (map str/lower-case)
-       (map #(str/replace % #"[.-]+$" ""))
-       (remove stop-words)
-       (map #(if (and (str/ends-with? % "s") (not (str/ends-with? % "ss")) (> (count %) 4)
-                      (not (singular-in-s %)))
-               (subs % 0 (dec (count %)))
-               %))
-       (remove stop-words)
-       (filter #(>= (count %) 4))
-       distinct))
+  (distinct (remove nil? (tokens heading-title))))
+
+(defn phrases
+  "Runs of two or three subject words that stand next to each other in a
+  heading: \"retrieval augmented generation\", \"graph database\". The rule's
+  stand-in for a noun chunk (experiment 011). On its own a run is noise; it
+  becomes a term only when two books use it."
+  [heading-title]
+  (let [in-order (vec (tokens heading-title))]
+    (distinct (for [length [2 3]
+                    run (partition length 1 in-order)
+                    :when (every? some? run)]
+                (str/join " " run)))))
 
 (defn graph
   "The projection as data:
@@ -92,7 +123,9 @@
                                                      [child parent]))
                                                  book-headings)]
                         [(:id parent) (:id child)]))
-         uses (for [heading headings, word (words (:title heading))] [heading word])
+         uses (for [heading headings
+                    word (concat (words (:title heading)) (phrases (:title heading)))]
+                [heading word])
          books-using (update-vals (group-by second uses) #(count (distinct (map (comp :book first) %))))
          terms (set (keep (fn [[word book-count]] (when (>= book-count minimum-books) word)) books-using))]
      {:books (mapv #(select-keys % [:id :title :shelf :why]) shelf-books)
@@ -102,8 +135,8 @@
       :about (vec (for [[heading word] uses :when (terms word)] [(:id heading) word]))})))
 
 (defn load!
-  "MERGEs the projection into the database. Running it twice changes
-  nothing. Returns the counts the database then holds."
+  "MERGEs books and headings into the database and replaces its terms.
+  Running it twice leaves the same graph. Returns the counts it then holds."
   [driver {:keys [books headings nesting about]}]
   (doseq [[constraint-name label property] [["book_id" "Book" "id"] ["heading_id" "Heading" "id"]
                                             ["term_name" "Term" "name"] ["shelf_name" "Shelf" "name"]]]
@@ -123,6 +156,9 @@
     (neo4j/query driver
                  "UNWIND $rows AS row MATCH (p:Heading {id: row[0]}), (c:Heading {id: row[1]}) MERGE (p)-[:HAS]->(c)"
                  {:rows (vec batch)}))
+  ;; Terms depend on the whole shelf, so they are replaced, not merged: a
+  ;; word that was a term under an older rule would otherwise stay one.
+  (neo4j/query driver "MATCH (t:Term) DETACH DELETE t")
   (doseq [batch (partition-all 2000 about)]
     (neo4j/query driver
                  "UNWIND $rows AS row MATCH (h:Heading {id: row[0]}) MERGE (t:Term {name: row[1]}) MERGE (h)-[:ABOUT]->(t)"

@@ -1,0 +1,96 @@
+#+TITLE: 011 - Terms from book headings: spaCy beside a rule, and what was ported
+#+DATE: 2026-10-09
+
+* Source
+
+The 7,036 bookmark headings of the 27 books on =shelves/homage.edn= that
+have an outline (two of the 29 have none), read by =bb books outline= into
+the cache. The rule is =workshop.books/words=. The Python is
+=terms_spacy.py= here, spaCy 3.8.16 with =en_core_web_sm= 3.8.0.
+
+* Hypothesis
+
+The books graph joins books through terms, and a term was whatever a
+regular expression and a stop list let through. A tagger that knows a noun
+from a verb, and a phrase from two words, makes better terms: fewer that
+are not subjects, and multiword ones the rule cannot see.
+
+* Gate
+
+Python is for finding out; what survives is Clojure (=CLAUDE.md=). So the
+gate is on the port: after it, the rule finds at least half of spaCy's
+shared phrases, and the ten most similar pairs of books agree with spaCy's
+on at least eight.
+
+* Result
+
+Passed on the pairs, by a little on the phrases, with the tagger's main
+advantage left unported.
+
+| measure                                   | rule before | spaCy | rule after |
+|-------------------------------------------+-------------+-------+------------|
+| single terms used by two or more books    |       1,285 |   938 |      1,284 |
+| of those, in both lists                   |         773 |     - |        784 |
+| phrases used by two or more books         |           0 |   105 |        191 |
+| of those, in both lists                   |           - |     - |         61 |
+| ten most similar pairs, shared with spaCy |      8 of 10 |     - | not rerun  |
+
+The two lists of pairs differ where spaCy does better: it puts Cloud
+Observability in Action beside Software Telemetry, and the rule did not.
+
+* What spaCy showed
+
+- 512 of the rule's terms were not spaCy's. Most are not subjects: "adding",
+  "across", "automatically", "applying". The rule has no way to know a verb.
+- Some were the rule's own damage. It dropped every final s: "anonymou",
+  "approache", "aritie", "asynchronou".
+- 165 of spaCy's were not the rule's, and most of those are spaCy's
+  mistakes on this text. A heading in title case reads as proper nouns, so
+  "Agents" keeps its s; and it has no idea that "colophon", "appendix" and
+  "cover illustration" are a book's furniture.
+- The phrases are the find: "retrieval augmented generation" in seven
+  books, "large language model" and "prompt engineering" in five, "graph
+  database", "prompt injection", "fine tuning".
+
+* What was ported, and what was not
+
+- Ported: plural folding by ending (=books/singular=), with the exceptions
+  the bad cases named.
+- Ported: =books/phrases=, runs of two or three subject words that stand
+  next to each other. No tagger; the filter is the same as for a word, two
+  books must use it. It finds 191, of which spaCy has 61. Its extras are
+  mostly real ("worker node", "retention policy", "text embedding") and
+  some are not ("source versus", "catch finally").
+- Not ported: part of speech. The 500 verb-like terms are still terms.
+  A stop list cannot fix that without losing "logging", "testing" and
+  "embedding", which end the same way and are subjects.
+- Not ported: lemmas. "embedding model" and spaCy's "embed model" are the
+  same phrase and count as different.
+
+* Log
+
+1. =headings.json= written from Clojure, so both sides read the same
+   headings and the rule's own words.
+2. spaCy over 7,036 headings in a few seconds, numbering stripped first.
+3. The comparison above. Nothing was tuned on the Python side.
+4. The port, and tests for the endings that were wrong.
+5. The books graph reloaded: 1,475 terms, 12,579 ABOUT edges.
+
+* Run
+
+#+begin_src sh
+uv run --with spacy \
+  --with 'en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl' \
+  python experiments/011-heading-terms/terms_spacy.py
+#+end_src
+
+It reads and writes the books cache only.
+
+* Not done
+
+- The pairs rerun after the port: the "8 of 10" is the rule before it.
+- A tagger on the JVM (OpenNLP, CoreNLP), which is what porting part of
+  speech would mean.
+- Headings that are captions. Manning's outlines list every "Listing 5.19"
+  and "Figure 5.4", and "listing" is the second most shared term between
+  two Manning books. They should be dropped before terms are made.

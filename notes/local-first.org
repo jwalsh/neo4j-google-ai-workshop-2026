@@ -92,6 +92,7 @@ an agent file, the env file naming its Neo4j, and an example question.
 |--------+-----------------------------------------+-------------------------+--------------------|
 | form13 | =labs/lab-09/...agent.json=             | =bolt://localhost:7688= | Aura, in Lab 9     |
 | papers | =agents/papers.agent.json=              | =bolt://localhost:7689= | hand               |
+| books  | =agents/books.agent.json=               | =bolt://localhost:7690= | hand               |
 
 #+begin_src sh
 bb local                  # the filings, 7688

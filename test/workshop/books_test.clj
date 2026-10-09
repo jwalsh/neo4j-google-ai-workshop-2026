@@ -10,6 +10,16 @@
     (is (empty? (books/words "about this book")))
     (is (empty? (books/words "Summary")))))
 
+(deftest singular-test
+  (is (= ["approach" "query" "macro" "anonymous" "kubernetes" "class" "analysis" "box"]
+         (map books/singular ["approaches" "queries" "macros" "anonymous" "kubernetes" "class" "analysis" "boxes"]))))
+
+(deftest phrases-test
+  (is (= ["retrieval augmented" "augmented generation" "retrieval augmented generation"]
+         (books/phrases "3.2 Retrieval augmented generation")))
+  (testing "a stop word between two words breaks the run"
+    (is (empty? (books/phrases "Graphs and the databases")))))
+
 (deftest graph-test
   (let [shelf [{:id "a" :title "A" :shelf "x" :why "w"} {:id "b" :title "B" :shelf "y" :why "w"}]
         outlines {"a" [{:level 1 :page 1 :title "1 Telemetry pipelines"}
