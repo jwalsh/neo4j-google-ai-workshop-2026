@@ -93,11 +93,16 @@
     "NEO4J_DATABASE" "neo4j"}))
 
 (defn -main
-  "clojure -M:serve. Starts the server on the store already under scratch/
-  and waits, so cypher-shell or an Org sh block has something to talk to.
-  Ctrl-C stops it."
-  [& _]
-  (let [started (start!)]
+  "clojure -M:serve [home [port [page-cache]]]. Starts the server on a store
+  and waits, so cypher-shell, an Org sh block or another process has
+  something to talk to. Ctrl-C stops it. With no arguments it is the Form 13
+  store on 7688. A second data source is a second process with its own home
+  and port: clojure -M:serve scratch/neo4j-papers 7689 64m."
+  [& [home port page-cache]]
+  (let [started (start! (cond-> {}
+                          home (assoc :home home)
+                          port (assoc :port (parse-long port))
+                          page-cache (assoc :page-cache page-cache)))]
     (.addShutdownHook (Runtime/getRuntime) (Thread. ^Runnable (fn [] (stop!))))
     (println (str "bolt://localhost:" (:port started) " up in "
                   (long (:startup-ms started)) " ms; store " (:home started)))

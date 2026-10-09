@@ -1,0 +1,24 @@
+;; The same test for the second agent, over the papers graph.
+[{:question "Who cites SkillsBench?"
+  :tool "Who Cites This Paper"
+  :parameters {"paperTitle" "SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks"}}
+ {:question "Which papers cite Voyager?"
+  :tool "Who Cites This Paper"
+  :parameters {"paperTitle" "Voyager: An Open-Ended Embodied Agent with Large Language Models"}}
+ {:question "What does the Agentless paper cite?"
+  :tool "What This Paper Cites"
+  :parameters {"sourceTitle" "Agentless: Demystifying LLM-based Software Engineering Agents"}}
+ {:question "What are the 5 most cited papers?"
+  :tool "Most Cited Papers" :parameters {"limit" 5}}
+ {:question "Which papers are filed under ROU?"
+  :tool "Papers Filed Under a Category" :parameters {"categoryCode" "ROU"}}
+ {:question "List the SKS papers."
+  :tool "Papers Filed Under a Category" :parameters {"categoryCode" "SKS"}}
+ {:question "What did Narasimhan write?"
+  :tool "Papers by an Author" :parameters {"authorName" "Narasimhan, Karthik"}}
+ {:question "Which papers have the verdict needs-citation?"
+  :tool "Papers With a Verification Verdict" :parameters {"verdict" "needs-citation"}}
+ {:question "Which managers hold Allstate?" :tool nil}
+ {:question "What is the weather in Boston?" :tool nil}
+ {:question "Who cites Attention Is All You Need?" :tool nil}
+ {:question "What did Smith write?" :tool nil}]

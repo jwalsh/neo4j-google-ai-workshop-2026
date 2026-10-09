@@ -1,0 +1,86 @@
+{
+  "name": "Reading List Librarian",
+  "description": "Answers questions about a set of research papers: which cite which, how they are filed, who wrote them and what a verification pass said of them.",
+  "system_prompt": "Answer from the papers graph only. Return rows; do not summarise papers you have not been given.",
+  "is_private": true,
+  "is_mcp_enabled": false,
+  "tools": [
+    {
+      "name": "Who Cites This Paper",
+      "description": "Lists the papers in the set that cite one named paper.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (cited:Paper)<-[:CITES]-(citing:Paper) WHERE cited.title = $paperTitle RETURN citing.arxiv AS arxiv, citing.title AS citingPaper ORDER BY arxiv LIMIT $limit",
+        "parameters": [
+          {"name": "paperTitle", "data_type": "string", "description": "The title of the paper that is cited, or a distinctive part of it."},
+          {"name": "limit", "data_type": "integer", "description": "Maximum number of papers to return.", "is_optional": true, "default": 25}
+        ]
+      }
+    },
+    {
+      "name": "What This Paper Cites",
+      "description": "Lists the papers in the set that one named paper cites in its own text.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (source:Paper)-[:CITES]->(cited:Paper) WHERE source.title = $sourceTitle RETURN cited.arxiv AS arxiv, cited.title AS citedPaper ORDER BY arxiv LIMIT $limit",
+        "parameters": [
+          {"name": "sourceTitle", "data_type": "string", "description": "The title of the paper doing the citing, or a distinctive part of it."},
+          {"name": "limit", "data_type": "integer", "description": "Maximum number of papers to return.", "is_optional": true, "default": 25}
+        ]
+      }
+    },
+    {
+      "name": "Most Cited Papers",
+      "description": "Ranks all papers by how many other papers in the set cite them. Takes no paper name.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (cited:Paper)<-[:CITES]-(citing:Paper) RETURN cited.arxiv AS arxiv, cited.title AS paper, count(citing) AS citedBy ORDER BY citedBy DESC, arxiv LIMIT $limit",
+        "parameters": [
+          {"name": "limit", "data_type": "integer", "description": "How many papers to return.", "is_optional": true, "default": 10}
+        ]
+      }
+    },
+    {
+      "name": "Papers Filed Under a Category",
+      "description": "Lists the papers filed under one category code, such as SKE, ROU, INS or SKS.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (category:Category)<-[:IN]-(paper:Paper) WHERE category.name = $categoryCode RETURN paper.arxiv AS arxiv, paper.title AS paper, paper.verdict AS verdict ORDER BY arxiv LIMIT $limit",
+        "parameters": [
+          {"name": "categoryCode", "data_type": "string", "description": "The category's short code, two or three capital letters."},
+          {"name": "limit", "data_type": "integer", "description": "Maximum number of papers to return.", "is_optional": true, "default": 25}
+        ]
+      }
+    },
+    {
+      "name": "Papers by an Author",
+      "description": "Lists the papers one named person wrote.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (author:Author)-[:WROTE]->(paper:Paper) WHERE author.name = $authorName RETURN paper.arxiv AS arxiv, paper.title AS paper, paper.year AS year ORDER BY arxiv LIMIT $limit",
+        "parameters": [
+          {"name": "authorName", "data_type": "string", "description": "The author's name, or their family name."},
+          {"name": "limit", "data_type": "integer", "description": "Maximum number of papers to return.", "is_optional": true, "default": 25}
+        ]
+      }
+    },
+    {
+      "name": "Papers With a Verification Verdict",
+      "description": "Lists the papers whose summary a verification pass marked with one verdict: correct, corrected or needs-citation.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (paper:Paper) WHERE paper.verdict = $verdict OPTIONAL MATCH (paper)-[:IN]->(category:Category) RETURN paper.arxiv AS arxiv, category.name AS category, paper.title AS paper ORDER BY category, arxiv LIMIT $limit",
+        "parameters": [
+          {"name": "verdict", "data_type": "string", "description": "One of: correct, corrected, needs-citation."},
+          {"name": "limit", "data_type": "integer", "description": "Maximum number of papers to return.", "is_optional": true, "default": 40}
+        ]
+      }
+    }
+  ]
+}

@@ -117,6 +117,9 @@ needed no model, connects the same papers better.
 7. The index was rewritten from one bibliography on every fetch, which
    would have dropped a second collection. It now merges by identifier.
 8. 54 papers added, 80 indexed, 165 citations. Second =add=: all cached.
+9. Moved out of the Form 13 store into a second embedded server on 7689
+   (=papers-graph.env=, =bb local-papers=, =bb papers-load=), and the
+   papers nodes deleted from the first. One graph per source.
 
 * Not done
 

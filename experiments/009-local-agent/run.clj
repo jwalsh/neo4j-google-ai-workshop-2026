@@ -1,13 +1,15 @@
-;; clojure -M:dev experiments/009-local-agent/run.clj MODEL [MODEL ...]
-;; Needs a server with the Form 13 graph (WORKSHOP_ENV) and an Ollama
-;; (OLLAMA_URL). Prints one row per question and model, then the scores.
+;; clojure -M:dev experiments/009-local-agent/run.clj AGENT-ID MODEL [MODEL ...]
+;; AGENT-ID is an id in agents/registry.edn: form13 reads questions.edn,
+;; any other id reads questions-ID.edn. Needs that agent's server running
+;; and an Ollama (OLLAMA_URL). Prints one row per question and model, then
+;; the scores, and writes results[-ID].edn.
 (require '[clojure.edn :as edn]
          '[clojure.pprint :as pprint]
-         '[workshop.agent :as agent]
-         '[workshop.neo4j :as neo4j])
+         '[workshop.agent :as agent])
 
-(def questions (edn/read-string (slurp "experiments/009-local-agent/questions.edn")))
-(def analyst (agent/load-agent))
+(def agent-id (first *command-line-args*))
+(def suffix (if (= "form13" agent-id) "" (str "-" agent-id)))
+(def questions (edn/read-string (slurp (str "experiments/009-local-agent/questions" suffix ".edn"))))
 
 (defn grade
   "right: the expected tool ran with the expected parameters, or nothing ran
@@ -23,10 +25,10 @@
           :else :wrong)))
 
 (def results
-  (with-open [driver (neo4j/connect)]
-    (vec (for [model-name *command-line-args*
+  (do
+    (vec (for [model-name (rest *command-line-args*)
                expected questions]
-           (let [answer (try (agent/ask driver analyst (:question expected) {:model model-name})
+           (let [answer (try (agent/ask-agent agent-id (:question expected) {:model model-name})
                              (catch Exception failure {:problem (ex-message failure)}))]
              {:model model-name
               :question (:question expected)
@@ -47,5 +49,5 @@
     :of (count model-results)
     :median-seconds (format "%.2f" (nth (sort (keep :seconds model-results))
                                         (quot (count (keep :seconds model-results)) 2)))}))
-(spit "experiments/009-local-agent/results.edn" (with-out-str (pprint/pprint results)))
+(spit (str "experiments/009-local-agent/results" suffix ".edn") (with-out-str (pprint/pprint results)))
 (shutdown-agents)

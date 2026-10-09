@@ -49,6 +49,29 @@ of experiment 008, the model on another machine on the network.
 managers hold Allstate?", returns the nine managers here, from every model
 but the smallest.
 
+* A second agent, over other data
+
+=agents/papers.agent.json=, written by hand in the same form, six templates
+over the papers graph of experiment 010, in its own Neo4j on another port.
+=agents/registry.edn= ties each agent to its data source. Twelve questions
+in =questions-papers.edn=, the same grading, =results-papers.edn=:
+
+| model                            | right | refused | wrong |
+|----------------------------------+-------+---------+-------|
+| qwen2.5-coder:7b-instruct-q4_K_M |    12 |       0 |     0 |
+| mistral:latest                   |    12 |       0 |     0 |
+| llama3.2:latest                  |    11 |       1 |     0 |
+
+No line of =workshop.agent= changed for it, which is the test of "nothing
+here knows the data". Two things made it easier than the first agent and
+neither is the model: the tool names were written to be told apart ("Who
+Cites This Paper", "What This Paper Cites", "Most Cited Papers"), and only
+one tool has no required argument. The first agent's names were generated
+and two of them differ by an apostrophe.
+
+The comparison is not clean. The questions were written by the person who
+wrote the tools, the same morning, and there are twelve of them.
+
 * What the checks did
 
 - The 3B model answered "List managers investing in uncommon companies"
@@ -82,14 +105,14 @@ but the smallest.
    John Smith. Added =grounded=.
 2. Twelve questions, four models: the table above. One pass, not repeated,
    temperature 0.
+4. The second agent and its registry; =run.clj= now takes an agent id.
+   =ask-agent= opens a driver for that agent's source per question.
 3. A flat arguments object in the schema, the union of every tool's
    parameters, checked per tool afterwards. A schema with a branch per tool
    was not tried.
 
 * Not done
 
-- A second agent file over other data. The code reads nothing but the
-  export, and that claim is untested until there is one.
 - Renaming the two tools and running again, which is the obvious fix.
 - A turn of conversation: "Let's try 3" after a first answer. Each question
   stands alone.

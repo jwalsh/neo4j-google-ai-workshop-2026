@@ -14,7 +14,9 @@
   Nothing here knows the data. Another agent file over another graph works
   the same way."
   (:require [clojure.data.json :as json]
+            [clojure.edn :as edn]
             [clojure.string :as str]
+            [workshop.env :as env]
             [workshop.neo4j :as neo4j]
             [workshop.ollama :as ollama]
             [workshop.telemetry :as telemetry]))
@@ -201,3 +203,37 @@
                       :resolved (into {} (filter (fn [[parameter-name stored]] (not= stored (parameters parameter-name)))
                                                  (update-vals resolutions first)))
                       :rows (neo4j/query driver (:template tool) resolved))))))))))
+
+;; More than one agent, each over its own graph.
+
+(def registry-path "agents/registry.edn")
+
+(defn registry
+  "The agents on offer, in order: [{:id :agent :env :about :example}]. The
+  first is the default."
+  []
+  (edn/read-string (slurp registry-path)))
+
+(defn entry
+  "The registry entry with this id, or the first when id is blank."
+  [agent-id]
+  (let [entries (registry)]
+    (if (str/blank? agent-id)
+      (first entries)
+      (or (first (filter #(= agent-id (:id %)) entries))
+          (throw (ex-info (str "No agent " (pr-str agent-id) ". There are: "
+                               (str/join ", " (map :id entries)))
+                          {}))))))
+
+(defn ask-agent
+  "A question to the agent with this id, against that agent's own data
+  source: its env file names the server, and a driver is opened for the one
+  question. Returns what `ask` returns, with :agent-id and :source."
+  ([agent-id question] (ask-agent agent-id question {}))
+  ([agent-id question options]
+   (let [{:keys [id agent] env-file :env} (entry agent-id)
+         env-map (env/load-env env-file)]
+     (with-open [driver (neo4j/connect env-map)]
+       (assoc (ask driver (load-agent agent) question options)
+              :agent-id id
+              :source (get env-map "NEO4J_URI"))))))

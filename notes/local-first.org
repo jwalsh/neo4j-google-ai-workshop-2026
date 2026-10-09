@@ -81,6 +81,43 @@ fills in their arguments. It writes no Cypher and no sentences. Measured on
 twelve questions, a 7B model got eleven right and none wrong; a 3B model
 nine, with three refusals and none wrong (=experiments/009-local-agent=).
 
+* More than one agent, more than one graph
+
+[[file:img/dashboard-ask-papers.png]]
+
+Each agent has its own data source. =agents/registry.edn= lists them: an id,
+an agent file, the env file naming its Neo4j, and an example question.
+
+| id     | agent file                              | source                  | made by            |
+|--------+-----------------------------------------+-------------------------+--------------------|
+| form13 | =labs/lab-09/...agent.json=             | =bolt://localhost:7688= | Aura, in Lab 9     |
+| papers | =agents/papers.agent.json=              | =bolt://localhost:7689= | hand               |
+
+#+begin_src sh
+bb local                  # the filings, 7688
+bb local-papers           # the papers, 7689: a second process, its own store
+bb papers-load            # fill it from the cache; again changes nothing
+bb ask --agent papers Who cites SWE-bench
+bb ask                    # with no question: lists the agents
+#+end_src
+
+Neo4j Community has one database per server, so a second data source is a
+second embedded server: about 15 s to start with a 512 MB heap, and its own
+directory under =experiments/008-local-graph-dx/scratch/=. An agent cannot
+reach another agent's graph: a question about managers put to the papers
+agent gets no tool and no rows.
+
+The agent files are in the form Aura's console exports, so "Import agent"
+there should take the hand-written one, and its tools are what a hosted
+agent in front of the same graph would need. That is not tried: it needs an
+instance holding the papers graph and a console session.
+
+To add one: load a graph somewhere, write an env file for it, write an
+agent file with a template per question worth asking, and add a line to
+the registry. Name the tools so that a small model can tell them apart, and
+give each a required argument where the question has one: those two did
+more for accuracy than the model did (=experiments/009-local-agent=).
+
 * What is not local
 
 - Bloom and Graph Analytics. Degree is a count; nothing here draws the scene
@@ -115,7 +152,7 @@ One second dataset exists: a reading list. =bb papers fetch= keeps the arXiv
 papers a =.bib= names in =$XDG_CACHE_HOME/workshop-papers=, outside the
 repository, so worktrees and agents share one copy and a container mounts
 one directory. =workshop.papers= makes Paper, Author, WROTE and CITES from
-it with no model and loads them beside the Form 13 graph: 80 papers from
+it with no model and loads them into their own server: 80 papers from
 two reading lists and 165 citations among them, asked about in
 =labs/papers/01-questions.cypher=. The model's layer
 on top did not pass its gate (=experiments/010-papers-dataset=).

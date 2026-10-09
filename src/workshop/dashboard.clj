@@ -62,6 +62,9 @@
    .statement { font: 12px/1.4 ui-monospace, monospace; color: var(--muted); margin: 6px 0 0;
                 overflow-wrap: anywhere; }
    form { display: flex; gap: 8px; }
+   select { font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px;
+            background: var(--card); color: var(--ink); }
+   a { color: inherit; }
    input[type=text] { flex: 1; font: inherit; padding: 6px 10px; border: 1px solid var(--line);
                       border-radius: 6px; background: var(--card); color: var(--ink); }
    button { font: inherit; padding: 6px 14px; border: 1px solid var(--line); border-radius: 6px;
@@ -198,13 +201,23 @@
   "The question form and, when a question was asked, what the agent did with
   it: the tool, the parameters as run, what was dropped or resolved, and the
   rows or the reason there are none."
-  [question {:keys [tool parameters resolved problem candidates rows choice] :as outcome}]
+  [agent-id question {:keys [tool parameters resolved problem candidates rows choice source] :as outcome}]
   (page "/ask" "Neo4j and Google workshop: ask"
         "a local model chooses a Cypher template; the rows are the answer"
         "wide"
-        (str "<section><form method=\"get\" action=\"/ask\"><input type=\"text\" name=\"q\" value=\""
-             (escape-html question) "\" placeholder=\"Which companies does Guggenheim own?\">"
-             "<button>Ask</button></form></section>"
+        (str "<section><form method=\"get\" action=\"/ask\"><select name=\"agent\">"
+             (str/join (map (fn [{:keys [id]}]
+                              (str "<option" (when (= id agent-id) " selected") ">" (escape-html id) "</option>"))
+                            (agent/registry)))
+             "</select><input type=\"text\" name=\"q\" value=\""
+             (escape-html question) "\" placeholder=\"" (escape-html (:example (agent/entry agent-id))) "\">"
+             "<button>Ask</button></form><table>"
+             (str/join (map (fn [{:keys [id about example]}]
+                              (str "<tr><td>" (escape-html id) "</td><td>" (escape-html about)
+                                   " <a href=\"/ask?agent=" id "&q=" (java.net.URLEncoder/encode ^String example "UTF-8")
+                                   "\">" (escape-html example) "</a></td></tr>"))
+                            (agent/registry)))
+             "</table></section>"
              (when outcome
                (str "<section><h2><span>" (escape-html (or tool (:tool choice) "no tool")) "</span>"
                     (if problem
@@ -213,7 +226,8 @@
                     "</h2><table>"
                     (str/join
                      (for [[row-name row-value]
-                           [["model" (str (:model choice) ", "
+                           [["agent and source" (str agent-id " on " source)]
+                            ["model" (str (:model choice) ", "
                                           (some->> (:seconds choice) double (format "%.2f s")))]
                             ["parameters as run" (when (seq parameters) (pr-str parameters))]
                             ["resolved against the graph" (when (seq resolved) (pr-str resolved))]
@@ -226,7 +240,7 @@
                     (when (seq rows)
                       (render-answer {:title "Rows" :rows rows
                                       :statement (some #(when (= tool (:name %)) (:template %))
-                                                       (:tools (agent/load-agent)))})))))
+                                                       (:tools (agent/load-agent (:agent (agent/entry agent-id)))))})))))
         false))
 
 (defn- bar-class
@@ -318,13 +332,15 @@
           "/data" (respond exchange 200 "text/html; charset=utf-8"
                            (telemetry/span "GET /data" {}
                              (render-data (mapv #(answer driver %) data-questions))))
-          "/ask" (let [question (query-parameter (.getRawQuery (.getRequestURI exchange)) "q")]
+          "/ask" (let [raw-query (.getRawQuery (.getRequestURI exchange))
+                       question (query-parameter raw-query "q")
+                       agent-id (:id (agent/entry (query-parameter raw-query "agent")))]
                    (respond exchange 200 "text/html; charset=utf-8"
                             (if (str/blank? question)
-                              (render-ask "" nil)
-                              (telemetry/span "GET /ask" {}
-                                (render-ask question
-                                            (try (agent/ask driver question)
+                              (render-ask agent-id "" nil)
+                              (telemetry/span "GET /ask" {:agent-id agent-id}
+                                (render-ask agent-id question
+                                            (try (agent/ask-agent agent-id question)
                                                  (catch Exception failure
                                                    {:problem (or (ex-message failure) (str (class failure)))})))))))
           "/traces" (respond exchange 200 "text/html; charset=utf-8"

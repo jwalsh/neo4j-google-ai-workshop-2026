@@ -10,6 +10,7 @@
             [workshop.gcp :as gcp]
             [workshop.msa :as msa]
             [workshop.neo4j :as neo4j]
+            [workshop.papers :as papers]
             [workshop.redact :as redact]
             [workshop.status :as status]))
 
@@ -42,13 +43,19 @@
                          (doseq [{:keys [statement rows]} (neo4j/run-file driver cypher-path)]
                            (println (first (str/split-lines statement)))
                            (print-rows rows))))}
-   "ask"       {:doc "A question to rows, by a local model choosing a Cypher template: ask \"Who owns 2U Inc?\""
-                :run (fn [words]
-                       (when (empty? words)
-                         (throw (ex-info "ask needs a question." {})))
-                       (with-open [driver (neo4j/connect)]
-                         (let [{:keys [tool parameters resolved problem candidates rows choice]}
-                               (agent/ask driver (str/join " " words))]
+   "ask"       {:doc "A question to rows, a local model choosing a Cypher template: ask [--agent ID] Who owns 2U Inc?"
+                :run (fn [arguments]
+                       (let [[agent-id words] (if (= "--agent" (first arguments))
+                                                [(second arguments) (drop 2 arguments)]
+                                                [nil arguments])]
+                         (when (empty? words)
+                           (println "ask needs a question. Agents:")
+                           (doseq [{:keys [id about example]} (agent/registry)]
+                             (println (format "  %-8s %s  e.g. %s" id about example)))
+                           (throw (ex-info "no question." {})))
+                         (let [{:keys [agent-id source tool parameters resolved problem candidates rows choice]}
+                               (agent/ask-agent agent-id (str/join " " words))]
+                           (println "agent:     " agent-id "on" source)
                            (println "tool:      " (or tool (:tool choice)))
                            (println "parameters:" (pr-str parameters))
                            (when (seq resolved) (println "resolved:  " (pr-str resolved)))
@@ -58,6 +65,10 @@
                              (do (println "no answer: " problem)
                                  (run! #(println "  " %) candidates))
                              (print-rows rows)))))}
+   "papers-load" {:doc "MERGE the cached papers into the server the env file names"
+                  :run (fn [_]
+                         (with-open [driver (neo4j/connect)]
+                           (pprint/pprint (papers/load! driver (papers/graph)))))}
    "status"    {:doc "Every connection check, once, as a table"
                 :run (fn [_]
                        (print-rows (map #(select-keys % [:name :state :millis :summary])

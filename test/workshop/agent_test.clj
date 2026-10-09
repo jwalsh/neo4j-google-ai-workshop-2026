@@ -43,3 +43,24 @@
       (is (= {:label "Manager" :property "managerName"}
              (agent/lookup (template-of "Find Manager's Uncommon Companies") "managerName"))))
     (is (nil? (agent/lookup (template-of "Get Companies by Manager") "limit")))))
+
+(deftest registry-test
+  (let [entries (agent/registry)]
+    (is (= ["form13" "papers"] (map :id entries)))
+    (testing "every agent file and env file named is there, and loads"
+      (doseq [{:keys [agent env]} entries]
+        (is (.exists (java.io.File. ^String env)) env)
+        (is (seq (:tools (agent/load-agent agent))) agent)))
+    (is (= "form13" (:id (agent/entry nil))))
+    (is (= "papers" (:id (agent/entry "papers"))))
+    (is (thrown? clojure.lang.ExceptionInfo (agent/entry "nope")))))
+
+(deftest second-agent-test
+  (let [librarian (agent/load-agent "agents/papers.agent.json")
+        template-of (fn [tool-name] (:template (first (filter #(= tool-name (:name %)) (:tools librarian)))))]
+    (is (= 6 (count (:tools librarian))))
+    (testing "every string parameter can be resolved against the graph"
+      (is (= {:label "Paper" :property "title"} (agent/lookup (template-of "Who Cites This Paper") "paperTitle")))
+      (is (= {:label "Category" :property "name"} (agent/lookup (template-of "Papers Filed Under a Category") "categoryCode")))
+      (is (= {:label "Author" :property "name"} (agent/lookup (template-of "Papers by an Author") "authorName")))
+      (is (= {:label "Paper" :property "verdict"} (agent/lookup (template-of "Papers With a Verification Verdict") "verdict"))))))

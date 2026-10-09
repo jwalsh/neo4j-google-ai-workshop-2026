@@ -37,9 +37,10 @@ that needs no JVM. `bb tasks` lists it: `bb ping`, `bb databases`,
 `bb redact IN.png OUT.png` (cover emails and `.env` secrets in a
 screenshot), `bb status` (every connection check once) with `bb dashboard` (the same as a
 page on 127.0.0.1:8377, loopback only, with `/data`, `/ask` and `/traces`
-beside it), `bb ask QUESTION` (a local model chooses one of the Lab 9
-agent's Cypher templates), `bb local` (an embedded Neo4j on
-localhost:7688), and `bb papers where|list|fetch|add DIR|index` (arXiv papers a `.bib`
+beside it), `bb ask [--agent ID] QUESTION` (a local model chooses one of an agent's
+Cypher templates; `agents/registry.edn` ties each agent to its own Neo4j),
+`bb local` (an embedded Neo4j on localhost:7688 for the filings),
+`bb local-papers` and `bb papers-load` (a second one on 7689 for the papers), and `bb papers where|list|fetch|add DIR|index` (arXiv papers a `.bib`
 names or a directory holds, kept in the XDG cache; this one runs in babashka itself, from `bb/`).
 `WORKSHOP_ENV=local-graph.env` points every command at the local server in
 place of `.env`. `OLLAMA_URL` and `OLLAMA_MODEL` choose the model; the
