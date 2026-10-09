@@ -77,36 +77,68 @@
      :producer (or (info "Creator") (info "Producer"))
      :megabytes (some->> (info "File size") (re-find #"\d+") parse-long (* 1e-6) (format "%.1f"))}))
 
+(defn catalog
+  "The catalog in the cache: every book seen, from every place looked."
+  []
+  (if (fs/exists? (catalog-path)) (edn/read-string (slurp (str (catalog-path)))) []))
+
+(defn- place-name
+  "A short name for where a directory is: BOOKS_PLACE, else the host's last
+  part, else \"local\"."
+  [host]
+  (or (System/getenv "BOOKS_PLACE")
+      (some-> host (str/split #"@") last)
+      "local"))
+
 (defn catalog!
-  "Makes the catalog and writes it to the cache. Returns the books."
+  "Catalogs one directory and merges it into the cache by file name: a book
+  seen in two places is one entry with both under :places. Returns the
+  whole catalog."
   []
   (let [directory (or (System/getenv "BOOKS_DIR")
                       (throw (ex-info "BOOKS_DIR is not set: the directory of PDFs." {})))
-        books (vec (parse-listing (raw-listing directory (System/getenv "BOOKS_HOST"))))]
+        host (System/getenv "BOOKS_HOST")
+        place (place-name host)
+        seen (parse-listing (raw-listing directory host))
+        before (into {} (map (juxt :file identity)) (catalog))
+        ;; A book no longer in this place loses the place, and goes when it has none.
+        cleared (into {} (keep (fn [[file-name book]]
+                                 (let [places (vec (remove #{place} (:places book)))]
+                                   (when (seq places) [file-name (assoc book :places places)]))))
+                      before)
+        merged (reduce (fn [by-file {:keys [file] :as book}]
+                         (assoc by-file file
+                                (assoc (merge (by-file file) (into {} (remove (comp nil? val)) book))
+                                       :places (vec (sort (distinct (conj (:places (by-file file) []) place)))))))
+                       cleared
+                       seen)
+        books (vec (sort-by :file (vals merged)))]
     (fs/create-dirs (cache-dir))
     (spit (str (catalog-path) ".part") (with-out-str (pprint/pprint books)))
     (fs/move (str (catalog-path) ".part") (catalog-path) {:replace-existing true})
     books))
-
-(defn catalog
-  []
-  (when (fs/exists? (catalog-path)) (edn/read-string (slurp (str (catalog-path))))))
 
 (defn -main
   [& [command]]
   (case command
     "catalog" (let [books (catalog!)]
                 (println (count books) "books," (reduce + (keep :pages books)) "pages, in" (str (catalog-path)))
+                (doseq [[places place-books] (sort-by (comp str key) (group-by :places books))]
+                  (println (format "  %-28s %d" (str/join " + " places) (count place-books))))
                 (println "  with a title: " (count (filter :title books)))
                 (println "  with an author:" (count (filter :author books)))
                 (println "  with a year:  " (count (filter :year books))))
+    "only" (doseq [book (catalog)
+                   :when (= [(second *command-line-args*)] (:places book))]
+             (println (:file book)))
     "list" (pprint/print-table [:pages :year :title :author :file]
                                (for [book (catalog)]
                                  (-> book
                                      (update :title #(some-> % (subs 0 (min 48 (count %)))))
                                      (update :author #(some-> % (subs 0 (min 28 (count %)))))
                                      (update :file #(subs % 0 (min 36 (count %)))))))
-    (do (println "usage: bb books catalog | list")
+    (do (println "usage: bb books catalog | list | only PLACE")
         (println "  BOOKS_DIR   the directory of PDFs (required)")
         (println "  BOOKS_HOST  an ssh destination the directory is on (optional)")
+        (println "  BOOKS_PLACE a name for this place in the catalog (default: the host, or local)")
         (println "  BOOKS_CACHE where the catalog is kept (default: $XDG_CACHE_HOME/workshop-books)"))))
