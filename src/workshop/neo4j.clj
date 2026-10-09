@@ -124,3 +124,15 @@
                              "RETURN label, count(*) AS count ORDER BY label"))
    :relationships (query driver (str "MATCH ()-[r]->() "
                                      "RETURN type(r) AS type, count(*) AS count ORDER BY type"))})
+
+(comment
+ ;; no server needed
+ (auto-commit? "LOAD CSV ... CALL { } IN TRANSACTIONS")
+ (auto-commit? "MATCH (n) RETURN n")
+ ;; needs a server: bb local-books, or any of the env files at the root
+ (def books-driver (connect (env/load-env "books-graph.env")))
+ (ping books-driver)
+ (counts books-driver)
+ (query books-driver "MATCH (b:Book) RETURN b.title AS title ORDER BY title LIMIT 5")
+ (.close books-driver)
+:review)

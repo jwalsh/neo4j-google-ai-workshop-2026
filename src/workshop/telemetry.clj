@@ -141,3 +141,14 @@
                  :max-ms (peek durations)})))
        (sort-by :p95-ms >)
        vec))
+
+(comment
+ (span "outer" {:why "review"} (span "inner" {} (Thread/sleep 20) :done))
+ ;; the inner span's :parent-id is the outer's id
+ (map #(select-keys % [:name :duration-ms :parent-id]) (take-last 2 (spans)))
+ (count (spans))
+ (summary)
+ (slowest 5)
+ (first (traces))
+ (clear!)
+:review)

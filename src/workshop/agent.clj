@@ -245,3 +245,18 @@
        (assoc (ask driver (load-agent agent) question options)
               :agent-id id
               :source (get env-map "NEO4J_URI"))))))
+
+(comment
+ ;; everything here but choose and ask runs without a model
+ (map :name (:tools (load-agent)))
+ (grounded "Which managers hold Allstate?"
+           {:tool "x" :arguments {"companyName" "Allstate" "minOwners" 3}})
+ (let [tool (first (:tools (load-agent)))]
+   (lookup (:template tool) (:name (first (:parameters tool)))))
+ (choice-schema (load-agent))
+ (println (instructions (load-agent)))
+ (validate (load-agent) {:tool "Get Companies by Manager" :arguments {}})
+ (map (juxt :id :env :example) (registry))
+ ;; needs OLLAMA_URL and the agent's server
+ (ask-agent "books" "Which books mention telemetry?")
+:review)

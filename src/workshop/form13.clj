@@ -162,3 +162,14 @@
       (assoc before :action :already-loaded)
       (do (run! #(neo4j/run-file driver %) load-files)
           (assoc (verify driver holdings) :action :loaded)))))
+
+(comment
+ ;; the day file in memory, from data/; no database
+ (summary @rows)
+ (take 3 (top-holdings @rows))
+ (take 5 (manager-degree @rows))
+ (take 5 (company-degree @rows))
+ (take 3 (name-variants @rows))
+ (take 3 (odd-prices @rows))
+ (holders-of @rows "ALLSTATE CORP")
+:review)

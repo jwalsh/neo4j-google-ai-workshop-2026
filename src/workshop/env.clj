@@ -50,3 +50,12 @@
                            " not set. gmake .env, then fill it in.")
                       {:missing (vec missing)})))
     (select-keys env variable-names)))
+
+(comment
+ (parse-dotenv "A=1\nB=\"two words\"\n# no\nC=")
+ ;; names only: the values include the lab password
+ (sort (filter #(re-find #"^NEO4J" %) (keys (load-env))))
+ (sort (filter #(re-find #"^NEO4J" %) (keys (load-env "books-graph.env"))))
+ (get (load-env "books-graph.env") "NEO4J_URI")
+ (require-vars {"A" "1"} ["A" "B"])   ; throws, naming B and no value
+:review)

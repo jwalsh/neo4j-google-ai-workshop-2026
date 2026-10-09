@@ -79,3 +79,12 @@
        (filter #(= area-name (first %)))
        (sort-by peek >)
        (mapv (fn [[_ target-name edge-similarity]] {:area target-name :similarity edge-similarity}))))
+
+(comment
+ ;; needs data/census_demographics_by_metro_area.csv (gmake data/...)
+ (def census "data/census_demographics_by_metro_area.csv")
+ (count (read-areas census))
+ (def similarity-edges (edges census))
+ (count similarity-edges)
+ (most-similar similarity-edges (:name (first (read-areas census))))
+:review)

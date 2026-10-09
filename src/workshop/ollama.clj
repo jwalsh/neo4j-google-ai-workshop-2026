@@ -70,3 +70,12 @@
                      :answer-tokens (:eval_count answer)}]
          (telemetry/annotate! (select-keys result [:prompt-tokens :answer-tokens]))
          result)))))
+
+(comment
+ (url)
+ (model)
+ ;; these call the server (url) names
+ (models)
+ (chat [{:role "user" :content "One word: the capital of France."}]
+       {:schema {"type" "object" "properties" {"city" {"type" "string"}} "required" ["city"]}})
+:review)

@@ -164,3 +164,14 @@
                  "UNWIND $rows AS row MATCH (h:Heading {id: row[0]}) MERGE (t:Term {name: row[1]}) MERGE (h)-[:ABOUT]->(t)"
                  {:rows (vec batch)}))
   (neo4j/counts driver))
+
+(comment
+ ;; the term rule; no cache, no server
+ (words "Deploying Agents to Kubernetes Clusters")
+ (phrases "Retrieval Augmented Generation with Knowledge Graphs")
+ (map singular ["anonymous" "approaches" "macros" "kubernetes"])
+ ;; needs the cache: bb books fetch, bb books outline
+ (cache-dir)
+ (map (juxt :id (comp count :entries)) (outlines))
+ (update-vals (graph) count)
+:review)
