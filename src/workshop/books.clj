@@ -6,9 +6,14 @@
 
     (:Shelf)<-[:ON]-(:Book)-[:HAS]->(:Heading)-[:HAS]->(:Heading)
     (:Heading)-[:ABOUT]->(:Term)
+    (:Book)-[:INDEXES {pages}]->(:Concept)
 
-  A Term is a word, or a run of two or three words, that the headings of
-  at least two books use. Nothing
+  A Term is a word, or a run of two or three words, from a heading; its
+  `books` property says how many books' headings use it, and a term with
+  `books` of 2 or more is a shared one. A Concept is a main entry of a
+  book's own index, as `bb books index` read it: the author's list of what
+  the book is about, where a Term is only what its headings happen to say.
+  Apart from those index pages nothing
   here reads a book's text and no model is involved: similarity by meaning
   is another tool's job, and this is the part of a library a graph database
   holds without one. Which books share vocabulary, which term bridges two
@@ -35,6 +40,16 @@
     (when-not (.exists outlines-file)
       (throw (ex-info "No outlines cached. bb books fetch, then bb books outline." {:cache (cache-dir)})))
     (into {} (map (juxt :id :entries)) (edn/read-string (slurp outlines-file)))))
+
+(defn indexes
+  "Each cached book's index entries by id, as `bb books index` wrote them:
+  {id [{:name :pages}]}. Empty when no index has been read: the index is a
+  second layer, and the outline projection stands without it."
+  []
+  (let [index-file (io/file (cache-dir) "index.edn")]
+    (if (.exists index-file)
+      (into {} (map (juxt :id :entries)) (edn/read-string (slurp index-file)))
+      {})))
 
 (def stop-words
   "Words a heading uses that say nothing about its subject, and the words
@@ -102,13 +117,29 @@
                     :when (every? some? run)]
                 (str/join " " run)))))
 
+(defn concept-name
+  "An index entry's name as the key books are joined on: lower case, the
+  last word's plural folded, and an acronym with its expansion reduced to
+  the expansion, whichever way round the index wrote them. \"RAG
+  (retrieval-augmented generation)\" and \"Retrieval-augmented generation
+  (RAG)\" are one concept."
+  [entry-name]
+  (let [lowered (str/lower-case (str/trim entry-name))
+        [_ before inside] (re-matches #"(.+?)\s*\((.+)\)" lowered)
+        chosen (cond (nil? before) (str/trim (str/replace lowered #"\s*\(.*$" ""))
+                     (> (count inside) (count before)) inside
+                     :else before)
+        parts (str/split (str/replace chosen #"[.:;]+$" "") #"\s+")]
+    (str/join " " (conj (vec (butlast parts)) (singular (last parts))))))
+
 (defn graph
   "The projection as data:
   {:books [...] :headings [...] :nesting [[parent-id child-id]] :terms [...]
    :about [[heading-id term]]}. minimum-books is how many books must use a
   word in a heading for it to be a term."
-  ([] (graph (edn/read-string (slurp default-shelf)) (outlines) 2))
-  ([shelf-books outlines-by-id minimum-books]
+  ([] (graph (edn/read-string (slurp default-shelf)) (outlines) 2 (indexes)))
+  ([shelf-books outlines-by-id minimum-books] (graph shelf-books outlines-by-id minimum-books {}))
+  ([shelf-books outlines-by-id minimum-books indexes-by-id]
    (let [headings (vec (for [{:keys [id]} shelf-books
                              [position {:keys [level page title]}] (map-indexed vector (outlines-by-id id))]
                          ;; pdftohtml's outline nests from 1; a book's own headings from 0
@@ -127,19 +158,39 @@
                     word (concat (words (:title heading)) (phrases (:title heading)))]
                 [heading word])
          books-using (update-vals (group-by second uses) #(count (distinct (map (comp :book first) %))))
-         terms (set (keep (fn [[word book-count]] (when (>= book-count minimum-books) word)) books-using))]
+         headings-using (update-vals (group-by second uses) count)
+         shared (set (keep (fn [[word book-count]] (when (>= book-count minimum-books) word)) books-using))
+         ;; A word one book alone uses is that book's own vocabulary and is
+         ;; kept. A run of words one book uses is kept only if the book
+         ;; uses it twice: once is two words that happened to be adjacent.
+         kept (into shared (keep (fn [[word heading-count]]
+                                   (when (or (not (str/includes? word " ")) (>= heading-count 2)) word))
+                                 headings-using))
+         index-uses (distinct (for [{:keys [id]} shelf-books
+                                    {:keys [pages] entry-name :name} (indexes-by-id id)
+                                    :let [concept (concept-name entry-name)]
+                                    :when (>= (count concept) 3)]
+                                [id concept pages]))
+         concept-books (update-vals (group-by second index-uses) #(count (distinct (map first %))))]
      {:books (mapv #(select-keys % [:id :title :shelf :why]) shelf-books)
       :headings headings
       :nesting nesting
-      :terms (vec (sort terms))
-      :about (vec (for [[heading word] uses :when (terms word)] [(:id heading) word]))})))
+      :terms (vec (sort shared))
+      :term-books (select-keys books-using kept)
+      :about (vec (for [[heading word] uses :when (kept word)] [(:id heading) word]))
+      :concept-books concept-books
+      ;; one row per book and concept: the first pages given win
+      :indexes (vec (vals (reduce (fn [by-pair [id concept pages]]
+                                    (if (by-pair [id concept]) by-pair (assoc by-pair [id concept] [id concept pages])))
+                                  {} index-uses)))})))
 
 (defn load!
   "MERGEs books and headings into the database and replaces its terms.
   Running it twice leaves the same graph. Returns the counts it then holds."
-  [driver {:keys [books headings nesting about]}]
+  [driver {:keys [books headings nesting about term-books indexes concept-books]}]
   (doseq [[constraint-name label property] [["book_id" "Book" "id"] ["heading_id" "Heading" "id"]
-                                            ["term_name" "Term" "name"] ["shelf_name" "Shelf" "name"]]]
+                                            ["term_name" "Term" "name"] ["shelf_name" "Shelf" "name"]
+                                            ["concept_name" "Concept" "name"]]]
     (neo4j/query driver (str "CREATE CONSTRAINT " constraint-name " IF NOT EXISTS FOR (n:" label
                              ") REQUIRE n." property " IS UNIQUE")))
   (neo4j/query driver
@@ -163,6 +214,19 @@
     (neo4j/query driver
                  "UNWIND $rows AS row MATCH (h:Heading {id: row[0]}) MERGE (t:Term {name: row[1]}) MERGE (h)-[:ABOUT]->(t)"
                  {:rows (vec batch)}))
+  (doseq [batch (partition-all 2000 term-books)]
+    (neo4j/query driver "UNWIND $rows AS row MATCH (t:Term {name: row[0]}) SET t.books = row[1]"
+                 {:rows (mapv vec batch)}))
+  ;; Concepts are replaced for the same reason terms are.
+  (neo4j/query driver "MATCH (c:Concept) DETACH DELETE c")
+  (doseq [batch (partition-all 2000 indexes)]
+    (neo4j/query driver
+                 (str "UNWIND $rows AS row MATCH (b:Book {id: row[0]}) MERGE (c:Concept {name: row[1]}) "
+                      "MERGE (b)-[i:INDEXES]->(c) SET i.pages = row[2]")
+                 {:rows (vec batch)}))
+  (doseq [batch (partition-all 2000 concept-books)]
+    (neo4j/query driver "UNWIND $rows AS row MATCH (c:Concept {name: row[0]}) SET c.books = row[1]"
+                 {:rows (mapv vec batch)}))
   (neo4j/counts driver))
 
 (comment
@@ -172,6 +236,8 @@
  (map singular ["anonymous" "approaches" "macros" "kubernetes"])
  ;; needs the cache: bb books fetch, bb books outline
  (cache-dir)
- (map (juxt :id (comp count :entries)) (outlines))
+ (update-vals (outlines) count)
+ (update-vals (indexes) count)
+ (map concept-name ["RAG (retrieval-augmented generation)" "Retrieval-augmented generation (RAG)" "Vector databases"])
  (update-vals (graph) count)
 :review)

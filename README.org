@@ -140,6 +140,7 @@ and a dated log of what was tried:
 - =009-local-agent=: Lab 9's agent as a small local model that only chooses a template; passed by one model of four
 - =010-papers-dataset=: a bibliography's arXiv papers as a graph; authors and citations passed, the model's layer did not
 - =011-heading-terms=: terms from book headings with spaCy beside a rule; plural folding and phrases ported to Clojure, part of speech not
+- =012-book-index=: concepts from each book's own index, read by word position in babashka; 8,288 concepts from 24 books, 777 shared
 
 =workshop.labs= is each lab as a function returning data: =(run-all)= in a
 REPL, =bb labs= in a shell, three ok, one skipped and six blocked on what they need.
@@ -167,7 +168,7 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lab-08-use-neo4j-agent.org][Lab 8 - Use Neo4j Agent]]: the three prompts, the lazy authorization, and what the shared database turned out to hold
 - [[file:notes/lab-09-aura-agents.org][Lab 9 - Aura Agents]]: the generated agent and its exported tools, and its answers checked against the database
 - [[file:notes/writeup-2026-10-08.org][Write-up, 2026-10-08]]: the day in one page: what the labs do, what held, what did not, and how to run it again
-- [[file:notes/books-shelf.org][A shelf of books as a graph]]: 29 books on the workshop's subjects as headings and shared terms, explored from Emacs, with why two books come out similar
+- [[file:notes/books-shelf.org][A shelf of books as a graph]]: 29 books on the workshop's subjects as headings, terms and the concepts in their own indexes, explored from Emacs, with why two books come out similar
 - [[file:notes/data-sources.org][Other data sources]]: fifteen public datasets checked by request, ranked, with what a dataset-agnostic loader would need from each
 - [[file:notes/local-first.org][The lab, local first]]: the same path with an embedded Neo4j and a small local model, lab by lab, and what does not carry over
 - [[file:notes/telemetry.org][Telemetry]]: spans around every statement, check and lab step, and the dashboard's Data and Traces pages

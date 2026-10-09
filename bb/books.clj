@@ -211,6 +211,114 @@
     (fs/move (str outlines-path ".part") outlines-path {:replace-existing true})
     outlines))
 
+;; A book's own index: the concepts its author chose, read from the pages
+;; the outline says the index is on.
+
+(defn- index-pages
+  "Where a book's index is, from its outline, as [first-page last-page]:
+  from the heading titled Index to the page before the next heading at its
+  level or above. last-page is nil when the index runs to the end. nil when
+  the outline has no such heading."
+  [entries]
+  (let [[position index-heading] (first (filter #(re-matches #"(?i)\s*index\s*" (:title (second %)))
+                                                (map-indexed vector entries)))]
+    (when index-heading
+      (let [following (first (filter #(and (<= (:level %) (:level index-heading))
+                                           (> (:page %) (:page index-heading)))
+                                     (drop (inc position) entries)))]
+        [(:page index-heading) (some-> following :page dec)]))))
+
+(defn parse-positions
+  "pdftotext's -bbox-layout output as lines with where each starts:
+  [{:page :x :text}], page counted from 1 within the output."
+  [bbox-text]
+  (for [[page-number page-text] (map-indexed vector (rest (str/split bbox-text #"<page ")))
+        [_ line-x line-body] (re-seq #"(?s)<line xMin=\"([\d.]+)\"[^>]*>(.*?)</line>" page-text)]
+    {:page (inc page-number)
+     :x (parse-double line-x)
+     :text (str/join " " (map (comp unescape second) (re-seq #"<word[^>]*>(.*?)</word>" line-body)))}))
+
+(defn- column-edges
+  "The left edge of each column, from where lines start. Lines of one
+  column start within a few points of its edge or indented from it;
+  another column starts much further right. An edge is the leftmost
+  position several lines share, so one stray line does not move it."
+  [line-positions]
+  (let [columns (reduce (fn [columns position]
+                          (if (and (seq columns) (< (- position (first (peek columns))) 60))
+                            (conj (pop columns) (conj (peek columns) position))
+                            (conj columns [position])))
+                        []
+                        (sort line-positions))]
+    (for [column columns
+          :let [needed (max 2 (quot (count column) 30))
+                edge (first (keep (fn [[position line-count]] (when (>= line-count needed) position))
+                                  (sort (frequencies (map #(Math/round (double %)) column)))))]
+          :when edge]
+      edge)))
+
+(def ^:private page-references
+  "Page numbers at the end of an index line, with ranges and roman numerals."
+  #"(?:[,\s]+(?:\d+|[ivxlc]+)(?:\s*[–‐-]\s*\d+)?(?:n\d*)?(?:st|nd|rd|th)?)+[,\s]*$")
+
+(defn index-entries
+  "The main entries of an index from its positioned lines:
+  [{:name :pages}]. A main entry starts at its column's left edge; a
+  sub-entry or a wrapped line is indented and is left out, since \"defined\"
+  or \"overview\" under a concept is not a concept. Left and right pages
+  have different margins, so edges are found for each separately."
+  [lines]
+  (let [edges-by-side (update-vals (group-by (comp odd? :page) lines)
+                                   #(column-edges (map :x %)))
+        main? (fn [{:keys [page x]}]
+                (some #(< (Math/abs (- x %)) 3) (edges-by-side (odd? page))))]
+    (->> (partition-all 2 1 lines)
+         (keep (fn [[line following]]
+                 (when (main? line)
+                   (let [wrapped? (re-find #"[‐-]$" (:text line))
+                         whole (if (and wrapped? following)
+                                 (str (str/replace (:text line) #"[‐-]$" "") (:text following))
+                                 (:text line))
+                         without-see (str/replace whole #"(?i)\s*\(?\bsee\b.*$" "")
+                         entry-name (-> without-see
+                                        (str/replace page-references "")
+                                        (str/split #",") first str str/trim)]
+                     (when (and (re-find #"[A-Za-z]{3}" entry-name)
+                                (<= (count (str/split entry-name #"\s+")) 5)
+                                (not (re-matches #"(?i)index|symbols?|numerics?" entry-name))
+                                ;; a buyer's watermark, and the publisher's pages after an index
+                                (not (re-find #"(?i)licensed to|@|what.s inside|thanks for|perks don" whole)))
+                       {:name entry-name
+                        :pages (some->> (re-find page-references without-see)
+                                        (re-seq #"\d+(?:\s*[–‐-]\s*\d+)?")
+                                        (map #(str/replace % #"\s*[–‐]\s*" "-"))
+                                        (str/join ", ") not-empty)})))))
+         (reduce (fn [[kept seen] entry]
+                   (if (seen (:name entry)) [kept seen] [(conj kept entry) (conj seen (:name entry))]))
+                 [[] #{}])
+         first)))
+
+(defn index!
+  "Reads the index of every cached book whose outline has one and writes
+  index.edn: [{:id :pages [first last] :entries [{:name :pages}]}]. Only
+  the index pages are read, and what is kept is the entries' names and
+  page numbers. A book with no Index heading is listed with no entries."
+  []
+  (let [outlines (edn/read-string (slurp (str (fs/path (cache-dir) "outlines.edn"))))
+        indexes (vec (for [{:keys [id entries]} outlines]
+                       (if-let [[first-page last-page] (index-pages entries)]
+                         (let [{:keys [out]} (apply process/shell {:out :string :err :string :continue true}
+                                                    (concat ["pdftotext" "-bbox-layout" "-f" (str first-page)]
+                                                            (when last-page ["-l" (str last-page)])
+                                                            [(str (copy-path id)) "-"]))]
+                           {:id id :pages [first-page last-page]
+                            :entries (index-entries (parse-positions (or out "")))})
+                         {:id id :pages nil :entries []})))
+        index-path (fs/path (cache-dir) "index.edn")]
+    (spit (str index-path ".part") (with-out-str (pprint/pprint indexes)))
+    (fs/move (str index-path ".part") index-path {:replace-existing true})
+    indexes))
+
 (defn -main
   [& [command]]
   (case command
@@ -229,6 +337,11 @@
                 (pprint/print-table (for [{:keys [id entries]} outlines]
                                       {:headings (count entries) :id id}))
                 (println (count outlines) "books," (reduce + (map (comp count :entries) outlines)) "headings"))
+    "index" (let [indexes (index!)]
+              (pprint/print-table (for [{:keys [id pages entries]} indexes]
+                                    {:entries (count entries) :from (first pages) :id id}))
+              (println (count (filter (comp seq :entries) indexes)) "of" (count indexes) "books have an index,"
+                       (reduce + (map (comp count :entries) indexes)) "entries"))
     "only" (doseq [book (catalog)
                    :when (= [(second *command-line-args*)] (:places book))]
              (println (:file book)))
@@ -238,7 +351,7 @@
                                      (update :title #(some-> % (subs 0 (min 48 (count %)))))
                                      (update :author #(some-> % (subs 0 (min 28 (count %)))))
                                      (update :file #(subs % 0 (min 36 (count %)))))))
-    (do (println "usage: bb books catalog | list | only PLACE | fetch [SHELF.edn] | outline")
+    (do (println "usage: bb books catalog | list | only PLACE | fetch [SHELF.edn] | outline | index")
         (println "  BOOKS_DIR   the directory of PDFs (required)")
         (println "  BOOKS_HOST  an ssh destination the directory is on (optional)")
         (println "  BOOKS_PLACE a name for this place in the catalog (default: the host, or local)")

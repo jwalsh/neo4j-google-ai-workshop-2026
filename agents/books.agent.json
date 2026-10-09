@@ -13,8 +13,18 @@
       "config": {
         "template": "MATCH (book:Book)-[:HAS*1..5]->(heading:Heading)-[:ABOUT]->(term:Term) WHERE term.name = $termName RETURN book.title AS book, count(DISTINCT heading) AS headings ORDER BY headings DESC, book LIMIT $limit",
         "parameters": [
-          {"name": "termName", "data_type": "string", "description": "One word, lower case, singular."},
-          {"name": "limit", "data_type": "integer", "description": "Maximum number of books to return.", "is_optional": true, "default": 15}
+          {
+            "name": "termName",
+            "data_type": "string",
+            "description": "One word, lower case, singular."
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of books to return.",
+            "is_optional": true,
+            "default": 15
+          }
         ]
       }
     },
@@ -26,9 +36,23 @@
       "config": {
         "template": "MATCH (volume:Book)-[:HAS*1..5]->(heading:Heading)-[:ABOUT]->(subject:Term) WHERE volume.title = $bookTitle AND subject.name = $subjectTerm RETURN heading.page AS page, heading.title AS heading ORDER BY page LIMIT $limit",
         "parameters": [
-          {"name": "bookTitle", "data_type": "string", "description": "The book's title, or a distinctive part of it."},
-          {"name": "subjectTerm", "data_type": "string", "description": "One word, lower case, singular."},
-          {"name": "limit", "data_type": "integer", "description": "Maximum number of headings to return.", "is_optional": true, "default": 30}
+          {
+            "name": "bookTitle",
+            "data_type": "string",
+            "description": "The book's title, or a distinctive part of it."
+          },
+          {
+            "name": "subjectTerm",
+            "data_type": "string",
+            "description": "One word, lower case, singular."
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of headings to return.",
+            "is_optional": true,
+            "default": 30
+          }
         ]
       }
     },
@@ -40,8 +64,18 @@
       "config": {
         "template": "MATCH (tome:Book)-[:HAS*1..2]->(heading:Heading) WHERE tome.title = $contentsOf RETURN heading.page AS page, heading.level AS level, heading.title AS heading ORDER BY heading.position LIMIT $limit",
         "parameters": [
-          {"name": "contentsOf", "data_type": "string", "description": "The book's title, or a distinctive part of it."},
-          {"name": "limit", "data_type": "integer", "description": "Maximum number of headings to return.", "is_optional": true, "default": 60}
+          {
+            "name": "contentsOf",
+            "data_type": "string",
+            "description": "The book's title, or a distinctive part of it."
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of headings to return.",
+            "is_optional": true,
+            "default": 60
+          }
         ]
       }
     },
@@ -51,10 +85,20 @@
       "enabled": true,
       "type": "cypherTemplate",
       "config": {
-        "template": "MATCH (origin:Book)-[:HAS*1..5]->(:Heading)-[:ABOUT]->(term:Term) WHERE origin.title = $similarTo WITH origin, collect(DISTINCT term) AS originTerms MATCH (other:Book)-[:HAS*1..5]->(:Heading)-[:ABOUT]->(term:Term) WHERE other <> origin WITH other, originTerms, collect(DISTINCT term) AS otherTerms WITH other, size([term IN originTerms WHERE term IN otherTerms]) AS shared, size(originTerms) AS originSize, size(otherTerms) AS otherSize RETURN other.title AS book, shared AS sharedTerms, round(1.0 * shared / (originSize + otherSize - shared), 3) AS jaccard ORDER BY jaccard DESC LIMIT $limit",
+        "template": "MATCH (origin:Book)-[:HAS*1..5]->(:Heading)-[:ABOUT]->(term:Term) WHERE origin.title = $similarTo AND term.books >= 2 WITH origin, collect(DISTINCT term) AS originTerms MATCH (other:Book)-[:HAS*1..5]->(:Heading)-[:ABOUT]->(term:Term) WHERE other <> origin AND term.books >= 2 WITH other, originTerms, collect(DISTINCT term) AS otherTerms WITH other, size([term IN originTerms WHERE term IN otherTerms]) AS shared, size(originTerms) AS originSize, size(otherTerms) AS otherSize RETURN other.title AS book, shared AS sharedTerms, round(1.0 * shared / (originSize + otherSize - shared), 3) AS jaccard ORDER BY jaccard DESC LIMIT $limit",
         "parameters": [
-          {"name": "similarTo", "data_type": "string", "description": "The title of the book to compare the others with, or a distinctive part of it."},
-          {"name": "limit", "data_type": "integer", "description": "How many books to return.", "is_optional": true, "default": 8}
+          {
+            "name": "similarTo",
+            "data_type": "string",
+            "description": "The title of the book to compare the others with, or a distinctive part of it."
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "How many books to return.",
+            "is_optional": true,
+            "default": 8
+          }
         ]
       }
     },
@@ -66,8 +110,41 @@
       "config": {
         "template": "MATCH (shelf:Shelf)<-[:ON]-(book:Book) WHERE shelf.name = $shelfName RETURN book.title AS book, book.why AS why ORDER BY book LIMIT $limit",
         "parameters": [
-          {"name": "shelfName", "data_type": "string", "description": "The shelf's name, one lower-case word."},
-          {"name": "limit", "data_type": "integer", "description": "Maximum number of books to return.", "is_optional": true, "default": 30}
+          {
+            "name": "shelfName",
+            "data_type": "string",
+            "description": "The shelf's name, one lower-case word."
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of books to return.",
+            "is_optional": true,
+            "default": 30
+          }
+        ]
+      }
+    },
+    {
+      "name": "Look Up a Concept in the Books' Indexes",
+      "description": "Lists the books whose own back-of-book index has an entry for a concept, with the pages the index gives, such as knowledge graph, vector database or cosine similarity. For a concept an author indexed, not a word in a chapter title.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (indexer:Book)-[entry:INDEXES]->(concept:Concept) WHERE concept.name = $conceptName RETURN indexer.title AS book, entry.pages AS pages ORDER BY book LIMIT $limit",
+        "parameters": [
+          {
+            "name": "conceptName",
+            "data_type": "string",
+            "description": "The concept as an index would list it, lower case."
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of books to return.",
+            "is_optional": true,
+            "default": 15
+          }
         ]
       }
     }

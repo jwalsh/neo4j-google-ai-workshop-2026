@@ -71,6 +71,58 @@ whole of the "model", and it can be changed and run again in place. Right,
 the terms one of two similar books has and the other lacks, as a set
 difference in Clojure.
 
+* Concepts, from each book's own index
+
+The terms above are words from headings, and the words beside "knowledge
+graph" were "completion", "interacting" and "building". An index is the
+author's own list of what the book is about. =bb books index= reads the
+pages each outline says the index is on, with word positions, and keeps
+the main entries: one that starts at its column's left edge. Sub-entries
+are indented and left out (=experiments/012-book-index=).
+
+| What                                   | Count |
+|----------------------------------------+-------|
+| Books with an index read               | 24 of 29 |
+| Concepts                               | 8,288 |
+| in two books or more                   | 777   |
+| in four books or more                  | 132   |
+| Terms, with single-book ones now kept  | 4,340 (1,475 shared) |
+
+The graph gains =(:Book)-[:INDEXES {pages}]->(:Concept)=, and a Term gains a
+=books= property: a word only one book's headings use is kept as that
+book's own vocabulary, and a query about a pair of books asks for
+=books >= 2=.
+
+This reads a few pages of each book, which the projection had not done
+before. What is kept is entry names and page numbers, in the cache with
+the outlines, not in the repository.
+
+[[file:img/emacs-books-concepts.png]]
+
+The same session, the concepts block of =dev/books_explore.clj=. Top right,
+who indexes "knowledge graph" and "model context protocol": three books
+each, all on the agents shelf, none on the graphs shelf. Below, what /AI
+Engineering/ and /Hands-On Large Language Models/ both index, rarest on the
+shelf first, with the pages each gives: "grouped-query attention",
+"llm-as-a-judge", "reranking". Heading words could not have said that.
+
+What it showed:
+
+- "retrieval-augmented generation" is indexed by eight books, "agent" by
+  nine, "vector database" by six, "cosine similarity" by five.
+- "gemini" is in three indexes. BigQuery and Vertex AI are in none: the
+  shelf has no Google Cloud book.
+- "cypher" is a concept in one index only, /Graph Algorithms for Data
+  Science/. /Neo4j in Action/'s index lists its clauses one by one and never
+  the language.
+- The concepts on four shelves or more are "metadata", "consistency",
+  "state", "concurrency", "pipeline": what the workshop's subjects stand
+  on, and nothing the workshop named.
+
+The books agent has a sixth tool over the indexes. It was not tried with a
+model: on 2026-10-09 afternoon no JVM or babashka process on the laptop
+could reach the model's host ("No route to host"), while curl could.
+
 * What the first look showed
 
 - The most similar pairs are the expected ones: the three Clojure books,
@@ -85,6 +137,11 @@ difference in Clojure.
 
 * Not done
 
+- The index's sub-entries and its "see also" lines, which are edges
+  between concepts.
+- A scored sample of index entries. The quality was looked at, not
+  measured.
+- The sixth agent tool with a model.
 - Captions dropped from the outlines before terms are made.
 - Editions folded: the catalog has three versions of some books.
 - The two books with no bookmarks. Their contents pages would have to be

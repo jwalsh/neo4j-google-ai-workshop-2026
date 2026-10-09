@@ -1,0 +1,69 @@
+#+title: 012 — concepts from each book's own index
+
+* Source
+
+=notes/books-shelf.org=: the books graph's terms are words from headings,
+and the words beside "knowledge graph" were "completion", "interacting",
+"building". A heading says what a chapter is called. An index says what an
+author thought a reader would look up.
+
+* Hypothesis
+
+The index pages of a PDF, read with word positions, give a book's concepts
+without a model: a main entry starts at its column's left edge and a
+sub-entry is indented, so position alone separates "knowledge graph" from
+"defined" beneath it.
+
+* Gate
+
+Decided before the run:
+
+- an index is read for at least 20 of the 29 books;
+- at least 300 concepts are listed by two books or more (the heading rule
+  gives 191 shared phrases);
+- of the workshop's subjects absent as heading terms (Gemini, BigQuery,
+  Vertex AI), at least one appears.
+
+* Result
+
+Passed, 2026-10-09, with the entries' quality checked by eye and not
+scored.
+
+| Measure                              | Value |
+|--------------------------------------+-------|
+| Books with an Index heading          | 24 of 29 |
+| Entries read                         | 9,940 |
+| Concepts after joining names         | 8,288 |
+| Concepts in two books or more        | 777   |
+| Concepts in four books or more       | 132   |
+| Gemini / BigQuery / Vertex AI        | 3 books / none / none |
+
+No Python: the reader is =bb books index= (=bb/books.clj=), over
+=pdftotext -bbox-layout=, and the join is =workshop.books/concept-name=.
+
+* Log
+
+1. Plain =pdftotext= loses indentation, and a sub-entry ("maintenance, 34")
+   cannot be told from a main one. =-bbox-layout= keeps each line's x.
+2. Left and right pages have different margins. Column edges are found
+   for odd and even pages apart, over the whole index and not per page: a
+   column that holds only sub-entries would otherwise take one as its edge.
+3. First pattern for page numbers allowed roman numerals anywhere at the
+   end of a line and ate the last letter of "index", "syntax" and
+   "LangChain". A number now has to follow a comma or a space.
+4. Eight Manning books carry the buyer's name and address on every page.
+   Lines with it are dropped; the cache was checked for it after.
+5. "RAG (retrieval-augmented generation)" in one index is
+   "Retrieval-augmented generation (RAG)" in another. The longer side of
+   the parenthesis is kept, so both are one concept, in eight books.
+
+* Not done
+
+- Sub-entries. They are dropped, and with them "knowledge graph,
+  construction of".
+- "See" and "see also", which are the index's own edges between concepts.
+- Scoring: nobody marked a sample of entries right or wrong. /Neo4j in
+  Action/'s index has no page numbers and includes lines of code;
+  /The Joy of Clojure/ leaks some sub-entries ("is data", "repetitive").
+- The five books with no Index heading.
+- Page numbers are the printed ones, not the PDF's, and are kept as text.
