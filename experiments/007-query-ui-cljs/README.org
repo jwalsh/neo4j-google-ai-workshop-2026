@@ -1,0 +1,333 @@
+#+TITLE: 007 - A replica of the Query tool, and Bombadil pointed at it
+#+DATE: 2026-10-08
+
+* Source
+
+Aura's Query tool, as it stood in the lab browser on 2026-10-08: a snapshot
+of its DOM with styles and scripts stripped, =resources/aura-dom/query-tool.html=
+(ignored, not copied here). Driving that page from scripts was fragile
+(findings 14 to 17 and 23). The snapshot shows what is stable in it: a set
+of =data-testid=, =role= and =aria-label= values.
+
+Bombadil is Antithesis's property-based tester for web UIs: it explores a
+page like a fuzzer and checks temporal properties against state read from
+the live DOM. =/usr/local/bin/bombadil= here is 0.7.8. What was read, all
+at tag =v0.7.8=:
+
+- =bombadil --help=, =bombadil browser {test,test-external,inspect} --help=
+- https://github.com/antithesishq/bombadil
+- The manual, https://antithesishq.github.io/bombadil/ , from its sources:
+  =docs/manual/src/02-getting-started.md= and =03-specification-language.md=
+- =lib/bombadil/src/specification/= : =index.ts=, =actions.ts=,
+  =browser/index.ts=, =browser/dom.ts=, =browser/defaults/actions.ts=,
+  =browser/defaults/properties.ts=
+- https://wal.sh/research/bombadil-spa/ , as a summary only
+
+* Hypothesis
+
+A page of our own that carries the Query tool's hooks, and nothing else of
+it, is enough for a Bombadil specification to be written and debugged
+against, and the same specification can then be pointed at the real tool
+without being able to leave it.
+
+* Gate
+
+1. The replica serves on a fixture back end with the hooks listed below,
+   and says which back end it is on.
+2. Bombadil, 60 seconds on the fixture: no property violated, and every
+   state the properties talk about reached in a companion run (the
+   witnesses), so that "no violation" is not vacuous.
+3. The same specification module run against the real Query tool for about
+   two minutes, confined to it, with database counts before and after.
+
+* Result
+
+1 and 2 passed. 3 was not run; see "The real page".
+
+The final 60-second run on the fixture: 996 steps (580 clicks, 303 editor
+fills, 69 typings, 43 scrolls), 15 properties, no violation. The witnesses
+run: all nine reached within 16 steps. The Aura specification run through
+the external-browser path against the replica: 729 steps, no violation.
+The replica on its live back end, 45 seconds: 467 steps, no violation, and
+=bb counts= the same before and after once one leftover =:Scratch= node
+was deleted.
+
+On the way Bombadil found one bug in the replica, one thing the replica
+did not bound, and one error in the specification; and Bombadil itself
+stalled six times. All four are in the Log.
+
+** The hooks
+
+Shared with the real page, same spelling: =query-app=, =main-editor=,
+=run-button=, =frame=, =frame-command=, =results-panel-content=,
+=result-view-graphViz=, =result-view-table=, =result-view-raw=,
+=result-view-emptyResult=, =simple-frame-status-bar-right=,
+=multi-statement=, =error-icon=, =aborted-icon=; the editor is
+=[role=textbox][aria-label="Cypher Editor"]= with class =cm-content=; the
+view switcher is =[role=tablist][aria-label="Frame view selector"]=; each
+frame has =button[aria-label="Remove frame"]=; the multi-statement table
+is =role=table= with columns #, Status, Cypher query.
+
+Ours, because the snapshot had no frame in that state to copy from:
+=frame-spinner= (a statement still running), =frame-error= (one statement
+that failed), =success-icon= (a guess, by analogy with the two real
+icons), =backend-name=, =stream=, =no-records=.
+
+Not in the replica: =instance-menu-button=, =database-menu-button=,
+=connection-status-indicator-success=, the sidebar, tabs, saved queries,
+the per-frame Run and "More options".
+
+** The properties
+
+| property                 | says                                                                    | replica | Aura spec |
+|--------------------------+-------------------------------------------------------------------------+---------+-----------|
+| editorEmptyAfterRun      | after a click on Run the editor is empty                                | holds   | included  |
+| newestFrameFirst         | text, then Run: the top frame's command is that text                    | holds   | included  |
+| framesLeaveOnlyByRemove  | the frame count drops only by "Remove frame", and by one                | holds   | included  |
+| runAddsExactlyOneFrame   | Run adds one frame, or none for a blank editor                          | holds   | left out  |
+| everyFrameHasOneStatus   | each frame is running, success, error or a statement table: exactly one | holds   | weakened  |
+| statusLineOnlyForSuccess | a status line is worded as the tool words it, in a frame with no error  | holds   | weakened  |
+| frameStopsRunning        | a running frame stops within 5 s (40 s on live)                         | holds   | left out  |
+| errorFramesNameTheError  | a failed statement shows an error code                                  | holds   | left out  |
+| oneViewSelectedPerFrame  | one selected tab per view selector, never a disabled one                | holds   | included  |
+| abortedOnlyAfterAnError  | a statement is aborted only after one that failed                       | holds   | weakened  |
+| backendIsStated          | the page names its back end, twice, and they agree                      | holds   | left out  |
+| staysInQueryTool         | the path stays under =/query=                                           | n/a     | included  |
+| noUncaughtExceptions, noUnhandledPromiseRejections, noConsoleErrors | Bombadil's defaults            | hold    | included  |
+| noHttpErrorCodes         | Bombadil's default                                                      | holds   | left out  |
+
+"Holds" means not violated in the runs recorded here, which is what a
+property test can say.
+
+What could not be expressed, and why:
+
+- On the real page: "a frame is in exactly one state" and "a statement
+  that errors never leaves a spinner". The snapshot has no single-statement
+  error frame and no running frame, so there is no hook to name. The Aura
+  specification says only that a frame does not show both a status line
+  and a statement table.
+- On the real page: "Run adds exactly one frame". The real tool caps its
+  stream, so a Run can add one and drop one.
+- On the real page: the status line's wording. One sentence was seen
+  ("Started streaming 3 records after 46 ms and completed after 49 ms.");
+  what a write or an empty result says was not. The Aura specification
+  asks only for a duration in ms.
+- Anywhere: "the selected tab's panel shows that view's content". The
+  property checks the selection, not what is drawn.
+- Anywhere: anything reached by Tab, Enter, Backspace or Escape (Log 7).
+
+* Log of attempts
+
+In order, all on 2026-10-08.
+
+1. *What is =bombadil=.* =--help=: "Property-based testing for web UIs",
+   with =browser= and =terminal= drivers. =browser test ORIGIN [SPEC]=
+   starts its own browser (=--headless=, =--time-limit=, =--output-path=,
+   =--cookie=, =--header=; no profile directory). =browser test-external
+   --remote-debugger URL= joins a running one. The specification is a
+   TypeScript or JavaScript module exporting properties and action
+   generators; there is no other form, so the specification here is
+   TypeScript and the rest is Clojure.
+2. *The replica.* A Clojure back end on the JDK's HttpServer, a protocol
+   with =fixture= and =live= behind it, and a ClojureScript front end
+   compiled by =cljs.main= (no shadow-cljs, no node: one JVM toolchain, and
+   the server hands out the one compiled file). Plain DOM rather than
+   Reagent: one atom and a redraw is about 300 lines, and there is no
+   component library between the specification and the markup. Worked the
+   first time it was served.
+3. *First Bombadil run, 20 seconds.* It did not end: 32 steps in 3
+   seconds, then nothing, still alive at 120 seconds, the browser at 76%
+   of a core. Killed. The last step logged was a =ScrollDown= from a scroll
+   generator of mine on a page that could not scroll. The generator went;
+   Bombadil's own =scroll=, which checks first, replaced it.
+4. *The same trace showed a violation that was mine.*
+   =framesLeaveOnlyByRemove= failed on every "Remove frame". The package's
+   types give a fingerprint as ={testId, accessibleName, ...}=, and
+   =getFingerprint= returns that; the fingerprint inside
+   =state.lastAction= arrives as ={test_id, accessible_name, ...}= with
+   null fields left out. =tsc= passes either way. The extractor now reads
+   both. Until then =editorEmptyAfterRun= and three others had been true
+   of nothing: they never saw a Run.
+5. *Second run, 30 seconds.* 124 steps, no violation. That says little
+   after attempt 4, so:
+6. *Witnesses.* =spec/witnesses.ts= exports the negation of each state the
+   properties depend on (Run clicked with text, Remove clicked, a frame
+   running, a status line, a failed statement, a statement table, an
+   aborted statement, three frames at once). Each should be violated. All
+   nine were, within 28 steps. The run then died: "state capture failed
+   ... timed out waiting for response for Debugger.evaluateOnCallFrame",
+   exit 1, straight after "Pressing Escape".
+7. *The stalls.* Four more 40-second runs: clean, 164 to 237 steps each.
+   Then three more stalls: on the live back end after Escape ("quiescence
+   timer failed ... timed out waiting for response for Runtime.evaluate",
+   and it ran on to my 150-second kill with a 45-second limit); and a
+   probe specification that pressed mostly Escape, twice, which stalled
+   inside half a second both times (once sitting idle to its limit and
+   exiting 0 after 12 steps, once running past it). Leaving Escape out
+   was not enough: the next run stalled after "Pressing Enter". Six stalls
+   in all; in five the last action logged was a key press, in the sixth
+   (attempt 3) it was my scroll. Ten key presses in the four clean runs
+   did no harm. With every =PressKey= removed, seven runs and about 4,600
+   steps passed without one. The cause inside Bombadil or Chrome was not
+   found. The cost is in "What it is not".
+8. *The Aura specification on the replica.* =spec/aura.ts= through
+   =test-external=, against a headless browser started here on an empty
+   profile: 683 steps, one violation, =staysInQueryTool=, because the
+   replica's path is =/=. The server now also answers at
+   =/projects/replica/studio/query=; from there, 729 steps and none.
+9. *The live back end.* =bb counts= first. The specification's bound on a
+   running frame, 5 seconds, was violated at step 39: five frames queued
+   behind an instance that takes 0.4 to 4 seconds a statement from here
+   (10 seconds for the first, while the driver connects), four at a time.
+   Nothing in the replica bounded it at all; the bound had held on the
+   fixture because the fixture is quick. Fixed in two places: the page
+   gives up on a run after 30 seconds and shows an error, and
+   =spec/replica-live.ts= sets the bound to 40. Then 467 steps, no
+   violation. One =:Scratch= node was left by a CREATE whose DELETE had
+   not been drawn yet; deleted through the same back end, and =bb counts=
+   matched the first.
+10. *A property added late found a bug.* =errorFramesNameTheError= was
+    violated at step 15: the editor held =;;=, the page called that
+    non-blank and sent it, the server found no statement in it and
+    answered with no frame, and the page drew an error frame with nothing
+    in it. "Exactly one status" had been satisfied by it for six runs.
+    Fixed: the back end answers =Replica.NoStatement=, and the page treats
+    a missing frame as a failure with a message. Three 40-second runs
+    after: 621, 683 and 666 steps, none violated.
+11. *The profile copy for the real page.* Refused by this session's
+    permission check as materialising credentials, before anything was
+    copied. Not worked around. Gate 3 stops here.
+
+* What the failures say
+
+- Attempt 4 is the one to keep. A property over "the last action was a
+  click on Run" was vacuously true for as long as the click was never
+  recognised, and a clean run looked the same as a real one. Witnesses,
+  properties that are meant to fail, are cheap and were what made the
+  later clean runs mean something.
+- Attempt 10 the same from the other side: the bug was reachable from the
+  first run and no property asked about it.
+- Attempt 9: a time bound in a specification is a claim about the back
+  end as much as the page.
+- Attempt 7: the tester is a system under test too. A run that stalls
+  exits 0 or 1, or not at all; only the step count shows it. The runner
+  kills Bombadil at twice its limit plus a minute.
+
+* The real page
+
+Not run. =spec/aura.ts= and =clojure -M:bombadil aura URL= are written and
+the path they use was exercised against the replica (attempt 8), but no
+part of this has touched console.neo4j.io.
+
+How it is confined. Bombadil performs only the actions a specification's
+generators offer, and =aura.ts= exports one generator, built from four:
+fill the editor (a custom action, =focus()= then =insertText=, as finding
+15 found works), click =run-button=, click a tab in a frame's "Frame view
+selector", click a frame's "Remove frame". Every click target is looked up
+inside =[data-testid="query-app"]=, must be visible and in the viewport,
+and must be the element actually under its point, so an overlay gets no
+click. If the path is not under =/query=, or =query-app= is missing, or a
+dialog, menu or listbox is open anywhere on the page, the only action
+offered is Wait. There are no default clicks, no navigation, no key
+presses. The origin argument is a second boundary of Bombadil's own. The
+statements are ten: reads, two that fail, two multi-statement, and
+=CREATE (:BombadilScratch ...)= with its DELETE.
+
+What it needs, and what is not known:
+
+1. The lab account's session. =bombadil browser test= takes cookies and
+   headers but no profile, and the console's sign-in is not a cookie one
+   can pass by hand. So the runner copies the lab profile to
+   =scratch/lab-profile-copy=, starts a headless browser on the copy with
+   its own DevTools port (9444; it refuses 9333 and refuses the original
+   directory), and joins Bombadil to that with =test-external
+   --create-target=. The copy is the step that was refused here; someone
+   with the standing to copy that session has to run it.
+2. Not checked: whether a second browser on a copy of the session
+   disturbs the first. If the console's sign-in rotates a refresh token,
+   the copy using it could sign the lab browser out. The lab profile was
+   not inspected to find out.
+3. Not checked: whether a fresh tab on the Query tool arrives connected
+   to the instance or behind a connection dialog. Behind a dialog the
+   specification will Wait for two minutes and report nothing, which is
+   safe and useless.
+4. Not checked: that =insertText= reaches CodeMirror from Bombadil's
+   custom action, or that the real page clears its editor in the same
+   step as the click.
+5. The real page saves what is typed in the editor as a query in the
+   sidebar. A run will leave some.
+
+After a run: =bb counts= from the repository root, and
+=MATCH (s:BombadilScratch) DETACH DELETE s= if one is left.
+
+* Run
+
+From this directory.
+
+#+begin_src sh
+clojure -M:cljs                      # compile the front end, about 10 s
+clojure -M:serve                     # fixture, http://127.0.0.1:8378/
+clojure -M:serve live 8379           # the instance in ../../.env
+
+# Bombadil against the replica, through the runner (headless, summarised):
+clojure -M:bombadil replica 60
+clojure -M:bombadil witnesses 30         # exit 2 is the point: all violated
+clojure -M:bombadil external-replica 30  # aura.ts, external browser, our page
+
+# or directly:
+bombadil browser test --headless --time-limit 60s \
+  --output-path scratch/bombadil/replica --output-path-overwrite \
+  http://127.0.0.1:8378/ spec/replica.ts
+bombadil browser test --headless --time-limit 45s \
+  --output-path scratch/bombadil/replica-live --output-path-overwrite \
+  http://127.0.0.1:8379/ spec/replica-live.ts
+
+# read a run: counts by action, violations by property
+clojure -M:bombadil summary scratch/bombadil/replica
+bombadil browser inspect scratch/bombadil/replica   # opens a window
+
+# the real page; read "The real page" first. Not run here.
+clojure -M:bombadil aura https://console.neo4j.io/projects/PROJECT-ID/studio/query 120
+
+# types for the specification, optional; Bombadil does not need them
+npm install && npm run typecheck
+#+end_src
+
+Exit codes seen from =bombadil=: 0 for no violation, 2 for violations, 1
+for a driver error.
+
+* Emacs
+
+=.dir-locals.el= makes CIDER take this directory's =deps.edn= and the
+=:dev= alias, as experiment 003's does. =dev/query_ui/explore.clj= is
+=(comment ...)= blocks: compile, start and stop the server, switch back
+end under it, call =backend/frame-data= and =server/run-response= with a
+statement and look at what the page would be given, build and run the
+Bombadil commands, read a trace.
+
+Not exercised: Emacs itself. Every form in the file's server, fixture and
+live blocks was evaluated with =clojure -M:dev -e=, and =emacs --batch=
+reads the =.dir-locals.el=; =cider-jack-in= was not run, and there is no
+ClojureScript REPL here to jack into.
+
+* What it is not
+
+Not the Query tool. The editor is a textarea, not CodeMirror; there is no
+graph drawing, only mermaid text from =workshop.diagram= for rows shaped
+as edges; frames are not capped; the multi-statement table has no "View
+results". Three hooks are invented and say so above.
+
+Not evidence about the real page. Every property was checked against our
+page only. That the two share hooks is read off a snapshot, once.
+
+Not a test of the keyboard. No Tab, Enter, Backspace or Escape, so
+nothing about focus order or shortcuts, on a page whose history includes
+a driver that typed into it by accident.
+
+Not deterministic end to end. The fixture is; Bombadil's exploration is
+random with no seed option in 0.7.8, only =--reproduce= of a trace, which
+was not tried.
+
+The live back end reports one duration for both numbers in the status
+line, and takes column order from the first row's keys. The fixture's
+answers are made up, with the lab's label names.

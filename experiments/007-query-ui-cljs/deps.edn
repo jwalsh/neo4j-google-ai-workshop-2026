@@ -1,0 +1,23 @@
+;; Run from this directory. The repository root is a dependency, for
+;; workshop.neo4j (the driver), workshop.env (.env) and workshop.diagram
+;; (edge rows to mermaid); nothing at the root is edited.
+{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.12.0"}
+        org.clojure/data.json {:mvn/version "2.5.1"}
+        workshop/root {:local/root "../.."}}
+ :aliases
+ {;; dev/query_ui/explore.clj: rich comments for CIDER. cider-jack-in uses
+  ;; this alias (see .dir-locals.el).
+  :dev {:extra-paths ["dev"]}
+  ;; clojure -M:cljs      compiles src/query_ui/app.cljs to scratch/public/js
+  :cljs {:extra-deps {org.clojure/clojurescript {:mvn/version "1.12.145"}}
+         :main-opts ["-m" "cljs.main" "-co" "build.edn" "-c" "query-ui.app"]}
+  ;; clojure -M:serve [fixture|live] [port]
+  :serve {:main-opts ["-m" "query-ui.server"]}
+  ;; clojure -M:bombadil replica [seconds]   |   clojure -M:bombadil aura [seconds]
+  :bombadil {:main-opts ["-m" "query-ui.bombadil"]}
+  ;; clojure -M:dev:repl, then cider-connect. Same alias name as the root.
+  :repl {:extra-deps {nrepl/nrepl {:mvn/version "1.8.0"}
+                      cider/cider-nrepl {:mvn/version "0.63.1"}}
+         :main-opts ["-m" "nrepl.cmdline"
+                     "--middleware" "[cider.nrepl/cider-middleware]"]}}}

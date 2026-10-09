@@ -1,0 +1,7 @@
+# Build output, node_modules for the specification's types, Bombadil traces,
+# and the copy of the lab browser profile. Nothing under scratch/ is kept.
+/scratch/
+/node_modules/
+/package-lock.json
+.cpcache/
+.nrepl-port

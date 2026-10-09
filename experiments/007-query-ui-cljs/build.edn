@@ -1,0 +1,5 @@
+{:main query-ui.app
+ :output-to "scratch/public/js/main.js"
+ :output-dir "scratch/cljs-out"
+ :optimizations :advanced
+ :parallel-build true}
