@@ -1,11 +1,17 @@
 * Labs
 
-The owner's own queries and scripts, one file per lab, named for the lab on
-the class page: =lab-04-query.cypher=, =lab-06-document-intelligence.py=.
+The queries run, by lab: one file (=lab-03-connect.cypher=) or, when a lab
+has several steps, a directory of numbered files (=lab-04/=, =lab-06/=).
+=audit/= holds the read-only queries the audit runs. A statement taken from
+the lab's text says so in its header.
 
-Run a Cypher file with =gmake cypher FILE=labs/lab-04-query.cypher=. Without
-cypher-shell that goes through the Query API, which takes one statement per
-request, so keep one statement per file or install cypher-shell.
+Run one with =bb cypher labs/lab-03-connect.cypher=, which takes any number
+of statements, or with =gmake cypher FILE=...=, which without cypher-shell
+goes through the Query API and takes one.
+
+=lab-04/02-delete-all.cypher= deletes every node in the database, the
+document graph from Lab 6 included, not only Lab 4's. It is the lab's
+statement and is kept as run; do not run it again without meaning to.
 
 Connection details come from the environment (=.env=, see =.env.template=).
 Nothing here holds a URI, a password or a project id.

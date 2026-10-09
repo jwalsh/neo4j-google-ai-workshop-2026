@@ -4,7 +4,8 @@
 
 Notes and my own queries from a three-hour hands-on lab on Neo4j Aura and
 Gemini Enterprise. The lab's own instructions live in its repository, linked
-under Materials; nothing of theirs is copied here beyond one slide.
+under Materials; nothing of theirs is copied here: slides worth keeping are redrawn as
+diagrams, and a statement or prompt taken from a lab is marked as theirs.
 
 * AI Workshop with Neo4j and Google
 
@@ -96,6 +97,11 @@ and a dated log of what was tried:
 - =004-form13-core-logic=: as core.logic facts
 - =005-graph-builder-api=: Lab 6's result through the LLM Graph Builder's API
 
+=workshop.labs= is each lab as a function returning data: =(run-all)= in a
+REPL, =bb labs= in a shell, three ok and six blocked on what they need.
+=workshop.audit= (=bb audit=) is the same for what the notes claim.
+=dev/labs_explore.clj= walks both, one form at a time. Neither writes.
+
 =bb status= runs every connection check once: the instance, the dataset
 bucket, the lab browser, the lab's remaining time, the environment, the
 checklist. =bb dashboard= serves the same as a page on
@@ -110,7 +116,8 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lab-03-connect-to-neo4j.org][Lab 3 - Connect to Neo4j]]: Connect, Query, and =SHOW DATABASES= two ways
 - [[file:notes/lab-04-query.org][Lab 4 - Query]]: the naive load, the keyed load, the counts, and what the file says locally
 - [[file:notes/lab-05-bloom.org][Lab 5 - Bloom]]: the path, the search, Degree Centrality sized on the scene, and degree without Bloom
-- [[file:notes/lab-06-document-intelligence.org][Lab 6 - Document Intelligence]]: not done, and why this account does not have the tool
+- [[file:notes/lab-06-document-intelligence.org][Lab 6 - Document Intelligence]]: why this account does not have the tool, and the same result through the LLM Graph Builder's API
+- [[file:notes/v2-cli-path.org][The labs again, by code]]: per lab, the console path, the CLI or API path, whether it ran here, and what the rest need
 - [[file:notes/lecture-gemini-enterprise.org][Lecture - Gemini Enterprise]]: the Agent Platform slide, redrawn
 - [[file:notes/lecture-neo4j-and-ai.org][Lecture - Neo4j and AI]]: two reference architectures, redrawn
 - [[file:notes/screens.org][Screens]]: the consoles and the dashboard as they stood, for after the lab expires

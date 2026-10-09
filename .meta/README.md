@@ -31,7 +31,8 @@ early on was removed from the tree on 2026-10-08; it is still in history
   Professional instance is RUNNING in us-east1 with its credentials in
   `.env`, and the database holds Lab 4's keyed load: 2,251 companies, 28
   managers, 7,381 OWNS, two node-key constraints. `bb form13 verify` checks
-  that against the file. The lectures are unticked: slides, and the owner's.
+  that against the file. Of the lectures, Gemini Enterprise is ticked, on the owner's word; the
+  rest are not.
 - Lab 5 is done: the Manager, OWNS, Company search and Degree Centrality
   with size scaling, in Bloom. A 4GB Graph Analytics session was left
   running.
@@ -46,7 +47,7 @@ early on was removed from the tree on 2026-10-08; it is still in history
 - The lab repository is `neo4j-partners/hands-on-lab-neo4j-and-google`,
   cloned beside this one by ghq and not forked: it is read, not changed.
 - Tooling was scaffolded during the session from the shape of
-  `babashka-workshop-spectre`, less its babashka and Emacs parts: `Makefile`,
+  `babashka-workshop-spectre`: `Makefile`,
   `.env.template`, `.envrc`, `labs/`, this directory.
 - `cypher-shell` is not installed on this machine. `gmake ping` and
   `gmake cypher` fall back to Aura's Query API over curl.

@@ -6,9 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Attendee notes for a one-day hands-on workshop: "AI Workshop with Neo4j and
 Google" (Boston AI Developers Group via AICamp, Google Cambridge, 2026-10-08).
-The labs run in a browser against Aura and the Google Cloud console, so
-there is nothing to build or test here: the repository is org-mode prose, the
-images it links to, and a Makefile of helpers.
+The labs run in a browser against Aura and the Google Cloud console. The
+repository is the notes in org-mode, the images and diagrams they link to,
+and Clojure tooling that does as much of each lab as can be done by code:
+`bb test` runs its tests, `bb labs` and `bb audit` say where things stand.
 
 The lab instructions are not in this repository. They are in
 `neo4j-partners/hands-on-lab-neo4j-and-google`, cloned beside this one under
@@ -68,6 +69,12 @@ workshop.env-test/parse-dotenv-test`.
   reference: the lab's step images, slides. Nothing in it is committed. A
   slide worth keeping is redrawn as mermaid in `notes/diagrams/` and the
   note says which slide it came from.
+- `src/workshop/labs.clj` is each lab as a step returning
+  `{:lab :status :evidence :how}`; `src/workshop/audit.clj` checks the notes
+  against the repository and the database. Both read only.
+  `dev/labs_explore.clj` is the page to evaluate. `.meta/audit-YYYY-MM-DD.md`
+  is a dated run of the audit, and its numbered discrepancies are a to-do
+  list, not a record.
 - `experiments/NNN-name/` is for exploration in anything else (Python, say).
   What survives is rewritten into `src/workshop/` in Clojure, ClojureScript
   or babashka.

@@ -72,7 +72,8 @@ owner's. These are what that cost.
     which do not pick a suggestion. Screenshots here are 2x the page, and
     the image shown to the agent is scaled again: page = shown x 0.6. What
     worked: ask the page for the position of each visible text and click
-    that, one suggestion at a time (`driver/bloom.py`). The owner's
+    that, one suggestion at a time (a script, `bloom.py`, kept with the
+    session's other drivers and not in the repository). The owner's
     reference images of the lab's steps showed what the list should look
     like, which is what exposed that it had never opened. A tool that
     "does not respond" is first a question about where the click went.
