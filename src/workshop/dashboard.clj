@@ -6,6 +6,7 @@
   the lab browser's tab titles."
   (:require [clojure.pprint :as pprint]
             [clojure.string :as str]
+            [workshop.agent :as agent]
             [workshop.neo4j :as neo4j]
             [workshop.status :as status]
             [workshop.telemetry :as telemetry])
@@ -60,6 +61,11 @@
    .data td.number { text-align: right; font-variant-numeric: tabular-nums; }
    .statement { font: 12px/1.4 ui-monospace, monospace; color: var(--muted); margin: 6px 0 0;
                 overflow-wrap: anywhere; }
+   form { display: flex; gap: 8px; }
+   input[type=text] { flex: 1; font: inherit; padding: 6px 10px; border: 1px solid var(--line);
+                      border-radius: 6px; background: var(--card); color: var(--ink); }
+   button { font: inherit; padding: 6px 14px; border: 1px solid var(--line); border-radius: 6px;
+            background: var(--page); color: var(--ink); }
    .trace-row { display: grid; grid-template-columns: minmax(180px, 34%) 1fr 70px; gap: 10px;
                 align-items: center; font-size: 13px; padding: 2px 0; border-top: 1px solid var(--line); }
    .trace-row .label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -69,6 +75,7 @@
    .bar.error { background: var(--down); }
    .bar.cypher { background: #4a7fd6; }
    .bar.lab { background: #b07cc6; }
+   .bar.model { background: #d9912b; }
    .trace-row .ms { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }")
 
 (def ^:private state-labels {:up "up" :down "down" :unknown "info"})
@@ -99,7 +106,7 @@
        (str/join (map (fn [[path label]]
                         (str "<a href=\"" path "\"" (when (= path current-path) " class=\"here\"")
                              ">" label "</a>"))
-                      [["/" "Connections"] ["/data" "Data"] ["/traces" "Traces"]]))
+                      [["/" "Connections"] ["/data" "Data"] ["/ask" "Ask"] ["/traces" "Traces"]]))
        "</nav><main" (when main-class (str " class=\"" main-class "\"")) ">" body "</main></body></html>"))
 
 (defn- clock [] (.format (LocalTime/now) (DateTimeFormatter/ofPattern "HH:mm:ss")))
@@ -178,10 +185,55 @@
         (str/join (map render-answer answers))
         false))
 
+(defn- query-parameter
+  "One parameter of a raw query string, decoded."
+  [raw-query parameter-name]
+  (some (fn [pair]
+          (let [[pair-name pair-value] (str/split pair #"=" 2)]
+            (when (= parameter-name pair-name)
+              (java.net.URLDecoder/decode (str pair-value) "UTF-8"))))
+        (str/split (str raw-query) #"&")))
+
+(defn render-ask
+  "The question form and, when a question was asked, what the agent did with
+  it: the tool, the parameters as run, what was dropped or resolved, and the
+  rows or the reason there are none."
+  [question {:keys [tool parameters resolved problem candidates rows choice] :as outcome}]
+  (page "/ask" "Neo4j and Google workshop: ask"
+        "a local model chooses a Cypher template; the rows are the answer"
+        "wide"
+        (str "<section><form method=\"get\" action=\"/ask\"><input type=\"text\" name=\"q\" value=\""
+             (escape-html question) "\" placeholder=\"Which companies does Guggenheim own?\">"
+             "<button>Ask</button></form></section>"
+             (when outcome
+               (str "<section><h2><span>" (escape-html (or tool (:tool choice) "no tool")) "</span>"
+                    (if problem
+                      "<span class=\"state unknown\">no answer</span>"
+                      (str "<span class=\"millis\">" (count rows) " rows</span>"))
+                    "</h2><table>"
+                    (str/join
+                     (for [[row-name row-value]
+                           [["model" (str (:model choice) ", "
+                                          (some->> (:seconds choice) double (format "%.2f s")))]
+                            ["parameters as run" (when (seq parameters) (pr-str parameters))]
+                            ["resolved against the graph" (when (seq resolved) (pr-str resolved))]
+                            ["dropped, not in the question" (when (seq (:dropped choice)) (pr-str (:dropped choice)))]
+                            ["why no rows" problem]
+                            ["stored values that match" (when (seq candidates) (str/join "; " candidates))]]
+                           :when row-value]
+                       (str "<tr><td>" (escape-html row-name) "</td><td>" (escape-html row-value) "</td></tr>")))
+                    "</table></section>"
+                    (when (seq rows)
+                      (render-answer {:title "Rows" :rows rows
+                                      :statement (some #(when (= tool (:name %)) (:template %))
+                                                       (:tools (agent/load-agent)))})))))
+        false))
+
 (defn- bar-class
   [{:keys [status] span-name :name}]
   (cond (= :error status) "bar error"
         (= "cypher" span-name) "bar cypher"
+        (= "ollama" span-name) "bar model"
         (str/starts-with? span-name "lab ") "bar lab"
         :else "bar"))
 
@@ -189,6 +241,9 @@
   [{:keys [attributes]}]
   (or (:statement attributes)
       (:error attributes)
+      (when (:model attributes)
+        (str (:model attributes) ", " (:prompt-tokens attributes) " tokens in, "
+             (:answer-tokens attributes) " out"))
       (some->> (dissoc attributes :parameters :auto-commit?) seq
                (map (fn [[attribute-name attribute-value]]
                       (str (name attribute-name) " " (if (keyword? attribute-value)
@@ -263,6 +318,15 @@
           "/data" (respond exchange 200 "text/html; charset=utf-8"
                            (telemetry/span "GET /data" {}
                              (render-data (mapv #(answer driver %) data-questions))))
+          "/ask" (let [question (query-parameter (.getRawQuery (.getRequestURI exchange)) "q")]
+                   (respond exchange 200 "text/html; charset=utf-8"
+                            (if (str/blank? question)
+                              (render-ask "" nil)
+                              (telemetry/span "GET /ask" {}
+                                (render-ask question
+                                            (try (agent/ask driver question)
+                                                 (catch Exception failure
+                                                   {:problem (or (ex-message failure) (str (class failure)))})))))))
           "/traces" (respond exchange 200 "text/html; charset=utf-8"
                              (render-traces (telemetry/traces 12) (telemetry/summary)))
           "/spans.edn" (respond exchange 200 "application/edn; charset=utf-8"

@@ -26,7 +26,8 @@ local server took.
 
 * The pages
 
-=bb dashboard= now serves three, on 127.0.0.1:8377 as before.
+=bb dashboard= now serves four, on 127.0.0.1:8377 as before. =/ask= is in
+=notes/local-first.org=; the other three:
 
 - =/= :: the connection checks. Each load is one trace.
 - =/data= :: five questions of whatever graph the env file names, one
@@ -81,5 +82,6 @@ made; =local-graph.env= is tracked and holds no secret.
 
 - No export. OTLP to a collector would be a function over =(telemetry/spans)=.
 - No sampling and no persistence: restart the process and the buffer is empty.
-- The Graph Builder and Ollama calls are not spans yet.
+- The Graph Builder's calls are not spans yet. Ollama's are, since
+  =workshop.ollama=: model and token counts, none of the text.
 - Never run against Aura: the instance was gone before this existed.

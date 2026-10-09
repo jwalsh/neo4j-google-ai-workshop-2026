@@ -10,36 +10,14 @@
 
   experiments/006-structured-extraction has what was tried."
   (:require [clojure.data.json :as json]
-            [clojure.string :as str])
-  (:import (java.net URI)
-           (java.net.http HttpClient HttpRequest HttpRequest$BodyPublishers HttpResponse$BodyHandlers)
-           (java.time Duration)))
-
-(defn ollama-url
-  "Where Ollama listens: OLLAMA_URL, else this machine. A larger model on
-  another host on the network is the usual reason to set it."
-  []
-  (or (System/getenv "OLLAMA_URL") "http://127.0.0.1:11434"))
-
-(def default-model "llama3.2:3b")
+            [clojure.string :as str]
+            [workshop.ollama :as ollama]))
 
 (def prompt-path "prompts/lab-06-generate-model.txt")
 (def hint-path "prompts/lab-06-extraction-hint.txt")
 (def schema-path "prompts/lab-06-extraction-schema.json")
 
 (defn schema [] (json/read-str (slurp schema-path)))
-
-(defn- post-json
-  [url body]
-  (let [request (-> (HttpRequest/newBuilder (URI/create url))
-                    (.timeout (Duration/ofMinutes 10))
-                    (.header "Content-Type" "application/json")
-                    (.POST (HttpRequest$BodyPublishers/ofString (json/write-str body)))
-                    (.build))
-        response (.send (HttpClient/newHttpClient) request (HttpResponse$BodyHandlers/ofString))]
-    (when-not (= 200 (.statusCode response))
-      (throw (ex-info (str "Ollama answered " (.statusCode response) ": " (.body response)) {})))
-    (json/read-str (.body response) :key-fn keyword)))
 
 (defn messages
   "The conversation sent: the hint as the system message, then the lab's
@@ -55,22 +33,18 @@
   what the model does when it is only asked nicely."
   ([text] (extract text {}))
   ([text {:keys [model structured? context-tokens]
-          :or {model default-model structured? true context-tokens 8192}}]
-   (let [answer (post-json (str (ollama-url) "/api/chat")
-                           (cond-> {:model model
-                                    :messages (messages text)
-                                    :stream false
-                                    :options {:temperature 0 :num_ctx context-tokens}}
-                             structured? (assoc :format (schema))))
-         content (get-in answer [:message :content])
-         parsed (try (json/read-str content :key-fn keyword)
-                     (catch Exception _ {:unparsed content}))]
-     (with-meta parsed
-       {:model model
-        :structured? structured?
-        :seconds (some-> (:total_duration answer) (/ 1e9))
-        :prompt-tokens (:prompt_eval_count answer)
-        :answer-tokens (:eval_count answer)}))))
+          :or {structured? true context-tokens 8192}}]
+   (let [{:keys [content parsed] :as answer}
+         (ollama/chat (messages text)
+                      (cond-> {:context-tokens context-tokens}
+                        model (assoc :model model)
+                        structured? (assoc :schema (schema))))
+         result (or parsed
+                    (try (json/read-str content :key-fn keyword)
+                         (catch Exception _ {:unparsed content})))]
+     (with-meta result
+       (assoc (select-keys answer [:model :seconds :prompt-tokens :answer-tokens])
+              :structured? structured?)))))
 
 (defn check
   "What is wrong with an answer, measured against the schema's enums and

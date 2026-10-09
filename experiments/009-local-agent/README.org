@@ -1,0 +1,97 @@
+#+TITLE: 009 - Lab 9's agent with a small local model that only chooses a tool
+#+DATE: 2026-10-09
+
+* Source
+
+Lab 9's Aura agent, exported as JSON (=labs/lab-09/=): four Cypher templates
+and a free Text2Cypher tool. Finding 26: every answer that came from a
+template was right, and the one that came from Text2Cypher was invented and
+looked the same. The code is =src/workshop/agent.clj= and
+=src/workshop/ollama.clj=.
+
+* Hypothesis
+
+A small model on our own hardware is enough to be the agent, if it is asked
+for less. It does not write Cypher and does not write the answer. Held to a
+JSON schema, it names one of the agent's templates and its arguments; the
+template runs as written and its rows are the answer. Around the model, two
+checks that need no model: an argument must appear in the question
+(=agent/grounded=), and a name must match exactly one stored value
+(=agent/resolve-value=).
+
+* Gate
+
+Twelve questions in =questions.edn=, eight that a tool answers and four that
+none should (off topic, a write, a manager who does not exist, a company
+name that matches two). Each answer is graded:
+
+- right :: the expected tool ran with the expected parameters, or nothing
+  ran when nothing should;
+- refused :: nothing ran when something should have;
+- wrong :: rows came back that do not answer the question.
+
+The gate is no wrong answer and at least ten right, for a model of 8B
+parameters or fewer.
+
+* Result
+
+Passed by one model of four. Run on 2026-10-09 against the embedded Neo4j
+of experiment 008, the model on another machine on the network.
+
+| model                            | size  | right | refused | wrong | median seconds |
+|----------------------------------+-------+-------+---------+-------+----------------|
+| qwen2.5-coder:7b-instruct-q4_K_M | 7.6B  |    11 |       1 |     0 |           1.20 |
+| mistral:latest                   | 7.2B  |    10 |       1 |     1 |           1.97 |
+| llama3.2:latest                  | 3.2B  |     9 |       3 |     0 |           0.68 |
+| qwen3:0.6b                       | 0.75B |     6 |       3 |     3 |           0.17 |
+
+=results.edn= has every row. The question Lab 9's agent got wrong, "Which
+managers hold Allstate?", returns the nine managers here, from every model
+but the smallest.
+
+* What the checks did
+
+- The 3B model answered "List managers investing in uncommon companies"
+  with a manager called John Smith and two thresholds, none of them in the
+  question. Grounding dropped all three, the tool was then missing its
+  required argument, and nothing ran. Without the check the query would
+  have run and returned no rows, which reads as "there are none".
+- "Who owns Alphabet?" resolves to two stored names, Class A and Class C.
+  The answer is the two names and no rows.
+- Every wrong answer left is the same shape: the model chose the tool whose
+  arguments are all optional, so there was nothing for either check to
+  catch. A tool with no required argument is the one a wrong choice passes
+  through.
+
+* What the failures say
+
+- Three of four models sent "Which companies are held by at most 3
+  managers, and who holds them?" to "Find Manager's Uncommon Companies",
+  not "Find Managers Sharing Uncommon Companies". The two names differ by
+  an apostrophe and a word. The tool names were generated for Lab 9 and
+  nobody had to tell them apart until a small model did.
+- 0.75B parameters is too few: it sent "who holds X" to the tool for "what
+  does X hold" twice. The name check caught those; it could not catch the
+  three where the wrong tool needed no name.
+- The model is nearly all of the time: about 1.2 s of a 1.25 s request, the
+  two Cypher statements under 40 ms together (=notes/telemetry.org=).
+
+* Log
+
+1. First run, three questions, llama3.2: one right, one right refusal, and
+   John Smith. Added =grounded=.
+2. Twelve questions, four models: the table above. One pass, not repeated,
+   temperature 0.
+3. A flat arguments object in the schema, the union of every tool's
+   parameters, checked per tool afterwards. A schema with a branch per tool
+   was not tried.
+
+* Not done
+
+- A second agent file over other data. The code reads nothing but the
+  export, and that claim is untested until there is one.
+- Renaming the two tools and running again, which is the obvious fix.
+- A turn of conversation: "Let's try 3" after a first answer. Each question
+  stands alone.
+- Variance. One run per model.
+- Any model on this machine: =OLLAMA_URL= pointed elsewhere throughout.

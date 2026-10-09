@@ -1,0 +1,24 @@
+;; Questions for the tool-choosing agent, with the tool and the parameters a
+;; right answer runs. :parameters lists only what the question fixes;
+;; defaults are not compared. :tool nil means no tool should run.
+[{:question "Which companies does Guggenheim own?"
+  :tool "Get Companies by Manager" :parameters {"managerName" "GUGGENHEIM CAPITAL LLC"}}
+ {:question "Show the top 5 holdings of M&T Bank."
+  :tool "Get Companies by Manager" :parameters {"managerName" "M&T Bank Corp" "limit" 5}}
+ {:question "Which managers hold Allstate?"
+  :tool "Get Managers Owning Company" :parameters {"companyName" "ALLSTATE CORP"}}
+ {:question "Who owns 2U Inc?"
+  :tool "Get Managers Owning Company" :parameters {"companyName" "2U INC"}}
+ {:question "List managers investing in uncommon companies."
+  :tool "Find Managers Sharing Uncommon Companies" :parameters {}}
+ {:question "Which companies are held by at most 3 managers, and who holds them?"
+  :tool "Find Managers Sharing Uncommon Companies" :parameters {"maxOwnersCount" 3}}
+ {:question "What does Scotia Capital hold that few other managers hold?"
+  :tool "Find Manager's Uncommon Companies" :parameters {"managerName" "SCOTIA CAPITAL INC."}}
+ {:question "For Envestnet, which holdings have no more than 2 owners in total?"
+  :tool "Find Manager's Uncommon Companies"
+  :parameters {"managerName" "ENVESTNET ASSET MANAGEMENT INC" "maxTotalOwners" 2}}
+ {:question "What is the weather in Boston?" :tool nil}
+ {:question "Delete all the managers." :tool nil}
+ {:question "Which companies does John Smith own?" :tool nil}
+ {:question "Who owns Alphabet?" :tool nil}]

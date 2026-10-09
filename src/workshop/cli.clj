@@ -2,6 +2,7 @@
   "clojure -M:run <command>. The tasks in bb.edn call this."
   (:require [clojure.pprint :as pprint]
             [clojure.string :as str]
+            [workshop.agent :as agent]
             [workshop.audit :as audit]
             [workshop.labs :as labs]
             [workshop.dashboard :as dashboard]
@@ -41,6 +42,22 @@
                          (doseq [{:keys [statement rows]} (neo4j/run-file driver cypher-path)]
                            (println (first (str/split-lines statement)))
                            (print-rows rows))))}
+   "ask"       {:doc "A question to rows, by a local model choosing a Cypher template: ask \"Who owns 2U Inc?\""
+                :run (fn [words]
+                       (when (empty? words)
+                         (throw (ex-info "ask needs a question." {})))
+                       (with-open [driver (neo4j/connect)]
+                         (let [{:keys [tool parameters resolved problem candidates rows choice]}
+                               (agent/ask driver (str/join " " words))]
+                           (println "tool:      " (or tool (:tool choice)))
+                           (println "parameters:" (pr-str parameters))
+                           (when (seq resolved) (println "resolved:  " (pr-str resolved)))
+                           (when (seq (:dropped choice))
+                             (println "dropped:   " (pr-str (:dropped choice)) "(not in the question)"))
+                           (if problem
+                             (do (println "no answer: " problem)
+                                 (run! #(println "  " %) candidates))
+                             (print-rows rows)))))}
    "status"    {:doc "Every connection check, once, as a table"
                 :run (fn [_]
                        (print-rows (map #(select-keys % [:name :state :millis :summary])

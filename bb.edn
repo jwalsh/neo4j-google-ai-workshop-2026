@@ -30,6 +30,11 @@
              :task (apply clojure "-M:run" "labs" *command-line-args*)}
   audit     {:doc "What is true beside what the notes say. Reads only."
              :task (clojure "-M:run" "audit")}
+  ask       {:doc "A question to rows, a local model choosing a Cypher template: bb ask Who owns 2U Inc?"
+             :task (apply clojure "-M:run" "ask" *command-line-args*)}
+  local     {:doc "Neo4j in this machine's JVM on bolt://localhost:7688, loaded and checked, until ctrl-c (experiments/008)"
+             :task (do (shell {:dir "experiments/008-local-graph-dx"} "clojure" "-M:gate")
+                       (shell {:dir "experiments/008-local-graph-dx"} "clojure" "-M:serve"))}
   repl      {:doc "An nREPL in dev/user.clj with CIDER's middleware, for cider-connect"
              :override-builtin true
              :task (clojure "-M:dev:repl")}}}

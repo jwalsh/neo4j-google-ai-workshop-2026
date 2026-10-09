@@ -8,8 +8,8 @@ under Materials; nothing of theirs is copied here: slides worth keeping are redr
 diagrams, and a statement or prompt taken from a lab is marked as theirs.
 
 Start with [[file:notes/writeup-2026-10-08.org][the write-up]]: one page on what the labs do, what held up and
-what did not. To run something with no account, =experiments/008-local-graph-dx=
-loads the lab's data into a Neo4j inside a REPL.
+what did not. To run it with no account, [[file:notes/local-first.org][the local-first path]]: =bb local=, then
+=WORKSHOP_ENV=local-graph.env bb dashboard=.
 
 * AI Workshop with Neo4j and Google
 
@@ -133,6 +133,7 @@ and a dated log of what was tried:
 - =006-structured-extraction=: the same extraction with a local model held to a JSON schema; the gate was not passed
 - =007-query-ui-cljs=: a ClojureScript replica of the Query tool, and Bombadil properties run against it
 - =008-local-graph-dx=: Lab 4's load on an embedded Neo4j, a container and Memgraph, before any cloud
+- =009-local-agent=: Lab 9's agent as a small local model that only chooses a template; passed by one model of four
 
 =workshop.labs= is each lab as a function returning data: =(run-all)= in a
 REPL, =bb labs= in a shell, three ok, one skipped and six blocked on what they need.
@@ -160,6 +161,7 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lab-08-use-neo4j-agent.org][Lab 8 - Use Neo4j Agent]]: the three prompts, the lazy authorization, and what the shared database turned out to hold
 - [[file:notes/lab-09-aura-agents.org][Lab 9 - Aura Agents]]: the generated agent and its exported tools, and its answers checked against the database
 - [[file:notes/writeup-2026-10-08.org][Write-up, 2026-10-08]]: the day in one page: what the labs do, what held, what did not, and how to run it again
+- [[file:notes/local-first.org][The lab, local first]]: the same path with an embedded Neo4j and a small local model, lab by lab, and what does not carry over
 - [[file:notes/telemetry.org][Telemetry]]: spans around every statement, check and lab step, and the dashboard's Data and Traces pages
 - [[file:notes/review-framework-2026-10-08.org][Review as a framework, 2026-10-08]]: what a next workshop would copy from this repository, and ten changes that would make the copy cheap
 - [[file:notes/review-2026-10-08.org][Review, 2026-10-08]]: the work read as one design, with the five forms of one fact drawn
