@@ -1,0 +1,15 @@
+neo4j-google-ai-workshop-2026
+Copyright 2026 Jason Walsh
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This repository includes text from other works:
+
+- Prompts in prompts/ and Cypher statements in labs/ that are marked as the
+  lab's come from neo4j-partners/hands-on-lab-neo4j-and-google,
+  Copyright 2022-2026 Neo4j, licensed under the Apache License, Version 2.0.
+  prompts/README.org and each file's header say which are theirs.
+
+Diagrams in notes/diagrams/ are redrawn from slides shown at the workshop by
+Neo4j and Google; each note says which slide. The slides themselves are not
+included.

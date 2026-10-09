@@ -161,3 +161,8 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lecture-neo4j-and-ai.org][Lecture - Neo4j and AI]]: two reference architectures, redrawn
 - [[file:notes/screens.org][Screens]]: the consoles and the dashboard as they stood, for after the lab expires
 - [[file:notes/resources.org][Resources from the slides]]: the Dataflow template and the Dataproc notebooks
+
+** Licence
+
+Apache 2.0, in =LICENSE=. =NOTICE= says which text is the lab's and under
+what terms.
