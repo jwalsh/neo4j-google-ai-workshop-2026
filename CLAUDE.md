@@ -35,12 +35,15 @@ that needs no JVM. `bb tasks` lists it: `bb ping`, `bb databases`,
 `bb datasets`, `bb peek OBJECT [lines]`, `bb form13 [view]`, `bb test`,
 `bb repl`, and
 `bb redact IN.png OUT.png` (cover emails and `.env` secrets in a
-screenshot), `bb status` (every connection check once) with `bb dashboard` (the same as a
-page on 127.0.0.1:8377, loopback only, with `/data`, `/ask` and `/traces`
-beside it), `bb ask [--agent ID] QUESTION` (a local model chooses one of an agent's
+screenshot), `bb status` (every connection check once) with `bb dashboard` (pages on
+127.0.0.1:8377, loopback only: `/` an overview of every source in
+`agents/registry.edn`, `/map`, `/data`, `/ask`, `/traces`, and `/config`
+for the connection checks), `bb ask [--agent ID] QUESTION` (a local model chooses one of an agent's
 Cypher templates; `agents/registry.edn` ties each agent to its own Neo4j),
 `bb local` (an embedded Neo4j on localhost:7688 for the filings),
 `bb local-papers` and `bb papers-load` (a second one on 7689 for the papers),
+`bb mbta fetch|network`, `bb local-mbta` and `bb mbta-load` (a fourth on 7691
+for the MBTA's rail network from its GTFS feed, kept in the XDG cache),
 `bb local-books` and `bb books-load` (a third on 7690 for a shelf of books;
 `bb books catalog|fetch|outline|index` fill the cache it reads (`index` is each book's back-of-book index, as concepts); the library's
 catalog and PDFs stay in the XDG cache and are never committed), and `bb papers where|list|fetch|add DIR|index` (arXiv papers a `.bib`

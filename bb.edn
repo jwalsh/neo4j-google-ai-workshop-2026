@@ -43,6 +43,15 @@
   papers    {:doc "arXiv papers a .bib names, fetched once into the XDG cache: bb papers where|list|fetch [n]|add DIR|index"
              :requires ([papers])
              :task (apply papers/-main *command-line-args*)}
+  mbta      {:doc "The MBTA's GTFS feed, fetched once into the XDG cache and cut to a rail network: bb mbta fetch|network|where"
+             :requires ([mbta])
+             :task (apply mbta/-main *command-line-args*)}
+  local-mbta {:doc "A fourth embedded Neo4j for the transit graph, on bolt://localhost:7691, until ctrl-c"
+              :task (shell {:dir "experiments/008-local-graph-dx"}
+                           "clojure" "-M:small:serve" "scratch/neo4j-mbta" "7691" "64m")}
+  mbta-load {:doc "Load the rail network into the transit graph: lines, routes, stations, stops. Idempotent."
+             :task (shell {:extra-env {"WORKSHOP_ENV" "mbta-graph.env"}}
+                          "clojure" "-M:run" "mbta-load")}
   local-papers {:doc "A second embedded Neo4j for the papers graph, on bolt://localhost:7689, until ctrl-c"
                 :task (shell {:dir "experiments/008-local-graph-dx"}
                              "clojure" "-M:small:serve" "scratch/neo4j-papers" "7689" "64m")}

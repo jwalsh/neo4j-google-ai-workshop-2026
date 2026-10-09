@@ -40,7 +40,7 @@ export WORKSHOP_ENV=local-graph.env
 bb counts
 bb form13 verify
 bb ask Which managers hold Allstate
-bb dashboard                               # / /data /ask /traces on 127.0.0.1:8377
+bb dashboard                               # / /map /data /ask /traces /config on 127.0.0.1:8377
 #+end_src
 
 * In a REPL

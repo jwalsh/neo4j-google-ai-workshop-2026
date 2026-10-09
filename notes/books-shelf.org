@@ -45,8 +45,9 @@ opens up into headings and page numbers.
 =dev/books_explore.clj= is a page of =(comment ...)= blocks. =bb repl= in one
 tmux window, Emacs in another, =cider-connect-clj=, and a form at a time.
 The pictures are that session: keys sent to the pane, the pane's text and
-colours rendered to an image. A person was not at the keyboard, and the
-palette is the renderer's.
+colours rendered to an image. A person was not at the keyboard. The theme
+is Emacs's own modus-operandi; the font and the exact shades are the
+renderer's.
 
 [[file:img/emacs-books-why-similar.png]]
 

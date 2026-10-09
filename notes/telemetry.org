@@ -29,7 +29,9 @@ local server took.
 =bb dashboard= now serves four, on 127.0.0.1:8377 as before. =/ask= is in
 =notes/local-first.org=; the other three:
 
-- =/= :: the connection checks. Each load is one trace.
+- =/= :: the connection checks. Each load is one trace. (Since
+  2026-10-09 afternoon these are at =/config=, and =/= is an overview of the
+  data sources: =notes/transit.org=.)
 - =/data= :: five questions of whatever graph the env file names, one
   statement each, printed above its rows.
 - =/traces= :: the last twelve traces as waterfalls, and a table by span

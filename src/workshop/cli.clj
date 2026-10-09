@@ -6,6 +6,7 @@
             [workshop.audit :as audit]
             [workshop.books :as books]
             [workshop.labs :as labs]
+            [workshop.mbta :as mbta]
             [workshop.dashboard :as dashboard]
             [workshop.form13 :as form13]
             [workshop.gcp :as gcp]
@@ -70,6 +71,10 @@
                  :run (fn [_]
                         (with-open [driver (neo4j/connect)]
                           (pprint/pprint (books/load! driver (books/graph)))))}
+   "mbta-load" {:doc "MERGE the cached rail network into the server the env file names"
+                :run (fn [_]
+                       (with-open [driver (neo4j/connect)]
+                         (pprint/pprint (mbta/load! driver (mbta/graph)))))}
    "papers-load" {:doc "MERGE the cached papers into the server the env file names"
                   :run (fn [_]
                          (with-open [driver (neo4j/connect)]

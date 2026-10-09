@@ -1,12 +1,18 @@
 (ns workshop.dashboard
-  "Three pages on 127.0.0.1, rendered on the server. / is workshop.status,
-  /data is a few questions asked of whatever graph .env names, and /traces
-  is what the other two cost: workshop.telemetry's spans as waterfalls.
+  "Pages on 127.0.0.1, rendered on the server. / is an overview: every data
+  source in agents/registry.edn with what its graph holds and one
+  projection of it, and the pages on offer. /map draws the transit graph's
+  stations where they are. /data is a few questions asked of whatever graph
+  the env file names, /ask puts a question to an agent, /traces is what the
+  others cost as waterfalls, and /config is workshop.status: every
+  connection the lab depends on.
   The JDK's own HTTP server. Loopback only: it shows the instance name and
   the lab browser's tab titles."
   (:require [clojure.pprint :as pprint]
             [clojure.string :as str]
             [workshop.agent :as agent]
+            [workshop.env :as env]
+            [workshop.mbta :as mbta]
             [workshop.neo4j :as neo4j]
             [workshop.status :as status]
             [workshop.telemetry :as telemetry])
@@ -53,6 +59,16 @@
    nav { max-width: 1100px; margin: 0 auto 14px; display: flex; gap: 16px; font-size: 14px; }
    nav a { color: var(--muted); text-decoration: none; padding-bottom: 2px; }
    nav a.here { color: var(--ink); border-bottom: 2px solid var(--ink); }
+   main.cards { grid-template-columns: repeat(auto-fill, minmax(460px, 1fr)); }
+   h3 { font-size: 13px; font-weight: 600; margin: 12px 0 0; color: var(--muted); }
+   .tally, .links { font-size: 13px; margin: 8px 0 0; }
+   .tally { color: var(--muted); font-variant-numeric: tabular-nums; }
+   code { font: 12px ui-monospace, monospace; background: var(--page); padding: 1px 5px; border-radius: 4px; }
+   .map { width: 100%; height: auto; display: block; margin-top: 10px; }
+   .map line { stroke-width: 4; stroke-linecap: round; }
+   .map circle { fill: var(--card); stroke: var(--ink); stroke-width: 1.5; }
+   .map circle.meet { stroke-width: 2.5; }
+   .map text { font-size: 11px; fill: var(--ink); paint-order: stroke; stroke: var(--card); stroke-width: 3; }
    main.wide { display: block; }
    main.wide section { margin-bottom: 12px; }
    .data th { text-align: left; font-weight: 600; font-size: 12px; color: var(--muted);
@@ -109,7 +125,8 @@
        (str/join (map (fn [[path label]]
                         (str "<a href=\"" path "\"" (when (= path current-path) " class=\"here\"")
                              ">" label "</a>"))
-                      [["/" "Connections"] ["/data" "Data"] ["/ask" "Ask"] ["/traces" "Traces"]]))
+                      [["/" "Overview"] ["/map" "Map"] ["/data" "Data"] ["/ask" "Ask"]
+                       ["/traces" "Traces"] ["/config" "Config"]]))
        "</nav><main" (when main-class (str " class=\"" main-class "\"")) ">" body "</main></body></html>"))
 
 (defn- clock [] (.format (LocalTime/now) (DateTimeFormatter/ofPattern "HH:mm:ss")))
@@ -117,7 +134,7 @@
 (defn render-page
   [checks]
   (let [down-count (count (filter #(= :down (:state %)) checks))]
-    (page "/" "Neo4j and Google workshop: connections"
+    (page "/config" "Neo4j and Google workshop: config"
           (str (if (zero? down-count) "nothing down" (str down-count " down"))
                ", checked " (clock) ", reloads every " refresh-seconds " s")
           nil
@@ -161,6 +178,18 @@
          "</td>")
     (str "<td>" (escape-html cell-value) "</td>")))
 
+(defn- render-rows
+  "Rows as a table, with the keys of the first row as its columns."
+  [rows]
+  (let [columns (keys (first rows))]
+    (str "<table class=\"data\"><tr>"
+         (str/join (map #(str "<th>" (escape-html (name %)) "</th>") columns))
+         "</tr>"
+         (str/join (map (fn [row]
+                          (str "<tr>" (str/join (map #(render-cell (row %)) columns)) "</tr>"))
+                        rows))
+         "</table>")))
+
 (defn- render-answer
   [{:keys [title statement rows error]}]
   (str "<section><h2><span>" (escape-html title) "</span>"
@@ -170,14 +199,7 @@
        "</h2><p class=\"statement\">" (escape-html statement) "</p>"
        (cond
          error (str "<p class=\"summary\">" (escape-html error) "</p>")
-         (seq rows) (let [columns (keys (first rows))]
-                      (str "<table class=\"data\"><tr>"
-                           (str/join (map #(str "<th>" (escape-html (name %)) "</th>") columns))
-                           "</tr>"
-                           (str/join (map (fn [row]
-                                            (str "<tr>" (str/join (map #(render-cell (row %)) columns)) "</tr>"))
-                                          rows))
-                           "</table>")))
+         (seq rows) (render-rows rows))
        "</section>"))
 
 (defn render-data
@@ -187,6 +209,158 @@
         "wide"
         (str/join (map render-answer answers))
         false))
+
+;; /: every data source the registry names, asked what it holds. Each has
+;; its own server, so each gets its own driver for the one page; a server
+;; that is not running is a card that says how to start it.
+
+(defn source-overview
+  "One registry entry with what its graph holds: :counts and :glance-rows,
+  or :problem when its server does not answer."
+  [{:keys [glance] env-file :env :as source}]
+  (telemetry/span (str "source: " (:id source)) {}
+    (try
+      (with-open [driver (neo4j/connect (env/load-env env-file))]
+        (assoc source
+               :counts (neo4j/counts driver)
+               :glance-rows (when glance (neo4j/query driver (:statement glance)))))
+      (catch Exception failure
+        (assoc source :problem (or (ex-message failure) (str (class failure))))))))
+
+(defn overview
+  "Every source in the registry, asked at once."
+  []
+  (mapv deref (mapv #(future (source-overview %)) (agent/registry))))
+
+(defn- ask-link
+  [agent-id question]
+  (str "<a href=\"/ask?agent=" agent-id "&q=" (java.net.URLEncoder/encode ^String question "UTF-8") "\">"
+       (escape-html question) "</a>"))
+
+(defn- render-source
+  [{:keys [id title about shape start counts glance glance-rows problem pages example]}]
+  (str "<section><h2><span>" (escape-html (or title id)) "</span>"
+       (if problem
+         "<span class=\"state down\">not running</span>"
+         (str "<span class=\"millis\">"
+              (format "%,d nodes, %,d relationships"
+                      (reduce + (map :count (:nodes counts)))
+                      (reduce + (map :count (:relationships counts))))
+              "</span>"))
+       "</h2><p class=\"summary\">" (escape-html about) "</p>"
+       "<p class=\"statement\">" (escape-html shape) "</p>"
+       (if problem
+         (str "<p class=\"summary\">Start it with <code>" (escape-html start) "</code>. "
+              "<span class=\"millis\">" (escape-html problem) "</span></p>")
+         (str "<p class=\"tally\">"
+              (str/join " · " (map (fn [{:keys [label count]}] (str (escape-html label) " " (format "%,d" count)))
+                                   (:nodes counts)))
+              "</p>"
+              (when (seq glance-rows)
+                (str "<h3>" (escape-html (:title glance)) "</h3>" (render-rows glance-rows)))))
+       "<p class=\"links\">Ask: " (ask-link id example)
+       (str/join (map (fn [[path label]] (str " · <a href=\"" path "\">" (escape-html label) "</a>")) pages))
+       "</p></section>"))
+
+(def ^:private pages-on-offer
+  [["/map" "Map" "The transit graph's stations drawn where they are, with the routes between them."]
+   ["/data" "Data" "Five questions asked of the graph the env file names, each one statement."]
+   ["/ask" "Ask" "A question to any source's agent: a local model chooses a Cypher template."]
+   ["/traces" "Traces" "What the other pages cost: every statement and model call as a waterfall."]
+   ["/config" "Config" "Every connection the lab depends on, checked: the database, the bucket, the browser."]])
+
+(defn render-overview
+  [sources]
+  (page "/" "Neo4j and Google workshop"
+        (str (count (remove :problem sources)) " of " (count sources) " data sources running, asked " (clock))
+        "cards"
+        (str (str/join (map render-source sources))
+             "<section><h2><span>Pages</span></h2><table>"
+             (str/join (map (fn [[path label what]]
+                              (str "<tr><td><a href=\"" path "\">" label "</a></td><td>" (escape-html what) "</td></tr>"))
+                            pages-on-offer))
+             "</table></section>")
+        false))
+
+;; /map: stations where they are. Latitude and longitude become x and y by
+;; the plainest projection that looks right at a city's scale: longitude
+;; shrunk by the cosine of the latitude, north up.
+
+(def ^:private map-width 1000)
+
+(defn- render-map-drawing
+  [{:keys [stations segments]}]
+  (let [latitudes (map :latitude stations)
+        longitudes (map :longitude stations)
+        south (apply min latitudes) north (apply max latitudes)
+        west (apply min longitudes) east (apply max longitudes)
+        squeeze (Math/cos (Math/toRadians (/ (+ south north) 2)))
+        margin 40
+        ;; room on the right for the name of the easternmost station
+        label-room 110
+        scale (/ (- map-width (* 2 margin) label-room) (max 1e-9 (* squeeze (- east west))))
+        height (+ (* 2 margin) (* scale (- north south)))
+        place (fn [{:keys [latitude longitude]}]
+                [(+ margin (* scale squeeze (- longitude west)))
+                 (+ margin (* scale (- north latitude)))])
+        placed (into {} (map (juxt :id place)) stations)
+        ;; a name is drawn where lines meet and where a route ends: enough
+        ;; to find one's way, few enough to read
+        degree (frequencies (mapcat (juxt :from :to) segments))
+        named? (fn [{:keys [id lines]}] (or (>= lines 2) (<= (degree id 0) 1)))]
+    (str "<svg class=\"map\" viewBox=\"0 0 " map-width " " (long height) "\" role=\"img\" "
+         "aria-label=\"Stations and the routes between them\">"
+         (str/join (for [{:keys [from to color]} segments
+                         :let [[from-x from-y] (placed from) [to-x to-y] (placed to)]
+                         :when (and from-x to-x)]
+                     (format "<line x1=\"%.1f\" y1=\"%.1f\" x2=\"%.1f\" y2=\"%.1f\" stroke=\"%s\"/>"
+                             (double from-x) (double from-y) (double to-x) (double to-y) (escape-html color))))
+         (str/join (for [{:keys [id lines lineNames] station-name :name :as station} stations
+                         :let [[x y] (placed id)]]
+                     (str (format "<circle cx=\"%.1f\" cy=\"%.1f\" r=\"%s\"%s>" (double x) (double y)
+                                  (if (>= lines 2) "5" "3") (if (>= lines 2) " class=\"meet\"" ""))
+                          "<title>" (escape-html station-name) ": " (escape-html (str/join ", " lineNames)) "</title></circle>"
+                          (when (named? station)
+                            (format "<text x=\"%.1f\" y=\"%.1f\">%s</text>" (double (+ x 7)) (double (+ y 4))
+                                    (escape-html station-name))))))
+         "</svg>")))
+
+(def ^:private map-views
+  {"rapid" {:label "Subway and light rail" :kinds mbta/rapid-transit}
+   "rail" {:label "Commuter rail" :kinds #{"commuter rail"}}
+   "all" {:label "Everything" :kinds #{"subway" "light rail" "commuter rail"}}})
+
+(defn render-map
+  "The map page for one view, or the reason there is no map."
+  [view-id]
+  (let [view-id (if (map-views view-id) view-id "rapid")
+        {:keys [kinds]} (map-views view-id)
+        source (first (filter #(= "mbta" (:id %)) (agent/registry)))
+        drawn (try (with-open [driver (neo4j/connect (env/load-env (:env source)))]
+                     (mbta/map-data driver kinds))
+                   (catch Exception failure {:problem (or (ex-message failure) (str (class failure)))}))]
+    (page "/map" "Neo4j and Google workshop: map"
+          (if (:problem drawn)
+            "the transit graph is not running"
+            (str (count (:stations drawn)) " stations, " (count (:segments drawn))
+                 " connections, from the MBTA's GTFS feed; hover a station for its lines"))
+          "wide"
+          (str "<section><p class=\"links\">"
+               (str/join " · " (map (fn [[id {:keys [label]}]]
+                                      (if (= id view-id)
+                                        (str "<strong>" label "</strong>")
+                                        (str "<a href=\"/map?view=" id "\">" label "</a>")))
+                                    map-views))
+               "</p>"
+               (cond
+                 (:problem drawn) (str "<p class=\"summary\">Start it with <code>" (escape-html (:start source))
+                                       "</code>, then <code>bb mbta network</code> and <code>bb mbta-load</code>. "
+                                       "<span class=\"millis\">" (escape-html (:problem drawn)) "</span></p>")
+                 (empty? (:stations drawn)) "<p class=\"summary\">The graph is empty. <code>bb mbta-load</code>.</p>"
+                 :else (render-map-drawing drawn))
+               "<p class=\"statement\">MATCH (a:Station)-[c:CONNECTS]-&gt;(b:Station) WHERE c.kind IN $kinds "
+               "RETURN a, b, c.color · a name is drawn where lines meet and where a route ends</p></section>")
+          false)))
 
 (defn- query-parameter
   "One parameter of a raw query string, decoded."
@@ -307,7 +481,7 @@
         "wide"
         (if (seq trace-list)
           (str (render-summary summary-rows) (str/join (map render-trace trace-list)))
-          "<section><p class=\"summary\">No spans yet. Load Connections or Data, then come back.</p></section>")
+          "<section><p class=\"summary\">No spans yet. Load Overview or Data, then come back.</p></section>")
         false))
 
 (defn- respond
@@ -326,7 +500,13 @@
         (case (.getPath (.getRequestURI exchange))
           "/" (respond exchange 200 "text/html; charset=utf-8"
                        (telemetry/span "GET /" {}
-                         (render-page (status/all-checks driver))))
+                         (render-overview (overview))))
+          "/config" (respond exchange 200 "text/html; charset=utf-8"
+                             (telemetry/span "GET /config" {}
+                               (render-page (status/all-checks driver))))
+          "/map" (respond exchange 200 "text/html; charset=utf-8"
+                          (telemetry/span "GET /map" {}
+                            (render-map (query-parameter (.getRawQuery (.getRequestURI exchange)) "view"))))
           "/status.edn" (respond exchange 200 "application/edn; charset=utf-8"
                                  (with-out-str (pprint/pprint (status/all-checks driver))))
           "/data" (respond exchange 200 "text/html; charset=utf-8"

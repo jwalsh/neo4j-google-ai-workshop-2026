@@ -39,7 +39,8 @@
   '(("lab"     nil                "dev/explore.clj")
     ("filings" "local-graph.env"  "dev/explore.clj")
     ("papers"  "papers-graph.env" "dev/explore.clj")
-    ("books"   "books-graph.env"  "dev/books_explore.clj"))
+    ("books"   "books-graph.env"  "dev/books_explore.clj")
+    ("transit" "mbta-graph.env"   "src/workshop/mbta.clj"))
   "The graphs on offer, each as (NAME ENV-FILE PAGE).
 ENV-FILE names the Neo4j, nil meaning .env, the lab's own instance.  PAGE is
 the file of forms opened beside the REPL.  Another workshop's data is one

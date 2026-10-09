@@ -1,0 +1,156 @@
+{
+  "name": "MBTA Rail Guide",
+  "description": "Answers questions about the MBTA's subway, light rail and commuter rail from its GTFS feed as a graph: stations, the stops in them, routes and the lines they are on.",
+  "tools": [
+    {
+      "name": "Which Routes Serve a Station",
+      "description": "Lists the routes and lines that serve one station, such as Park Street or South Station. Takes a station, not a route.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (line:Line)<-[:ON]-(service:Route)-[:SERVES]->(station:Station) WHERE station.name = $stationName WITH service, line ORDER BY service.order RETURN service.name AS route, line.name AS line, service.kind AS kind LIMIT $limit",
+        "parameters": [
+          {
+            "name": "stationName",
+            "data_type": "string",
+            "description": "The station's name as written in the question."
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of rows to return.",
+            "is_optional": true,
+            "default": 40
+          }
+        ]
+      }
+    },
+    {
+      "name": "Stations on a Route in Order",
+      "description": "Lists every station one route serves, in the order a train reaches them, such as the Red Line or the Fitchburg Line. Takes a route, not a station.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (route:Route)-[serves:SERVES]->(station:Station) WHERE route.name = $routeName RETURN serves.sequence + 1 AS position, station.name AS station, station.municipality AS municipality ORDER BY position LIMIT $limit",
+        "parameters": [
+          {
+            "name": "routeName",
+            "data_type": "string",
+            "description": "The route's name as written in the question."
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of rows to return.",
+            "is_optional": true,
+            "default": 80
+          }
+        ]
+      }
+    },
+    {
+      "name": "Subway Journey Between Two Stations",
+      "description": "Finds the journey with the fewest stops from one station to another by subway and light rail, step by step, with the line ridden on each step, so a change of line shows as the line changing. Takes two stations. Commuter rail is left out, so a station only it serves gives no rows.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (origin:Station), (destination:Station) WHERE origin.name = $fromStation AND destination.name = $toStation MATCH journey = shortestPath((origin)-[:CONNECTS*..80]->(destination)) WHERE all(leg IN relationships(journey) WHERE leg.kind <> 'commuter rail') UNWIND range(0, length(journey) - 1) AS step RETURN step + 1 AS step, nodes(journey)[step].name AS fromStation, nodes(journey)[step + 1].name AS toStation, relationships(journey)[step].line AS line LIMIT $limit",
+        "parameters": [
+          {
+            "name": "fromStation",
+            "data_type": "string",
+            "description": "The station the journey starts at."
+          },
+          {
+            "name": "toStation",
+            "data_type": "string",
+            "description": "The station the journey ends at."
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of steps to return.",
+            "is_optional": true,
+            "default": 80
+          }
+        ]
+      }
+    },
+    {
+      "name": "Stations Near a Station",
+      "description": "Lists the stations within walking distance of one station, nearest first, with the distance in metres. Takes one station.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (centre:Station) WHERE centre.name = $nearStation MATCH (other:Station) WHERE other <> centre AND point.distance(centre.location, other.location) <= $withinMetres RETURN other.name AS station, toInteger(point.distance(centre.location, other.location)) AS metres ORDER BY metres LIMIT $limit",
+        "parameters": [
+          {
+            "name": "nearStation",
+            "data_type": "string",
+            "description": "The station to measure from."
+          },
+          {
+            "name": "withinMetres",
+            "data_type": "integer",
+            "description": "The distance in metres, only if the question gives one.",
+            "is_optional": true,
+            "default": 1500
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of rows to return.",
+            "is_optional": true,
+            "default": 40
+          }
+        ]
+      }
+    },
+    {
+      "name": "Platforms in a Station",
+      "description": "Lists the stops inside one station: each platform, the route that calls at it and whether it is wheelchair accessible. Takes one station.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (station:Station)<-[:IN]-(platform:Stop)<-[:CALLS_AT]-(route:Route) WHERE station.name = $platformsOf RETURN DISTINCT platform.platform AS platform, route.name AS route, platform.accessible AS accessible, platform.id AS stopId ORDER BY route, platform LIMIT $limit",
+        "parameters": [
+          {
+            "name": "platformsOf",
+            "data_type": "string",
+            "description": "The station's name as written in the question."
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of rows to return.",
+            "is_optional": true,
+            "default": 40
+          }
+        ]
+      }
+    },
+    {
+      "name": "Stations in a Municipality",
+      "description": "Lists the stations in one city or town, such as Cambridge or Somerville, with the routes serving each. Takes a municipality.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (station:Station)<-[:SERVES]-(route:Route) WHERE station.municipality = $municipalityName RETURN station.name AS station, collect(DISTINCT route.name) AS routes ORDER BY station LIMIT $limit",
+        "parameters": [
+          {
+            "name": "municipalityName",
+            "data_type": "string",
+            "description": "The city or town as written in the question."
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of rows to return.",
+            "is_optional": true,
+            "default": 40
+          }
+        ]
+      }
+    }
+  ]
+}

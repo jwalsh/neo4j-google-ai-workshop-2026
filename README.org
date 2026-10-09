@@ -149,10 +149,14 @@ REPL, =bb labs= in a shell, three ok, one skipped and six blocked on what they n
 
 =bb status= runs every connection check once: the instance, the dataset
 bucket, the lab browser, the lab's remaining time, the environment, the
-checklist. =bb dashboard= serves the same as a page on
-=http://127.0.0.1:8377/= that reloads itself. Beside it, =/data= asks five
-questions of the graph and =/traces= shows what every statement and check
-cost. =WORKSHOP_ENV=local-graph.env= points all of it at the local server.
+checklist. =bb dashboard= serves pages on =http://127.0.0.1:8377/=: an
+overview of every data source in =agents/registry.edn= (filings, papers,
+books, transit) with what each graph holds, =/map= for the transit graph's
+stations where they are, =/data= with five questions of the graph, =/ask=
+for a question to any source's agent, =/traces= for what every statement
+cost, and =/config= for the connection checks.
+=WORKSHOP_ENV=local-graph.env= points =/data= and =/config= at the local
+server.
 
 ** Notes
 
@@ -169,6 +173,7 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lab-09-aura-agents.org][Lab 9 - Aura Agents]]: the generated agent and its exported tools, and its answers checked against the database
 - [[file:notes/writeup-2026-10-08.org][Write-up, 2026-10-08]]: the day in one page: what the labs do, what held, what did not, and how to run it again
 - [[file:notes/books-shelf.org][A shelf of books as a graph]]: 29 books on the workshop's subjects as headings, terms and the concepts in their own indexes, explored from Emacs, with why two books come out similar
+- [[file:notes/transit.org][Transit]]: the MBTA's rail network from its GTFS feed as stations, stops, routes and lines, a map drawn from it, and Maverick to Kendall
 - [[file:notes/data-sources.org][Other data sources]]: fifteen public datasets checked by request, ranked, with what a dataset-agnostic loader would need from each
 - [[file:notes/local-first.org][The lab, local first]]: the same path with an embedded Neo4j and a small local model, lab by lab, and what does not carry over
 - [[file:notes/telemetry.org][Telemetry]]: spans around every statement, check and lab step, and the dashboard's Data and Traces pages
