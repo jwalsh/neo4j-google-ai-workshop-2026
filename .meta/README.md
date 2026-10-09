@@ -31,14 +31,15 @@ early on was removed from the tree on 2026-10-08; it is still in history
 - The workshop is over. Labs 1 to 5 and 7 to 9 were done as written; the
   database held Lab 4's keyed load (2,251 companies, 28 managers, 7,381
   OWNS, two node keys), which `bb form13 verify` checks against the file.
-  Of the lectures, Gemini Enterprise is ticked, on the owner's word; the
-  rest are not.
+  Every box in `README.org` is ticked and every assignment is DONE, on the
+  owner's word and the class page, which showed all sixteen items as
+  "Viewed".
 - Lab 6 was blocked as written: this Aura account had no Document
   Intelligence (finding 22). Its result was reproduced through the LLM
   Graph Builder's API (`experiments/005-graph-builder-api/`), which wrote
   Document, Chunk and 117 entity nodes (two runs) into the same database.
-  That subgraph is kept as EDN beside the experiment. Its box stays
-  unticked.
+  That subgraph is kept as EDN beside the experiment. Its box is ticked
+  for the stand-in, and the note says so.
 - Lab 7 added the marketplace Neo4j Agent to a Gemini Enterprise app, Lab 8
   sent it three prompts, Lab 9 generated an Aura agent. The agent's export
   is `labs/lab-09/`; its second answer was wrong and the first partial

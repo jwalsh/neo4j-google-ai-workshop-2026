@@ -29,29 +29,33 @@ worked on real datasets.
 
 ** Assignments
 
-From the class page, "Neo4j and Google".
+From the class page, "Neo4j and Google". All complete: the class page showed
+every lecture, lab and the cloud environment as "Viewed" at the end of the
+day, 2026-10-08. The boxes below are org checkboxes, which GitHub shows as
+plain =[X]= text. Lab 6 was done with a stand-in, not Document Intelligence;
+its note says why.
 
-*** TODO Assignment 1 - Getting Started
-- [ ] Lecture - Introduction to Neo4j
+*** DONE Assignment 1 - Getting Started
+- [X] Lecture - Introduction to Neo4j
 - [X] Lab 1 - Sign In
 - [X] Lab 2 - Deploy Neo4j
 - [X] Lab 3 - Connect to Neo4j
 
-*** TODO Assignment 2 - Moving Data
-- [ ] Lecture - Moving Data
+*** DONE Assignment 2 - Moving Data
+- [X] Lecture - Moving Data
 - [X] Lab 4 - Query
 - [X] Lab 5 - Bloom
 
-*** TODO Assignment 3 - AI and Agents
+*** DONE Assignment 3 - AI and Agents
 - [X] Lecture - Gemini Enterprise
-- [ ] Lecture - Neo4j and AI
-- [ ] Lab 6 - Document Intelligence
+- [X] Lecture - Neo4j and AI
+- [X] Lab 6 - Document Intelligence
 - [X] Lab 7 - Deploy Neo4j Agent
 - [X] Lab 8 - Use Neo4j Agent
 - [X] Lab 9 - Aura Agents
-- [ ] Lecture - Next Steps
+- [X] Lecture - Next Steps
 
-*** TODO Cloud Environment
+*** DONE Cloud Environment
 Ungrouped on the class page.
 
 ** Materials

@@ -2,7 +2,9 @@
 #+DATE: 2026-10-08
 
 From the lab text, =assignment-3-ai-and-agents/lab-6-document-intelligence=
-in the lab repository. Not done: the box in =README.org= is unticked.
+in the lab repository. Not done as written: Document Intelligence was not
+available to this account. The box in =README.org= is ticked for the
+stand-in below, on the owner's reading that the lab was completed.
 
 * What the lab does
 
@@ -55,8 +57,8 @@ second run from the text, held to relationship triples), and the Home
 category includes the HomePod, the HomePod mini and Apple TV 4K, which is
 the observation the lab ends on.
 
-It is a substitute. The box in =README.org= stays unticked: Document
-Intelligence itself was never opened.
+It is a substitute: Document Intelligence itself was never opened. The box
+in =README.org= is ticked for the result, not the tool.
 
 ** The picture the lab ends on
 
