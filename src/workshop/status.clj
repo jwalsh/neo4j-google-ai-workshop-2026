@@ -73,8 +73,7 @@
      :summary (format "%s %s %s, %d nodes, %d relationships"
                       name (first versions) edition node-total relationship-total)
      :details (concat
-               [["instance" (str (env-map "AURA_INSTANCENAME" "?")
-                                 " (" (env-map "AURA_INSTANCEID" "?") ")")]]
+               [["instance" (env-map "AURA_INSTANCENAME" "?")]]
                (map (fn [{:keys [name currentStatus default]}]
                       [(str "database " name) (str currentStatus (when default ", default"))])
                     databases)

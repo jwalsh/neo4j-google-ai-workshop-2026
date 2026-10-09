@@ -15,7 +15,12 @@
            (java.net.http HttpClient HttpRequest HttpRequest$BodyPublishers HttpResponse$BodyHandlers)
            (java.time Duration)))
 
-(def ollama-url "http://127.0.0.1:11434")
+(defn ollama-url
+  "Where Ollama listens: OLLAMA_URL, else this machine. A larger model on
+  another host on the network is the usual reason to set it."
+  []
+  (or (System/getenv "OLLAMA_URL") "http://127.0.0.1:11434"))
+
 (def default-model "llama3.2:3b")
 
 (def prompt-path "prompts/lab-06-generate-model.txt")
@@ -51,7 +56,7 @@
   ([text] (extract text {}))
   ([text {:keys [model structured? context-tokens]
           :or {model default-model structured? true context-tokens 8192}}]
-   (let [answer (post-json (str ollama-url "/api/chat")
+   (let [answer (post-json (str (ollama-url) "/api/chat")
                            (cond-> {:model model
                                     :messages (messages text)
                                     :stream false
