@@ -1,0 +1,602 @@
+#+TITLE: Other data sources
+#+DATE: 2026-10-09
+
+The owner's question: "think of other data sources we could pull", for a
+local-first, REPL-driven framework that is not tied to the workshop's one
+file. Fifteen candidates, each fetched on 2026-10-09 unless the row says
+otherwise. Nothing here is from the lab or the slides; it is ours.
+
+* The bar
+
+What =form13-2023-05-11.csv= has, and what a replacement is judged against:
+
+| property             | the day file                                              |
+|----------------------+-----------------------------------------------------------|
+| public, no key       | yes, one GET                                              |
+| one file             | 1,126,960 bytes, CSV with a header                        |
+| shape                | bipartite: 28 Manager, 2,251 Company, 7,381 OWNS          |
+| oracle               | the file: distinct keys are the expected counts           |
+| dirt                 | 258 CUSIPs under more than one company name               |
+| paired text          | two pages of Apple's 10-K                                 |
+| scale                | maps in memory, about two seconds into an embedded Neo4j  |
+
+* How this was checked
+
+"Verified" means a request made on 2026-10-09 returned what the row says:
+headers for size and date, and for anything under 50 MB the file itself,
+opened and counted. "Recalled" means from memory, not checked. Downloads
+went to a scratch directory, not =data/=.
+
+Not verified by request, all recalled:
+
+- Licences for SEC and FEC data (US government works), OpenAlex and Wikidata
+  (CC0), deps.dev (CC-BY 4.0), GH Archive (CC-BY 4.0). No page fetched said so
+  in words that were read.
+- The inside of SEC's official Form 13F zip: 100 MB, over the limit, not
+  opened. Its table names below are recalled.
+- OpenAlex's abstract field, Wikidata's User-Agent policy, FEC's restriction
+  on using individual contributors' names for solicitation.
+- Anything about OpenStreetMap beyond one size header: two Overpass servers
+  failed (504, then 500).
+- The row count of =form13-2023.csv=; estimated from bytes per row.
+
+* Summary
+
+| #  | candidate                         | shape                 | fetch size       | files | key needed            | fresh         | joins Form 13 |
+|----+-----------------------------------+-----------------------+------------------+-------+-----------------------+---------------+---------------|
+| 1  | Form 10-K sections, same bucket   | text beside a graph   | 5.6 MB           | 1 zip | no                    | 2023-09       | yes, by CUSIP |
+| 2  | Form 13, the year, same bucket    | bipartite, temporal   | 247 MB           | 1     | no                    | 2023-09       | is it         |
+| 3  | SEC insider transactions (3/4/5)  | bipartite, temporal   | 8.7 MB a quarter | 1 zip | User-Agent            | 2026-10-07    | by name only  |
+| 4  | SEC Form 13F data sets            | bipartite, temporal   | 100 MB a quarter | 1 zip | User-Agent            | 2026-09-14    | yes, by CUSIP |
+| 5  | SEC company facts and tickers     | star per company      | 3.8 MB a company | API   | User-Agent            | 2026-10-07    | needs a bridge |
+| 6  | Clojars feed, POMs, stats         | dependency            | 10 MB + POMs     | 3 + n | no                    | hourly        | no            |
+| 7  | deps.dev                          | dependency, resolved  | per call         | API   | no                    | live          | no            |
+| 8  | GH Archive                        | bipartite, temporal   | 9-20 MB an hour  | 1     | no                    | hourly        | no            |
+| 9  | MBTA GTFS                         | geospatial, hierarchy | 24.7 MB          | 1 zip | no                    | 2026-10-08    | no            |
+| 10 | FEC bulk data                     | bipartite, money      | 9.7 MB for four  | 4 zip | no                    | 2026-10-09    | no            |
+| 11 | OpenAlex                          | citation, bipartite   | per call         | API   | no, metered           | live          | no            |
+| 12 | Wikidata                          | hierarchy             | per query        | API   | User-Agent            | live          | yes, by CIK   |
+| 13 | SNAP cit-HepTh                    | citation, temporal    | 13.4 MB          | 3     | no                    | frozen, 2003  | no            |
+| 14 | OpenFlights                       | geospatial, directed  | 3.5 MB           | 3     | no                    | routes: 2017  | no            |
+| 15 | Neo4j's own examples              | various, small        | under 1 MB       | 1-7   | no                    | 2015 to 2026  | no            |
+
+* Financial filings
+
+** 1. Form 10-K sections, already in the bucket
+
+- URL: https://storage.googleapis.com/neo4j-datasets/hands-on-lab/form10k.zip
+- Verified: downloaded and opened. 5,624,228 bytes, updated 2023-09-29.
+  94 files (plus 94 macOS =__MACOSX= shadows), 21 MB unzipped. Each is one
+  JSON object with keys =item1=, =item1a=, =item7=, =item7a=, =companyName=,
+  =cusip=; the file name is the accession number.
+- Licence: none stated on the object. The text is from SEC filings.
+- Yields: =(:Filing {accession})-[:FILED_BY]->(:Company {cusip})=, 94 and 48.
+  35 of the 48 CUSIPs are in the day file. Sections become chunks if wanted.
+- Oracle: 94 documents, 48 distinct CUSIPs, 35 matching Company nodes. For an
+  extraction, nothing: that is the lesson of Lab 6, and of experiment 006.
+- Paired text: it is the paired text. Median 198,000 characters a filing.
+- Questions:
+  1. Which managers hold a company whose risk factors mention a given word?
+     (template, once the text is indexed)
+  2. Which companies name each other in Item 1? (extraction, then a template)
+  3. Which holdings are most similar by what their filings say?
+     (algorithm: node similarity or kNN over embeddings)
+- Dirt: one file is a table of contents, 271 characters, for General
+  Electric. Company names are lower-cased after the first letter
+  ("General electric co"). Several years per company, so CUSIP is not a key
+  for Filing. The macOS shadow files are in the zip.
+- Breaks: nothing in size. "One file" becomes "one zip of JSON", and a
+  whole filing does not fit a small local model's context.
+- Also there: =form10k/form10k-clean-all-companies.zip= (215 MB) and
+  =form10k/form10k-doc-embeddings.csv= (1.2 GB). Listed, not opened.
+
+** 2. Form 13, the year
+
+- URL: https://storage.googleapis.com/neo4j-datasets/hands-on-lab/form13-2023.csv
+- Verified: headers and the first 700 bytes. 247,298,034 bytes, last modified
+  2023-09-20. Same seven columns as the day file. Not downloaded.
+- Licence: none stated.
+- Yields: the same labels. About 1.6 million rows, estimated from the day
+  file's 153 bytes a row; node counts not known. =reportCalendarOrQuarter=
+  now varies, so =OWNS= is a time series.
+- Oracle: =expected-counts= unchanged, if the rows can be held.
+- Paired text: candidate 1, and =hands-on-lab/form13-raw/=, the raw filings
+  the CSV was made from (over 1,000 objects, 136 MB in the first page of the
+  listing).
+- Questions:
+  1. What did a manager add or drop between two quarters? (template)
+  2. Which companies gained the most holders over the year? (template)
+  3. Which managers hold alike? (algorithm: node similarity on the
+     bipartite graph, then Louvain)
+- Dirt: the value column changes scale inside the file. In the first rows a
+  2022-09-30 position is 15,017,000 for 267,500 shares (56 a share) and a
+  2022-12-31 position is 5,199,000,000 for 150,000 shares (34,660 a share).
+  =form13/value-scale= of 1000 is right for the day file and wrong for
+  quarters before 2022-12-31. Seen in two rows, not counted across the file.
+- Breaks: everything this repository assumes. 247 MB as a vector of maps
+  is over a gigabyte of heap; the load is minutes; =rows= as a =delay=
+  cannot be the design.
+- Smaller siblings in the same bucket, listed and not opened:
+  =form13/2022-02-17.csv= (58 KB, another day), =form13/2021.csv= (52 MB),
+  =form13/train.csv= and =form13/test.csv=.
+
+** 3. SEC insider transactions (Forms 3, 4, 5)
+
+- Page: https://www.sec.gov/data-research/sec-markets-data/insider-transactions-data-sets
+- URL: https://www.sec.gov/files/datastandardsinnovation/data/insider-transactions-data-sets/2026q3_form345.zip
+- Verified: downloaded and opened. 8,660,776 bytes, last modified
+  2026-10-07; 53.6 MB unzipped, eight TSV tables, a metadata JSON and a
+  readme. Needs a User-Agent that names the caller; no key.
+- Licence: recalled, a US government work.
+- Yields, from the 2026 Q3 file: 38,152 filings, 4,716 issuers by
+  =ISSUERCIK=, 23,769 reporting owners by =RPTOWNERCIK=, 59,885
+  non-derivative transactions.
+  =(:Insider {cik})-[:FILED]->(:Filing {accession})-[:ABOUT]->(:Issuer {cik})=,
+  with =RPTOWNER_RELATIONSHIP= (Director, Officer, TenPercentOwner) on the
+  first edge and the transactions as dated properties or their own nodes.
+- Oracle: distinct =ACCESSION_NUMBER=, =ISSUERCIK=, =RPTOWNERCIK=; rows of
+  each table. Same technique as =expected-counts=, over three tables.
+- Paired text: =FOOTNOTES.tsv=, 27 MB of free text keyed by accession number
+  and footnote id. A footnote says in prose what the coded row says in
+  columns, which is a checkable extraction.
+- Questions:
+  1. Who sold shares of an issuer in a given month, and how much? (template)
+  2. Which people are insiders at more than one issuer? (template)
+  3. Which issuers are joined by shared directors, and what are the
+     clusters? (algorithm: projection onto issuers, then connected
+     components or Louvain)
+- Dirt: 727 amendments (=4/A=, =3/A=) that restate earlier filings. Five
+  owner CIKs appear under more than one name. Dates are =31-JUL-2026=.
+  Entities file as owners beside people. The newest two quarters moved from
+  =/files/structureddata/= to =/files/datastandardsinnovation/=, so a URL
+  built from a pattern breaks.
+- Breaks: one file becomes a zip of related tables joined on accession
+  number. In memory it fits. The load is tens of seconds, not two.
+- Joining Form 13: no CUSIP here and no CIK there. A crude normalised name
+  match found 925 of the day file's company names among 4,729 issuer names.
+  That gap is an entity-resolution lab, not a defect.
+
+** 4. SEC Form 13F data sets
+
+- Page: https://www.sec.gov/data-research/sec-markets-data/form-13f-data-sets
+- URL: https://www.sec.gov/files/datastandardsinnovation/data/form-13f-data-sets/01jun2026-31aug2026_form13f.zip
+- Verified: headers only. 100,719,015 bytes, last modified 2026-09-14. Not
+  opened. Needs a User-Agent.
+- Licence: recalled, a US government work.
+- Yields: recalled, not seen. =INFOTABLE= is the holdings (CUSIP, value,
+  shares), =COVERPAGE= and =SUBMISSION= carry the manager's name and CIK.
+  Manager would be keyed on CIK, which the bucket's file lacks.
+- Oracle: the same distinct-key counts.
+- Paired text: the filings themselves on EDGAR; none in the zip.
+- Questions: as candidate 2, plus "how has a manager's book changed since
+  the workshop file's 2023" (template) and holder similarity (algorithm).
+- Dirt: recalled, values were reported in thousands before 2023 and in
+  dollars after. Candidate 2 shows the same seam from the other side.
+- Breaks: a quarter is a whole market. Same failure as candidate 2. Worth
+  it only as the source for cutting a fresh one-day file.
+
+** 5. SEC company facts, submissions and tickers
+
+- URLs: https://www.sec.gov/files/company_tickers.json ,
+  https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json ,
+  https://data.sec.gov/submissions/CIK0000320193.json
+- Verified: all three fetched. Tickers 798,703 bytes, last modified
+  2026-10-07, rows of =cik_str=, =ticker=, =title=. Apple's facts 3,789,099
+  bytes. No key, per SEC's own page; without a User-Agent the answer is 403.
+  A HEAD on the facts URL is 403 even with one; GET is 200.
+- Licence: recalled, a US government work.
+- Yields: =(:Company {cik})-[:REPORTED]->(:Fact {concept, period, value})=,
+  thousands of facts a company. Tickers give =(:Company {cik, ticker})=.
+- Oracle: per company, the count of concept and period pairs in the JSON.
+- Paired text: the 10-K whose numbers these are (candidate 1).
+- Questions:
+  1. What revenue did a company report each year? (template)
+  2. Which of a manager's holdings report the most debt? (template, after
+     the bridge)
+  3. Which companies have financials that move together? (algorithm: kNN
+     on fact vectors)
+- Dirt: the same fact restated in later filings; custom concepts per
+  company; fiscal years that are not calendar years.
+- Breaks: one request per company, deeply nested JSON, and no CUSIP
+  anywhere, so it does not attach to the existing graph without a bridge.
+
+* Software ecosystems
+
+** 6. Clojars
+
+- URLs: https://repo.clojars.org/feed.clj.gz ,
+  https://repo.clojars.org/all-poms.txt.gz ,
+  https://repo.clojars.org/stats/all.edn
+- Verified: the first two downloaded, the third sampled. Feed 10,057,190
+  bytes, 41.7 MB unzipped, last modified 2026-10-09 13:00 GMT, one EDN map
+  a line, 33,567 lines. POM list 2,816,346 bytes, 328,935 paths. Stats
+  4,753,754 bytes. The Clojars wiki says the lists are rebuilt hourly and
+  the stats daily. No key.
+- Licence: not found. The wiki page describes the files and states no terms.
+- Yields: =(:Artifact {group, name})-[:HAS_VERSION]->(:Version)= from the
+  feed, download counts from the stats. =DEPENDS_ON= is in neither: it is in
+  the POMs, one request each.
+- Oracle: lines in the feed for artifacts; the sum of =:versions= for
+  versions; =all-poms.txt= as an independent count of versions.
+- Paired text: =:description= in every feed line, and the README at
+  =:scm :url=.
+- Questions:
+  1. Which artifacts did a group publish, and when was each last released?
+     (template)
+  2. What depends on a given library? (template, once POMs are in)
+  3. Which libraries does the ecosystem rest on? (algorithm: PageRank over
+     DEPENDS_ON)
+- Dirt: =:homepage "http://example.com/FIXME"=, =:scm :tag "HEAD"=,
+  SNAPSHOT versions, =#inst= tagged literals, and a stats key that is a
+  request path: =["lein-scalac.lein-scalac.0.1.0.lein-scalac-0.1.0.jar?f=.m2" "clojars"]=.
+- Breaks: the edges. Without POM fetches this is a catalogue, not a graph;
+  with them it is a crawl of up to 328,935 requests. A subset (latest
+  version of the 1,000 most downloaded) is a real file to cut once.
+  It is EDN, which this repository reads natively and no CSV loader does.
+
+** 7. deps.dev
+
+- URL: https://api.deps.dev/v3/systems/maven/packages/org.clojure%3Aclojure/versions/1.12.0:dependencies
+- Verified: fetched, 200, no key. Returns =nodes= and =edges= with the
+  resolved versions. =metosin:reitit-core= returned 404: Maven here means
+  Maven Central, not Clojars.
+- Licence: recalled, CC-BY 4.0. The FAQ fetched did not say.
+- Yields: =(:Version)-[:DEPENDS_ON {requirement}]->(:Version)=, already
+  resolved, with =relation= DIRECT or INDIRECT.
+- Oracle: the response: its node and edge arrays are the expected counts.
+- Paired text: little. Advisory text through other endpoints, recalled.
+- Questions:
+  1. What does this project pull in transitively? (template)
+  2. Which versions of a library are in use across a set of projects?
+     (template)
+  3. What is the longest dependency chain? (algorithm: longest path on a
+     DAG, or betweenness for the chokepoints)
+- Dirt: little; it is someone else's cleaned answer.
+- Breaks: it is an API, so there is no file to be the oracle tomorrow. The
+  response must be saved, and the saved copy becomes the dataset. Use:
+  feed it the Maven Central half of this repository's own =deps.edn=.
+
+** 8. GH Archive
+
+- URL: https://data.gharchive.org/2026-10-08-15.json.gz
+- Verified: downloaded and counted. 8,827,144 bytes, 41.0 MB unzipped, one
+  JSON event a line. 47,229 events, 27,426 actors, 33,558 repositories; 77%
+  are PushEvent. Another hour, =2026-10-04-4=, is 19.5 MB. No key.
+- Licence: recalled, CC-BY 4.0 for the archive; the events are GitHub's.
+- Yields: =(:Actor {login})-[:PUSHED|OPENED|STARRED {at}]->(:Repo {name})=.
+- Oracle: lines in the file; distinct =actor.login= and =repo.name=.
+- Paired text: issue and pull request titles and bodies in the payloads.
+- Questions:
+  1. Which repositories did an actor touch in this hour? (template)
+  2. Which repositories had the most distinct actors? (template)
+  3. Which repositories share contributors? (algorithm: node similarity)
+- Dirt: bots are most of it. Event payloads differ by type.
+- Breaks: an hour is nearly a matching: 27,426 actors over 33,558
+  repositories leaves almost no shared neighbours, so the graph questions
+  are empty until many hours are joined, and then it is too big.
+
+* Civic and scientific
+
+** 9. MBTA GTFS
+
+- URL: https://cdn.mbta.com/MBTA_GTFS.zip
+- Verified: downloaded and opened. 24,740,105 bytes, last modified
+  2026-10-08 22:30 GMT, feed version "Fall 2026, 2026-10-08", valid
+  2026-10-01 to 2026-12-12. 32 CSV files with headers, 180 MB unzipped.
+  No key.
+- Licence: the MassDOT Developers License Agreement, named on
+  https://www.mbta.com/developers/gtfs . The agreement itself was not read.
+- Yields: 10,298 stops, 406 routes, 120,208 trips, 3,154,923 stop times,
+  9,605 transfers, 9,329 pathways.
+  =(:Stop {id, lat, lon})-[:PART_OF]->(:Station)=,
+  =(:Route)-[:SERVES]->(:Stop)=, =(:Stop)-[:NEXT {seconds}]->(:Stop)=,
+  =(:Stop)-[:TRANSFER]->(:Stop)=.
+- Oracle: rows per file for the nodes. =NEXT= is derived (consecutive
+  stop times collapsed per pair), so its expected count has to be computed
+  in memory by the same rule and compared. The feed version is in
+  =feed_info.txt=.
+- Paired text: thin. =stop_desc=, facility properties; service alerts
+  through =https://api-v3.mbta.com/= (the routes endpoint answered with no
+  key).
+- Questions:
+  1. Which routes serve Kendall/MIT? (template)
+  2. Which stations are wheelchair accessible on the Red Line? (template)
+  3. Fewest-stops or shortest-time path between two stations; which
+     station's closure disconnects the most? (algorithm: shortest path,
+     betweenness, articulation points)
+- Dirt: stops are four things (stop, station, entrance, generic node)
+  under one =location_type=; times run past 24:00:00; MBTA adds its own
+  files to the standard.
+- Breaks: =stop_times.txt= is 147 MB and three million rows. The rapid
+  transit subset (=route_type= 0 and 1) is small and has to be cut by the
+  loader, so the config needs a row filter. One file becomes five joined.
+
+** 10. FEC bulk data
+
+- Page: https://www.fec.gov/data/browse-data/?tab=bulk-data
+- URLs: https://www.fec.gov/files/bulk-downloads/2026/cm26.zip ,
+  https://www.fec.gov/files/bulk-downloads/2026/cn26.zip ,
+  https://www.fec.gov/files/bulk-downloads/2026/ccl26.zip ,
+  https://www.fec.gov/files/bulk-downloads/2026/pas226.zip
+- Verified: all four downloaded and counted. 872,360, 309,124, 88,837 and
+  8,437,848 bytes; the first three last modified 2026-10-09, the last
+  2026-10-04. Each redirects to an S3 bucket. No key. The first request for
+  =cm26.zip= got an empty reply and the retry worked.
+- Licence: recalled, a US government work.
+- Yields: 20,841 committees, 8,658 candidates, 8,175 candidate-committee
+  links, 217,527 contributions from committees to candidates.
+  =(:Committee {id})-[:GAVE {amount, date}]->(:Candidate {id})=: 4,659
+  committees, 1,843 candidates, 118,787 distinct pairs.
+- Oracle: rows and distinct ids per file, and one better: the linkage file
+  is a second source for which committee belongs to which candidate.
+- Paired text: none in the files. The filings are PDFs by =IMAGE_NUM=.
+- Questions:
+  1. Which committees gave to a candidate, and how much? (template)
+  2. Which candidates share the most donors? (template)
+  3. Which blocs of committees fund the same candidates? (algorithm:
+     similarity then Louvain)
+- Dirt: no header row (it is a separate CSV under
+  =https://www.fec.gov/files/bulk-downloads/data_dictionaries/=),
+  pipe-delimited, dates as =MMDDYYYY=, 7,014 negative amounts (refunds),
+  985 rows with no candidate id, 420 candidate names under more than one
+  candidate id.
+- Breaks: little. 38 MB unzipped holds in memory. The individual
+  contributions file, =indiv26.zip=, is 2.2 GB and is the one to leave.
+  The shape is Form 13 again: good for proving the loader, no new lesson.
+
+** 11. OpenAlex
+
+- URL: https://api.openalex.org/works?filter=institutions.ror:https://ror.org/042nb2s44,publication_year:2025,primary_topic.field.id:17
+- Verified: fetched, 200, no key. 1,893 works: MIT, 2025, computer
+  science. The response headers carry a keyless daily budget
+  (=x-ratelimit-limit-usd: 0.1=) and the list call cost 0.0001 of it. The
+  documentation says a free key raises the budget tenfold.
+- Licence: recalled, CC0.
+- Yields: =(:Work)-[:CITES]->(:Work)=, =(:Author)-[:WROTE]->(:Work)=,
+  =(:Author)-[:AFFILIATED]->(:Institution)=, =(:Work)-[:ABOUT]->(:Topic)=.
+- Oracle: =meta.count= in the response against the works saved.
+- Paired text: titles (seen); abstracts as an inverted index (recalled).
+- Questions:
+  1. Who at MIT wrote with whom at another institution? (template)
+  2. Which works in the slice cite a given work? (template)
+  3. Which papers matter most inside the slice? (algorithm: PageRank;
+     co-authorship communities)
+- Dirt: author disambiguation is theirs and imperfect; most cited works
+  fall outside any slice, so edges dangle.
+- Breaks: paged API, 10 pages for this slice at 200 a page, and a budget
+  that is new since last remembered. Save the pages; the saved pages are
+  the dataset.
+
+** 12. Wikidata
+
+- URL: https://query.wikidata.org/sparql , with =Accept: text/csv=
+- Verified: three count queries ran, 200, no key, with a User-Agent sent.
+  3,705 items carry an SEC CIK (=P5531=); 809 owned-by statements (=P127=)
+  among them; 1,718 parent-organization statements (=P749=) among items
+  listed on an exchange (=P414=).
+- Licence: recalled, CC0.
+- Yields: =(:Company {qid, cik})-[:SUBSIDIARY_OF|OWNED_BY]->(:Company)=.
+  A hierarchy, which nothing else here has.
+- Oracle: the query's own row count; a count query beside the data query.
+- Paired text: the linked Wikipedia article's first paragraph.
+- Questions:
+  1. What is the ultimate parent of a company? (template, variable-length
+     path)
+  2. Which holdings of a manager are subsidiaries of another holding?
+     (template, after a bridge)
+  3. Where are the cycles in "owned by"? (algorithm: strongly connected
+     components; there should be none, and there will be some)
+- Dirt: it is a wiki. Coverage is uneven, dates are missing, cycles exist.
+- Breaks: a query result has no fixed version, so the CSV saved is the
+  dataset and the query goes in =labs/=. CIK joins candidate 3 and 5, not
+  Form 13's CUSIP.
+
+** 13. SNAP cit-HepTh
+
+- Page: https://snap.stanford.edu/data/cit-HepTh.html
+- URLs: https://snap.stanford.edu/data/cit-HepTh.txt.gz ,
+  https://snap.stanford.edu/data/cit-HepTh-dates.txt.gz ,
+  https://snap.stanford.edu/data/cit-HepTh-abstracts.tar.gz
+- Verified: all three downloaded. 1,317,497, 96,569 and 11,956,788 bytes,
+  all last modified 2009-12-03. No key.
+- Licence: none stated on the page. It asks for a citation and says the
+  data is from the 2003 KDD Cup.
+- Yields: =(:Paper {id})-[:CITES]->(:Paper)=: 27,770 and 352,807, with a
+  submission date per paper and an abstract file per paper (29,567 entries
+  in the tar, directories included).
+- Oracle: the only one here published by the source. The page and the
+  file's own comment line both say 27,770 nodes and 352,807 edges, and the
+  page adds the size of the largest component. A load can be checked
+  against a number nobody here computed.
+- Paired text: the abstracts, with title, authors and journal in a plain
+  header. Authors are only in the text, so Author nodes are an extraction
+  whose citing graph is already known.
+- Questions:
+  1. Which papers cite a given paper? (template)
+  2. How many citations did a paper gather per year? (template)
+  3. Which papers are most central, and does it match citation count?
+     (algorithm: PageRank; the published component size checks WCC)
+- Dirt: cross-listed papers appear in the dates file with =11= in front of
+  the id (835 ids occur twice); tab-separated with =#= comment lines; no
+  header; a paper cited from outside the set has no edge.
+- Breaks: the two seconds. 352,807 relationships is fifty times the day
+  file. Memory is fine.
+
+** 14. OpenFlights
+
+- URLs: https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat ,
+  https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat ,
+  https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat
+- Verified: all three downloaded. 1,127,225 and 2,377,148 bytes for the
+  first two. 7,698 airports, 67,663 routes, 6,162 airlines. No key.
+  =routes.dat= was last committed 2017-02-02 (GitHub API).
+- Licence: the =data/LICENSE= file is the Open Database License. The
+  repository's code is AGPL-3.0.
+- Yields: =(:Airport {id, iata, lat, lon})-[:ROUTE {airline}]->(:Airport)=.
+- Oracle: lines per file; distinct airport ids referenced by routes.
+- Paired text: none.
+- Questions:
+  1. Where can you fly direct from BOS? (template)
+  2. Which airlines fly a given pair? (template)
+  3. Fewest hops between two airports; which airports are the bridges?
+     (algorithm: shortest path, betweenness)
+- Dirt: no header row, =\N= for null (898 route lines have one), an
+  airline with id -1 called "Unknown", routes that name airports absent
+  from the airports file.
+- Breaks: nothing. It is the closest in size and ease to the day file,
+  and it is nine years stale and has no text.
+
+* Neo4j's own
+
+** 15. Neo4j's example datasets
+
+Requested: small and permissively licensed. Found: small. None of the
+=neo4j-graph-examples= repositories checked carries a licence GitHub can
+see (=license: null= for movies, northwind, graph-data-science,
+stackoverflow, network-management, recommendations, fincen and
+icij-offshoreleaks).
+
+| set                | URL                                                                                                   | verified            | size                             | licence                     |
+|--------------------+-------------------------------------------------------------------------------------------------------+---------------------+----------------------------------+-----------------------------|
+| Northwind          | https://data.neo4j.com/northwind/orders.csv (and products, categories, suppliers, order-details, customers, employees) | all seven fetched   | 830 orders, 2,155 lines, 77 products | none stated; files from 2015 |
+| Movies             | https://raw.githubusercontent.com/neo4j-graph-examples/movies/main/scripts/movies.cypher             | headers             | 40,257 bytes, a Cypher script    | none stated                 |
+| A Song of Ice and Fire | https://raw.githubusercontent.com/mathbeveridge/asoiaf/master/data/asoiaf-all-edges.csv          | fetched             | about 795 characters, 2,820 edges | CC BY-NC-SA 4.0, per README |
+| Network management | https://github.com/neo4j-graph-examples/network-management                                            | directory listing   | a 5.5 KB script that generates it | none stated                 |
+| Offshore Leaks     | https://offshoreleaks-data.icij.org/offshoreleaks/csv/full-oldb.LATEST.zip                            | headers             | 71,935,075 bytes, 2026-09-09     | ODbL, contents CC BY-SA, per ICIJ's page |
+
+- Yields: Northwind is the relational-to-graph case:
+  =(:Customer)-[:PURCHASED]->(:Order)-[:ORDERS]->(:Product)-[:PART_OF]->(:Category)=,
+  with =(:Employee)-[:REPORTS_TO]->(:Employee)= as a small hierarchy. The
+  interaction network is one weighted undirected edge list. Network
+  management is a data-centre hierarchy with dependencies.
+- Oracle: Northwind's row counts, and its foreign keys: every order line
+  must reach an order and a product.
+- Paired text: Northwind has product and category descriptions; the rest
+  has none.
+- Questions, Northwind:
+  1. What did a customer order? (template)
+  2. Which products are bought together? (template)
+  3. Which customers buy alike? (algorithm: node similarity)
+- Dirt: the interaction file uses bare carriage returns as line endings,
+  so =wc -l= says zero lines and =head -3= prints the file. Northwind is
+  clean, which is its weakness. The movies set is a script and has no
+  source file to be an oracle.
+- Breaks: Northwind is seven files joined, none of them large. Offshore
+  Leaks is two million nodes; the bucket has a 2023 copy as 626 MB of CSV
+  under =offshore-leaks-fulldb/=.
+
+Also in the =neo4j-datasets= bucket, seen in the listing and one of them
+sampled: =recipes.csv= (1,258,056 bytes; columns name, minutes, tags,
+nutrition, steps, description, ingredients). One file, bipartite once the
+ingredient list is split, with its text in the same row. No licence
+stated and the source is not named.
+
+* Ranking
+
+| rank | candidate                          | why                                                                                                                                                                                                                             |
+|------+------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|    1 | Form 10-K sections (1)             | Already public in the bucket the code reads. 94 documents where the lab has two pages; 35 of its 48 CUSIPs join the Company nodes already loaded, so an extraction can be checked against a graph that exists.                  |
+|    2 | Insider transactions (3)           | One 8.7 MB zip, refreshed two days ago, people and dates where Form 13 has neither. The footnotes are prose restating coded rows: an extraction with an answer key. The missing CUSIP is a lab in itself.                        |
+|    3 | MBTA GTFS (9)                      | The proof that the framework is not about finance. One zip, a named licence, yesterday's feed, coordinates, a hierarchy, and questions where the algorithm is the point. Its three-million-row file forces the subset question early. |
+
+Next in line: SNAP cit-HepTh (13), for the oracle published by its source
+and for 29,000 abstracts; FEC (10), as the cheapest second dataset if the
+only aim is to exercise a loader.
+
+Do not bother: OpenStreetMap. The Massachusetts extract at
+https://download.geofabrik.de/north-america/us/massachusetts-latest.osm.pbf
+is 310,865,395 bytes of a binary format that needs its own parser, and the
+way to a smaller slice is Overpass, where
+https://overpass-api.de/api/interpreter answered 504 and
+https://overpass.private.coffee/api/interpreter answered 500 to a count
+over Cambridge. A lab cannot open on a server that is busy. MBTA covers
+the geospatial case from a file.
+
+A close second for that place: GH Archive (8), where one hour is too
+sparse to be a graph and enough hours to be a graph is too many.
+
+* What a dataset-agnostic loader would need
+
+A proposal. No code was written.
+
+What =src/workshop/form13.clj= fixes today, and where:
+
+| hard-coded                                         | where                              | what varies across the fifteen                                        |
+|----------------------------------------------------+------------------------------------+-----------------------------------------------------------------------|
+| bucket and object name                             | =object-name=, =gcp/dataset-bucket= | plain https, redirects, a required User-Agent, an API with pages      |
+| one local path                                     | =local-path=                       | a zip with members; several files; a saved API response               |
+| CSV, comma, header row present                     | =read-rows=                        | TSV, pipe, EDN lines, JSON lines; no header (10, 13, 14); =#= comments; bare CR |
+| seven column names, by destructuring               | =parse-row=                        | everything                                                            |
+| =parse-double= and =parse-long= on two columns     | =parse-row=                        | three date formats, =\N= and empty as null, tagged literals           |
+| Company by =:cusip=, Manager by =:manager=         | =expected-counts=                  | one to four node labels, compound keys                                |
+| OWNS by manager, cusip and quarter                 | =expected-counts=                  | relationship keys, or none (multigraph), or derived edges (9)         |
+| labels in the counting query                       | =database-counts=                  | follows from the above                                                |
+| four Cypher files, with the URL and columns inside | =load-files=, =labs/lab-04/=       | follows from the above                                                |
+| =value-scale= of 1000                              | =value-scale=                      | per-dataset, and in candidate 2 per row                               |
+| everything in memory behind a =delay=              | =rows=                             | 2, 4, 9 do not fit                                                    |
+
+What does not need to change: =expected-counts= is already the general
+rule. A node count is the number of distinct key tuples; a relationship
+count is the number of distinct (from key, to key, own key) tuples.
+=verify= and =load!= are that rule and nothing about Form 13. The
+analyses (=manager-degree=, =name-variants=, =odd-prices=) are the
+dataset's, and stay with it.
+
+The description, as the fields of one map per dataset:
+
+| field             | holds                                                                                              | form13 today                                              |
+|-------------------+----------------------------------------------------------------------------------------------------+-----------------------------------------------------------|
+| =:id=             | a name; also the directory under =data/=                                                           | implied by the namespace                                  |
+| =:sources=        | a vector, each with =:url=, optional =:headers=, optional =:member= inside a zip, =:local= path    | one object in one bucket                                  |
+| =:pin=            | bytes and last-modified or a hash, recorded at first fetch                                         | absent; the file is assumed not to change                 |
+| =:licence=        | the terms and where they are stated, or "none stated"                                              | absent                                                    |
+| =:format=         | =:type= (csv, edn-lines, json-lines, json), =:delimiter=, =:header?=, =:columns= when there is no header, =:comment=, =:null= tokens, =:line-ending= | csv with header, implied |
+| =:coerce=         | column to type, with a pattern for dates                                                           | two calls in =parse-row=                                  |
+| =:filter=         | a row predicate as data, for subsets (rapid transit only; latest version only)                     | absent                                                    |
+| =:nodes=          | per label: =:source=, =:key= columns, =:properties= as column to property name                     | two labels, spread across three functions and two files   |
+| =:relationships=  | per type: =:source=, =:from= and =:to= (label and key columns), =:key= columns, =:properties=      | one type, the same                                        |
+| =:oracle=         | =:derived= (the default, the distinct-key rule) and optionally =:published=, counts the source states | derived only                                           |
+| =:checks=         | named dirt: a column that should be functionally dependent on a key (name on CUSIP), a foreign key that should resolve, a range | =name-variants= and =odd-prices=, by hand |
+| =:text=           | paired documents: source, how one maps to a node key                                               | a PDF named in the README                                 |
+| =:scale=          | row count and whether it may be held in memory                                                     | assumed yes                                               |
+
+What each candidate asks of that map beyond what Form 13 asks:
+
+| candidate | sources       | format                          | coercion                 | nodes and relationships         | oracle               | new field exercised      |
+|-----------+---------------+---------------------------------+--------------------------+---------------------------------+----------------------+--------------------------|
+|         1 | zip, 94 members | JSON per member               | none                     | key from file name and a field  | derived              | =:text=, =:member= glob  |
+|         2 | one file      | as today                        | scale differs by quarter | as today                        | derived              | =:scale=, streaming      |
+|         3 | zip, 3+ members | TSV with header               | =DD-MON-YYYY=            | 3 labels, joined on accession   | derived              | =:headers=, joins        |
+|         4 | zip           | TSV with header (recalled)      | dates, value scale       | Manager on CIK                  | derived              | =:scale=                 |
+|         5 | one GET a company | nested JSON                 | none                     | facts unnested                  | derived per company  | a path into JSON         |
+|         6 | 3 files, then n | EDN lines; XML for POMs       | =#inst=                  | compound key (group, name)      | derived, two sources | edn-lines, compound keys |
+|         7 | API           | JSON with =nodes= and =edges=   | none                     | given                           | the response         | =:pin= on a saved response |
+|         8 | one file      | JSON lines                      | ISO timestamps           | edge type from =type=           | derived              | type from a column       |
+|         9 | zip, 5 of 32 members | CSV with header          | times past 24:00         | derived =NEXT= edges            | derived by rule      | =:filter=, derived edges |
+|        10 | 4 zips        | pipe, no header                 | =MMDDYYYY=, negatives    | as Form 13                      | derived, plus linkage file | =:columns=, =:delimiter= |
+|        11 | paged API     | JSON                            | none                     | 4 labels                        | =meta.count=         | paging, =:published=     |
+|        12 | one query     | CSV with header                 | none                     | self-relationship               | a count query        | the query as a source    |
+|        13 | 3 files       | TSV, no header, =#= comments    | ISO dates                | self-relationship               | published            | =:published=, =:comment= |
+|        14 | 3 files       | CSV, no header                  | =\N=                     | self-relationship with a property | derived            | =:null=, =:columns=      |
+|        15 | 7 files       | CSV with header; one with bare CR | none                   | foreign keys                    | derived, plus foreign keys | =:line-ending=     |
+
+Three things the table says:
+
+- A self-relationship (12, 13, 14) breaks nothing in the rule and breaks
+  =database-counts=, which matches each label once and assumes two.
+- Derived edges (9) and unnested facts (5) are transforms, not
+  descriptions. Either the map grows a function slot or those datasets get
+  a small namespace that produces rows the map then describes. The second
+  keeps the map data.
+- An API (5, 7, 11, 12) is a dataset only after its response is saved.
+  =:pin= is what turns it into a file that can be an oracle.
+
+Prior art, in the same bucket:
+https://storage.googleapis.com/neo4j-datasets/hands-on-lab/neo4j_importer_model_sec-edgar-forms13.json
+(8,120 bytes, updated 2025-09-22) is a Neo4j Data Importer model of this
+very load: node labels, a relationship type, a uniqueness constraint on
+=cusip=, a key property, and field-to-property mappings from
+=form13-2023.csv=. It was fetched and its structure read. It covers
+=:nodes=, =:relationships= and the keys; it has nothing for fetching,
+coercion patterns, an oracle or checks. Whether to read that format
+rather than invent one is the first decision.

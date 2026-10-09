@@ -161,6 +161,7 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lab-08-use-neo4j-agent.org][Lab 8 - Use Neo4j Agent]]: the three prompts, the lazy authorization, and what the shared database turned out to hold
 - [[file:notes/lab-09-aura-agents.org][Lab 9 - Aura Agents]]: the generated agent and its exported tools, and its answers checked against the database
 - [[file:notes/writeup-2026-10-08.org][Write-up, 2026-10-08]]: the day in one page: what the labs do, what held, what did not, and how to run it again
+- [[file:notes/data-sources.org][Other data sources]]: fifteen public datasets checked by request, ranked, with what a dataset-agnostic loader would need from each
 - [[file:notes/local-first.org][The lab, local first]]: the same path with an embedded Neo4j and a small local model, lab by lab, and what does not carry over
 - [[file:notes/telemetry.org][Telemetry]]: spans around every statement, check and lab step, and the dashboard's Data and Traces pages
 - [[file:notes/review-framework-2026-10-08.org][Review as a framework, 2026-10-08]]: what a next workshop would copy from this repository, and ten changes that would make the copy cheap

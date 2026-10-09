@@ -62,6 +62,26 @@ script that made the table's rows.
    ten-minute limit. Not retried; whether it was loading or generating was
    not looked at.
 
+6. 2026-10-09. A second way in, =extract/outline=: no graph schema. Ask
+   for the categories, then for each category its products, each answer a
+   plain list of names, and keep only names that appear in the text. Run by
+   =outline.clj=, results in =outline-results.edn=. Not passed by any of
+   three models, for three different reasons:
+   - llama3.2 (3B), 8 s: one category, "Apple Inc.", and nothing under it.
+   - qwen2.5-coder (7B), 97 s: the best outline, 11 groups and 41 edges, no
+     name dropped. It took the heading "Wearables, Home and Accessories" as
+     one category, so there is no Home, and it stopped that list before the
+     HomePod.
+   - mistral (7B), 396 s: has Home, and under it all 25 products in the
+     text, the HomePod among them. Every name is in the text, so the text
+     check passes all of them; 498 edges, of which 32 have a sentence
+     holding both names.
+7. Read from attempt 6 and not yet run: the check that would have saved
+   mistral's answer is the one already computed and not enforced. Keep an
+   edge only when one sentence holds both names. That is the same move as
+   =agent/grounded= in experiment 009: a model's list, cut down by a test
+   that needs no model.
+
 * What the failures say
 
 - A schema fixes the shape and nothing else. The answer that passed every
@@ -78,7 +98,9 @@ script that made the table's rows.
 * Not done
 
 - gemma4:26b with a longer limit, and qwen2.5-coder, both on the remote host.
-- The schema tightened to triples (source type, relationship, target type),
-  which is the obvious next attempt.
+- The schema tightened to triples (source type, relationship, target type).
+- Attempt 7: enforce same-sentence evidence in =extract/outline= and rerun.
+- Names carry the text's trademark marks ("HomePod®"); a comparison with
+  the lab's wording has to strip them.
 - Chunking: both pages went in as one prompt of 1,744 tokens.
 - Loading an answer into Neo4j. Nothing here writes to a database.

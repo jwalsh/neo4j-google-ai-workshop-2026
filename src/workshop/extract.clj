@@ -91,3 +91,62 @@
              :relationship type
              :target target :targetLabel (type-of target)})
           relationships)))
+
+;; A second way in, after the whole-graph schema failed its gate
+;; (experiments/006, attempts 6 on): ask for one list at a time, and keep
+;; only what the text contains. Each question is small enough for a small
+;; model, and the check after it needs no model.
+
+(def ^:private names-schema
+  {"type" "object"
+   "properties" {"names" {"type" "array" "items" {"type" "string"}}}
+   "required" ["names"]})
+
+(defn- squash [phrase] (str/lower-case (str/replace (str phrase) #"\s+" " ")))
+
+(defn names-of
+  "The names the model lists in answer to one question about the text, as
+  {:kept [...] :dropped [...]}: kept are those that appear in the text,
+  dropped are those that do not."
+  ([text question] (names-of text question {}))
+  ([text question options]
+   (let [squashed-text (squash text)
+         listed (->> (get-in (ollama/chat [{:role "system"
+                                            :content (str "Answer from the text only. Copy each name exactly "
+                                                          "as it is written in the text. List a name once.")}
+                                           {:role "user" :content (str question "\n\nText:\n" text)}]
+                                          (assoc options :schema names-schema))
+                             [:parsed :names])
+                     (map str/trim)
+                     (remove str/blank?)
+                     distinct)
+         {kept true dropped false} (group-by #(str/includes? squashed-text (squash %)) listed)]
+     {:kept (vec kept) :dropped (vec dropped)})))
+
+(defn outline
+  "A two-level graph by questions: the groups the text names, then the
+  members of each. group-question asks for the groups; member-question is a
+  function of a group's name. Returns
+  {:groups [...] :members {group [...]} :dropped {...} :edges [...]}, the
+  edges as {:source :type :target :evidence}, where the evidence is the
+  sentence of the text holding both names when there is one."
+  ([text group-question member-question relationship-type]
+   (outline text group-question member-question relationship-type {}))
+  ([text group-question member-question relationship-type options]
+   (let [sentences (str/split (str/replace text #"\s+" " ") #"(?<=[.;])\s+")
+         groups (names-of text group-question options)
+         answers (into {} (map (fn [group-name]
+                                 [group-name (names-of text (member-question group-name) options)]))
+                       (:kept groups))
+         evidence (fn [group-name member-name]
+                    (first (filter #(and (str/includes? (squash %) (squash group-name))
+                                         (str/includes? (squash %) (squash member-name)))
+                                   sentences)))]
+     {:groups (:kept groups)
+      :members (update-vals answers :kept)
+      :dropped (into {"(groups)" (:dropped groups)} (update-vals answers :dropped))
+      :edges (vec (for [[group-name {:keys [kept]}] answers
+                        member-name kept
+                        :when (not= (squash member-name) (squash group-name))]
+                    {:source group-name :type relationship-type :target member-name
+                     :evidence (evidence group-name member-name)}))})))
