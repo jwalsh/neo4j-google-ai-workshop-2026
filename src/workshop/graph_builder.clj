@@ -17,6 +17,9 @@
             [workshop.env :as env])
   (:import (java.util Base64 UUID)))
 
+;; The hosted Graph Builder's own backend, as its page calls it. It is not
+;; an offered API: undocumented, behind the page's login, and free to change.
+;; Recorded because it is what was used on 2026-10-08 (experiments/005).
 (def default-backend "https://prod-backend-967196130891.us-central1.run.app")
 
 ;; The identifier the front end sends for "Gemini 3.5 flash", its default.

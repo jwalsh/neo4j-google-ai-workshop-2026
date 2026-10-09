@@ -7,6 +7,10 @@ Gemini Enterprise. The lab's own instructions live in its repository, linked
 under Materials; nothing of theirs is copied here: slides worth keeping are redrawn as
 diagrams, and a statement or prompt taken from a lab is marked as theirs.
 
+Start with [[file:notes/writeup-2026-10-08.org][the write-up]]: one page on what the labs do, what held up and
+what did not. To run something with no account, =experiments/008-local-graph-dx=
+loads the lab's data into a Neo4j inside a REPL.
+
 * AI Workshop with Neo4j and Google
 
 Boston AI Developers Group, through AICamp.
@@ -150,6 +154,7 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lab-08-use-neo4j-agent.org][Lab 8 - Use Neo4j Agent]]: the three prompts, the lazy authorization, and what the shared database turned out to hold
 - [[file:notes/lab-09-aura-agents.org][Lab 9 - Aura Agents]]: the generated agent and its exported tools, and its answers checked against the database
 - [[file:notes/writeup-2026-10-08.org][Write-up, 2026-10-08]]: the day in one page: what the labs do, what held, what did not, and how to run it again
+- [[file:notes/review-framework-2026-10-08.org][Review as a framework, 2026-10-08]]: what a next workshop would copy from this repository, and ten changes that would make the copy cheap
 - [[file:notes/review-2026-10-08.org][Review, 2026-10-08]]: the work read as one design, with the five forms of one fact drawn
 - [[file:notes/v2-cli-path.org][The labs again, by code]]: per lab, the console path, the CLI or API path, whether it ran here, and what the rest need
 - [[file:notes/lecture-gemini-enterprise.org][Lecture - Gemini Enterprise]]: the Agent Platform slide, redrawn

@@ -34,7 +34,18 @@ credentials and names no instance.
 The templates use =managerName= and =companyName=, the properties the
 database has.
 
+[[file:img/lab-09-create-with-ai.png]]
+
+The dialog, with the lab's prompt in it.
+
 [[file:img/lab-09-configuration-generated.png]]
+
+The generated form on the left, its five tools at the bottom, and the
+preview chat on the right.
+
+[[file:img/lab-09-agent-saved.png]]
+
+After "Create agent": listed under "Shared in project", Free.
 
 * Results
 

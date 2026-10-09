@@ -10,9 +10,13 @@
             [workshop.env :as env]))
 
 ;; Values from .env that are never to appear in an image. The instance id
-;; and the project id are not in the list: they are names, not credentials.
+;; and the project id are names, not credentials, and are covered all the
+;; same: workshop.labs scrubs them from text, and one rule is easier to keep
+;; than two. A console also prints ids that are in no file (app, agent,
+;; project number); those are found by eye.
 (def secret-variables
-  ["LAB_EMAIL" "LAB_PASSWORD" "LAB_EMPLOYEE_ID" "NEO4J_PASSWORD"])
+  ["LAB_EMAIL" "LAB_PASSWORD" "LAB_EMPLOYEE_ID" "NEO4J_PASSWORD"
+   "AURA_INSTANCEID" "GOOGLE_CLOUD_PROJECT"])
 
 (def ^:private box-padding 6)
 

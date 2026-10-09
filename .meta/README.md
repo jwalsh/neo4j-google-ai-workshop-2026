@@ -103,7 +103,7 @@ early on was removed from the tree on 2026-10-08; it is still in history
   sat at it, and nothing was tried against the root project's REPL.
 - `cider-jack-in` was not run in a live Emacs. Checked in batch: the
   `.dir-locals.el` values are accepted as safe and applied, and
-  `clojure -M:dev:nrepl` starts with CIDER's middleware.
+  `clojure -M:dev:repl` starts with CIDER's middleware.
 
 ## Verified on 2026-10-08
 

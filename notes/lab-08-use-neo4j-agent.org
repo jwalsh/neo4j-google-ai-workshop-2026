@@ -19,6 +19,10 @@ in the Gemini Enterprise preview. The three prompts are
 
 * Results
 
+[[file:img/lab-08-agent-pinned.png]]
+
+The agent's chat, pinned in the sidebar, before the first prompt.
+
 [[file:img/lab-08-authorize.png]]
 
 The lazy authorization the lab describes: nothing asks until a prompt is sent.

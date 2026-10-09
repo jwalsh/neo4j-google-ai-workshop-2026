@@ -50,7 +50,8 @@ instance and repeating Lab 4's load.
 The lab's result was reproduced with the tool the lab names as Document
 Intelligence's predecessor, the LLM Graph Builder, driven through its API
 from Clojure: =experiments/005-graph-builder-api/=, with the seven attempts
-it took. The same PDF and the same prompt gave 71 entities, and the Home
+it took. The same PDF and the same prompt gave 71 entities (117 after a
+second run from the text, held to relationship triples), and the Home
 category includes the HomePod, the HomePod mini and Apple TV 4K, which is
 the observation the lab ends on.
 

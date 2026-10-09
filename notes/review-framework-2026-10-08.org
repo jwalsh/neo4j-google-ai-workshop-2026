@@ -1,0 +1,475 @@
+#+TITLE: Review: front door, screenshots, notes, experiments, and the framework question
+#+DATE: 2026-10-08
+
+Not in the lab. A staff-level read of the repository at commit =9fd91d2=,
+about 22:05 EDT, forty minutes after the lab account expired. Asked for by
+the owner: "review the readme, screenshots, description, consolidation of
+notes and our use of experiments but keep it so that we could use this as a
+framework for other workshops but with custom data". The data-model review
+is [[file:review-2026-10-08.org][the earlier one]] and is not repeated.
+
+"Checked" means I did it: read every tracked file outside =scratch/= and
+=node_modules/= except the body of =review-2026-10-08.org= (headings and
+its "overclaim" section only), opened all 28 images in =notes/img/=, and
+ran =bb tasks=, =bb test= (29 tests, 78 assertions, 0 failures),
+=gmake help=, =gmake todos=, =gmake agenda= and read-only git. "Inferred"
+is marked. The tree moved under the review: it started at =e83e9c5= and two
+commits landed from another session (=1039c98=, =9fd91d2=), which fixed two
+things first written here about =notes/screens.org=. Nothing but this file
+was written. This note is not yet linked from =README.org=; by =CLAUDE.md='s
+own rule it is not done until it is.
+
+* Verdict
+
+1. Not ready to go public as it stands: no licence file, a history that
+   holds a third party's slide and the unredacted versions of four
+   screenshots, and four images in the tree with a resource id still legible.
+2. The content is honest and the numbers agree where they should. What is
+   wrong is staleness: three notes still describe 19:50, not 21:20.
+3. =README.org= is an attendee's page, not a front door. The one thing a
+   stranger can run is in line 86, inside an experiment.
+4. The experiments are the best-kept part: eight of eight have a hypothesis,
+   a gate and a log, and the two that failed say so in the first line.
+5. As a framework: copy the directory. About 600 lines are reusable and
+   they are tangled with Form 13 in four files; untangle those here, in
+   place, and the next copy is a delete and a config edit.
+
+* 1. README.org as a front door
+
+** Order
+
+For a stranger the order is backwards. It opens on the event, the street
+address and an attendee's TODO checklist (=README.org= lines 10-49), reaches
+what the repository does at line 68 and what can be run with no account at
+line 86, in one sentence. Suggested order, same content: three lines on what
+this is; the flow table; "run it with no account" as its own heading; what
+is in the repository; the notes index; then the event, speakers and
+checklist last. The =#+TITLE= and the first heading are the same string
+(lines 1 and 10).
+
+The checklist has to stay in =README.org= while =Makefile= line 3 and
+=src/workshop/status.clj= line 150 read it from there. That is a reason to
+move the default, not to keep the order (see Framework, change 1).
+
+** The flow table, lines 74-84
+
+Checked against the notes and the files. Every note link resolves; every
+directory named exists; every =bb= and =gmake= command named exists.
+
+| row | finding |
+|-----+---------|
+| 2   | accurate. =gmake .env= is =Makefile= line 61 |
+| 3   | accurate |
+| 4   | accurate. =bb form13 load= and =verify= are =src/workshop/cli.clj= lines 64-67 |
+| 5   | =bb form13 degree= exists (=cli.clj= line 60) but the task's doc string at =bb.edn= line 25 lists six views and leaves =degree= out, so =bb tasks= does not show it |
+| 6   | accurate, and the only row whose "to do it again" needs a login nobody else has (=GRAPH_BUILDER_TOKEN_FILE=, =.env.template= line 32). Say so in the row |
+| 7   | accurate |
+| 8   | accurate; =examples/lab-08-conversation.txt= is the missing pointer |
+| 9   | accurate |
+
+** Commands and paths elsewhere in the file
+
+Every =bb= task named in the file is one of the fifteen in =bb.edn=; every
+=gmake= target named is in =Makefile=. Two small misses. "=gmake help= lists the
+targets" (line 96): it does not list =data/<name>=, a pattern rule with no
+=##= comment (=Makefile= lines 50-58). And the experiments paragraph (lines
+116-126) and =CLAUDE.md= ("exploration in anything else (Python, say)")
+describe different things: six of the eight experiments are Clojure.
+
+** Stale now the instance is gone
+
+- Line 130: "=bb labs= in a shell, three ok, one skipped and six blocked".
+  True at 21:10 (=examples/labs.txt=). Now it fails at the connection.
+  Past tense, and point at =examples/=.
+- Lines 132-135: =bb status= and =bb dashboard= described as live. Same.
+- Lines 91-92 say the instance expired, which is right, but sit under the
+  table and not above the commands they qualify.
+- Line 5 says "three-hour"; =CLAUDE.md= line 7 says "one-day";
+  =.meta/audit-2026-10-08.md= line 168 reads the lab timer as about five
+  hours; commits run 16:15 to 22:00. Pick one and say which clock it is.
+
+* 2. Screenshots
+
+28 images. Every =[[file:...]]= link in =README.org=, =labs/=, =prompts/=,
+=notes/= and the experiment READMEs resolves: no broken links.
+
+** Unlinked
+
+Three, all from commit =5fe2b1f=. =workshop.audit/notes-indexed= would
+report them; nobody has been able to run it since.
+
+| image | shows | judgement |
+|-------+-------+-----------|
+| =lab-08-agent-pinned.png= | the agent's empty chat with the pin set | cut, or link from step 2 of =notes/lab-08-use-neo4j-agent.org= |
+| =lab-09-create-with-ai.png= | the dialog with the prompt typed | link it: it is the only picture of step 2 of =notes/lab-09-aura-agents.org=, and the prompt in it matches =prompts/lab-09-01-create-agent.txt= |
+| =lab-09-agent-saved.png= | the saved agent, Internal, Free | link from step 4 or cut |
+
+** Still legible
+
+Lab identifiers, all dead. None is a credential. They matter because the
+last commit's message says they were covered and the covering is uneven.
+The values are not repeated here.
+
+| image | what is readable | beside it |
+|-------+------------------+-----------|
+| =lab-03-show-databases.png= | the instance host in the =address= column, wrapped over fifteen lines so OCR did not join it | the note writes the same host as =p-<id>-<suffix>= (=notes/lab-03-connect-to-neo4j.org= line 31), and git history shows the literal was removed from the text (2 commits touch it) |
+| =state-gcp-console.png= | the project chip in the header, and the project number | the project name and Project ID are painted over two lines below |
+| =lab-02-manage-on-provider-auth-failure.png= | the same project chip | - |
+| =lab-08-authorize.png= | "additional authorization for: neo4j-agent_<number>" | =lab-07-agents-table.png= covers the Agent ID column. Inferred to be the same id; not confirmed |
+
+The cause is in the code. =src/workshop/redact.clj= lines 12-15 leave the
+instance id and project id out on purpose ("they are names, not
+credentials"), while =src/workshop/labs.clj= lines 63-68 lists both as
+things to scrub from text, and commit =e83e9c5= then covered them in images
+by hand. Two lists, two policies. Decide once.
+
+No email address, password or account name is legible in any of the 28.
+The avatar is a letter. =lab-08-list-bob.png= and
+=lab-08-describe-database.png= show what other attendees wrote into the
+shared database (property values, label names); the note repeats the labels
+(=notes/lab-08-use-neo4j-agent.org= line 41). Not personal data in any
+strict sense, but it is other people's typing, published.
+
+** Redundant
+
+- =lab-05-show-me-a-graph.png= and =state-bloom-scene.png=: the same scene,
+  the second with one tooltip open. Keep one.
+- =lab-07-review-agent-card.png= and =lab-07-agent-details.png=: the same
+  six fields. Keep the card.
+- =lab-05-manager-owns-company.png= and =lab-05-size-scaling.png=: the
+  difference is one node a few pixels larger. The caption says what to look
+  for; a crop would show it.
+
+** Captions
+
+Most say what the image shows. Four do not.
+
+- =lab-07-agent-details.png=: "The blue "Neo4j Agent" link." says how to
+  get there, not what is there (=notes/lab-07-deploy-neo4j-agent.org= line 37).
+- =lab-09-uncommon-companies.png= and =lab-09-threshold-3.png=: the caption
+  names the companies; the image stops above the table. The rows are in
+  =examples/lab-09-conversation.txt=. Say "the table is below the fold".
+- =lab-09-configuration-generated.png= has no caption at all
+  (=notes/lab-09-aura-agents.org= line 37).
+- =state-dashboard.png= sits under the heading "19:08, between Lab 4 and
+  Lab 5" (=notes/screens.org= line 9) and was retaken at 21:10. The caption
+  was corrected in =9fd91d2=; the heading was not.
+
+** Over-redaction and legibility
+
+One: =state-dashboard.png= paints over the last letter of "My instance",
+which is the default name and in every other image. Everything is readable
+at full size. The console shots are 2400 px wide for a few lines of
+content; =lab-02-instance-running.png= is half onboarding pop-up.
+=emacs-cider-local-graph.png= is a rendering of a tmux pane, and
+=notes/screens.org= lines 41-46 say so plainly, which is the right way to
+do it.
+
+* 3. Description and topics
+
+Current: "Notes and code from the Boston AI workshop with Neo4j and Google,
+2026-10-08". No topics, no licence, private (from =gh repo view=).
+
+Proposed, not applied:
+
+#+begin_quote
+Field notes and Clojure tooling from a Neo4j Aura and Gemini Enterprise
+hands-on lab: every query and prompt as a file, each lab as a function, and
+the results checked against the source CSV.
+#+end_quote
+
+Topics: =neo4j=, =knowledge-graph=, =clojure=, =babashka=, =org-mode=,
+=workshop=. The date and the city belong in the README; the description
+should say what a stranger gets.
+
+* 4. Consolidation of notes
+
+** Where to start
+
+=notes/writeup-2026-10-08.org=. It is one page, current, and it is the only
+file that says what was learned. =README.org= should say so in its first
+five lines; at present the link is at line 89.
+
+** What overlaps
+
+| subject | told in | keep |
+|---------+---------+------|
+| per-lab outcome | =README.org= flow table; =writeup= "What was done"; =notes/v2-cli-path.org= table; =.meta/README.md= "Where things stand"; =examples/labs.txt= | the README table for "how", the write-up for "what happened". The other three are derived |
+| each lab "by code" | =notes/v2-cli-path.org= sections; the =:how= strings in =src/workshop/labs.clj=; the "By code" section of each lab note | the code and the lab notes. See below |
+| never verified | =.meta/README.md= (13 items); =writeup= (4); =review-2026-10-08.org= last section | =.meta/README.md= as the list; the write-up points at it |
+| architecture | =notes/architecture.org=; both lecture notes; =README.org= via =CLAUDE.md= | fine as is. The three are one topic and could be one file, =notes/slides.org=, with no loss |
+| what bit | =.meta/findings.md=; "What bit" lines in lab notes 2 and 3; "Where it left the lab's text" in 4 to 9 | fine: the notes cite by number |
+
+** What contradicts
+
+- =notes/v2-cli-path.org= lines 178, 191 and 200 say Labs 7, 8 and 9 were
+  "not done" in the console. =README.org= ticks all three and
+  =notes/lab-07= to =lab-09= describe doing them. The file is a 19:51
+  snapshot (its line 18) that reads as current.
+- The same file, lines 29 and 172: "1 document, 9 chunks, 71 entities".
+  The database ended with 2 documents, 35 chunks and 117 entities
+  (=examples/counts.txt=, =examples/labs.txt=, =.meta/README.md= line 39).
+  =notes/lab-06-document-intelligence.org= line 53 and the Result table of
+  =experiments/005-graph-builder-api/README.org= also stop at 71. Both
+  numbers are true, of the first run and of two; only =.meta/README.md=
+  says "two runs".
+- =notes/lecture-gemini-enterprise.org= lines 17-18: "Which of the other
+  boxes the labs use is not known until they are done." They are done.
+- =.meta/README.md= line 106: =clojure -M:dev:nrepl=. The alias is =:repl=
+  (=deps.edn=, =bb.edn= line 34).
+- =.meta/audit-2026-10-08.md= lists ten discrepancies as open. By my count
+  1, 5, 6, 7 and 8 are fixed in the tree and 4 in the text but not the image. The file
+  is dated, and =CLAUDE.md= calls its list "a to-do list, not a record",
+  so strike what is done or say at the top that it is closed.
+
+** Numbers quoted in more than one place
+
+| number | where | agree |
+|--------+-------+-------|
+| 2,251 companies, 28 managers, 7,381 OWNS | =README= (via notes), =.meta/README.md=, =writeup=, =lab-04=, the audit, =examples/=, two screenshots | yes, everywhere |
+| entities from Lab 6's stand-in | 71 in four files, 117 in four | no, see above |
+| findings | "thirty" in =writeup= line 80; 1 to 30 in =.meta/findings.md=, none missing | yes |
+| experiments | "eight" in =writeup=; eight listed in =README=; eight directories | yes |
+| labs by code | 3 ok, 1 skipped, 6 blocked in =README= 130, =v2-cli-path= 34, =examples/= | yes, as of 21:10 |
+| checklist | 6 of 14 in =examples/= and the audit; =gmake agenda= now gives 9 of 14 | both right for their time; nothing states the current one |
+| tests | 27/71 (audit), 28/75 (first review), 29/78 (now) | dated; nothing states the current one, which is correct practice |
+| 805 single-owner companies | =lab-09=, =v2-cli-path=, finding 27, =writeup= | yes |
+| expiry, 21:20 EDT | =README=, =.meta/README.md=, =.env.template= | yes |
+
+** Merge or cut
+
+1. Cut =notes/v2-cli-path.org= to its two parts worth keeping: the
+   "By code" endpoints for Labs 2, 5, 7 and 9 and the "What was read" list.
+   Its table is =examples/labs.txt=, and its per-lab prose is the =:how=
+   strings in =labs.clj=, which will not drift. Or keep it and put
+   "As of 19:51" in the title.
+2. Fold =notes/screens.org='s three "state" images into the lab notes they
+   sit beside and keep the file for the Emacs session only, or the reverse.
+   At present two of its three console shots duplicate lab images.
+3. Leave the two reviews as they are, dated and linked. Do not merge them.
+4. =.meta/audit-2026-10-08.md=: close it out, do not rewrite it.
+
+* 5. Experiments
+
+** Form
+
+| | hypothesis | gate | result | log | honest about failure |
+|-+------------+------+--------+-----+----------------------|
+| 001 | yes | yes | in the log only | yes | yes: records that the first version used the wrong rows, and "same as GDS is untested" |
+| 002 | yes | 14 checks | in the log only | yes | yes: first run failed before reading data |
+| 003 | yes | 23 checks | in the log only | yes | yes: three checks failed first, with the cause |
+| 004 | yes | 17 checks | in the log only | yes | yes: 7 of 17 failed first |
+| 005 | yes | yes | "Passed, on the sixth attempt" | nine attempts | yes. The Result table is the first run's (71), not the final state |
+| 006 | yes | yes | "Not passed." first words | yes | yes: two local runs "did not finish", one timed out, said so |
+| 007 | yes | three parts | "1 and 2 passed. 3 was not run" | yes | yes |
+| 008 | yes | yes | table, three servers | sixteen attempts | yes, with a "Claims" table that marks what was run and what was not |
+
+Eight of eight. The inconsistency is in the headings only: 001 to 004 have
+no =Result= section, and the log is "Log" in six and "Log of attempts" in
+three. A reader looking for the outcome of 002 has to read to line 180.
+
+** Ported, or stranded
+
+| | into =src/workshop/= | state |
+|-+----------------------+-------|
+| 001 | =msa.clj=, =bb msa= | ported. Nothing else uses it and no lab does |
+| 002-004 | nothing | standalone by design, each with its own =deps.edn=. Their result is the argument in =review-2026-10-08.org=. Not stranded: finished |
+| 005 | =graph_builder.clj=, =snapshot.clj=, =labs/lab-06/= | ported. Runs only with a login to someone else's hosted backend, whose URL is a literal at =graph_builder.clj= line 20 |
+| 006 | =extract.clj= | ported although the gate was not passed. =src/= holds code for a failed hypothesis with no caller in =cli.clj= |
+| 007 | nothing | stranded, and says so: gate 3 never ran |
+| 008 | one fix to =neo4j.clj= (finding 29) | the important one, and stranded. It is the only path that still runs, =README.org= line 86 sends strangers to it, and it is not a =bb= task |
+
+=CLAUDE.md= says "What survives is rewritten into =src/workshop/=". By that
+rule 006 should not be in =src/= and 008's session should be.
+
+** Numbering and listing
+
+Consistent: 001 to 008, no gaps, =README.org= lines 119-126 list all eight
+with accurate one-liners, including "the gate was not passed" for 006.
+There is no =experiments/README.org=; the form lives only in the examples.
+
+* Framework
+
+** Copy the directory
+
+A template repository or a generator does not beat =cp -r= here, for three
+reasons. There are two data points at most: this repository was itself
+"scaffolded during the session from the shape of =babashka-workshop-spectre="
+(=.meta/README.md=), and that worked in an afternoon. The reusable part is
+small, roughly 600 of 2,400 lines in =src/workshop/=. And the owner's own
+rule is that a synthesis waits for two repositories to agree; a template
+written from one freezes its accidents. What copying needs is for the
+generic and the specific to be in different files, so that the copy is
+followed by a delete and not by surgery. That is the whole proposal.
+
+** What is what
+
+| reusable as it stands | file |
+|-----------------------+------|
+| dotenv parsing, required variables, never a value in a message | =src/workshop/env.clj= |
+| redaction by OCR, with a second read of the output | =src/workshop/redact.clj= (the mechanism; not the variable list) |
+| edge rows to mermaid | =src/workshop/diagram.clj= |
+| the check shape, time limit, the page | =run-check= in =status.clj=; all of =dashboard.clj= but its title |
+| the step shape and its four statuses | =step=, =statuses=, =scrub=, =overall=, =table-rows=, =as-check=, =report=, =guarded= in =labs.clj= |
+| repository checks | =file-links=, =path-mentions=, =checklist-items=, =value-hits=, =claim=, =links=, =notes-indexed=, =paths-mentioned=, =secrets-kept=, =lint=, =checklist= in =audit.clj= |
+| checklist progress, =guard-env=, pipefail, the =.part= download rule | =Makefile= |
+| the forms | =prompts/README.org=, =labs/README.org=, the experiment README headings, =.meta/README.md= and =findings.md=, =.env.template='s =LAB_*= block, =.envrc=, =.gitignore=, =.dir-locals.el= |
+| the policies | =CLAUDE.md=: sources named, slides redrawn, =resources/= ignored, screenshots redacted then looked at, a note is not done until indexed |
+
+| specific to this workshop | file |
+|---------------------------+------|
+| Form 13 | =form13.clj=; =lab-4= and =lab-5= and the =expected-*= vars in =labs.clj=; =naive-load-shape=, =statements=, =lab-4-intact=, =claims= in =audit.clj=; =document-graph-filter= in =snapshot.clj= |
+| Aura and Neo4j | =neo4j.clj= (reusable for any Neo4j workshop, not for any workshop); =aura-api=, =aura-instance-request=, =graph-analytics-statements= in =labs.clj=; =RUN_CYPHER=, =QUERY_API_URL=, =REQUIRE_NEO4J= in =Makefile= |
+| Google | =gcp.clj= (a public bucket reader; the bucket is the specific part) |
+| one-offs | =msa.clj=, =graph_builder.clj=, =extract.clj= |
+
+** Hard-coded where a parameter belongs
+
+| what | where |
+|------+-------|
+| the dataset location, twice | =gcp.clj= lines 16-17 (=dataset-bucket=, =dataset-prefix=) and =Makefile= line 11 (=DATASET_URL=). Two statements of one fact, nothing checks they agree |
+| the checklist file | =status.clj= line 150 and =audit.clj= line 162 read ="README.org"=; =Makefile= line 3 has =CHECKLIST ?== for the same thing |
+| the secret list, twice and different | =redact.clj= lines 14-15; =labs.clj= lines 63-68 |
+| the connection variables, three times | =status.clj= lines 21-23 and 44; =Makefile= line 91 and =REQUIRE_NEO4J=; =neo4j.clj= =connect= |
+| the lab browser's port | =status.clj= line 19 (=lab-browser-port=) |
+| the list of checks | =status.clj= lines 178-187, a literal vector with "Neo4j Aura" and "Labs" in it |
+| the page title | =dashboard.clj= line 74 |
+| the list of steps | =run-all= in =labs.clj= (line 475), which also reads =@form13/rows= |
+| the prose files and path roots | =audit.clj= lines 34-36 (=path-roots= names =driver=, which does not exist, and omits =prompts= and =examples=) and 113-116 |
+| the commands | =cli.clj= lines 21-105: one literal map, generic and specific together, mirrored by hand in =bb.edn= and =README.org= |
+| the tests | =test/workshop/env_test.clj= holds the tests for =env=, =status=, =form13=, =redact=, =diagram= and =neo4j= |
+
+** What the next workshop does
+
+Copies: everything in the first table above, =deps.edn= and =bb.edn= less
+the drivers and tasks it does not need, and the skeleton of =notes/=
+(=architecture.org=, one =lab-NN-name.org= per lab, =screens.org=, a dated
+write-up).
+
+Renames: nothing, if the namespace stays =workshop=. That is the reason to
+keep the name generic and move Form 13 out of it, not the other way round.
+
+Rewrites: the checklist, =.env.template='s service block, the data
+namespace, the steps, the claims.
+
+Deletes: =form13=, =msa=, =graph_builder=, =extract=, =labs/=, =prompts/*.txt=,
+=examples/=, =experiments/00*=, =notes/*=, =.meta/findings.md= entries.
+
+** Ten changes, by value
+
+Each is one commit and none changes behaviour. Tests pass before and after.
+
+1. *One config map.* =workshop.edn= at the root (or =src/workshop/config.clj=):
+   title, checklist path, dataset bucket and prefix, connection variables,
+   required variables, secret variables, browser port. =status=,
+   =dashboard=, =redact=, =labs=, =audit= and =gcp= read it. A test asserts
+   =Makefile='s =DATASET_URL= and =CHECKLIST= say the same. This removes
+   six of the eleven rows above.
+2. *One secret list, one policy.* Merge =redact/secret-variables= and
+   =labs/secret-variables= into the config, and decide whether resource ids
+   are covered. If yes, =bb redact= does what =e83e9c5= did by hand.
+3. *Split =labs.clj=.* =workshop.steps= gets the shape (about 90 lines);
+   =workshop.labs= keeps the nine labs and exports a vector of step
+   functions that =run-all= maps over. Tests move with them.
+4. *Split =audit.clj=.* =workshop.audit= keeps the repository checks;
+   =workshop.claims= takes the database statements and the notes' numbers.
+   Fix =path-roots= while there.
+5. *Checks as data.* =status/all-checks= takes its list from the config or
+   from a registry: the generic four (environment, lab time, checklist,
+   repository) always, the rest contributed by the workshop.
+6. *Move the data out of the generic namespace.* =form13=, =msa=,
+   =graph_builder=, =extract= and =snapshot/document-graph-filter= under one
+   directory (=src/workshop/data/= or a second source root). =cli.clj=
+   merges a =commands= map from each side.
+7. *Promote 008's session.* =bb local= starts the embedded server, loads
+   and verifies. It is the only thing a stranger can run and the best
+   portable idea in the repository: a local stand-in for the hosted service,
+   checked against the same file. Every workshop wants one.
+8. *=experiments/README.org=.* The form in ten lines (Source, Hypothesis,
+   Gate, Result, Log, What it is not), and one table: number, one line,
+   passed or not, where it was ported. Add the missing =Result= heading to
+   001 to 004. Correct =CLAUDE.md='s definition to match practice.
+9. *Split the tests by namespace.* =env_test.clj= into one file per
+   namespace, so deleting =form13.clj= in a copy deletes one test file.
+10. *=.meta/next-workshop.md=.* The four lists above (copy, rename, rewrite,
+    delete), twenty lines, written for whoever runs =cp -r=. It is a finding
+    until a second repository has used it; then it is a skill for
+    =aygp-dr/skills/staging=, not before.
+
+Not proposed: a new repository, a =neo4j= abstraction over other databases,
+or making =Makefile= read EDN. The curl path's value is that it needs
+nothing.
+
+* Before going public
+
+In order of how much it would embarrass.
+
+1. *No licence.* =prompts/= and the lab's statements in =labs/= are text
+   from an Apache 2.0 repository, attributed in =prompts/README.org=. The
+   repository itself has no =LICENSE= and states no terms for the owner's
+   own work.
+2. *History.* 51 commits go public with the tree. They hold: the slide
+   image (=232e0f4=, removed in =7c0e787=; =.meta/README.md= says so); the
+   first versions of four screenshots that =e83e9c5= re-covered; the
+   instance host in note text. Inferred from commit messages and =git log
+   -S=; I did not open the old blobs. Either publish from a fresh root
+   commit or accept it knowingly. The credentials are dead; the slide is
+   the part that is somebody else's.
+3. *The four images under "Still legible".*
+4. *=notes/v2-cli-path.org=* saying three labs were not done.
+5. *=src/workshop/graph_builder.clj= line 20:* the production backend of
+   someone else's hosted tool as a default, driven through an API its
+   owners do not document (finding 25). Legitimate as a record of what was
+   done; say in the docstring that it is not an interface anyone offered.
+6. *=CLAUDE.md=, "Lab credentials are not secrets".* Correct, and written
+   to an agent in a private repository. Read it once as a stranger would.
+7. The three unlinked images, the description and topics, and this note's
+   link in =README.org=.
+
+* Not checked
+
+- Anything that needs the instance, the consoles or the lab browser:
+  =bb ping=, =labs=, =audit=, =status=, =dashboard=, =form13 verify=. So
+  =workshop.audit= itself was read, not run, and its counts of links and
+  paths are mine by shell, not its own.
+- =.env= and =resources/= were not opened. Whether the legible strings in
+  the four images equal =AURA_INSTANCEID= and =GOOGLE_CLOUD_PROJECT= is
+  inferred from where they sit on the page.
+- The old versions of images and the slide in history: not opened.
+- OCR was not run over the images; they were read by eye at reduced size
+  (2000 px wide). A small or low-contrast string could have been missed.
+- The experiments' gates were not re-run, and no model was run. Their
+  results are taken from their READMEs. =scratch/= directories were not
+  read.
+- Whether =gmake data/form13-2023-05-11.csv= still fetches: no network
+  call was made. The no-account path in =README.org= line 86 depends on it.
+- =clj-kondo= was not run.
+- =review-2026-10-08.org= was read by headings and one section; where this
+  note overlaps it, that is why.
+- The lab repository beside this one was not opened, so "as the lab says"
+  in the notes is taken on trust, and so is the Apache 2.0 claim.
+- The mermaid files in =notes/diagrams/= were not rendered.
+
+* Since this review
+
+Added by the session that asked for it, after reading it. Done the same
+evening, each checked by rerunning OCR over every image or by =bb test=:
+
+- The four images named under "Fix before going public" have the
+  identifier covered: the address column in =lab-03-show-databases.png=, the
+  project chip in both console images, the project number, and the agent id
+  in =lab-08-authorize.png=.
+- =redact/secret-variables= now includes the instance and project ids, so
+  it and =labs/secret-variables= no longer disagree about them.
+- =notes/v2-cli-path.org= says Labs 7 to 9 were done after it was written.
+- The 71 and 117 entity counts are explained where 71 is quoted in the
+  Lab 6 note.
+- The three unlinked images are linked, and the uncaptioned one has a
+  caption.
+- =.meta/README.md='s alias, =bb.edn='s =form13= doc string, and the
+  docstring on the Graph Builder's backend URL.
+- =README.org= points at the write-up first and links this note.
+
+Not done, and the owner's to decide: a =LICENSE=, the history (the owner's
+word on it: it does not matter), the description and topics, and all ten
+framework changes.

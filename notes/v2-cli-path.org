@@ -175,8 +175,9 @@ to this one, it does not say.
 
 * Lab 7 - Deploy Neo4j Agent
 
-- In the console :: not done. The lab adds a marketplace agent to a new
-  Gemini Enterprise app in the Cloud console.
+- In the console :: done after this was written
+  ([[file:lab-07-deploy-neo4j-agent.org][lab 7]]). The lab adds a marketplace agent to a new Gemini Enterprise
+  app in the Cloud console.
 - By code :: Google documents adding a marketplace agent as console steps
   only. A custom A2A agent has a REST registration:
   =POST https://<location>-discoveryengine.googleapis.com/v1alpha/projects/<project>/locations/<location>/collections/default_collection/engines/<app>/assistants/default_assistant/agents=
@@ -188,8 +189,8 @@ to this one, it does not say.
 
 * Lab 8 - Use Neo4j Agent
 
-- In the console :: not done. A chat in Gemini Enterprise; the first prompt
-  raises a consent screen.
+- In the console :: done after this was written ([[file:lab-08-use-neo4j-agent.org][lab 8]]). A chat in
+  Gemini Enterprise; the first prompt raises a consent screen.
 - By code :: nothing here. The consent is a person's click, and the agent
   answers from the instructor's shared instance, not the one in =.env=, so
   nothing in this repository could check what it says.
@@ -197,7 +198,8 @@ to this one, it does not say.
 
 * Lab 9 - Aura Agents
 
-- In the console :: not done. "Agents", "Create with AI", a prompt.
+- In the console :: done after this was written ([[file:lab-09-aura-agents.org][lab 9]]), and the agent
+  exported to =labs/lab-09/=. "Agents", "Create with AI", a prompt.
 - By code :: creating the agent has no documented API; importing one from
   JSON is also a console step. Invoking one does: set the agent to External
   in the console, then
