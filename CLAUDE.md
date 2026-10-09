@@ -36,7 +36,15 @@ that needs no JVM. `bb tasks` lists it: `bb ping`, `bb databases`,
 `bb repl`, and
 `bb redact IN.png OUT.png` (cover emails and `.env` secrets in a
 screenshot), `bb status` (every connection check once) with `bb dashboard` (the same as a
-page on 127.0.0.1:8377, loopback only). Each task
+page on 127.0.0.1:8377, loopback only, with `/data`, `/ask` and `/traces`
+beside it), `bb ask QUESTION` (a local model chooses one of the Lab 9
+agent's Cypher templates), `bb local` (an embedded Neo4j on
+localhost:7688), and `bb papers where|list|fetch` (arXiv papers a `.bib`
+names, kept in the XDG cache; this one runs in babashka itself, from `bb/`).
+`WORKSHOP_ENV=local-graph.env` points every command at the local server in
+place of `.env`. `OLLAMA_URL` and `OLLAMA_MODEL` choose the model; the
+default is this machine. Do not run a model on this machine unless asked:
+set `OLLAMA_URL` to a host with room. Each task
 starts `clojure -M:run ...`; babashka is the runner, not the runtime, because
 the drivers are JVM libraries. A single test: `clojure -M:test -v
 workshop.env-test/parse-dotenv-test`.
@@ -56,7 +64,9 @@ workshop.env-test/parse-dotenv-test`.
   Cloud Storage client (unauthenticated by default: the datasets are
   public), `form13` explores Lab 4's file in memory and checks a load
   against it; `status` holds one check per dependency and `dashboard` renders
-  them; `cli` is what `bb` calls. `dev/user.clj` is the REPL namespace;
+  them; `telemetry` holds spans in memory for `/traces`; `ollama` is the
+  one model client; `agent` answers a question by choosing a template;
+  `papers` reads the paper cache; `cli` is what `bb` calls. `dev/user.clj` is the REPL namespace;
   `.dir-locals.el` makes `cider-jack-in` start in it. `dev/explore.clj` is
   `(comment ...)` blocks per lab, evaluated a form at a time; a new lab
   gets a block there.

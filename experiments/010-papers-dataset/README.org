@@ -1,0 +1,92 @@
+#+TITLE: 010 - A bibliography's papers as a graph, in three layers
+#+DATE: 2026-10-09
+
+* Source
+
+The owner's survey of agentic triage, a gist cloned by ghq
+(=gist.github.com/jwalsh/5ff341dadc8444f29a10b507869e59f6=): an org file and
+=references.bib=, 255 entries, 27 of them arXiv papers. The gist is read
+where ghq put it and nothing of it is copied here. =bb papers fetch= keeps
+the PDFs and their text in =$XDG_CACHE_HOME/workshop-papers= (=bb/papers.clj=);
+=src/workshop/papers.clj= reads that cache.
+
+* Hypothesis
+
+A reading list becomes a dataset in three layers, and the layers differ in
+how far they can be trusted:
+
+1. from the bibliography alone: Paper, Author, WROTE;
+2. from the papers' text with no model: CITES, where one paper's text holds
+   another's title or arXiv identifier;
+3. from the text with a small model: MENTIONS, the benchmarks and datasets a
+   paper names, each kept only if the text contains it.
+
+* Gate
+
+Layers one and two load into Neo4j, a second load changes nothing, and the
+most-cited paper within the set is one a reader of the field would expect.
+Layer three: at least three quarters of what it keeps are benchmarks or
+datasets, judged by reading the list.
+
+* Result
+
+Layers one and two passed. Layer three did not.
+
+| layer | what                         | count | how it was checked                                   |
+|-------+------------------------------+-------+------------------------------------------------------|
+|     1 | papers, authors, WROTE       | 27, 123, 134 | counts equal the bibliography's; second load identical |
+|     2 | CITES within the set         |    17 | read 12 of the 17; SWE-bench cited by 5, Agentless by 4 |
+|     3 | MENTIONS, one model, one pass |    59 | read all 59; 23 are benchmarks or datasets           |
+
+=graph.edn= is layers one and two. =mentions.edn= is layer three as the
+model gave it, model =qwen2.5-coder:7b-instruct-q4_K_M= on another host,
+27 calls, median 6.6 s.
+
+* What layer three got wrong
+
+Nothing was invented: no name was dropped by the text check, in 27 papers.
+What it kept that is not a benchmark:
+
+- people and addresses from the author block ("Celal Ziftci",
+  "mnbucher@stanford.edu", "Stanford University");
+- the paper's own system ("COTA", "TickIt", "LocAgent", "Cupid");
+- models ("BERT", "ChatGPT", "Claude-3-5-sonnet-20241022");
+- section-like phrases ("Working Memory", "Face Recognition").
+
+So the check that worked for the agent's arguments (009) proves less here.
+There, "in the question" was the whole requirement. Here, "in the text" is
+necessary and nowhere near enough: the model was asked for a kind of thing,
+and the text contains every kind.
+
+And what it got right does not join: "SWE-bench", "SWE-Bench",
+"SWE-bench Lite", "SWE-Bench-Lite" and "SWE-bench Lite LeaderBoard" are five
+nodes. Only two names are shared by two papers. The citation layer, which
+needed no model, connects the same papers better.
+
+* Log
+
+1. =bb papers fetch=: 27 of 27, 48 MB, three seconds apart. Run again: all
+   cached, no request made.
+2. The bibliography parser reads one field per line. It took "and others"
+   as an author named "others"; filtered in =papers/graph=.
+3. CITES by the first 45 letters of a title, compared after dropping
+   everything but letters and digits, or by the arXiv identifier. 17 edges.
+   Not checked for misses: a paper cited under a different title, or a
+   reference list the PDF's text extraction mangled, would not be found.
+4. MENTIONS over the first 6,000 characters of each paper. One question,
+   one model, one pass.
+5. Loaded into the embedded Neo4j beside the Form 13 graph; the second load
+   returned the same five counts.
+
+* Not done
+
+- Layer three with a typed answer, e.g. each name with a kind from an enum,
+  so that "benchmark" is the model's claim and can be filtered.
+- Canonical names: fold case and punctuation, and treat "X Lite" as a
+  variant of "X" or not, on purpose.
+- The other 228 entries. They are web pages; fetching them is a different
+  job with different terms per site.
+- References parsed out of each PDF, which would give citations to papers
+  outside the set.
+- A Gemini agent. The idea came from the workshop's Gemini Enterprise labs;
+  that account had expired, so the model here was a local one.

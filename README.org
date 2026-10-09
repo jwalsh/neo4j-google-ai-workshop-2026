@@ -134,6 +134,7 @@ and a dated log of what was tried:
 - =007-query-ui-cljs=: a ClojureScript replica of the Query tool, and Bombadil properties run against it
 - =008-local-graph-dx=: Lab 4's load on an embedded Neo4j, a container and Memgraph, before any cloud
 - =009-local-agent=: Lab 9's agent as a small local model that only chooses a template; passed by one model of four
+- =010-papers-dataset=: a bibliography's arXiv papers as a graph; authors and citations passed, the model's layer did not
 
 =workshop.labs= is each lab as a function returning data: =(run-all)= in a
 REPL, =bb labs= in a shell, three ok, one skipped and six blocked on what they need.

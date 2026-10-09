@@ -1,0 +1,73 @@
+{:model "qwen2.5-coder:7b-instruct-q4_K_M",
+ :question
+ "Which benchmarks or datasets does this paper name? List their names, not descriptions.",
+ :results
+ [{:kept ["Google Chromium" "Mozilla Core" "Mozilla Firefox"],
+   :dropped [],
+   :arxiv "1801.01275"}
+  {:kept ["COTA" "Hui" "Jha"], :dropped [], :arxiv "1807.01337"}
+  {:kept [], :dropped [], :arxiv "2012.03665"}
+  {:kept [], :dropped [], :arxiv "2209.11055"}
+  {:kept [], :dropped [], :arxiv "2301.03797"}
+  {:kept ["Microsoft"], :dropped [], :arxiv "2305.15778"}
+  {:kept ["Cupid" "REP" "ChatGPT"], :dropped [], :arxiv "2308.10022"}
+  {:kept ["SWE-bench"], :dropped [], :arxiv "2310.06770"}
+  {:kept ["DeBERTa" "BERT" "CodeBERT"],
+   :dropped [],
+   :arxiv "2310.06913"}
+  {:kept [], :dropped [], :arxiv "2406.01789"}
+  {:kept
+   ["Stanford University"
+    "University of Zurich"
+    "mnbucher@stanford.edu"
+    "marco.martini@uzh.ch"],
+   :dropped [],
+   :arxiv "2406.08660"}
+  {:kept ["τ -bench"], :dropped [], :arxiv "2406.12045"}
+  {:kept ["SWE-bench Lite"], :dropped [], :arxiv "2407.01489"}
+  {:kept ["GSM8K" "INFOBENCH" "FOFO"],
+   :dropped [],
+   :arxiv "2408.02442"}
+  {:kept ["MMLU" "MMLU Pro" "GSM8K" "MATH"],
+   :dropped [],
+   :arxiv "2409.12183"}
+  {:kept
+   ["Mind Your Step"
+    "Implicit Statistical Learning"
+    "Face Recognition"
+    "Classifying Data with Exceptions"
+    "Natural Language Inference"
+    "Spatial intuitions"
+    "Working Memory"],
+   :dropped [],
+   :arxiv "2410.21333"}
+  {:kept ["CRMArena"], :dropped [], :arxiv "2411.02305"}
+  {:kept
+   ["BERT"
+    "MosaicBERT"
+    "CrammingBERT"
+    "AcademicBERT"
+    "NomicBERT"
+    "GTE-en-MLM"],
+   :dropped [],
+   :arxiv "2412.13663"}
+  {:kept ["SWE-Bench" "SWE-Bench-Lite" "GITS-Eval"],
+   :dropped [],
+   :arxiv "2501.07531"}
+  {:kept ["SWE-bench Lite LeaderBoard"],
+   :dropped [],
+   :arxiv "2502.00350"}
+  {:kept
+   ["LocAgent"
+    "Qwen-2.5-Coder-Instruct-32B"
+    "Claude-3-5-sonnet-20241022"],
+   :dropped [],
+   :arxiv "2503.09089"}
+  {:kept ["TickIt" "Volcano Engine"], :dropped [], :arxiv "2504.08475"}
+  {:kept ["CRMArena-Pro"], :dropped [], :arxiv "2505.18878"}
+  {:kept ["AGNews" "DBpedia"], :dropped [], :arxiv "2508.00957"}
+  {:kept ["EclipseJDT" "Mozilla"], :dropped [], :arxiv "2508.21156"}
+  {:kept [], :dropped [], :arxiv "2511.20667"}
+  {:kept ["Celal Ziftci" "Ray Liu" "Spencer Greene" "Livio Dalloro"],
+   :dropped [],
+   :arxiv "2604.12108"}]}

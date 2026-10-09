@@ -1,0 +1,410 @@
+{:papers
+ [{:arxiv "1801.01275",
+   :title
+   "DeepTriage: Exploring the Effectiveness of Deep Learning for Bug Triaging",
+   :year "2019",
+   :url "https://arxiv.org/abs/1801.01275"}
+  {:arxiv "1807.01337",
+   :title
+   "COTA: Improving the Speed and Accuracy of Customer Support through Ranking and Deep Networks",
+   :year "2018",
+   :url "https://arxiv.org/abs/1807.01337"}
+  {:arxiv "2012.03665",
+   :title
+   "DeepTriage: Automated Transfer Assistance for Incidents in Cloud Services",
+   :year "2020",
+   :url "https://arxiv.org/abs/2012.03665"}
+  {:arxiv "2209.11055",
+   :title "Efficient Few-Shot Learning Without Prompts",
+   :year "2022",
+   :url "https://arxiv.org/abs/2209.11055"}
+  {:arxiv "2301.03797",
+   :title
+   "Recommending Root-Cause and Mitigation Steps for Cloud Incidents using Large Language Models",
+   :year "2023",
+   :url "https://arxiv.org/abs/2301.03797"}
+  {:arxiv "2305.15778",
+   :title
+   "Automatic Root Cause Analysis via Large Language Models for Cloud Incidents",
+   :year "2024",
+   :url "https://arxiv.org/abs/2305.15778"}
+  {:arxiv "2308.10022",
+   :title
+   "Cupid: Leveraging ChatGPT for More Accurate Duplicate Bug Report Detection",
+   :year "2024",
+   :url "https://arxiv.org/abs/2308.10022"}
+  {:arxiv "2310.06770",
+   :title
+   "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+   :year "2024",
+   :url "https://arxiv.org/abs/2310.06770"}
+  {:arxiv "2310.06913",
+   :title
+   "A Comparative Study of Transformer-based Neural Text Representation Techniques on Bug Triaging",
+   :year "2023",
+   :url "https://arxiv.org/abs/2310.06913"}
+  {:arxiv "2406.01789",
+   :title
+   "AI-based Classification of Customer Support Tickets: State of the Art and Implementation with AutoML",
+   :year "2024",
+   :url "https://arxiv.org/abs/2406.01789"}
+  {:arxiv "2406.08660",
+   :title
+   "Fine-Tuned 'Small' LLMs (Still) Significantly Outperform Zero-Shot Generative AI Models in Text Classification",
+   :year "2024",
+   :url "https://arxiv.org/abs/2406.08660"}
+  {:arxiv "2406.12045",
+   :title
+   "$\\tau$-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains",
+   :year "2024",
+   :url "https://arxiv.org/abs/2406.12045"}
+  {:arxiv "2407.01489",
+   :title
+   "Agentless: Demystifying LLM-based Software Engineering Agents",
+   :year "2024",
+   :url "https://arxiv.org/abs/2407.01489"}
+  {:arxiv "2408.02442",
+   :title
+   "Let Me Speak Freely? A Study on the Impact of Format Restrictions on Performance of Large Language Models",
+   :year "2024",
+   :url "https://arxiv.org/abs/2408.02442"}
+  {:arxiv "2409.12183",
+   :title
+   "To CoT or not to CoT? Chain-of-thought helps mainly on math and symbolic reasoning",
+   :year "2024",
+   :url "https://arxiv.org/abs/2409.12183"}
+  {:arxiv "2410.21333",
+   :title
+   "Mind Your Step (by Step): Chain-of-Thought can Reduce Performance on Tasks where Thinking Makes Humans Worse",
+   :year "2024",
+   :url "https://arxiv.org/abs/2410.21333"}
+  {:arxiv "2411.02305",
+   :title
+   "CRMArena: Understanding the Capacity of LLM Agents to Perform Professional CRM Tasks in Realistic Environments",
+   :year "2025",
+   :url "https://arxiv.org/abs/2411.02305"}
+  {:arxiv "2412.13663",
+   :title
+   "Smarter, Better, Faster, Longer: A Modern Bidirectional Encoder for Fast, Memory Efficient, and Long Context Finetuning and Inference",
+   :year "2024",
+   :url "https://arxiv.org/abs/2412.13663"}
+  {:arxiv "2501.07531",
+   :title "Evaluating Agent-based Program Repair at Google",
+   :year "2025",
+   :url "https://arxiv.org/abs/2501.07531"}
+  {:arxiv "2502.00350",
+   :title
+   "OrcaLoca: An LLM Agent Framework for Software Issue Localization",
+   :year "2025",
+   :url "https://arxiv.org/abs/2502.00350"}
+  {:arxiv "2503.09089",
+   :title "LocAgent: Graph-Guided LLM Agents for Code Localization",
+   :year "2025",
+   :url "https://arxiv.org/abs/2503.09089"}
+  {:arxiv "2504.08475",
+   :title
+   "TickIt: Leveraging Large Language Models for Automated Ticket Escalation",
+   :year "2025",
+   :url "https://arxiv.org/abs/2504.08475"}
+  {:arxiv "2505.18878",
+   :title
+   "CRMArena-Pro: Holistic Assessment of LLM Agents Across Diverse Business Scenarios and Interactions",
+   :year "2025",
+   :url "https://arxiv.org/abs/2505.18878"}
+  {:arxiv "2508.00957",
+   :title
+   "Small sample-based adaptive text classification through iterative and contrastive description refinement",
+   :year "2025",
+   :url "https://arxiv.org/abs/2508.00957"}
+  {:arxiv "2508.21156",
+   :title
+   "Automated Bug Triaging using Instruction-Tuned Large Language Models",
+   :year "2025",
+   :url "https://arxiv.org/abs/2508.21156"}
+  {:arxiv "2511.20667",
+   :title
+   "A centroid based framework for text classification in ITSM environments",
+   :year "2025",
+   :url "https://arxiv.org/abs/2511.20667"}
+  {:arxiv "2604.12108",
+   :title
+   "LLM-Based Automated Diagnosis of Integration Test Failures at Google",
+   :year "2026",
+   :url "https://arxiv.org/abs/2604.12108"}],
+ :authors
+ ["Agarwal, Divyansh"
+  "Ahmed, Toufique"
+  "Ait-Bachir, Ali"
+  "Akhavan, Arshia"
+  "Aralikatte, Rahul"
+  "Avadhanam, Udayaadithya"
+  "Bansal, Chetan"
+  "Bates, Luke"
+  "Boehm, Stephan"
+  "Bucher, Martin Juan Jos\\'e"
+  "Cambronero, Jos\\'e"
+  "Cao, Yunjie"
+  "Chaffin, Antoine"
+  "Chandra, Satish"
+  "Chen, Jianjun"
+  "Chen, Yinfang"
+  "Chen, Zhaoling"
+  "Choubey, Prafulla Kumar"
+  "Cito, J\\\"urgen"
+  "Clavi\\'e, Benjamin"
+  "Dalloro, Livio"
+  "Dauterman, Lukas"
+  "Deng, Gangda"
+  "Deng, Yinlin"
+  "Dhawan, Sidharth"
+  "Ding, Ke"
+  "Dipongkor, Atish Kumar"
+  "Dunn, Soren"
+  "Fan, Hao"
+  "Gao, Xin"
+  "Gao, Xuedong"
+  "Geng, Jiayi"
+  "Ghosh, Supriyo"
+  "Greene, Spencer"
+  "He, Xiao"
+  "Hosseinpour, Alireza"
+  "Huang, Hanxian"
+  "Huang, Kung-Hsiang"
+  "Irsan, Ivana Clairine"
+  "Jain, Navendu"
+  "Jain, Vivek"
+  "Jiang, Dongwei"
+  "Jimenez, Carlos E."
+  "Jo, Unso Eun Seo"
+  "Kang, Yu"
+  "Khosravani, Arsham"
+  "Kiashemshaki, Kiana"
+  "Laban, Philippe"
+  "Lin, Chieh-Yen"
+  "Lin, Qingwei"
+  "Liu, Fengrui"
+  "Liu, Ray"
+  "Liu, Ryan"
+  "Lo, David"
+  "Ma, Minghua"
+  "Mani, Senthil"
+  "Mao, Yixin"
+  "Martini, Marco"
+  "Mohanna, Hossein"
+  "Molino, Piero"
+  "Moran, Kevin"
+  "Narasimhan, Karthik"
+  "Ormont, Justin"
+  "Pei, Kexin"
+  "Pham, Phuong"
+  "Prabhakar, Akshara"
+  "Press, Ofir"
+  "Rajeev, Amrit"
+  "Rajmohan, Saravan"
+  "Razavi, Pedram"
+  "Reimers, Nils"
+  "Rodriguez, Juan Diego"
+  "Rondon, Pat"
+  "Sankaran, Anush"
+  "Sanyam, Siddhant"
+  "Savarese, Silvio"
+  "Shi, Liu"
+  "Shinn, Noah"
+  "Sprague, Zayne"
+  "Sucholutsky, Ilia"
+  "Sun, Aaron"
+  "Sundar, SaiBarath"
+  "Tam, Zhi Rui"
+  "Tang, Xiangru"
+  "Thorat, Onkar"
+  "Thung, Ferdian"
+  "Truss, Mario"
+  "Tsai, Yi-Lin"
+  "Tufano, Michele"
+  "Tulapurkar, Harshula"
+  "Tunstall, Lewis"
+  "Wang, Huan"
+  "Wang, Yi-Chia"
+  "Warner, Benjamin"
+  "Wei, Renyao"
+  "Weller, Orion"
+  "Wen, Ming"
+  "Wettig, Alexander"
+  "Wu, Addison J."
+  "Wu, Cheng-Kuang"
+  "Wu, Chien-Sheng"
+  "Xia, Chunqiu Steven"
+  "Xie, Huaibing"
+  "Xiong, Caiming"
+  "Xu, Tianyin"
+  "Yang, John"
+  "Yao, Matrix"
+  "Yao, Shunyu"
+  "Yin, Fangcong"
+  "Yu, Zhongming"
+  "Zeng, Jun"
+  "Zhang, Chaoyun"
+  "Zhang, Dongmei"
+  "Zhang, Hejia"
+  "Zhang, Lingming"
+  "Zhang, Tieying"
+  "Zhang, Ting"
+  "Zhang, Xuchao"
+  "Zhao, Jishen"
+  "Zhao, Yujie"
+  "Zheng, Huaixiu"
+  "Ziftci, Celal"
+  "Zimmermann, Thomas"],
+ :wrote
+ [["Mani, Senthil" "1801.01275"]
+  ["Sankaran, Anush" "1801.01275"]
+  ["Aralikatte, Rahul" "1801.01275"]
+  ["Molino, Piero" "1807.01337"]
+  ["Zheng, Huaixiu" "1807.01337"]
+  ["Wang, Yi-Chia" "1807.01337"]
+  ["Pham, Phuong" "2012.03665"]
+  ["Jain, Vivek" "2012.03665"]
+  ["Dauterman, Lukas" "2012.03665"]
+  ["Ormont, Justin" "2012.03665"]
+  ["Jain, Navendu" "2012.03665"]
+  ["Tunstall, Lewis" "2209.11055"]
+  ["Reimers, Nils" "2209.11055"]
+  ["Jo, Unso Eun Seo" "2209.11055"]
+  ["Bates, Luke" "2209.11055"]
+  ["Ahmed, Toufique" "2301.03797"]
+  ["Ghosh, Supriyo" "2301.03797"]
+  ["Bansal, Chetan" "2301.03797"]
+  ["Zimmermann, Thomas" "2301.03797"]
+  ["Zhang, Xuchao" "2301.03797"]
+  ["Rajmohan, Saravan" "2301.03797"]
+  ["Chen, Yinfang" "2305.15778"]
+  ["Xie, Huaibing" "2305.15778"]
+  ["Ma, Minghua" "2305.15778"]
+  ["Kang, Yu" "2305.15778"]
+  ["Gao, Xin" "2305.15778"]
+  ["Shi, Liu" "2305.15778"]
+  ["Cao, Yunjie" "2305.15778"]
+  ["Gao, Xuedong" "2305.15778"]
+  ["Fan, Hao" "2305.15778"]
+  ["Wen, Ming" "2305.15778"]
+  ["Zeng, Jun" "2305.15778"]
+  ["Ghosh, Supriyo" "2305.15778"]
+  ["Zhang, Xuchao" "2305.15778"]
+  ["Zhang, Chaoyun" "2305.15778"]
+  ["Lin, Qingwei" "2305.15778"]
+  ["Rajmohan, Saravan" "2305.15778"]
+  ["Zhang, Dongmei" "2305.15778"]
+  ["Xu, Tianyin" "2305.15778"]
+  ["Zhang, Ting" "2308.10022"]
+  ["Irsan, Ivana Clairine" "2308.10022"]
+  ["Thung, Ferdian" "2308.10022"]
+  ["Lo, David" "2308.10022"]
+  ["Jimenez, Carlos E." "2310.06770"]
+  ["Yang, John" "2310.06770"]
+  ["Wettig, Alexander" "2310.06770"]
+  ["Yao, Shunyu" "2310.06770"]
+  ["Pei, Kexin" "2310.06770"]
+  ["Press, Ofir" "2310.06770"]
+  ["Narasimhan, Karthik" "2310.06770"]
+  ["Dipongkor, Atish Kumar" "2310.06913"]
+  ["Moran, Kevin" "2310.06913"]
+  ["Truss, Mario" "2406.01789"]
+  ["Boehm, Stephan" "2406.01789"]
+  ["Bucher, Martin Juan Jos\\'e" "2406.08660"]
+  ["Martini, Marco" "2406.08660"]
+  ["Yao, Shunyu" "2406.12045"]
+  ["Shinn, Noah" "2406.12045"]
+  ["Razavi, Pedram" "2406.12045"]
+  ["Narasimhan, Karthik" "2406.12045"]
+  ["Xia, Chunqiu Steven" "2407.01489"]
+  ["Deng, Yinlin" "2407.01489"]
+  ["Dunn, Soren" "2407.01489"]
+  ["Zhang, Lingming" "2407.01489"]
+  ["Tam, Zhi Rui" "2408.02442"]
+  ["Wu, Cheng-Kuang" "2408.02442"]
+  ["Tsai, Yi-Lin" "2408.02442"]
+  ["Lin, Chieh-Yen" "2408.02442"]
+  ["Sprague, Zayne" "2409.12183"]
+  ["Yin, Fangcong" "2409.12183"]
+  ["Rodriguez, Juan Diego" "2409.12183"]
+  ["Jiang, Dongwei" "2409.12183"]
+  ["Liu, Ryan" "2410.21333"]
+  ["Geng, Jiayi" "2410.21333"]
+  ["Wu, Addison J." "2410.21333"]
+  ["Sucholutsky, Ilia" "2410.21333"]
+  ["Huang, Kung-Hsiang" "2411.02305"]
+  ["Prabhakar, Akshara" "2411.02305"]
+  ["Dhawan, Sidharth" "2411.02305"]
+  ["Mao, Yixin" "2411.02305"]
+  ["Wang, Huan" "2411.02305"]
+  ["Savarese, Silvio" "2411.02305"]
+  ["Xiong, Caiming" "2411.02305"]
+  ["Laban, Philippe" "2411.02305"]
+  ["Wu, Chien-Sheng" "2411.02305"]
+  ["Warner, Benjamin" "2412.13663"]
+  ["Chaffin, Antoine" "2412.13663"]
+  ["Clavi\\'e, Benjamin" "2412.13663"]
+  ["Weller, Orion" "2412.13663"]
+  ["Rondon, Pat" "2501.07531"]
+  ["Wei, Renyao" "2501.07531"]
+  ["Cambronero, Jos\\'e" "2501.07531"]
+  ["Cito, J\\\"urgen" "2501.07531"]
+  ["Sun, Aaron" "2501.07531"]
+  ["Sanyam, Siddhant" "2501.07531"]
+  ["Tufano, Michele" "2501.07531"]
+  ["Chandra, Satish" "2501.07531"]
+  ["Yu, Zhongming" "2502.00350"]
+  ["Zhang, Hejia" "2502.00350"]
+  ["Zhao, Yujie" "2502.00350"]
+  ["Huang, Hanxian" "2502.00350"]
+  ["Yao, Matrix" "2502.00350"]
+  ["Ding, Ke" "2502.00350"]
+  ["Zhao, Jishen" "2502.00350"]
+  ["Chen, Zhaoling" "2503.09089"]
+  ["Tang, Xiangru" "2503.09089"]
+  ["Deng, Gangda" "2503.09089"]
+  ["Liu, Fengrui" "2504.08475"]
+  ["He, Xiao" "2504.08475"]
+  ["Zhang, Tieying" "2504.08475"]
+  ["Chen, Jianjun" "2504.08475"]
+  ["Huang, Kung-Hsiang" "2505.18878"]
+  ["Prabhakar, Akshara" "2505.18878"]
+  ["Thorat, Onkar" "2505.18878"]
+  ["Agarwal, Divyansh" "2505.18878"]
+  ["Choubey, Prafulla Kumar" "2505.18878"]
+  ["Mao, Yixin" "2505.18878"]
+  ["Savarese, Silvio" "2505.18878"]
+  ["Xiong, Caiming" "2505.18878"]
+  ["Wu, Chien-Sheng" "2505.18878"]
+  ["Rajeev, Amrit" "2508.00957"]
+  ["Avadhanam, Udayaadithya" "2508.00957"]
+  ["Tulapurkar, Harshula" "2508.00957"]
+  ["Sundar, SaiBarath" "2508.00957"]
+  ["Kiashemshaki, Kiana" "2508.21156"]
+  ["Khosravani, Arsham" "2508.21156"]
+  ["Hosseinpour, Alireza" "2508.21156"]
+  ["Akhavan, Arshia" "2508.21156"]
+  ["Mohanna, Hossein" "2511.20667"]
+  ["Ait-Bachir, Ali" "2511.20667"]
+  ["Ziftci, Celal" "2604.12108"]
+  ["Liu, Ray" "2604.12108"]
+  ["Greene, Spencer" "2604.12108"]
+  ["Dalloro, Livio" "2604.12108"]],
+ :cites
+ [["2305.15778" "2301.03797"]
+  ["2406.01789" "2012.03665"]
+  ["2406.12045" "2310.06770"]
+  ["2407.01489" "2310.06770"]
+  ["2411.02305" "2406.12045"]
+  ["2501.07531" "2407.01489"]
+  ["2502.00350" "2310.06770"]
+  ["2502.00350" "2407.01489"]
+  ["2503.09089" "2310.06770"]
+  ["2503.09089" "2407.01489"]
+  ["2503.09089" "2502.00350"]
+  ["2504.08475" "2406.01789"]
+  ["2505.18878" "2406.12045"]
+  ["2505.18878" "2411.02305"]
+  ["2604.12108" "2310.06770"]
+  ["2604.12108" "2407.01489"]
+  ["2604.12108" "2501.07531"]]}
