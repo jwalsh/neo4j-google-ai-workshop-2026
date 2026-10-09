@@ -27,3 +27,20 @@ browser's tabs, a little over two hours of lab time left.
 - Labs 6 to 9: Document Intelligence, the agents, Gemini Enterprise.
 - An Emacs session: =cider-jack-in=, a block of =dev/explore.clj= evaluated.
   There has not been one yet.
+
+* Emacs and CIDER on the local graph
+
+[[file:img/emacs-cider-local-graph.png]]
+
+Taken after the lab account expired, so the database is the embedded Neo4j
+of =experiments/008-local-graph-dx=, not Aura. Left, =dev/local_graph/explore.clj=
+with =(lab/verify (session/driver))= evaluated in place: the load holds what
+the file says, 2,251 companies, 28 managers, 7,381 OWNS. Right, the CIDER
+REPL with a Cypher statement run through =q= and printed as a table.
+
+How it was made: =clojure -M:dev:repl= in one tmux window, =emacs -nw= in
+another, =cider-connect-clj= to the port in =.nrepl-port=, and the forms
+evaluated by keys sent to the pane. The picture is that pane's text and
+colour codes rendered to an image, so the palette is approximate and the
+font is not the terminal's. The session is real; a person at the keyboard
+was not.

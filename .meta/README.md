@@ -98,6 +98,9 @@ early on was removed from the tree on 2026-10-08; it is still in history
 - `workshop.form13/value-scale` is an inference from the numbers.
 - `experiments/001-msa-similarity` shows the Python and the Clojure agree
   with each other. Neither was compared with the notebook it came from.
+- `cider-connect-clj` ran in a terminal Emacs against experiment 008's
+  nREPL, driven by keys sent through tmux (`notes/screens.org`). Nobody has
+  sat at it, and nothing was tried against the root project's REPL.
 - `cider-jack-in` was not run in a live Emacs. Checked in batch: the
   `.dir-locals.el` values are accepted as safe and applied, and
   `clojure -M:dev:nrepl` starts with CIDER's middleware.

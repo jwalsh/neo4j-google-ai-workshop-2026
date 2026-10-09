@@ -97,4 +97,5 @@ Intelligence or the Graph Builder login.
 - Experiment 007's properties against the real Query tool; they ran against
   the replica only.
 - gemma4:26b on the extraction: it timed out and was not retried.
-- Anything in an Emacs session. The REPL files were evaluated by script.
+- Emacs at a keyboard. One CIDER session was driven through tmux against
+  the local graph ([[file:screens.org][screens]]); the other REPL files were evaluated by script.
