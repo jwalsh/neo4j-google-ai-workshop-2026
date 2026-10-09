@@ -2,7 +2,7 @@
   "What a REPL starts in. One driver for the session, opened on first use.
 
     (q \"MATCH (n) RETURN count(n) AS nodes\")
-    (q \"MATCH (m:Manager) WHERE m.name = $name RETURN m\" {:name \"...\"})
+    (q \"MATCH (m:Manager) WHERE m.managerName = $name RETURN m\" {:name \"...\"})
     (run-file \"labs/lab-03-connect.cypher\")
     (datasets)
     (status)

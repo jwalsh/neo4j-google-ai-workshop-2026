@@ -145,7 +145,8 @@ From what was built here and what =labs/lab-04= loads, not in general.
   value is exact in the file (=1054757624000.0=). Jena hands a whole-number
   decimal back to Clojure as a =Long= and the shares as an =Integer= or
   =Long= by size. The quarter is =xsd:date= in both.
-- *Schema.* Neither has one imposed. Labels and relationship types in
+- *Schema.* RDF has none imposed; Neo4j has the two node keys Lab 4
+  made and nothing else. Labels and relationship types in
   Neo4j, =rdf:type= and predicates here; both can be listed from the data
   (=CALL db.schema.visualization()= there, two =GROUP BY= queries in
   =rdf_explore.clj= here). RDF's are global names, which is what would

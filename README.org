@@ -65,6 +65,32 @@ Ungrouped on the class page.
 The data is quarterly filings to SEC EDGAR by asset managers with over $100m
 under management: who holds what.
 
+** The flow, lab by lab
+
+What each lab does, where it was done, what is here to do it again, and the
+note that has the detail. "Console" means a browser signed in as the lab
+account; nothing in this repository replaces that.
+
+| lab | what it does                              | done in                  | to do it again                                     | note |
+|-----+-------------------------------------------+--------------------------+----------------------------------------------------+------|
+|   1 | sign in to the lab's Google account       | console                  | nothing                                            | -    |
+|   2 | deploy Aura from the marketplace          | console                  | =gmake .env=, then fill it from the credentials file | [[file:notes/lab-02-deploy-neo4j.org][lab 2]] |
+|   3 | connect and list databases                | console, then Clojure    | =bb ping=, =bb databases=                          | [[file:notes/lab-03-connect-to-neo4j.org][lab 3]] |
+|   4 | load a day of Form 13 filings, keyed      | console, then Clojure    | =bb form13 load=, =bb form13 verify=, =labs/lab-04/= | [[file:notes/lab-04-query.org][lab 4]] |
+|   5 | Bloom: search, degree centrality          | console                  | =bb form13 degree= for the numbers, no picture     | [[file:notes/lab-05-bloom.org][lab 5]] |
+|   6 | a 10-K into a graph                       | not available; API instead | =experiments/005-graph-builder-api=, =labs/lab-06/= | [[file:notes/lab-06-document-intelligence.org][lab 6]] |
+|   7 | add the Neo4j Agent to Gemini Enterprise  | console                  | nothing                                            | [[file:notes/lab-07-deploy-neo4j-agent.org][lab 7]] |
+|   8 | three prompts to that agent               | console                  | =prompts/lab-08-*=                                 | [[file:notes/lab-08-use-neo4j-agent.org][lab 8]] |
+|   9 | an Aura agent made from a prompt          | console, checked in Clojure | =prompts/lab-09-*=, =labs/lab-09/= (the exported agent and checks) | [[file:notes/lab-09-aura-agents.org][lab 9]] |
+
+Before any of it, with no account: =experiments/008-local-graph-dx= runs
+Lab 4's load on an embedded Neo4j and checks it against the file. After it:
+=examples/= holds what the commands printed on the day, and
+[[file:notes/writeup-2026-10-08.org][the write-up]] says what was learned.
+
+The lab account, project and instance expired on 2026-10-08 at 21:20 EDT.
+Commands that need the instance fail after that until =.env= names another.
+
 ** Tooling
 
 =gmake help= lists the targets. =gmake agenda= and =gmake todos= read the
@@ -96,9 +122,12 @@ and a dated log of what was tried:
 - =003-form13-datalog=: as datoms in DataScript and triples in Asami
 - =004-form13-core-logic=: as core.logic facts
 - =005-graph-builder-api=: Lab 6's result through the LLM Graph Builder's API
+- =006-structured-extraction=: the same extraction with a local model held to a JSON schema; the gate was not passed
+- =007-query-ui-cljs=: a ClojureScript replica of the Query tool, and Bombadil properties run against it
+- =008-local-graph-dx=: Lab 4's load on an embedded Neo4j, a container and Memgraph, before any cloud
 
 =workshop.labs= is each lab as a function returning data: =(run-all)= in a
-REPL, =bb labs= in a shell, three ok and six blocked on what they need.
+REPL, =bb labs= in a shell, three ok, one skipped and six blocked on what they need.
 =workshop.audit= (=bb audit=) is the same for what the notes claim.
 =dev/labs_explore.clj= walks both, one form at a time. Neither writes.
 
@@ -120,6 +149,7 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lab-07-deploy-neo4j-agent.org][Lab 7 - Deploy Neo4j Agent]]: the marketplace path into Gemini Enterprise, the agent's A2A card, and the check
 - [[file:notes/lab-08-use-neo4j-agent.org][Lab 8 - Use Neo4j Agent]]: the three prompts, the lazy authorization, and what the shared database turned out to hold
 - [[file:notes/lab-09-aura-agents.org][Lab 9 - Aura Agents]]: the generated agent and its exported tools, and its answers checked against the database
+- [[file:notes/writeup-2026-10-08.org][Write-up, 2026-10-08]]: the day in one page: what the labs do, what held, what did not, and how to run it again
 - [[file:notes/review-2026-10-08.org][Review, 2026-10-08]]: the work read as one design, with the five forms of one fact drawn
 - [[file:notes/v2-cli-path.org][The labs again, by code]]: per lab, the console path, the CLI or API path, whether it ran here, and what the rest need
 - [[file:notes/lecture-gemini-enterprise.org][Lecture - Gemini Enterprise]]: the Agent Platform slide, redrawn

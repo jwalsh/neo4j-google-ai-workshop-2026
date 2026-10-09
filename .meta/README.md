@@ -13,9 +13,11 @@ directory holds only what those do not say.
 
 The owner's notes and own queries from a three-hour cloud lab on Neo4j Aura
 and Gemini Enterprise. The labs run in a browser against a hosted
-environment, so the oracle here is the lab environment itself: a query is
-right when Aura returns what the lab says it should. Nothing local can stand
-in for that.
+environment, so the first oracle is the lab environment itself: a query is
+right when Aura returns what the lab says it should. The second is the
+source file: `workshop.form13` computes from the CSV what a correct load
+holds, and that check runs against any server, including a local one
+(`experiments/008-local-graph-dx/`).
 
 The lab content and slides are Neo4j's and Google's. Notes and the owner's
 queries go in; copies of their materials do not. A slide worth keeping is
@@ -26,24 +28,29 @@ early on was removed from the tree on 2026-10-08; it is still in history
 
 ## Where things stand (2026-10-08)
 
-- The workshop is in progress. Labs 1 to 4 are done: the lab account is
-  signed in to a Chromium with its own empty profile, one AuraDB
-  Professional instance is RUNNING in us-east1 with its credentials in
-  `.env`, and the database holds Lab 4's keyed load: 2,251 companies, 28
-  managers, 7,381 OWNS, two node-key constraints. `bb form13 verify` checks
-  that against the file. Of the lectures, Gemini Enterprise is ticked, on the owner's word; the
+- The workshop is over. Labs 1 to 5 and 7 to 9 were done as written; the
+  database held Lab 4's keyed load (2,251 companies, 28 managers, 7,381
+  OWNS, two node keys), which `bb form13 verify` checks against the file.
+  Of the lectures, Gemini Enterprise is ticked, on the owner's word; the
   rest are not.
-- Lab 5 is done: the Manager, OWNS, Company search and Degree Centrality
-  with size scaling, in Bloom. A 4GB Graph Analytics session was left
-  running.
-- Lab 6 is blocked as written: this Aura account has no Document
+- Lab 6 was blocked as written: this Aura account had no Document
   Intelligence (finding 22). Its result was reproduced through the LLM
   Graph Builder's API (`experiments/005-graph-builder-api/`), which wrote
-  Document, Chunk and 71 entity nodes into the same database. Lab 4's
-  counts are unchanged; `bb counts` now lists both graphs.
-- The lab account, the project and the instance expire with the lab, about
-  five hours from 16:23 EDT. After that `.env` holds dead values and
-  `gmake ping` fails; that is expected, not a regression.
+  Document, Chunk and 117 entity nodes (two runs) into the same database.
+  That subgraph is kept as EDN beside the experiment. Its box stays
+  unticked.
+- Lab 7 added the marketplace Neo4j Agent to a Gemini Enterprise app, Lab 8
+  sent it three prompts, Lab 9 generated an Aura agent. The agent's export
+  is `labs/lab-09/`; its second answer was wrong and the first partial
+  (findings 26 and 27).
+- `neo4j/query` now gives `IN TRANSACTIONS` an auto-commit session
+  (finding 29). The relationship file was run that way against Aura once,
+  on a loaded database. A load from empty through `form13/load!` was run
+  only locally, by experiment 008.
+- The lab account, the project and the instance expired at about 21:20 EDT
+  on 2026-10-08. `.env` holds dead values and `gmake ping` fails; that is
+  expected, not a regression. `examples/` has what the commands printed
+  while it was up.
 - The lab repository is `neo4j-partners/hands-on-lab-neo4j-and-google`,
   cloned beside this one by ghq and not forked: it is read, not changed.
 - Tooling was scaffolded during the session from the shape of
@@ -79,9 +86,15 @@ early on was removed from the tree on 2026-10-08; it is still in history
   first needs application default credentials for the lab account, which
   exists only in the driven browser; nothing on this machine can call the
   lab project's own APIs yet.
-- `workshop.form13/load!` has only taken its already-loaded branch: the
-  load itself was run from the console. The files it would run are the
-  ones that were run there.
+- `workshop.form13/load!` against Aura has only taken its already-loaded
+  branch. Its loading branch ran on a local server (experiment 008), and
+  the relationship file alone ran on Aura through `bb cypher`.
+- Experiment 007's Bombadil properties ran against the replica, never the
+  real Query tool. Its runner for the real page was written and not run.
+- Experiment 006's larger model (gemma4:26b) timed out and was not retried.
+- The Lab 9 agent was never called through its endpoint or as an MCP
+  server; only the preview chat in the console.
+- Whether the marketplace trial reached the lab's subscription.
 - `workshop.form13/value-scale` is an inference from the numbers.
 - `experiments/001-msa-similarity` shows the Python and the Clojure agree
   with each other. Neither was compared with the notebook it came from.

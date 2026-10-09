@@ -175,7 +175,7 @@ here, then =cider-connect=.
 | unit                | node, relationship, properties on both | [entity attribute value]                | [subject predicate object]             |
 | size for this file  | 2,279 nodes, 7,381 relationships     | 56,523 datoms                             | 49,142 triples (no filing id loaded)   |
 | OWNS                | a relationship with three properties | an entity with two refs and five values   | a node with two links and four values  |
-| schema              | two uniqueness constraints           | five attributes declared, the rest free   | none                                   |
+| schema              | two node keys                        | five attributes declared, the rest free   | none                                   |
 | identity            | =MERGE= on the key                   | upsert on a unique attribute              | the loader's naming of nodes           |
 | a CUSIP's names     | one: =ON CREATE SET=, first wins     | all, because the attribute was made many  | all, every attribute is many           |
 | top N               | =ORDER BY ... LIMIT= in the query    | sort and take in Clojure                  | sort and take in Clojure               |

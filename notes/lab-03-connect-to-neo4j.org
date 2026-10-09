@@ -28,7 +28,7 @@ Two rows, as the lab says to expect:
 | system | system   | read-write | primary | online        | false   | false |
 
 Streamed 2 records in 45 ms. Both report the address
-=p-5978ba49-ec5d-0001.production-orch-1423.neo4j.io:7687=, the host behind
+=p-<id>-<suffix>.production-orch-<n>.neo4j.io:7687=, the host behind
 the =<id>.databases.neo4j.io= name in the credentials file.
 
 ** The same check without a browser
