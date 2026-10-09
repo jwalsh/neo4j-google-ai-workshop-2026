@@ -6,14 +6,13 @@
   (:require [clojure.string :as str]
             [workshop.env :as env])
   (:import (java.util List Map)
-           (org.neo4j.driver AuthTokens Driver GraphDatabase QueryConfig Record)
+           (org.neo4j.driver AuthTokens Driver GraphDatabase QueryConfig Record SessionConfig)
            (org.neo4j.driver.types Node Path Relationship)))
 
 (set! *warn-on-reflection* true)
 
 (defn connect
-  "A driver for the instance .env names. Close it, or use with-open.
-  The returned driver carries the database name as metadata."
+  "A driver for the instance .env names. Close it, or use with-open."
   (^Driver [] (connect (env/load-env)))
   (^Driver [env-map]
    (let [{:strs [NEO4J_URI NEO4J_USERNAME NEO4J_PASSWORD]}
@@ -54,23 +53,34 @@
 
     :else driver-value))
 
+(defn auto-commit?
+  "True for a statement Neo4j refuses inside a managed transaction: one that
+  commits as it goes."
+  [statement]
+  (boolean (re-find #"(?i)\bIN\s+(?:\d+\s+CONCURRENT\s+)?TRANSACTIONS\b|\bUSING\s+PERIODIC\s+COMMIT\b"
+                    statement)))
+
 (defn query
-  "Runs one Cypher statement in a managed transaction and returns a vector
-  of row maps keyed by column keyword. parameters is a map with string or
-  keyword keys."
+  "Runs one Cypher statement and returns a vector of row maps keyed by
+  column keyword. parameters is a map with string or keyword keys. The
+  statement runs in a managed transaction, except one that commits as it
+  goes (CALL {} IN TRANSACTIONS), which gets an auto-commit session."
   ([driver statement] (query driver statement {}))
   ([^Driver driver ^String statement parameters]
    (let [string-keyed (into {} (map (fn [[parameter-name parameter-value]]
                                       [(name parameter-name) parameter-value]))
                             parameters)
-         result (-> (.executableQuery driver statement)
-                    (.withParameters ^Map string-keyed)
-                    (.withConfig (-> (QueryConfig/builder)
-                                     (.withDatabase (database-name))
-                                     (.build)))
-                    (.execute))]
-     (mapv (fn [^Record record] (->clj (.asMap record)))
-           (.records result)))))
+         records (if (auto-commit? statement)
+                   (with-open [session (.session driver (SessionConfig/forDatabase (database-name)))]
+                     (.list (.run session statement ^Map string-keyed)))
+                   (-> (.executableQuery driver statement)
+                       (.withParameters ^Map string-keyed)
+                       (.withConfig (-> (QueryConfig/builder)
+                                        (.withDatabase (database-name))
+                                        (.build)))
+                       (.execute)
+                       (.records)))]
+     (mapv (fn [^Record record] (->clj (.asMap record))) records))))
 
 (defn statements
   "The statements in Cypher text: split where a semicolon ends a line, with

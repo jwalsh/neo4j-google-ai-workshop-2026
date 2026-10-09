@@ -82,3 +82,8 @@
   (testing "a semicolon inside a line does not split"
     (is (= ["RETURN 'a;b' AS text"]
            (neo4j/statements "RETURN 'a;b' AS text\n")))))
+
+(deftest auto-commit-test
+  (is (neo4j/auto-commit? "LOAD CSV FROM 'x' AS row CALL (row) { MERGE (n) } IN TRANSACTIONS OF 1000 ROWS"))
+  (is (neo4j/auto-commit? "CALL { RETURN 1 } IN 4 CONCURRENT TRANSACTIONS"))
+  (is (not (neo4j/auto-commit? "MATCH (n) RETURN count(n) AS transactions"))))
