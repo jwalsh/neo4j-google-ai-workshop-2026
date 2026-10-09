@@ -8,7 +8,7 @@
              :task (clojure "-M:run" "databases")}
   counts    {:doc "Node counts by label, relationship counts by type"
              :task (clojure "-M:run" "counts")}
-  cypher    {:doc "Run a Cypher file: bb cypher labs/lab-04-query.cypher"
+  cypher    {:doc "Run a Cypher file: bb cypher labs/lab-03-connect.cypher"
              :task (apply clojure "-M:run" "cypher" *command-line-args*)}
   status    {:doc "Every connection check, once, as a table"
              :task (clojure "-M:run" "status")}
@@ -26,6 +26,10 @@
              :task (apply clojure "-M:run" "msa" *command-line-args*)}
   redact    {:doc "Cover emails and .env secrets in a screenshot: bb redact IN.png OUT.png"
              :task (apply clojure "-M:run" "redact" *command-line-args*)}
+  labs      {:doc "Each lab by code, as a table: ok, skipped, blocked. Reads only: bb labs [detail]"
+             :task (apply clojure "-M:run" "labs" *command-line-args*)}
+  audit     {:doc "What is true beside what the notes say. Reads only."
+             :task (clojure "-M:run" "audit")}
   repl      {:doc "An nREPL in dev/user.clj with CIDER's middleware, for cider-connect"
              :override-builtin true
              :task (clojure "-M:dev:repl")}}}

@@ -1,0 +1,248 @@
+#+TITLE: The labs again, by code
+#+DATE: 2026-10-08
+
+Not in the lab. Labs 1 to 5 were done in two consoles driven by an agent,
+and that cost a misplaced click, a stray keystroke run as a statement and a
+tab that hung (=.meta/findings.md=, entries 14 to 17 and 23). This is each
+lab again with the question: what would do it without a browser, and was
+that run here.
+
+The code is =src/workshop/labs.clj=. Each lab is a function that returns a
+map, ={:lab :title :status :evidence :how}=, and =(workshop.labs/run-all)=
+returns all of them. =dev/labs_explore.clj= walks them one form at a time.
+Nothing in it deletes or overwrites, and with no options nothing in it
+writes at all.
+
+* The table
+
+From =(workshop.labs/run-all)= against the live instance, 2026-10-08 19:51
+EDT.
+
+| lab | step                        | status  | evidence                                                        |
+|-----+-----------------------------+---------+-----------------------------------------------------------------|
+|   1 | Sign In                     | blocked | no API: an interactive Google sign-in                           |
+|   2 | Deploy Neo4j                | blocked | Aura API =POST /v1/instances=; no client credentials here       |
+|   3 | Connect to Neo4j            | ok      | 2 databases: neo4j online default, system online                |
+|   4 | Query                       | ok      | already loaded: 2,251 companies, 28 managers, 7,381 OWNS; 2 of 2 node keys |
+|   5 | Bloom: degree, in Cypher    | ok      | file and graph agree on 28 of 28 managers, 2,251 of 2,251 companies |
+|   5 | Bloom: degree, in a session | skipped | 4 of 4 procedures offered; 0 sessions visible; not started      |
+|   6 | Document Intelligence       | blocked | console only; the Graph Builder stand-in left 1 document, 9 chunks, 71 entities |
+|   7 | Deploy Neo4j Agent          | blocked | Cloud console as the lab account; no documented API for a marketplace agent |
+|   8 | Use Neo4j Agent             | blocked | a chat with an OAuth consent click; depends on Lab 7            |
+|   9 | Aura Agents                 | blocked | creation is console only; invoking is an API, credentials not held |
+
+Three ok, one skipped, six blocked. The statuses mean:
+
+- ok :: ran here and the result was checked.
+- skipped :: could run from here and was deliberately not.
+- blocked :: cannot run from here. =:how= names the endpoint and what is
+  missing.
+- failed :: ran and the check did not hold. None did.
+
+* Lab 1 - Sign In
+
+- In the console :: the lab account's email, password and Employee ID
+  typed into Google's sign-in, then terms accepted by the owner (finding 3).
+- By code :: nothing. An interactive sign-in has no endpoint. The
+  non-interactive equivalent is a service-account key for the lab project,
+  which the lab environment does not hand out.
+- Run here :: no. This machine's =gcloud= is the owner's and stays out of
+  the lab.
+
+* Lab 2 - Deploy Neo4j
+
+- In the console :: the marketplace listing, "Manage on provider", Aura's
+  sign-up, Professional, "Create instance" (=notes/lab-02-deploy-neo4j.org=).
+- By code :: the Aura API. From its documentation:
+  1. Create a client credential in the Aura console: Account settings,
+     Client credentials, Aura API. The secret is shown once.
+  2. A token, good for an hour:
+     #+begin_src sh
+     curl --request POST 'https://api.neo4j.io/oauth/token' \
+          --user "$AURA_CLIENT_ID:$AURA_CLIENT_SECRET" \
+          --header 'Content-Type: application/x-www-form-urlencoded' \
+          --data-urlencode 'grant_type=client_credentials'
+     #+end_src
+  3. =GET https://api.neo4j.io/v1/tenants= for the project's id. The API
+     still says tenant where the console says project.
+  4. =POST https://api.neo4j.io/v1/instances= with a bearer token and
+     #+begin_src json
+     {"version": "5", "region": "us-east1", "memory": "2GB",
+      "name": "My instance", "type": "professional-db",
+      "tenant_id": "<project id>", "cloud_provider": "gcp"}
+     #+end_src
+     The field names and =professional-db= are from the documentation's
+     own example, which uses =europe-west1= and =8GB=. That =2GB= and
+     =us-east1= are accepted for this tier is taken from the instance the
+     console made, not from the specification: the specification page
+     renders in a browser and did not come back as text.
+  5. =GET /v1/instances/<id>= until =status= is =running=. The response to
+     the create carries the password, once. Do not resolve the hostname
+     before then (finding 12).
+  The same through =aura-cli instance create --name ... --cloud-provider gcp
+  --region us-east1 --memory 2GB --type professional-db --tenant-id ...=.
+  =(workshop.labs/aura-instance-request "<project id>" "My instance")=
+  returns the request as data. Nothing sends it.
+- Run here :: no. The credential is made in the console and was not sought.
+  One thing this would not settle: an instance made through the API lands in
+  the organization the credential belongs to, and which organization that
+  should be is the open question of findings 13 and 22.
+
+* Lab 3 - Connect to Neo4j
+
+- In the console :: Connect, Query, =SHOW DATABASES;=, Run.
+- By code :: Bolt, with the Java driver, as user =neo4j= from =.env=.
+  =(workshop.labs/lab-3)=, or =bb ping= and =bb databases=.
+- Run here :: yes. Two databases, =neo4j= online and the default, =system=
+  online. The step is =:ok= only when it is exactly those.
+
+* Lab 4 - Query
+
+- In the console :: the lab's statements pasted into the Query tool, the
+  naive load, the delete, then constraints and three keyed loads
+  (=notes/lab-04-query.org=).
+- By code :: files 03 to 06 of =labs/lab-04/= through =workshop.form13/load!=,
+  which first compares the database with the file and sends nothing when
+  they agree. =(workshop.labs/lab-4)= reads only. With ={:allow-load? true}=
+  it will call =load!=, and only for a database that already matches or
+  holds nothing of Lab 4's; a database holding something else is reported
+  and left. The naive load and the delete are not part of it: they exist to
+  be looked at and thrown away.
+- Run here :: verified, not loaded. 2,251 companies, 28 managers, 7,381
+  OWNS, both node keys, equal to the file. The loading branch of =load!= has
+  still never run (=.meta/README.md=, "Never verified").
+
+The evidence also lists what else is in the database, since later labs add
+to it: by 19:51 the Graph Builder's Document, Chunk and entity nodes.
+
+* Lab 5 - Bloom
+
+- In the console :: Bloom, a search for Manager, OWNS, Company, then
+  Degree Centrality from the data science panel, which starts a Graph
+  Analytics session, and size scaling (=notes/lab-05-bloom.org=).
+- By code, the count :: degree is a count. =(workshop.labs/lab-5)= takes it
+  in Cypher for every manager and every company and compares each with the
+  same count from the file. Run here: yes, all 28 managers and all 2,251
+  companies agree. This is over the whole graph, where Bloom's scene stops
+  at 1,000 paths. The picture, nodes sized on a scene, has no equivalent
+  and none is claimed.
+- By code, the algorithm :: the instance lists =gds.graph.project=,
+  =gds.degree.stream= and =gds.session.list= and =delete=: the Cypher API
+  for Aura Graph Analytics. From its documentation a projection that names
+  a memory size starts a session, with the database's own credentials and
+  no Aura API key:
+  #+begin_src cypher
+  CALL gds.graph.project('lab5', ['Manager', 'Company'], 'OWNS', {memory: '4GB'})
+  YIELD nodeCount, relationshipCount;
+  CALL gds.degree.stream('lab5') YIELD nodeId, score
+  RETURN gds.util.asNode(nodeId).managerName AS manager, score
+  ORDER BY score DESC LIMIT 10;
+  CALL gds.session.list() YIELD name, memory, status;
+  CALL gds.session.delete('<name>') YIELD deleted;
+  #+end_src
+  Run here: no, and so these four statements have never executed. The
+  first starts billed compute on a trial whose bill nobody here can see.
+  The documentation's own examples use =gds.pageRank.stream=; that
+  =gds.degree.stream= takes the same form is read from the procedure list,
+  and =gds.util.asNode= in a session is an assumption. The page also lists
+  =gds.graph.project= among unsupported catalog procedures while using it
+  in its examples.
+- By code, the other way :: the =graphdatascience= Python client,
+  =GdsSessions(api_credentials=AuraAPICredentials(client_id, client_secret,
+  project_id))= and =sessions.get_or_create(session_name, memory,
+  db_connection, ttl)=. That needs the Aura API credential, so it is blocked
+  as Lab 2 is.
+
+=CALL gds.session.list()= as user =neo4j= returned no rows. Whether the
+session Bloom left running is gone, or is the console user's and not shown
+to this one, it does not say.
+
+* Lab 6 - Document Intelligence
+
+- In the console :: not done. The tool is a private preview and this
+  account does not have it (=notes/lab-06-document-intelligence.org=).
+- By code :: nothing documented. Neo4j's announcement of the tool lists
+  API, command-line and MCP access as what it is being extended with, which
+  reads as planned. Fetching the PDF is =gmake data/Apple_10-K_2025_2_pages.pdf=.
+- The stand-in :: the lab text names the tool before this one, Neo4j Labs'
+  LLM Graph Builder. Another session drove its backend from Clojure
+  (=experiments/005-graph-builder-api/=, =workshop.graph-builder=).
+  =(workshop.labs/lab-6 driver)= does not call it, since it writes; it
+  counts what it left and looks for the lab's last observation. Found: one
+  document, nine chunks, 71 entities, and the HomePod, the HomePod mini and
+  an Apple TV under Home. The step stays =:blocked=: it is not Document
+  Intelligence.
+
+* Lab 7 - Deploy Neo4j Agent
+
+- In the console :: not done. The lab adds a marketplace agent to a new
+  Gemini Enterprise app in the Cloud console.
+- By code :: Google documents adding a marketplace agent as console steps
+  only. A custom A2A agent has a REST registration:
+  =POST https://<location>-discoveryengine.googleapis.com/v1alpha/projects/<project>/locations/<location>/collections/default_collection/engines/<app>/assistants/default_assistant/agents=
+  with =displayName=, =description= and =a2aAgentDefinition.jsonAgentCard=.
+  It needs an access token for the lab account with the Gemini Enterprise
+  Admin role, an app that already exists, and the agent's card, which the
+  marketplace listing does not publish.
+- Run here :: no. The lab account's token exists only in the lab browser.
+
+* Lab 8 - Use Neo4j Agent
+
+- In the console :: not done. A chat in Gemini Enterprise; the first prompt
+  raises a consent screen.
+- By code :: nothing here. The consent is a person's click, and the agent
+  answers from the instructor's shared instance, not the one in =.env=, so
+  nothing in this repository could check what it says.
+- Run here :: no. Needs Lab 7.
+
+* Lab 9 - Aura Agents
+
+- In the console :: not done. "Agents", "Create with AI", a prompt.
+- By code :: creating the agent has no documented API; importing one from
+  JSON is also a console step. Invoking one does: set the agent to External
+  in the console, then
+  #+begin_src sh
+  curl --request POST "$AGENT_ENDPOINT_URL" \
+       --header 'Content-Type: application/json' --header 'Accept: application/json' \
+       --header "Authorization: Bearer $AURA_API_TOKEN" \
+       --data '{"input": "List managers investing in uncommon companies."}'
+  #+end_src
+  with the token from the same =oauth/token= call as Lab 2. An External
+  agent is charged for. From the documentation, agents run read-only
+  queries.
+- Run here :: no: no agent, no credential. The lab's question does not
+  need one. With "uncommon" read as held by one manager, 805 of the 2,251
+  companies are, and Envestnet holds 263 of them, Guggenheim 166, Paradigm
+  147. The query is in the Lab 5 block of =dev/labs_explore.clj=. The
+  threshold is this note's choice; the lab's agent asks the user to pick.
+
+* From a REPL
+
+#+begin_src clojure
+(require '[workshop.labs :as labs] '[workshop.audit :as audit])
+(labs/run-all)                               ; every step, as data
+(labs/lab-5)                                 ; one step, own driver
+(:evidence (labs/lab-4 (user/driver) (user/holdings)))
+(user/q (:lab-5/manager-degree labs/statements))   ; the statement under it
+(labs/as-check (labs/run-all))               ; the dashboard's shape
+(audit/discrepancies (audit/run-all))        ; what the notes get wrong, now
+#+end_src
+
+=workshop.audit= is the audit in =.meta/audit-2026-10-08.md= as functions:
+the links, the secrets by value, the checklist, the inventory of the
+database and the notes' numbers one row each. Reads only.
+
+* What was read
+
+- Aura API, authentication: https://neo4j.com/docs/aura/api/authentication/
+- Aura API, overview: https://neo4j.com/docs/aura/api/overview/
+- Create an AuraDB instance in the terminal: https://neo4j.com/docs/aura/tutorials/create-auradb-instance-from-terminal/
+- Aura CLI, managing instances: https://neo4j.com/docs/aura/aura-cli/auradb-instances/
+- Aura API specification, which did not come back as text: https://neo4j.com/docs/aura/platform/api/specification/
+- Aura Graph Analytics: https://neo4j.com/docs/aura/graph-analytics/ and https://neo4j.com/docs/aura/graph-analytics/aga/
+- Graph Analytics, the Cypher API: https://neo4j.com/docs/graph-data-science/current/aura-graph-analytics/cypher/
+- Graph Analytics, the Python client: https://neo4j.com/docs/graph-data-science-client/current/aura-graph-analytics/
+- Aura Agent: https://neo4j.com/docs/aura/aura-agent/
+- Document Intelligence, the announcement, from a search result's summary and not the page itself: https://neo4j.com/blog/genai/introducing-document-intelligence-from-documents-to-a-knowledge-graph-right-inside-aura/
+- Gemini Enterprise, register and manage A2A agents: https://docs.cloud.google.com/gemini/enterprise/docs/register-and-manage-an-a2a-agent
+- Gemini Enterprise, agents from the marketplace, from a search result's summary: https://docs.cloud.google.com/gemini/enterprise/docs/register-and-manage-marketplace-agents

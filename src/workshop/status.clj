@@ -7,6 +7,7 @@
             [clojure.string :as str]
             [workshop.env :as env]
             [workshop.gcp :as gcp]
+            [workshop.labs :as labs]
             [workshop.neo4j :as neo4j])
   (:import (java.net URI)
            (java.net.http HttpClient HttpRequest HttpResponse$BodyHandlers)
@@ -176,6 +177,8 @@
                          (with-open [fresh-driver (neo4j/connect env-map)]
                            (driver-fn fresh-driver))))]
      (->> [["Neo4j Aura" #(with-driver (fn [open-driver] (neo4j-check open-driver env-map)))]
+           ["Labs" #(with-driver (fn [open-driver]
+                                   (labs/as-check (labs/run-all {:driver open-driver}))))]
            ["Dataset bucket" datasets-check]
            ["Lab browser" lab-browser-check]
            ["Lab time" #(lab-expiry-check env-map)]

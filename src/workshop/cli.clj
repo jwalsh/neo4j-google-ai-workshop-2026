@@ -2,6 +2,8 @@
   "clojure -M:run <command>. The tasks in bb.edn call this."
   (:require [clojure.pprint :as pprint]
             [clojure.string :as str]
+            [workshop.audit :as audit]
+            [workshop.labs :as labs]
             [workshop.dashboard :as dashboard]
             [workshop.form13 :as form13]
             [workshop.gcp :as gcp]
@@ -78,6 +80,19 @@
                          (prn outcome)
                          (when (pos? still-readable)
                            (throw (ex-info "something sensitive is still readable in the output." {})))))}
+   "labs"      {:doc "Each lab by code, as a table. Reads only: labs [detail]"
+                :run (fn [[view]]
+                       (let [results (labs/run-all)]
+                         (print (labs/report results))
+                         (when (= view "detail")
+                           (pprint/pprint (mapv #(select-keys % [:lab :title :status :evidence]) results)))
+                         (when (pos? (:failed (labs/overall results)))
+                           (throw (ex-info "a lab step failed." {})))))}
+   "audit"     {:doc "What is true beside what the notes say. Reads only."
+                :run (fn [_]
+                       (let [checks (audit/run-all)]
+                         (print-rows (audit/overview checks))
+                         (pprint/pprint (audit/discrepancies checks))))}
    "datasets"  {:doc "List the workshop's datasets in Cloud Storage"
                 :run (fn [_]
                        (print-rows (gcp/list-objects (gcp/public-storage))))}
