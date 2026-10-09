@@ -1,0 +1,84 @@
+#+TITLE: 006 - Lab 6's extraction with a local model held to a JSON schema
+#+DATE: 2026-10-08
+
+* Source
+
+Lab 6's prompt (=prompts/lab-06-generate-model.txt=), the two pages of the
+Apple 10-K as text (=gmake data/Apple_10-K_2025_2_pages.txt=), and Ollama's
+chat API, whose =format= field takes a JSON schema and constrains the
+answer to it. The code is =src/workshop/extract.clj=.
+
+* Hypothesis
+
+A small model on our own hardware, given the lab's prompt, a hint saying
+what each type means and which way each relationship points
+(=prompts/lab-06-extraction-hint.txt=) and a schema
+(=prompts/lab-06-extraction-schema.json=), returns entities and
+relationships good enough to stand in for the hosted extraction of
+experiment 005, with nothing sent anywhere.
+
+* Gate
+
+The same observation Lab 6 ends on: =(extract/included-in answer "Home")=
+returns the HomePod, the HomePod mini and Apple TV. Beside it,
+=extract/check= must report no unknown types and no dangling
+relationships, and =extract/unsupported= says how many relationships quote
+evidence that is not in the text.
+
+* Result
+
+Not passed. The schema did what it is for: with it, the answer parsed, every
+type was one the schema allows and no relationship pointed at a missing
+entity. The content did not follow. The one run that finished put the Home
+sentence, whole, on an edge from Apple Inc. to Home, and made no edge from
+Home to any product.
+
+| run                           | seconds | parsed | entities | relationships | evidence not in text | Home includes |
+|-------------------------------+---------+--------+----------+---------------+----------------------+---------------|
+| local llama3.2:3b, schema     |       - | -      |        - |             - |                    - | did not finish |
+| local llama3.2:3b, no schema  |       - | -      |        - |             - |                    - | did not finish |
+| remote llama3.2, schema       |     100 | yes    |       56 |            45 |             41 of 45 | nothing       |
+| remote llama3.2, no schema    |      10 | no     |        0 |             0 |                    - | nothing       |
+| remote gemma4:26b, schema     |    600+ | -      |        - |             - |                    - | timed out     |
+
+The remote answer is =remote-llama3.2-2026-10-08.edn=. =run.clj= is the
+script that made the table's rows.
+
+* Log
+
+1. Local, llama3.2:3b, on the laptop. The machine stopped answering while
+   the model loaded beside a JVM, a browser and a container VM. Stopped by
+   the owner. Nothing came back, and nothing is to be run locally: set
+   =OLLAMA_URL= to a host with room.
+2. =extract.clj= read a fixed local URL. Changed to read =OLLAMA_URL=.
+3. Remote, llama3.2, with the schema: 100 seconds, 3,553 answer tokens. All
+   types valid, one duplicate entity, no dangling relationship. 41 of 45
+   evidence strings are not substrings of the text: the model paraphrases
+   where it was asked to quote ("iPad mini is based on its iPadOS operating
+   system"), so "evidence" as a field is not evidence.
+4. The same model without the schema: 10 seconds, a numbered Markdown list
+   of products and no relationships at all. Nothing to parse.
+5. Remote, gemma4:26b, with the schema: no answer inside the client's
+   ten-minute limit. Not retried; whether it was loading or generating was
+   not looked at.
+
+* What the failures say
+
+- A schema fixes the shape and nothing else. The answer that passed every
+  structural check failed the only question asked of it.
+- The direction hint was not enough for a 3B model: INCLUDES went from the
+  company to each category, where the text and the hint put it from the
+  category to its products.
+- Constrained decoding cost ten times the tokens of the free answer,
+  because the schema makes the model describe every entity.
+- The hosted Graph Builder (005), given relationship triples, got the three
+  products under Home. The useful control there was the triples, the pairs
+  of types an edge may join. The schema here allows any type on either end.
+
+* Not done
+
+- gemma4:26b with a longer limit, and qwen2.5-coder, both on the remote host.
+- The schema tightened to triples (source type, relationship, target type),
+  which is the obvious next attempt.
+- Chunking: both pages went in as one prompt of 1,744 tokens.
+- Loading an answer into Neo4j. Nothing here writes to a database.

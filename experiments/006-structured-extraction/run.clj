@@ -1,0 +1,25 @@
+(require '[workshop.extract :as extract] '[clojure.pprint :as pprint] '[clojure.string :as str])
+(def page-text (slurp "data/Apple_10-K_2025_2_pages.txt"))
+(defn report [label options]
+  (let [answer (try (extract/extract page-text options)
+                    (catch Exception failure {:failed (str (class failure) " " (ex-message failure))}))
+        checked (when-not (:failed answer) (extract/check answer))]
+    (println "==" label (pr-str options))
+    (if (:failed answer)
+      (println "  failed:" (subs (:failed answer) 0 (min 200 (count (:failed answer)))))
+      (do (println "  meta:" (pr-str (meta answer)))
+          (println "  check:" (pr-str (-> checked
+                                          (update :unknown-entity-types count)
+                                          (update :unknown-relationship-types count)
+                                          (update :duplicate-entities count)
+                                          (update :dangling count))))
+          (println "  unsupported evidence:" (count (extract/unsupported page-text answer)) "of" (count (:relationships answer)))
+          (println "  Home includes:" (pr-str (extract/included-in answer "Home")))
+          (println "  relationship types:" (pr-str (frequencies (map :type (:relationships answer)))))
+          (when (:unparsed answer) (println "  unparsed:" (subs (:unparsed answer) 0 (min 300 (count (:unparsed answer))))))))
+    answer))
+(def runs (atom {}))
+(doseq [[label options] (read-string (first *command-line-args*))]
+  (swap! runs assoc label (report label options)))
+(spit (second *command-line-args*) (pr-str @runs))
+(shutdown-agents)

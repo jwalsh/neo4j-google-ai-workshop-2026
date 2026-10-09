@@ -2,7 +2,8 @@
 
 Every prompt a lab has a person type into a model, one file each, named for
 the lab and for what the prompt is for. The text is the lab's, from
-=neo4j-partners/hands-on-lab-neo4j-and-google= (Apache 2.0), unchanged. A
+=neo4j-partners/hands-on-lab-neo4j-and-google= (Apache 2.0), unchanged,
+except the rows marked "ours". A
 file holds the prompt and nothing else, so code can read it and a diff shows
 when one was edited.
 
@@ -12,8 +13,8 @@ Where a lab has a query and not a prompt, it is in =labs/= as Cypher.
 |-------------------------------------+-----+--------------------------------------------------------+--------------------------------+----------|
 | =lab-06-generate-model.txt=         |   6 | after "Generate model", the prompt box, before "Save"  | Document Intelligence          | yes, to the LLM Graph Builder instead (=experiments/005=) |
 | =lab-06-allowed-relationships.txt= |   6 | ours, not the lab's: the relationship triples a second run was held to | LLM Graph Builder, =allowedRelationship= | yes, 2026-10-08 (=experiments/005=, attempts 8 and 9) |
-| =lab-06-extraction-hint.txt=        |   6 | ours: what each type means and which way relationships point | a local model, as the system message | not yet (=experiments/006=) |
-| =lab-06-extraction-schema.json=     |   6 | ours: the JSON schema the local model's answer is constrained to | a local model, as the output format | not yet (=experiments/006=) |
+| =lab-06-extraction-hint.txt=        |   6 | ours: what each type means and which way relationships point | a local model, as the system message | yes, 2026-10-08 (=experiments/006=) |
+| =lab-06-extraction-schema.json=     |   6 | ours: the JSON schema the local model's answer is constrained to | a local model, as the output format | yes, 2026-10-08 (=experiments/006=) |
 | =lab-08-01-create-node.txt=         |   8 | first prompt to the agent; triggers "Authorize"        | Neo4j Agent, Gemini Enterprise | yes, 2026-10-08 (=notes/lab-08-use-neo4j-agent.org=) |
 | =lab-08-02-find-node.txt=           |   8 | checks the node the first prompt made                  | Neo4j Agent, Gemini Enterprise | yes, 2026-10-08 (=notes/lab-08-use-neo4j-agent.org=) |
 | =lab-08-03-describe-database.txt=   |   8 | asks what the shared database holds                    | Neo4j Agent, Gemini Enterprise | yes, 2026-10-08 (=notes/lab-08-use-neo4j-agent.org=) |

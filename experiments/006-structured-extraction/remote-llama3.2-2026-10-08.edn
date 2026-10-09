@@ -1,0 +1,381 @@
+{"remote llama3.2, schema"
+ {:entities
+  [{:name "Apple Inc.",
+    :type "Organization",
+    :description "the company the filing is about"}
+   {:name "iPhone",
+    :type "Product",
+    :description
+    "the Company's line of smartphones based on its iOS operating system"}
+   {:name "iPhone 17 Pro",
+    :type "Product",
+    :description "a product in the iPhone line"}
+   {:name "iPhone Air",
+    :type "Product",
+    :description "a product in the iPhone line"}
+   {:name "iPhone 17",
+    :type "Product",
+    :description "a product in the iPhone line"}
+   {:name "iPhone 16",
+    :type "Product",
+    :description "a product in the iPhone line"}
+   {:name "iPhone 16e",
+    :type "Product",
+    :description "a product in the iPhone line"}
+   {:name "Mac",
+    :type "Product",
+    :description
+    "the Company's line of personal computers based on its macOS operating system"}
+   {:name "MacBook Air",
+    :type "Product",
+    :description "a product in the Mac line"}
+   {:name "MacBook Pro",
+    :type "Product",
+    :description "a product in the Mac line"}
+   {:name "iMac",
+    :type "Product",
+    :description "a product in the Mac line"}
+   {:name "Mac mini",
+    :type "Product",
+    :description "a product in the Mac line"}
+   {:name "Mac Studio",
+    :type "Product",
+    :description "a product in the Mac line"}
+   {:name "Mac Pro",
+    :type "Product",
+    :description "a product in the Mac line"}
+   {:name "iPad",
+    :type "Product",
+    :description
+    "the Company's line of multipurpose tablets based on its iPadOS operating system"}
+   {:name "iPad Pro",
+    :type "Product",
+    :description "a product in the iPad line"}
+   {:name "iPad Air",
+    :type "Product",
+    :description "a product in the iPad line"}
+   {:name "iPad",
+    :type "Product",
+    :description "a product in the iPad line"}
+   {:name "iPad mini",
+    :type "Product",
+    :description "a product in the iPad line"}
+   {:name "Wearables",
+    :type "Segment",
+    :description
+    "a product category or line the filing groups products under"}
+   {:name "Apple Watch",
+    :type "Product",
+    :description "a product in the Wearables segment"}
+   {:name "Apple Watch Series 11",
+    :type "Product",
+    :description "a product in the Wearables segment"}
+   {:name "Apple Watch SE",
+    :type "Product",
+    :description "a product in the Wearables segment"}
+   {:name "Apple Watch Ultra",
+    :type "Product",
+    :description "a product in the Wearables segment"}
+   {:name "AirPods",
+    :type "Product",
+    :description "a product in the Wearables segment"}
+   {:name "AirPods Pro",
+    :type "Product",
+    :description "a product in the Wearables segment"}
+   {:name "AirPods Max",
+    :type "Product",
+    :description "a product in the Wearables segment"}
+   {:name "Beats",
+    :type "Product",
+    :description "a product in the Wearables segment"}
+   {:name "Apple Vision Pro",
+    :type "Product",
+    :description "a product in the Wearables segment"}
+   {:name "Home",
+    :type "Segment",
+    :description
+    "a product category or line the filing groups products under"}
+   {:name "Apple TV",
+    :type "Product",
+    :description "a product in the Home segment"}
+   {:name "Apple TV 4K",
+    :type "Product",
+    :description "a product in the Home segment"}
+   {:name "HomePod",
+    :type "Product",
+    :description "a product in the Home segment"}
+   {:name "HomePod mini",
+    :type "Product",
+    :description "a product in the Home segment"}
+   {:name "Accessories",
+    :type "Segment",
+    :description
+    "a product category or line the filing groups products under"}
+   {:name "Advertising",
+    :type "Service",
+    :description "the Company’s advertising services"}
+   {:name "AppleCare",
+    :type "Service",
+    :description
+    "the Company offers a portfolio of fee-based service and support products under the AppleCare brand"}
+   {:name "Cloud Services",
+    :type "Service",
+    :description "the Company’s cloud services"}
+   {:name "Digital Content",
+    :type "Service",
+    :description
+    "the Company operates various platforms, including the App Store, that allow customers to discover and download applications and digital content"}
+   {:name "Apple Arcade",
+    :type "Service",
+    :description "a game service"}
+   {:name "Apple Fitness+",
+    :type "Service",
+    :description "a personalized fitness service"}
+   {:name "Apple Music",
+    :type "Service",
+    :description
+    "which offers users a curated listening experience with on-demand radio stations"}
+   {:name "Apple News+",
+    :type "Service",
+    :description "a news and magazine service"}
+   {:name "Apple TV+",
+    :type "Service",
+    :description
+    "which offers exclusive original content and live sports"}
+   {:name "Payment Services",
+    :type "Service",
+    :description
+    "the Company offers payment services, including Apple Card, a co-branded credit card, and Apple Pay, a cashless payment service"}
+   {:name "Apple Card",
+    :type "Service",
+    :description "a co-branded credit card"}
+   {:name "Apple Pay",
+    :type "Service",
+    :description "a cashless payment service"}
+   {:name "Americas",
+    :type "Segment",
+    :description "a geographic region"}
+   {:name "Europe",
+    :type "Segment",
+    :description "a geographic region"}
+   {:name "Greater China",
+    :type "Segment",
+    :description "a geographic region"}
+   {:name "Japan", :type "Segment", :description "a geographic region"}
+   {:name "Rest of Asia Pacific",
+    :type "Segment",
+    :description "a geographic region"}
+   {:name "Competitor",
+    :type "Competitor",
+    :description
+    "a company or kind of company the filing says it competes with"}
+   {:name "Samsung",
+    :type "Competitor",
+    :description
+    "a company or kind of company the filing says it competes with"}
+   {:name "Google",
+    :type "Competitor",
+    :description
+    "a company or kind of company the filing says it competes with"}
+   {:name "Amazon",
+    :type "Competitor",
+    :description
+    "a company or kind of company the filing says it competes with"}],
+  :relationships
+  [{:source "Apple Inc.",
+    :type "OFFERS",
+    :target "iPhone",
+    :evidence
+    "iPhone is the Company’s line of smartphones based on its iOS operating system"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "iPhone 17 Pro",
+    :evidence "iPhone 17 Pro is a product in the iPhone line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "iPhone Air",
+    :evidence "iPhone Air is a product in the iPhone line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "iPhone 17",
+    :evidence "iPhone 17 is a product in the iPhone line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "iPhone 16",
+    :evidence "iPhone 16 is a product in the iPhone line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "iPhone 16e",
+    :evidence "iPhone 16e is a product in the iPhone line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "Mac",
+    :evidence
+    "Mac is the Company’s line of personal computers based on its macOS operating system"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "MacBook Air",
+    :evidence "MacBook Air is a product in the Mac line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "MacBook Pro",
+    :evidence "MacBook Pro is a product in the Mac line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "iMac",
+    :evidence "iMac is a product in the Mac line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "Mac mini",
+    :evidence "Mac mini is a product in the Mac line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "Mac Studio",
+    :evidence "Mac Studio is a product in the Mac line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "Mac Pro",
+    :evidence "Mac Pro is a product in the Mac line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "iPad",
+    :evidence
+    "iPad is the Company’s line of multipurpose tablets based on its iPadOS operating system"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "iPad Pro",
+    :evidence "iPad Pro is a product in the iPad line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "iPad Air",
+    :evidence "iPad Air is a product in the iPad line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "iPad",
+    :evidence "iPad is a product in the iPad line"}
+   {:source "Apple Inc.",
+    :type "OFFERS",
+    :target "iPad mini",
+    :evidence "iPad mini is a product in the iPad line"}
+   {:source "Apple Inc.",
+    :type "HAS_SEGMENT",
+    :target "Wearables",
+    :evidence
+    "Wearables includes smartwatches, wireless headphones and spatial computers"}
+   {:source "Apple Inc.",
+    :type "HAS_SEGMENT",
+    :target "Home",
+    :evidence
+    "Home includes Apple TV 4K, the Company’s media streaming and gaming device based on its tvOS operating system, and HomePod and HomePod mini, high-fidelity wireless smart speakers"}
+   {:source "Apple Inc.",
+    :type "HAS_SEGMENT",
+    :target "Accessories",
+    :evidence
+    "Accessories includes Apple-branded and third-party accessories"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "iPhone",
+    :evidence "iPhone is based on its iOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "iPhone 17 Pro",
+    :evidence "iPhone 17 Pro is based on its iOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "iPhone Air",
+    :evidence "iPhone Air is based on its iOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "iPhone 17",
+    :evidence "iPhone 17 is based on its iOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "iPhone 16",
+    :evidence "iPhone 16 is based on its iOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "iPhone 16e",
+    :evidence "iPhone 16e is based on its iOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "Mac",
+    :evidence "Mac is based on its macOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "MacBook Air",
+    :evidence "MacBook Air is based on its macOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "MacBook Pro",
+    :evidence "MacBook Pro is based on its macOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "iMac",
+    :evidence "iMac is based on its macOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "Mac mini",
+    :evidence "Mac mini is based on its macOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "Mac Studio",
+    :evidence "Mac Studio is based on its macOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "Mac Pro",
+    :evidence "Mac Pro is based on its macOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "iPad",
+    :evidence "iPad is based on its iPadOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "iPad Pro",
+    :evidence "iPad Pro is based on its iPadOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "iPad Air",
+    :evidence "iPad Air is based on its iPadOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "iPad",
+    :evidence "iPad is based on its iPadOS operating system"}
+   {:source "Apple Inc.",
+    :type "RUNS_ON",
+    :target "iPad mini",
+    :evidence "iPad mini is based on its iPadOS operating system"}
+   {:source "Apple Inc.",
+    :type "INCLUDES",
+    :target "Wearables",
+    :evidence
+    "Wearables includes smartwatches, wireless headphones and spatial computers"}
+   {:source "Apple Inc.",
+    :type "INCLUDES",
+    :target "Home",
+    :evidence
+    "Home includes Apple TV 4K, the Company’s media streaming and gaming device based on its tvOS operating system, and HomePod and HomePod mini, high-fidelity wireless smart speakers"}
+   {:source "Apple Inc.",
+    :type "INCLUDES",
+    :target "Accessories",
+    :evidence
+    "Accessories includes Apple-branded and third-party accessories"}
+   {:source "Apple Inc.",
+    :type "COMPETES_WITH",
+    :target "Samsung",
+    :evidence
+    "Samsung is a company or kind of company the filing says it competes with"}
+   {:source "Apple Inc.",
+    :type "COMPETES_WITH",
+    :target "Google",
+    :evidence
+    "Google is a company or kind of company the filing says it competes with"}
+   {:source "Apple Inc.",
+    :type "COMPETES_WITH",
+    :target "Amazon",
+    :evidence
+    "Amazon is a company or kind of company the filing says it competes with"}]},
+ "remote llama3.2, no schema"
+ {:unparsed
+  "Here are the extracted entities:\n\n**Products:**\n\n1. iPhone 17 Pro\n2. iPhone Air\n3. iPhone 17\n4. iPhone 16\n4. iPhone 16e\n5. MacBook Air\n6. MacBook Pro\n7. iMac\n8. Mac mini\n9. Mac Studio\n10. Mac Pro\n11. iPad Pro\n12. iPad Air\n13. iPad\n14. iPad mini\n15. Apple Watch Series 11\n16. Apple Watch SE 3\n17. Apple Watch Ultra 3\n18. AirPods\n19. AirPods Pro\n20. AirPods Max\n21. Beats products\n22. Apple Vision Pro\n23. Apple TV 4K\n24. HomePod\n25. HomePod mini\n\n**Services:**\n\n1. Advertising\n2. AppleCare\n3. Cloud Services\n4. Digital Content\n5. Apple Arcade\n6. Apple Fitness+\n7. Apple Music\n8. Apple News+\n9. Apple TV\n10. Payment Services\n11. Apple Card\n12. Apple Pay\n\n**Segments:**\n\n1. Americas\n2. Europe\n3. Greater China\n4. Japan\n5. Rest of Asia Pacific\n\n**Competition:**\n\n1. Competitors (general term, no specific company mentioned)"},
+ "remote gemma4:26b, schema"
+ {:failed "class java.net.http.HttpTimeoutException request timed out"}}
