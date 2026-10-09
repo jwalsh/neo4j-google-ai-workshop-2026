@@ -7,6 +7,7 @@
     (datasets)
     (status)
     (dashboard)
+    (use-env! \"books-graph.env\")   ; another graph, same REPL
     (peek-dataset \"hands-on-lab/form13-2023.csv\")"
   (:require [workshop.dashboard :as dashboard]
             [workshop.env :as env]
@@ -17,17 +18,39 @@
 
 (defonce ^:private session-driver (atom nil))
 
+;; The env file the session's driver is opened from. nil is the default:
+;; WORKSHOP_ENV if the process has it, else .env.
+(defonce ^:private session-env-file (atom nil))
+
 (defn driver
-  "The session's driver, opened from .env the first time it is asked for."
+  "The session's driver, opened the first time it is asked for, from the
+  env file `use-env!` named or else from .env."
   []
-  (or @session-driver (reset! session-driver (neo4j/connect))))
+  (or @session-driver
+      (reset! session-driver
+              (neo4j/connect (if-let [env-file @session-env-file]
+                               (env/load-env env-file)
+                               (env/load-env))))))
 
 (defn disconnect
-  "Closes the session's driver. The next call to `driver` reads .env again."
+  "Closes the session's driver. The next call to `driver` reads the env
+  file again."
   []
   (when-let [open-driver @session-driver]
     (.close ^java.lang.AutoCloseable open-driver)
     (reset! session-driver nil)))
+
+(defn use-env!
+  "Points `q` and the rest at the Neo4j another env file names, without a
+  new REPL: (use-env! \"books-graph.env\"). nil goes back to .env. Returns
+  the file, the server and how many nodes it has, so a wrong or stopped
+  server shows at once."
+  [env-file]
+  (disconnect)
+  (reset! session-env-file env-file)
+  {:env (or env-file (System/getenv "WORKSHOP_ENV") ".env")
+   :uri (get (if env-file (env/load-env env-file) (env/load-env)) "NEO4J_URI")
+   :nodes (:nodes (first (neo4j/query (driver) "MATCH (n) RETURN count(n) AS nodes")))})
 
 (defn q
   "Runs one Cypher statement and returns its rows."

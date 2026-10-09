@@ -79,17 +79,17 @@ What each lab does, where it was done, what is here to do it again, and the
 note that has the detail. "Console" means a browser signed in as the lab
 account; nothing in this repository replaces that.
 
-| lab | what it does                              | done in                  | to do it again                                     | note |
-|-----+-------------------------------------------+--------------------------+----------------------------------------------------+------|
-|   1 | sign in to the lab's Google account       | console                  | nothing                                            | -    |
-|   2 | deploy Aura from the marketplace          | console                  | =gmake .env=, then fill it from the credentials file | [[file:notes/lab-02-deploy-neo4j.org][lab 2]] |
-|   3 | connect and list databases                | console, then Clojure    | =bb ping=, =bb databases=                          | [[file:notes/lab-03-connect-to-neo4j.org][lab 3]] |
-|   4 | load a day of Form 13 filings, keyed      | console, then Clojure    | =bb form13 load=, =bb form13 verify=, =labs/lab-04/= | [[file:notes/lab-04-query.org][lab 4]] |
-|   5 | Bloom: search, degree centrality          | console                  | =bb form13 degree= for the numbers, no picture     | [[file:notes/lab-05-bloom.org][lab 5]] |
-|   6 | a 10-K into a graph                       | not available; API instead | =experiments/005-graph-builder-api=, =labs/lab-06/= | [[file:notes/lab-06-document-intelligence.org][lab 6]] |
-|   7 | add the Neo4j Agent to Gemini Enterprise  | console                  | nothing                                            | [[file:notes/lab-07-deploy-neo4j-agent.org][lab 7]] |
-|   8 | three prompts to that agent               | console                  | =prompts/lab-08-*=                                 | [[file:notes/lab-08-use-neo4j-agent.org][lab 8]] |
-|   9 | an Aura agent made from a prompt          | console, checked in Clojure | =prompts/lab-09-*=, =labs/lab-09/= (the exported agent and checks) | [[file:notes/lab-09-aura-agents.org][lab 9]] |
+| lab | what it does                             | done in                     | to do it again                                                     | note  |
+|-----+------------------------------------------+-----------------------------+--------------------------------------------------------------------+-------|
+|   1 | sign in to the lab's Google account      | console                     | nothing                                                            | -     |
+|   2 | deploy Aura from the marketplace         | console                     | =gmake .env=, then fill it from the credentials file               | [[file:notes/lab-02-deploy-neo4j.org][lab 2]] |
+|   3 | connect and list databases               | console, then Clojure       | =bb ping=, =bb databases=                                          | [[file:notes/lab-03-connect-to-neo4j.org][lab 3]] |
+|   4 | load a day of Form 13 filings, keyed     | console, then Clojure       | =bb form13 load=, =bb form13 verify=, =labs/lab-04/=               | [[file:notes/lab-04-query.org][lab 4]] |
+|   5 | Bloom: search, degree centrality         | console                     | =bb form13 degree= for the numbers, no picture                     | [[file:notes/lab-05-bloom.org][lab 5]] |
+|   6 | a 10-K into a graph                      | not available; API instead  | =experiments/005-graph-builder-api=, =labs/lab-06/=                | [[file:notes/lab-06-document-intelligence.org][lab 6]] |
+|   7 | add the Neo4j Agent to Gemini Enterprise | console                     | nothing                                                            | [[file:notes/lab-07-deploy-neo4j-agent.org][lab 7]] |
+|   8 | three prompts to that agent              | console                     | =prompts/lab-08-*=                                                 | [[file:notes/lab-08-use-neo4j-agent.org][lab 8]] |
+|   9 | an Aura agent made from a prompt         | console, checked in Clojure | =prompts/lab-09-*=, =labs/lab-09/= (the exported agent and checks) | [[file:notes/lab-09-aura-agents.org][lab 9]] |
 
 Before any of it, with no account: =experiments/008-local-graph-dx= runs
 Lab 4's load on an embedded Neo4j and checks it against the file. After it:
@@ -114,7 +114,11 @@ official Java driver, =workshop.gcp= over Google's Cloud Storage client.
 =bb tasks= lists the commands (=bb ping=, =bb counts=, =bb cypher FILE=,
 =bb datasets=, =bb peek OBJECT=, =bb test=). In Emacs, =cider-jack-in= opens a
 REPL in =dev/user.clj=, where =(q "MATCH ...")= runs a statement and returns
-rows as maps.
+rows as maps. =workshop.el= at the root, once loaded (=M-x load-file=), adds
+=M-x workshop-repl= (a REPL beside a page of forms: an existing one, else
+the one =bb repl= left a port for, else jack-in) and =M-x workshop-graph=
+(point that REPL at the lab's instance, the filings, the papers or the
+books, and open the matching page).
 
 =bb form13= explores Lab 4's day file locally, with no database: =summary=,
 =top=, =degree=, =variants=, =odd=; =verify= compares the database with the

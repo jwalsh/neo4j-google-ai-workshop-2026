@@ -71,7 +71,10 @@ workshop.env-test/parse-dotenv-test`.
   them; `telemetry` holds spans in memory for `/traces`; `ollama` is the
   one model client; `agent` answers a question by choosing a template;
   `papers` reads the paper cache; `cli` is what `bb` calls. `dev/user.clj` is the REPL namespace;
-  `.dir-locals.el` makes `cider-jack-in` start in it. `dev/explore.clj` is
+  `.dir-locals.el` makes `cider-jack-in` start in it. `workshop.el` at the
+  root is the Emacs side: `workshop-repl` lays out a page beside the REPL,
+  `workshop-graph` switches graphs by evaluating `(user/use-env! FILE)`. A
+  new data source gets an entry in its `workshop-graphs`. `dev/explore.clj` is
   `(comment ...)` blocks per lab, evaluated a form at a time; a new lab
   gets a block there.
 - `prompts/` holds every prompt a lab has a person type into a model, one
