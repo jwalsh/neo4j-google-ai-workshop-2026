@@ -1,0 +1,559 @@
+#+TITLE: Review, 2026-10-08
+#+DATE: 2026-10-08
+
+Not in the lab. A staff-level read of the repository as it stood at commit
+=69424c0=, about 20:15 EDT, an hour before the lab account expires. Asked
+for by the owner: "review what we're working on and our clojure specific
+views of the work with the diagrams to illustrate: rdf and logic programming
+are related triple stores".
+
+Sources are named where they are used. "Run for this review" means I ran
+it: =bb test= (28 tests, 75 assertions, 0 failures), =bb form13 summary=,
+=bb counts=, =bb labs=, the three gates (002: 14 of 14, 003: 23, 004: 17 of
+17), and three read-only statements of my own through =bb cypher= from a
+scratch file. Nothing was written to the database or to an existing file.
+=experiments/007-query-ui-cljs= was not read: it is another session's, mid
+build. The working tree moved while this was written: by 20:30
+=src/workshop/extract.clj= had an uncommitted edit (the Ollama address from
+=OLLAMA_URL=) and =experiments/008-local-graph-dx= had appeared. Neither is
+reviewed here; what is said of =extract= is of the committed file.
+
+The four diagrams are ours, not redrawn slides, and each rendered with
+=mmdc=.
+
+* The short version
+
+1. The repository is no longer attendee notes. It is three things: notes
+   (11 files), an instrument panel in Clojure (2,304 lines in
+   =src/workshop/=), and a small comparative study of data models
+   (=experiments/002= to =004=). The third is the best work in it and the
+   one nobody asked the workshop for.
+2. The shape is sound where it has one oracle: the day file. Everything
+   that can be checked is checked against 7,381 rows, by the database
+   (=form13/verify=) and by each experiment's gate. That is a star, not a
+   chain, and it is why five forms of the same data are comparable at all.
+3. It is over-built on watching itself (status, dashboard, labs, audit:
+   1,269 lines) and under-built on the workshop's subject. The stated aims
+   on the architecture slide are fewer tokens, better accuracy, more
+   explainability from a graph under an agent (=notes/architecture.org=).
+   Labs 7, 8 and 9 are the agent. None ran, and nothing here tests any of
+   the three aims.
+4. The thesis is exact for one fragment (conjunctive queries over ground
+   facts: SPARQL patterns, Datalog clauses, miniKanren goals), an analogy
+   for storage, and wrong as worded: logic programming is not a triple
+   store, and experiment 004 is the evidence, because its =holds= has four
+   places and needs no holding node.
+5. The one thing in the database that cannot be rebuilt from a file is the
+   model's extraction (117 entities). It goes at about 21:20 with the
+   instance. Save it as rows first.
+
+* What this repository now is
+
+** As against what it set out to be
+
+From =CLAUDE.md= as first written (quoted in the audit, discrepancy 8):
+"there is nothing to build or test here". From =git log=: 41 commits
+between 16:15 and 20:00. By =wc=: 903 lines of notes, 2,304 lines of
+Clojure in =src/workshop/=, 909 lines of experiment READMEs, 28 tests.
+
+The drift was not careless. Each addition answers something that bit:
+=pipefail= after finding 9, the editor read-back after 16, =bb redact=
+after 18, the constraint listing after 24. The findings file is the
+strongest thing in =.meta/=: 25 entries, each hit and not reasoned to.
+
+What it is now, plainly:
+
+| part | where | size | verdict |
+|------+-------+------+---------|
+| notes on the labs | =notes/=, =README.org= | 11 notes | good for Labs 2 to 6, absent for 7 to 9, two of five lectures |
+| instrument panel | =status=, =dashboard=, =labs=, =audit= | 1,269 lines | more than a five-hour lab needs |
+| the file as oracle | =form13=, =neo4j=, =gcp=, =env= | 398 lines | the core, and right |
+| stand-ins for Lab 6 | =graph_builder=, =extract=, =diagram= | 342 lines | one worked, one never ran |
+| model study | =experiments/002= to =004= | three gates | the part worth a second day |
+
+** Whether the shape is sound
+
+Sound: the oracle. =workshop.form13= reads the CSV into maps and says what
+a correct load holds (=expected-counts=, =form13.clj= lines 54 to 60);
+=verify= compares the database with it; the gates of 002, 003 and 004 each
+hard-code the same six numbers and then compare their engine with plain
+Clojure over the rows. No experiment depends on another or on the
+database. That independence is why agreement between them means something.
+
+I disagree with =.meta/README.md= lines 14 to 18: "the oracle here is the
+lab environment itself ... Nothing local can stand in for that." For Lab 4
+the repository's own practice says the opposite, and the practice is
+right: the file defines the load, the database is the thing under test.
+The sentence holds for Labs 5 to 9 only. The same file has a
+=methodology-delta= to state, per the owner's global conventions, and this
+is it: two oracles, one local and exact, one remote and expiring.
+
+Sound: reads and writes are kept apart. =labs= and =audit= send only
+reads, and a test checks the statements (=labs_test.clj=,
+=statements-read-only-test=).
+
+Not sound: the comparison stops at the file. Each experiment says so under
+"What it is not": none queried Aura. "Five forms of the same facts" is
+four forms of the file plus one database that was shown equal to the file
+by three counts and two degree tables (=labs/lab-5=). That is enough here.
+It would not be for a load with transformations in it.
+
+** Over-built
+
+- =workshop.labs= is 529 lines and six of its ten steps return a constant
+  string saying why they cannot run (=lab-1=, =lab-2=, =lab-6= to =lab-9=).
+  =notes/v2-cli-path.org= says the same in 248 lines of prose. One of the
+  two is a copy. A map of data would hold the blocked steps; the note is
+  the better home for the sentences.
+- =workshop.audit= at 433 lines is the largest namespace, auditing notes
+  that total 903. It earned its keep once (two stale claims found). It
+  will not earn it daily.
+- Three parsers for one org checklist: the Makefile's =agenda= awk,
+  =status/checklist= (=status.clj= line 134) and =audit/checklist-items=
+  (=audit.clj= line 50).
+- Two runners for the same two verbs. =gmake ping= and =gmake cypher= go
+  through the Query API, one statement a file; =bb ping= and =bb cypher= go
+  over Bolt, any number. The =cypher-shell= branch of the first has never
+  executed (=.meta/README.md=, "Never verified").
+- A dashboard that reloads every 20 seconds for an environment with a
+  five-hour life.
+
+** Under-built
+
+- The workshop's subject. =README.org=: 6 of 14 boxes. No note for three
+  lectures. Nothing for Labs 7 to 9 beyond why they are blocked.
+- The oracle's own tests. =form13= is what everything is checked against
+  and has one test of two functions, filed in =test/workshop/env_test.clj=
+  (line 46). =neo4j/statements=, the splitter every =bb cypher= depends on,
+  has none that I found.
+- The owner's interface. Every experiment and =.meta/README.md= say the
+  same thing: nobody has run =cider-jack-in= here. The forms evaluate from
+  a script. The interface the work is for is the one path never taken.
+
+* The Clojure-specific views
+
+The layer as built: [[file:diagrams/clojure-views.mmd][diagrams/clojure-views.mmd]]. Drawn from the =ns= forms,
+not from the README.
+
+** What it makes visible that the consoles do not
+
+- *Rows as data.* =(q "MATCH ...")= returns a vector of maps
+  (=neo4j.clj=, =query=), so the next form is =sort-by= or =frequencies=
+  and not a second query. The consoles return a picture or a table that
+  ends there. Experiment 003's README makes the same point about Datalog:
+  the query ends at a set and the rest is Clojure.
+- *The file before the database.* =bb form13 variants= found 258 CUSIPs
+  under more than one name before any load, which is the whole reason Lab
+  4 has a second load. The lab shows the consequence (2,577 against 2,251
+  companies); the file shows the cause.
+- *A load with an expected answer.* =verify= gives ={:expected :actual
+  :loaded?}=. The console reports what it did, not whether that was right.
+- *Labs as functions.* =(labs/run-all)= is a table of what was done and
+  what was not, with evidence. Honest about its limits: the statuses
+  distinguish skipped from blocked.
+- *A subgraph from rows.* =diagram/edges->mermaid= drew the Home category
+  from a query (=notes/diagrams/lab-06-home-category.mmd=) and the note
+  could then set it beside the console's picture and the lab's.
+- *What bit, as data.* The units finding in =notes/lab-04-query.org= (value
+  over shares is a thousand times a share price across the file) came from
+  dividing two columns at the REPL. The lab reads one row of it as a bad
+  filing. I think the note is right and the lab is wrong, and the note says
+  correctly that it is an inference.
+
+** Where it is thin
+
+- *=->clj= throws identity away.* A node becomes ={:labels :properties}=
+  and a relationship ={:type :properties}= (=neo4j.clj= lines 33 to 41):
+  no element id, no start, no end. A path comes back as two parallel
+  vectors from which the graph cannot be rebuilt when two nodes have equal
+  properties, and direction is lost. This is why =workshop.diagram= needs
+  its own five-column row shape and a hand-written query
+  (=labs/lab-06/06-home-edges.cypher=) for each picture. Keep the ids and
+  the endpoints and any path query is drawable.
+- *=query= reads =.env= on every call.* =(database-name)= at =neo4j.clj=
+  line 69 loads the file each time and ignores the map =connect= was given.
+  The docstring at line 16, "The returned driver carries the database name
+  as metadata", is not true: nothing attaches metadata.
+- *=load!= will fail the first time it loads.* Not run, because running it
+  writes; this is from reading. =labs/lab-04/06-relationships.cypher= ends
+  =IN TRANSACTIONS OF 1000 ROWS=. =neo4j/query= uses the driver's
+  =executableQuery=, which runs in a managed transaction, and Cypher allows
+  =CALL { } IN TRANSACTIONS= only in an implicit one (the Cypher manual and
+  the Java driver manual, as I remember them; not looked up today). The
+  console and the Query API are implicit, which is why the file worked
+  there. Through =load!= I expect files 03 to 05 to succeed and 06 to
+  throw, leaving companies and managers with no OWNS, which
+  =labs/lab-4-decision= then reports as =:mismatch= and refuses to touch
+  again. =.meta/README.md= already lists the branch as never run; this is
+  the reason it matters.
+- *=workshop.extract= is reached from nowhere.* No task, no dev page, no
+  test requires it. Its docstring (line 11) says
+  =experiments/006-structured-extraction= "has what was tried". There is
+  no such directory; =prompts/README.org= says "not yet". Code committed
+  ahead of its experiment, with a pointer to a log that does not exist.
+
+** Where it is duplicated
+
+- =form13/database-counts= (=form13.clj= lines 142 to 147) and
+  =:lab-4/counts= (=labs.clj= lines 192 to 194) are the same string.
+- =graph-builder/run-lab-06!= (lines 161 to 173) is =run-source!= (147 to
+  159) with one argument fixed.
+- =parse-row= exists four times: at the root and in each of 002, 003, 004.
+  That one is deliberate, the price of experiments that share nothing, and
+  I would leave it.
+- Statements live in two places: =labs/*.cypher= for people and strings in
+  =labs/statements= and =audit/statements= for code. =prompts/= got this
+  right: one file, read by the code that sends it.
+
+** A second day on it
+
+Should: make =->clj= keep ids and endpoints; give =query= the database
+name once; run file 06 through an auto-commit session; put a snapshot
+function beside =counts= that writes a subgraph to EDN in =data/=; move
+the statements to files; open Emacs.
+
+Should not: add a fifth entry point, a second dashboard, another audit, or
+a wrapper library over the driver. The driver interop is 109 lines and
+that is the right size. The layer's value is that it is thin enough to
+read in one sitting; it has stopped being that around =labs= and =audit=.
+
+* The thesis: RDF and logic programming are related triple stores
+
+One row in all five forms: [[file:diagrams/one-fact-five-forms.mmd][diagrams/one-fact-five-forms.mmd]]. The family
+and what moves between neighbours: [[file:diagrams/triple-stores-family.mmd][diagrams/triple-stores-family.mmd]].
+
+The claim has three parts and they do not fare alike. (a) RDF and logic
+programming are related. (b) Both come down to stores of triples. (c) So
+what is learned in one carries to the other.
+
+** Where they coincide, and it is exact
+
+A fact is a tuple. An RDF triple is a ground atom of one three-place
+relation. A datom is the same with a transaction on the end. A pldb fact
+is a ground atom of a relation of any arity. A query is a join: a SPARQL
+basic graph pattern, a Datalog =:where=, and a conjunction of miniKanren
+goals are all the conjunctive query, with shared variables doing the
+joining. A rule is a join with a name.
+
+The experiments measured this and it held, on every number they share:
+
+| question | 002 SPARQL | 003 Datalog | 004 miniKanren | rows |
+|----------+------------+-------------+----------------+------|
+| managers, CUSIPs, holdings | 28, 2,251, 7,381 | same, both stores | same | same |
+| CUSIPs under several names | 258, =GROUP BY ... HAVING= | 258, cardinality-many | 258, =company= twice and =!== | 258 |
+| top manager | Envestnet, 1,615 | same | same, asked two ways | same |
+| holders of Apple | 22 | 22 (DataScript) | 22, asked two ways | 22 |
+| manager pairs sharing a company | not gated | 281 | 562 ordered, which is 281 | 281 |
+| Envestnet and Guggenheim share | not gated | in the 281 | 1,099 | 1,099 |
+
+From the three READMEs and their gates, re-run for this review. The last
+figure is also what the audit read from Aura in Cypher
+(=.meta/audit-2026-10-08.md=, "share 1,099"), so on that one number four
+engines and a =group-by= agree.
+
+The named join held in two of three. DataScript's =co-holds= rule returns
+the same 281 pairs as the inlined clauses (003, gate "rule = inline").
+core.logic's =holdso= is two lines and =both-holdo= and =chaino= are built
+from it (004). SPARQL has no rules. 002's property path
+=f13:owns/^f13:owns= is one fixed shape of rule, not a way to write them.
+
+The background, from general knowledge and not from anything measured
+here: RDF's semantics is model-theoretic, the RDFS and OWL RL entailment
+rules are Datalog rules, and SPARQL's expressive power is that of
+non-recursive Datalog with negation (Angles and Gutierrez, 2008, as I
+remember the citation). So part (a) is true and well known. What the
+repository adds is that it survives contact with real libraries on real
+rows.
+
+** Where it is an analogy
+
+*"Triple store."* The arity is the whole difference, and it shows in the
+one place the experiments had to make a decision: =OWNS= carries three
+properties.
+
+| form | what the edge became | cost for 7,381 holdings | source |
+|------+----------------------+-------------------------+--------|
+| Neo4j | one relationship with properties | 7,381 relationships | =labs/lab-04/06= |
+| RDF | a Holding node, 7 triples, plus the bare =owns= | 59,048 of 66,183 triples | 002 |
+| RDF 1.2 | an annotated triple, stored as 4 with a reifier | the Holding again, IRI left out | 002 |
+| DataScript | a holding entity, 7 datoms | 51,667 of 56,523 datoms | 003 |
+| Asami | a node with two links and four values | 49,142 triples in all | 003 |
+| pldb | nothing: =holds= has four places | 7,381 facts of 9,986 | 004 |
+
+The 9,986 is my sum of 004's fact table (28 + 2,577 + 7,381). Note 51,667:
+it is 7 by 7,381, the number of cells in the CSV, and it turns up in both
+002 and 003. A triple store spells each cell out as its own fact and then
+needs a made-up subject to hang them on. Reification, the holding entity
+and the n-ary relation pattern are three names for that subject.
+
+So the edge-with-properties problem is a problem of fixed arity three, not
+of logic. Experiment 004 does not have it. I disagree with 003's README at
+line 192, "the relationship with properties is the one thing the graph has
+that the tuples lack": it is the one thing the graph has that
+three-tuples lack. And 004 dropped the quarter and the filing id to get
+down to four places, so its win is partly a smaller question.
+
+*Identity.* Four regimes, and each failed differently on the same 258
+CUSIPs or on the second source:
+
+| form | identity is | what happened | source |
+|------+-------------+---------------+--------|
+| Neo4j, naive | whatever =MERGE= names: name and CUSIP | 2,577 companies for 2,251 CUSIPs | =notes/lab-04-query.org= |
+| Neo4j, keyed | node key on =cusip=, =ON CREATE SET= | first name wins, the rest dropped, silently | 002, 003 |
+| Neo4j, second source | the same node key | loud refusal: "must have the property cusip" | finding 24 |
+| RDF | the IRI a function mints | all 2,577 names kept; nothing checks the minting | 002 |
+| DataScript, obvious schema | unique attribute, upsert | last name wins: 0 variants, no error | 003, =lossy-schema= |
+| DataScript, one word changed | the same, name made many | 258 | 003 |
+| pldb | none: a term is its value | 2,577 =company= facts; every count needs =distinct= | 004 |
+
+Finding 24 is the sharp one and worth reading against this table. The
+constraint that refused the model's =Company= is the existence half of a
+node key. A plain uniqueness constraint would have let a company with no
+CUSIP in. So 003's table (line 178) is wrong to call Lab 4's schema "two
+uniqueness constraints", and 002 (line 148) is wrong that "neither has
+one imposed": Neo4j had two imposed, and they are what bit. In RDF the
+same collision cannot fail. A second source mints its own IRI for Apple
+and the two never meet: silent non-identity where Neo4j gave a loud
+refusal. Neither is a join.
+
+*Schema.* None (RDF, Asami, maps), per attribute (DataScript: five
+declared), per label and key (Neo4j: two node keys, and now a uniqueness
+constraint on =__Entity__.id=, from =SHOW CONSTRAINTS= run for this
+review), per relation and position (pldb: =db-rel= fixes arity and which
+places are indexed). They are not points on one scale. Cardinality is a
+schema question in DataScript, a non-question in RDF, and not expressible
+as a constraint in any of the others here.
+
+*Index.* The word means three things.
+
+- In a triple or datom store it is a sort order of the whole set. Arity
+  three is small enough to keep several permutations, so any pattern with
+  one place bound has an index. This is what "store" buys in "triple
+  store". From general knowledge of Jena and DataScript; neither 002 nor
+  003 looked at an index.
+- In Neo4j it is per label and property, opt in, with a planner choosing.
+  The audit lists a range index behind each node key and three vector
+  indexes the Graph Builder made.
+- In pldb it is one hash map per marked position and one index per call:
+  the leftmost position that is both indexed and ground. No planner. 004
+  measured it: the same join with =holds= stored manager first took 758.8
+  ms and cusip first 8.2 ms; 886.9 and 8.7 when I re-ran the gate.
+  Argument order is the query plan, and goal order is the rest of it (=!==
+  moved after the two =company= calls: about 100 ms down to about 30).
+
+That last one is where the analogy is thinnest. A logic database of n-ary
+relations has no uniform indexing to fall back on. The author is the
+planner.
+
+** Where it is wrong
+
+*Multiplicity.* "A query is a join" is true up to how many times an
+answer counts, and the forms disagree:
+
+| form | facts are | answers are | aggregates | what it cost here |
+|------+-----------+-------------+------------+-------------------|
+| RDF, SPARQL | a set: every row added twice, still 66,183 | a bag | in the language | joining names into a =SUM= would multiply it (002) |
+| DataScript | a set | a set | yes, with =:with= | none once =:with ?holding= was written |
+| Asami | a set | a set | yes | =sum= gave 9.6331905975E13 for 9.6335448383E13, silently (003) |
+| pldb, miniKanren | a set | a bag, one per derivation | none | 37,632 answers for 562 pairs; 3 names for Westwood's 2 CUSIPs (004) |
+| Cypher | a multigraph | a bag | in the language | none; =count(DISTINCT c)= where needed |
+
+Asami's total is short by about 3.5 billion, which is exactly the
+duplicate values: the set was taken before the sum. The right total is
+also what =bb form13 summary= printed for this review. Same data, same
+logical query, two answers, no error. Lab 5 is degree centrality, which
+is a count, and 004 says plainly that the logic engine contributes
+nothing to it. A thesis that puts SPARQL and miniKanren in one family has
+to stop before aggregation.
+
+*"Logic programming" is two things.* 003 is Datalog: no function
+symbols, set semantics, always terminates. 004 is miniKanren: terms with
+structure, search, bags, and no promise of ending. RDF's relatives are
+the first kind. 004's =chaino= returns the path as a list, which neither
+SPARQL (002: "no path values") nor Datalog can do, and the same engine
+has 114,962,418 derivations for the two-link join, worked out and not
+run. The thesis is exact for RDF and Datalog and loose for RDF and
+miniKanren.
+
+*The property graph is not a triple store either.* An edge in Neo4j has
+its own identity and its own record. Two OWNS between one pair is legal
+(the audit checked there are none). A set of triples cannot say that
+without the Holding node.
+
+** What was not tested
+
+- *Open and closed world.* This is the difference usually cited, and
+  nothing here measured it. 002 has no RDFS, no OWL, no inference, and no
+  =NOT EXISTS= or =MINUS= (I searched =rdf.clj=). 003 has no =not=. Only
+  004 used negation: =nafc=, 219 CUSIPs Guggenheim holds and Envestnet
+  does not, equal to the set difference. That is negation as failure,
+  which is the closed-world reading. As run, all five forms behaved
+  closed-world. The one place the distinction showed was finding 24: a
+  node key is a closed-world statement, and RDF as loaded here had no way
+  to make one. From general knowledge, that is SHACL's job, not OWL's.
+- *Merging by global name.* The point of an IRI is that two sources can
+  agree on it. 002 says so and adds "nothing here tests that". The
+  repository has the test case sitting in its database (see the next
+  section) and did not run it.
+- *Recursion.* The rule in 003 is not recursive. 004's is, bounded at
+  three hops, over a graph where everything is within two links of
+  everything. "Nothing in it to search" is 004's own verdict.
+- *Time.* The datom's fourth place. DataScript keeps no history (003).
+
+** Verdict
+
+| claim | standing | on what |
+|-------+----------+---------|
+| a fact is a tuple; a query is a join | exact | six shared numbers, three gates |
+| a rule is a named join | exact for Datalog and miniKanren; SPARQL has none | 003, 004 |
+| RDF is related to logic programming | exact for Datalog; an analogy for miniKanren | 003 against 004 |
+| both are triple stores | wrong for logic programming: arity is free | 004's =holds= |
+| identity, schema, index carry across | analogy; each bit differently | the tables above |
+| the same query gives the same number | wrong once anything is counted | Asami's sum, pldb's bags |
+| open against closed world separates them | not tested here | no inference, one =nafc= |
+
+Reworded so that it is true: triples, datoms and relations are the same
+facts under the same joins, and they differ in everything a database adds
+to that: arity, identity, multiplicity, constraints and who plans the
+query. The property graph differs in the first two as well.
+
+* Risks and loose ends
+
+** Two graphs, no join
+
+[[file:diagrams/two-graphs-no-join.mmd][diagrams/two-graphs-no-join.mmd]]. From =bb counts= and three read-only
+statements run for this review at about 20:10 EDT:
+
+- 2,251 Company, 28 Manager, 7,381 OWNS: Lab 4, unchanged.
+- 2 Document, 35 Chunk, 117 =__Entity__=, of which 6 Organization: both
+  Graph Builder runs of experiment 005.
+- Relationships between the two: 0.
+- The six Organization ids: "Apple", "Apple Inc.", "The Company",
+  "Company", "Other Resellers", "Third-Party Cellular Network Carriers".
+  So the filer is four nodes on one side and one on the other (CUSIP
+  037833100, APPLE INC, held by 22 managers).
+
+The workshop's picture is one graph under an agent, built from structured
+and unstructured sources (=notes/lecture-neo4j-and-ai.org=). This database
+is that picture with the middle missing. The audit said it first
+(discrepancy 1); 005 names the honest fix and does not make it. It is also
+the untested half of the thesis: a shared name is what RDF is for, and
+here the two sources share no key at all, because two pages of a 10-K do
+not print a CUSIP. No data model fixes that. It is entity resolution, and
+someone has to assert the edge.
+
+A second identity regime came in with it: =__Entity__.id= is unique and
+its value is whatever string the model wrote. 005, attempt 9, already hit
+the consequence: the two runs merged entities on =id= and the comparison
+between them is muddied.
+
+** Dependencies that will not hold
+
+- *A login token.* The Graph Builder needs an Auth0 token copied out of a
+  browser's localStorage, good for a day (005, attempt 3). "No clicking
+  after the login" is the hypothesis as written and it is fair, but the
+  path is not repeatable without a person.
+- *An API with one client.* The backend's address is a Cloud Run URL with
+  a project number in it, hard-coded at =graph_builder.clj= line 20, and
+  its contract is whatever its own front end sends (finding 25). It can
+  change on any deploy, with no notice owed to anyone.
+- *Credentials to a Labs service, on the command line.* Every call sends
+  the instance's password, base64 encoded, to that backend, and both the
+  password and the bearer token go into =curl='s arguments
+  (=graph_builder.clj= lines 52 to 56), where =ps= shows them. The
+  Makefile takes care to keep the password out of argv (=RUN_CYPHER=,
+  =-K <(...)=). Low stakes tonight: the credentials die with the lab. It
+  is the habit that should not travel.
+- *A local model.* =workshop.extract= expects Ollama on port 11434 with
+  =llama3.2:3b=. Whether either is present was not checked, and the code
+  has, by its own index, not run.
+- *The lab itself.* About an hour left at the time of writing, by
+  =LAB_EXPIRES_AT=.
+
+** What the notes overclaim, or get wrong
+
+Beyond what the audit lists. File and line each.
+
+- =.meta/README.md= line 42: "71 entity nodes". 117 now, with 2 documents
+  and 35 chunks. Stale since 005's attempt 8. 005 reports that run as "130
+  nodes"; I could not make 130 from the counts (46 new entities, 26
+  chunks, 1 document is 73) and did not chase it.
+- =README.org= line 101: "three ok and six blocked". =bb labs= prints
+  "3 ok, 1 skipped, 6 blocked". Ten steps, not nine.
+- =src/workshop/neo4j.clj= line 16: the metadata that is not attached.
+- =src/workshop/extract.clj= line 11: the experiment that does not exist.
+- =dev/user.clj= line 5: the example filters on =m.name=. The property is
+  =managerName=, so the example returns nothing.
+- =experiments/003-form13-datalog/README.org= line 178: node keys, not
+  uniqueness constraints. Line 192: see above.
+- =experiments/002-form13-rdf/README.org= line 148: "Neither has one
+  imposed."
+- =prompts/README.org= lines 4 and 5: "The text is the lab's ...
+  unchanged", above a table in which three files are marked "ours".
+- =notes/lab-06-document-intelligence.org= line 5 opens "Not done" and
+  line 48 is headed "Done another way". Both are true; the first should
+  say which.
+- =notes/img/state-dashboard.png= shows the instance id beside the
+  instance name. The audit found the same id in one text file
+  (discrepancy 4). =workshop.labs= lists =AURA_INSTANCEID= among the
+  values to scrub (=labs.clj= line 66) and =workshop.status= prints it
+  (=status.clj= lines 76 and 77). An identifier, not a secret, but the
+  code holds two opinions.
+- =.meta/README.md= lines 14 to 18, on the oracle: argued above.
+
+** Carried from the audit, still open
+
+The Graph Analytics session "left running" (probably gone, not verified);
+=labs/lab-04/02-delete-all.cypher= one command from deleting both graphs,
+guarded by a paragraph in =labs/README.org= and nothing else; six
+property keys nobody has accounted for; =load!='s loading branch.
+
+* Recommendations
+
+Ranked. The first has a deadline.
+
+1. *Save the extracted graph as rows before the instance goes.* Form 13
+   can be reloaded from the file in a minute. The 117 entities and their
+   relationships are a model's output and will not come back the same.
+   Two read queries into EDN under =data/=, plus the =SHOW CONSTRAINTS=
+   and =SHOW INDEXES= rows. Buys: experiment 005's result outlives the
+   lab, and everything after this can be tried against a local copy.
+2. *Assert the join, as an experiment.* Hypothesis, gate, log, like the
+   others. Smallest form: one relationship from the Organization that is
+   Apple to the Company with CUSIP 037833100, and one question that
+   crosses it (which managers hold the company whose Home segment includes
+   the HomePod). Then the same in 002 with one shared IRI. Buys: the
+   workshop's actual claim tested once, and the thesis tested where it
+   was not.
+3. *Make =load!= able to load.* Run file 06 in an auto-commit session,
+   then run the branch once on a fresh instance. Buys: Lab 4 "by code"
+   becomes true and not just verified. It is the first thing a second
+   instance will need.
+4. *Write the comparison down once, above the experiments.* 004's README
+   says "experiments 002 and 003 were not read". The tables in this note
+   are the start of the synthesis; by the owner's own tiers that belongs
+   in =.meta/= and then further out, since three experiments agree. Add
+   the two missing probes so the three are level: a negation in SPARQL
+   and Datalog to set beside =nafc='s 219, and =:with= beside SPARQL's
+   bag. Buys: the thesis in a form that can be cited and corrected.
+5. *Stop building instruments; open Emacs.* Freeze =status=, =dashboard=,
+   =labs= and =audit= as they are. Spend the ten minutes on
+   =cider-jack-in= and one block of =dev/explore.clj=. Buys: the most
+   repeated line under "Never verified" comes off, by the only person who
+   can take it off.
+
+* What this review did not verify
+
+- Anything in a browser, in Emacs, or through =gcloud=. =bb status= was
+  not run because it shells out to =gcloud=; =bb audit= was not run either,
+  so the audit's own figures are quoted from its file, not re-derived.
+- The =IN TRANSACTIONS= failure. Read, not run.
+- The general-knowledge claims marked as such: the SPARQL and Datalog
+  equivalence, how Jena and DataScript index, SHACL's role.
+- pldb's index rule in the jar. 004 says it was read there; I took the
+  measurement as the evidence.
+- The timings in 002 and 003 beyond seeing the gates pass.
+- The screenshots other than =state-dashboard.png=.
+- Whether the Graph Analytics session exists, what the trial bills, and
+  everything else the audit lists under "What could not be checked".
+- =experiments/007-query-ui-cljs=, by instruction.

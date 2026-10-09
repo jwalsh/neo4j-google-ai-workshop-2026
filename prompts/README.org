@@ -14,12 +14,12 @@ Where a lab has a query and not a prompt, it is in =labs/= as Cypher.
 | =lab-06-allowed-relationships.txt= |   6 | ours, not the lab's: the relationship triples a second run was held to | LLM Graph Builder, =allowedRelationship= | yes, 2026-10-08 (=experiments/005=, attempts 8 and 9) |
 | =lab-06-extraction-hint.txt=        |   6 | ours: what each type means and which way relationships point | a local model, as the system message | not yet (=experiments/006=) |
 | =lab-06-extraction-schema.json=     |   6 | ours: the JSON schema the local model's answer is constrained to | a local model, as the output format | not yet (=experiments/006=) |
-| =lab-08-01-create-node.txt=         |   8 | first prompt to the agent; triggers "Authorize"        | Neo4j Agent, Gemini Enterprise | no       |
-| =lab-08-02-find-node.txt=           |   8 | checks the node the first prompt made                  | Neo4j Agent, Gemini Enterprise | no       |
-| =lab-08-03-describe-database.txt=   |   8 | asks what the shared database holds                    | Neo4j Agent, Gemini Enterprise | no       |
-| =lab-09-01-create-agent.txt=        |   9 | after "Create with AI", before "Create"                | Aura, Agents                   | no       |
-| =lab-09-02-uncommon-companies.txt=  |   9 | first question to the new agent                        | the Aura agent                 | no       |
-| =lab-09-03-choose-threshold.txt=    |   9 | the answer when the agent asks what "uncommon" means   | the Aura agent                 | no       |
+| =lab-08-01-create-node.txt=         |   8 | first prompt to the agent; triggers "Authorize"        | Neo4j Agent, Gemini Enterprise | yes, 2026-10-08 (=notes/lab-08-use-neo4j-agent.org=) |
+| =lab-08-02-find-node.txt=           |   8 | checks the node the first prompt made                  | Neo4j Agent, Gemini Enterprise | yes, 2026-10-08 (=notes/lab-08-use-neo4j-agent.org=) |
+| =lab-08-03-describe-database.txt=   |   8 | asks what the shared database holds                    | Neo4j Agent, Gemini Enterprise | yes, 2026-10-08 (=notes/lab-08-use-neo4j-agent.org=) |
+| =lab-09-01-create-agent.txt=        |   9 | after "Create with AI", before "Create"                | Aura, Agents                   | yes, 2026-10-08 (=notes/lab-09-aura-agents.org=) |
+| =lab-09-02-uncommon-companies.txt=  |   9 | first question to the new agent                        | the Aura agent                 | yes, 2026-10-08 (=notes/lab-09-aura-agents.org=) |
+| =lab-09-03-choose-threshold.txt=    |   9 | the answer when the agent asks what "uncommon" means   | the Aura agent                 | yes, 2026-10-08 (=notes/lab-09-aura-agents.org=) |
 
 Naming: =lab-NN-= then, when a lab has several, a two-digit order, then what
 the prompt does in a few words. A prompt of our own, not from a lab, drops

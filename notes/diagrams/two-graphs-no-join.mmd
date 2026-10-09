@@ -1,0 +1,27 @@
+%% Ours, not a redrawn slide. For notes/review-2026-10-08.org.
+%% The two graphs in the one Aura database and the join that is not there.
+%% Counts are from `bb counts` and three read-only statements run for the review,
+%% 2026-10-08 about 20:10 EDT, after both Graph Builder runs of experiments/005.
+%% They differ from the 71 entities in .meta/README.md, which predates the second run.
+flowchart TB
+  subgraph form13_graph["Form 13, Lab 4: identity is the CUSIP"]
+    direction TB
+    managers(["Manager<br/>28 nodes<br/>NODE KEY managerName"])
+    companies(["Company<br/>2,251 nodes<br/>NODE KEY cusip"])
+    apple_company(["Company<br/>cusip 037833100<br/>APPLE INC<br/>held by 22 managers"])
+    managers -- "OWNS, 7,381<br/>value, shares, quarter" --> companies
+    companies --- apple_company
+  end
+
+  subgraph extracted_graph["Apple 10-K, Lab 6 stand-in: identity is a name the model chose"]
+    direction TB
+    documents(["Document, 2<br/>Chunk, 35"])
+    entities(["__Entity__, 117<br/>UNIQUE id<br/>Product 56, Segment 39,<br/>Service 23, Competitor 1"])
+    organizations(["Organization, 6<br/>Apple<br/>Apple Inc.<br/>The Company<br/>Company<br/>and two that are not Apple"])
+    documents -- "HAS_ENTITY, 206" --> entities
+    entities --- organizations
+  end
+
+  missing_join{{"The missing join<br/>0 relationships between the two graphs<br/>the 10-K pages give no CUSIP<br/>the label Company was refused (finding 24)"}}
+  apple_company -.- missing_join
+  missing_join -.- organizations

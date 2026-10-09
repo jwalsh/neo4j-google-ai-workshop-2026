@@ -1,0 +1,12 @@
+
+|          :name |   :state | :millis |                                                                    :summary |
+|----------------+----------+---------+-----------------------------------------------------------------------------|
+|     Neo4j Aura |      :up |    2710 |           Neo4j Kernel 5.27-aura enterprise, 2558 nodes, 7859 relationships |
+|           Labs |      :up |    6741 |                                                  3 ok, 1 skipped, 6 blocked |
+| Dataset bucket |      :up |    1064 | 6 entries under gs://neo4j-datasets/hands-on-lab/, read without credentials |
+|    Lab browser |      :up |     240 |                                                Chrome/154.0.8037.98, 5 tabs |
+|       Lab time |      :up |      11 |                                                                 0h 11m left |
+|    Environment |      :up |       1 |                                                unset: GOOGLE_CLOUD_LOCATION |
+|         gcloud | :unknown |    1605 |                                                account unset, project unset |
+|      Checklist | :unknown |       3 |                                                        6 of 14 boxes ticked |
+|     Repository | :unknown |     114 |                                             main at 69424c0, 12 uncommitted |

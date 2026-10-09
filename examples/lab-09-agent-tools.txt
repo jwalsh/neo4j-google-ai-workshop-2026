@@ -1,0 +1,56 @@
+sharing, max 3, limit 12
+
+|                 :companyName |                                                                :owningManagers | :numberOfOwners |
+|------------------------------+--------------------------------------------------------------------------------+-----------------|
+|                       2U INC |                    ["ENVESTNET ASSET MANAGEMENT INC" "GUGGENHEIM CAPITAL LLC"] |               2 |
+|   A-MARK PRECIOUS METALS INC |                             ["M&T Bank Corp" "NOMURA ASSET MANAGEMENT CO LTD"] |               2 |
+|                 ABM INDS INC |            ["ENVESTNET ASSET MANAGEMENT INC" "NOMURA ASSET MANAGEMENT CO LTD"] |               2 |
+|   ACADIA PHARMACEUTICALS INC |                    ["ENVESTNET ASSET MANAGEMENT INC" "GUGGENHEIM CAPITAL LLC"] |               2 |
+|             ACCO BRANDS CORP |              ["Cornerstone Management, Inc." "ENVESTNET ASSET MANAGEMENT INC"] |               2 |
+|            ACI WORLDWIDE INC |            ["ENVESTNET ASSET MANAGEMENT INC" "NOMURA ASSET MANAGEMENT CO LTD"] |               2 |
+|          ACUSHNET HLDGS CORP |                             ["ENVESTNET ASSET MANAGEMENT INC" "M&T Bank Corp"] |               2 |
+|  ADAMS DIVERSIFIED EQUITY FD | ["GUGGENHEIM CAPITAL LLC" "TEXAS CAPITAL BANK WEALTH MANAGEMENT SERVICES INC"] |               2 |
+| ADAPTIVE BIOTECHNOLOGIES COR |                    ["ENVESTNET ASSET MANAGEMENT INC" "GUGGENHEIM CAPITAL LLC"] |               2 |
+|          ADDUS HOMECARE CORP |                    ["ENVESTNET ASSET MANAGEMENT INC" "GUGGENHEIM CAPITAL LLC"] |               2 |
+|                  ADT INC DEL |            ["ENVESTNET ASSET MANAGEMENT INC" "NOMURA ASSET MANAGEMENT CO LTD"] |               2 |
+|        ADTALEM GLOBAL ED INC |            ["ENVESTNET ASSET MANAGEMENT INC" "NOMURA ASSET MANAGEMENT CO LTD"] |               2 |
+sharing, exactly 3
+
+|                 :companyName |                                                                              :owningManagers | :numberOfOwners |
+|------------------------------+----------------------------------------------------------------------------------------------+-----------------|
+|                  8X8 INC NEW |                     ["ENVESTNET ASSET MANAGEMENT INC" "M&T Bank Corp" "SCOTIA CAPITAL INC."] |               3 |
+|      ABCELLERA BIOLOGICS INC |        ["EPIQ Capital Group, LLC" "GUGGENHEIM CAPITAL LLC" "NOMURA ASSET MANAGEMENT CO LTD"] |               3 |
+| ACADEMY SPORTS & OUTDOORS IN | ["ENVESTNET ASSET MANAGEMENT INC" "GUGGENHEIM CAPITAL LLC" "NOMURA ASSET MANAGEMENT CO LTD"] |               3 |
+|         ADVANCED ENERGY INDS |                  ["ENVESTNET ASSET MANAGEMENT INC" "GUGGENHEIM CAPITAL LLC" "M&T Bank Corp"] |               3 |
+|                        AECOM |          ["ENVESTNET ASSET MANAGEMENT INC" "M&T Bank Corp" "NOMURA ASSET MANAGEMENT CO LTD"] |               3 |
+|  ALEXANDER & BALDWIN INC NEW |          ["ENVESTNET ASSET MANAGEMENT INC" "M&T Bank Corp" "NOMURA ASSET MANAGEMENT CO LTD"] |               3 |
+|     ALGONQUIN PWR UTILS CORP |            ["ENVESTNET ASSET MANAGEMENT INC" "GUGGENHEIM CAPITAL LLC" "SCOTIA CAPITAL INC."] |               3 |
+|            ALPHABET INC-CL A |              ["NATIXIS ADVISORS, L.P." "NBW CAPITAL LLC" "PARADIGM ASSET MANAGEMENT CO LLC"] |               3 |
+| AMERICAN AXLE & MFG HLDGS IN | ["ENVESTNET ASSET MANAGEMENT INC" "GUGGENHEIM CAPITAL LLC" "NOMURA ASSET MANAGEMENT CO LTD"] |               3 |
+| AMERICAN EAGLE OUTFITTERS IN | ["ENVESTNET ASSET MANAGEMENT INC" "GUGGENHEIM CAPITAL LLC" "NOMURA ASSET MANAGEMENT CO LTD"] |               3 |
+|               AMERIS BANCORP | ["ENVESTNET ASSET MANAGEMENT INC" "GUGGENHEIM CAPITAL LLC" "NOMURA ASSET MANAGEMENT CO LTD"] |               3 |
+|     ANYWHERE REAL ESTATE INC | ["ENVESTNET ASSET MANAGEMENT INC" "GUGGENHEIM CAPITAL LLC" "NOMURA ASSET MANAGEMENT CO LTD"] |               3 |
+| APOLLO COML REAL EST FIN INC | ["ENVESTNET ASSET MANAGEMENT INC" "GUGGENHEIM CAPITAL LLC" "NOMURA ASSET MANAGEMENT CO LTD"] |               3 |
+|       ARBOR REALTY TRUST INC | ["ENVESTNET ASSET MANAGEMENT INC" "GUGGENHEIM CAPITAL LLC" "NOMURA ASSET MANAGEMENT CO LTD"] |               3 |
+owners of ALLSTATE CORP
+
+|                          :managerName |
+|---------------------------------------|
+|                              BANK OZK |
+|        ENVESTNET ASSET MANAGEMENT INC |
+|                GUGGENHEIM CAPITAL LLC |
+| Legacy Capital Group California, Inc. |
+|                         M&T Bank Corp |
+|                NATIXIS ADVISORS, L.P. |
+|        NOMURA ASSET MANAGEMENT CO LTD |
+|      PARADIGM ASSET MANAGEMENT CO LLC |
+|                   SCOTIA CAPITAL INC. |
+uncommon for one manager
+
+|                 :companyName | :totalOwners | :shares |     :value |
+|------------------------------+--------------+---------+------------|
+|             A10 NETWORKS INC |            1 |   34137 |  5.28782E8 |
+| ABRDN AUSTRALIA EQUITY FD IN |            1 |   24043 |  1.05549E8 |
+| ABRDN INCOME CREDIT STRATEGI |            1 |  803040 | 5.356277E9 |
+|          ADAM NAT RES FD INC |            1 |   33540 |  6.89582E8 |
+|                 ADVANSIX INC |            1 |    8859 |  3.39034E8 |

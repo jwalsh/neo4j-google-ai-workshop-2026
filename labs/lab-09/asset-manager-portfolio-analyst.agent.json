@@ -1,0 +1,116 @@
+{
+  "name": "Asset Manager Portfolio Analyst",
+  "description": "Analyzes asset manager portfolios, identifies commonly and uncommonly held companies, and finds managers sharing investments.",
+  "system_prompt": "Analyze asset manager portfolios to identify unique and shared company investments. When responding, be analytical and provide clear, structured insights.",
+  "is_private": true,
+  "is_mcp_enabled": false,
+  "tools": [
+    {
+      "name": "Get Companies by Manager",
+      "description": "Retrieves a list of companies owned by a specific asset manager, including shares and value.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (m:Manager)-[o:OWNS]->(c:Company) WHERE m.managerName = $managerName RETURN c.companyName AS companyName, o.shares AS shares, o.value AS value ORDER BY o.shares DESC LIMIT $limit",
+        "parameters": [
+          {
+            "name": "managerName",
+            "data_type": "string",
+            "description": "The exact name of the asset manager."
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of companies to return.",
+            "is_optional": true,
+            "default": 25
+          }
+        ]
+      }
+    },
+    {
+      "name": "Get Managers Owning Company",
+      "description": "Finds all asset managers that own a specific company.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (m:Manager)-[:OWNS]->(c:Company) WHERE c.companyName = $companyName RETURN m.managerName AS managerName ORDER BY managerName LIMIT $limit",
+        "parameters": [
+          {
+            "name": "companyName",
+            "data_type": "string",
+            "description": "The exact name of the company."
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of managers to return.",
+            "is_optional": true,
+            "default": 25
+          }
+        ]
+      }
+    },
+    {
+      "name": "Find Manager's Uncommon Companies",
+      "description": "For a given manager, identifies companies they own that are held by a relatively small number of other managers. 'Uncommon' is defined by a maximum number of total owners for the company.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (m:Manager {managerName: $managerName})-[ownsRel:OWNS]->(c:Company) WITH c, ownsRel, m.managerName AS managerName MATCH (otherManagers:Manager)-[:OWNS]->(c) WITH c, ownsRel, managerName, count(DISTINCT otherManagers) AS totalOwners WHERE totalOwners <= $maxTotalOwners RETURN c.companyName AS companyName, totalOwners, ownsRel.shares AS shares, ownsRel.value AS value ORDER BY totalOwners ASC, companyName ASC LIMIT $limit",
+        "parameters": [
+          {
+            "name": "managerName",
+            "data_type": "string",
+            "description": "The exact name of the asset manager."
+          },
+          {
+            "name": "maxTotalOwners",
+            "data_type": "integer",
+            "description": "Maximum number of total managers owning a company for it to be considered 'uncommon'.",
+            "is_optional": true,
+            "default": 5
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of uncommon companies to return.",
+            "is_optional": true,
+            "default": 25
+          }
+        ]
+      }
+    },
+    {
+      "name": "Find Managers Sharing Uncommon Companies",
+      "description": "Identifies companies that are owned by a small number of managers (uncommon), and lists all managers who own those companies. Requires at least two managers to be considered 'shared'.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (c:Company)<-[:OWNS]-(m:Manager) WITH c, collect(DISTINCT m.managerName) AS owningManagers WHERE size(owningManagers) >= 2 AND size(owningManagers) <= $maxOwnersCount RETURN c.companyName AS companyName, owningManagers, size(owningManagers) AS numberOfOwners ORDER BY numberOfOwners ASC, companyName ASC LIMIT $limit",
+        "parameters": [
+          {
+            "name": "maxOwnersCount",
+            "data_type": "integer",
+            "description": "Maximum number of managers that can own a company for it to be considered 'uncommon' and shared.",
+            "is_optional": true,
+            "default": 5
+          },
+          {
+            "name": "limit",
+            "data_type": "integer",
+            "description": "Maximum number of shared uncommon companies to return.",
+            "is_optional": true,
+            "default": 25
+          }
+        ]
+      }
+    },
+    {
+      "name": "Natural Language to Cypher Tool",
+      "description": "A general-purpose, free-form Text-to-Cypher tool that converts natural language questions into Cypher queries, executes them, and returns the results. Use this option when no specialized tool (e.g. for aggregation or domain-specific logic) is more appropriate.",
+      "enabled": true,
+      "type": "text2cypher"
+    }
+  ]
+}

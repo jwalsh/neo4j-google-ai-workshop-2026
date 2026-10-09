@@ -1,0 +1,87 @@
+#+TITLE: Lab 9 - Aura Agents
+#+DATE: 2026-10-08
+
+From the lab text, =assignment-3-ai-and-agents/lab-9-aura-agents=. Driven in
+the Aura console against our own instance, the one Lab 4 loaded. Prompts are
+=prompts/lab-09-01..03=. The whole conversation, with the agent's reasoning
+and tool calls, is =examples/lab-09-conversation.txt=.
+
+* The path
+
+1. "Agents" in the sidebar, "Create with AI".
+2. The dialog names the instance and takes the prompt. "Create".
+3. About twenty seconds later: "Configuration generated. Review and finish
+   setup." A form on the left (name, description, prompt instruction, tools)
+   and a preview chat on the right.
+4. Ask in the preview. Then "Create agent" saves it; access was left at
+   Internal, which is free. External is $0.35 an hour.
+
+* What it generated
+
+Name "Asset Manager Portfolio Analyst", four Cypher templates and one
+Text2Cypher tool. The agent's context menu has "Export as JSON"; the export
+is =labs/lab-09/asset-manager-portfolio-analyst.agent.json=. It holds no
+credentials and names no instance.
+
+| tool                                     | kind            |
+|------------------------------------------+-----------------|
+| Get Companies by Manager                 | Cypher template |
+| Get Managers Owning Company              | Cypher template |
+| Find Manager's Uncommon Companies        | Cypher template |
+| Find Managers Sharing Uncommon Companies | Cypher template |
+| Natural Language to Cypher Tool          | Text2Cypher     |
+
+The templates use =managerName= and =companyName=, the properties the
+database has.
+
+[[file:img/lab-09-configuration-generated.png]]
+
+* Results
+
+[[file:img/lab-09-uncommon-companies.png]]
+
+"List managers investing in uncommon companies." It did not ask what
+uncommon means, as the lab's run did. It chose "three or fewer owners", ran
+"Find Managers Sharing Uncommon Companies" and listed ten companies held by
+two managers each.
+
+[[file:img/lab-09-threshold-3.png]]
+
+"Let's try 3." Three companies "held by exactly three managers": Advanced
+Micro Devices, Allstate, Alphabet Class A.
+
+* Checking the answers
+
+The export makes the agent's tools runnable from here. The templates, run
+through =workshop.neo4j= with the agent's own parameters, are in
+=examples/lab-09-agent-tools.txt=; the direct checks are
+=labs/lab-09/01-check-agent-answers.cypher=.
+
+- The first answer is right. The ten companies and their pairs of managers
+  are the template's first ten rows, with the names tidied into title case.
+- It is also partial in a way the answer does not say. The template requires
+  at least two owners and sorts by name, so the 805 companies with a single
+  owner, the most uncommon there are, are never considered, and the ten
+  shown are the start of the alphabet out of 411.
+- The second answer is not from the database. Allstate has nine owning
+  managers, not three. Alphabet Class A does have three, and they are
+  Natixis, NBW Capital and Paradigm, none of the three the agent named.
+- The conversation shows why. The Text2Cypher tool wrote =c.name= and
+  =m.name=, properties that do not exist (0 of 28 managers have =name=), got
+  nothing, and the agent's reasoning then says it "can't perform a precise
+  query" and will "present a summary". What it presented has the form of a
+  result.
+
+| owners | companies |
+|--------+-----------|
+|      1 |       805 |
+|      2 |       411 |
+|      3 |       246 |
+|      4 |       290 |
+
+* By code
+
+Creation is console only. After it, the export is data: a later run can
+import it ("Import agent"), and =labs/lab-09/= can run each template against
+any instance with the Form 13 graph, including a local one
+(=experiments/008-local-graph-dx=).

@@ -1,0 +1,35 @@
+
+|       :label | :count |
+|--------------+--------|
+|        Chunk |     35 |
+|      Company |   2251 |
+|   Competitor |      1 |
+|     Document |      2 |
+|      Manager |     28 |
+| Organization |      6 |
+|      Product |     56 |
+|      Segment |     39 |
+|      Service |     23 |
+|   __Entity__ |    117 |
+
+|               :type | :count |
+|---------------------+--------|
+|            BASED_ON |      1 |
+|       COMPETES_WITH |      2 |
+| DISTRIBUTES_THROUGH |      2 |
+|         FIRST_CHUNK |      2 |
+|          HAS_ENTITY |    206 |
+|         HAS_SEGMENT |     26 |
+|            INCLUDES |     81 |
+|          NEXT_CHUNK |     33 |
+|              OFFERS |     44 |
+|    OPERATING_SYSTEM |      2 |
+|                OWNS |   7381 |
+|       PARTNERS_WITH |      2 |
+|             PART_OF |     35 |
+|            PRODUCES |      3 |
+|             PRODUCT |     11 |
+|             RESELLS |      1 |
+|             RUNS_ON |     20 |
+|             SEGMENT |      2 |
+|              SERVES |      5 |

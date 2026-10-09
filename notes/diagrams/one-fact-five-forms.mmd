@@ -1,0 +1,52 @@
+%% Ours, not a redrawn slide. For notes/review-2026-10-08.org.
+%% One row of data/form13-2023-05-11.csv (line 2 of the file) in the five forms
+%% this repository holds it in: Ackerman Capital Advisors, LLC holds ABBOTT LABS,
+%% cusip 002824100, value 465999000.0, shares 4602, quarter 2023-03-31.
+%% Shapes are from labs/lab-04/03 to 06 (property graph), experiments/002 (RDF),
+%% experiments/003 (datoms), experiments/004 (relations), src/workshop/form13.clj (map).
+%% Laid out in two rows so the labels stay readable.
+%% Entity ids e1 to e3 are illustrative; DataScript assigns its own.
+flowchart TB
+  subgraph property_graph["1. Property graph, Neo4j, Lab 4: 2 nodes, 1 relationship"]
+    direction TB
+    graph_manager(["Manager<br/>managerName: Ackerman Capital Advisors, LLC"])
+    graph_company(["Company<br/>cusip: 002824100<br/>companyName: ABBOTT LABS"])
+    graph_manager -- "OWNS<br/>value: 465999000.0<br/>shares: 4602<br/>reportCalendarOrQuarter: 2023-03-31" --> graph_company
+  end
+
+  subgraph rdf_triples["2. RDF, Jena, 002: 8 triples for the holding"]
+    direction TB
+    rdf_manager(["manager:Ackerman...LLC"])
+    rdf_holding(["holding:Ackerman...LLC/002824100/2023-03-31<br/>a f13:Holding"])
+    rdf_company(["company:002824100"])
+    rdf_literals["f13:value 465999000.0<br/>f13:shares 4602<br/>f13:quarter 2023-03-31 as xsd:date<br/>f13:sourceFilingId raw_2023-05-11_..."]
+    rdf_holding -- "f13:manager" --> rdf_manager
+    rdf_holding -- "f13:company" --> rdf_company
+    rdf_holding --- rdf_literals
+    rdf_manager -. "f13:owns<br/>the bare shortcut" .-> rdf_company
+  end
+
+  subgraph datoms["3. Datoms, DataScript, 003: 7 datoms for the holding"]
+    direction TB
+    datom_identities["e1 :manager/name Ackerman Capital Advisors, LLC<br/>e2 :company/cusip 002824100<br/>e2 :company/name ABBOTT LABS"]
+    datom_holding["e3 :holding/manager e1<br/>e3 :holding/company e2<br/>e3 :holding/value 4.65999E8<br/>e3 :holding/shares 4602<br/>e3 :holding/quarter 2023-03-31<br/>e3 :holding/company-name ABBOTT LABS<br/>e3 :holding/filing raw_2023-05-11_..."]
+    datom_holding -- "two refs" --> datom_identities
+  end
+
+  subgraph relations["4. Relations, core.logic pldb, 004: 3 facts, no holding entity"]
+    direction TB
+    fact_manager["manager(Ackerman Capital Advisors, LLC)"]
+    fact_company["company(002824100, ABBOTT LABS)"]
+    fact_holds["holds(002824100, Ackerman Capital Advisors, LLC,<br/>465999000, 4602)"]
+    fact_holds -. "joins on the string" .- fact_manager
+    fact_holds -. "joins on the string" .- fact_company
+  end
+
+  subgraph clojure_map["5. Clojure map, workshop.form13: the row itself"]
+    direction TB
+    row_map["{:manager Ackerman Capital Advisors, LLC<br/>:quarter 2023-03-31<br/>:cusip 002824100<br/>:value 4.65999E8<br/>:shares 4602<br/>:filing raw_2023-05-11_...<br/>:company ABBOTT LABS}"]
+  end
+
+  property_graph ~~~ relations
+  rdf_triples ~~~ relations
+  datoms ~~~ clojure_map

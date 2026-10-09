@@ -42,9 +42,9 @@ From the class page, "Neo4j and Google".
 - [X] Lecture - Gemini Enterprise
 - [ ] Lecture - Neo4j and AI
 - [ ] Lab 6 - Document Intelligence
-- [ ] Lab 7 - Deploy Neo4j Agent
-- [ ] Lab 8 - Use Neo4j Agent
-- [ ] Lab 9 - Aura Agents
+- [X] Lab 7 - Deploy Neo4j Agent
+- [X] Lab 8 - Use Neo4j Agent
+- [X] Lab 9 - Aura Agents
 - [ ] Lecture - Next Steps
 
 *** TODO Cloud Environment
@@ -117,6 +117,10 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lab-04-query.org][Lab 4 - Query]]: the naive load, the keyed load, the counts, and what the file says locally
 - [[file:notes/lab-05-bloom.org][Lab 5 - Bloom]]: the path, the search, Degree Centrality sized on the scene, and degree without Bloom
 - [[file:notes/lab-06-document-intelligence.org][Lab 6 - Document Intelligence]]: why this account does not have the tool, and the same result through the LLM Graph Builder's API
+- [[file:notes/lab-07-deploy-neo4j-agent.org][Lab 7 - Deploy Neo4j Agent]]: the marketplace path into Gemini Enterprise, the agent's A2A card, and the check
+- [[file:notes/lab-08-use-neo4j-agent.org][Lab 8 - Use Neo4j Agent]]: the three prompts, the lazy authorization, and what the shared database turned out to hold
+- [[file:notes/lab-09-aura-agents.org][Lab 9 - Aura Agents]]: the generated agent and its exported tools, and its answers checked against the database
+- [[file:notes/review-2026-10-08.org][Review, 2026-10-08]]: the work read as one design, with the five forms of one fact drawn
 - [[file:notes/v2-cli-path.org][The labs again, by code]]: per lab, the console path, the CLI or API path, whether it ran here, and what the rest need
 - [[file:notes/lecture-gemini-enterprise.org][Lecture - Gemini Enterprise]]: the Agent Platform slide, redrawn
 - [[file:notes/lecture-neo4j-and-ai.org][Lecture - Neo4j and AI]]: two reference architectures, redrawn

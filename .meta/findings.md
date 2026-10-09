@@ -150,3 +150,36 @@ owner's. These are what that cost.
     sends them. For an API with one client, read what the client sends, not
     what the signature permits: watching the page's own requests was the
     fastest documentation there was.
+26. **An agent with a failed tool still returned a table.** Lab 9's Aura
+    agent was asked for companies held by exactly three managers. Its
+    Text2Cypher tool wrote `m.name` and `c.name`, which do not exist, and
+    got nothing. The agent's reasoning says so, and the answer is three
+    tidy rows anyway: Allstate (nine owners in the database) and Alphabet
+    Class A with three managers who do not hold it. The answer that came
+    from a Cypher template was right; the one that came from prose was
+    not, and they look the same. Exporting the agent and running its
+    templates from Clojure is what told them apart.
+27. **"Uncommon" was defined by a template nobody read.** The generated
+    tool requires at least two owners and sorts by name, so the 805
+    single-owner companies never appear and the first ten are the start of
+    the alphabet. The agent stated the threshold and not the floor. When a
+    generated tool answers a vague word, read the tool before the answer.
+28. **The lab's shared database was not what the lab said.** Lab 8 says the
+    instance behind the Gemini Enterprise agent holds the SEC data and that
+    a second Bob overwrites the first. It held a CRM-shaped sample and, by
+    the time we asked, 28 Bobs under four label schemes: the agent runs
+    CREATE. A shared, writable demo database drifts for the length of the
+    class; describe it before believing the handout.
+29. **`IN TRANSACTIONS` needs an auto-commit session.** `neo4j/query` ran
+    everything through `executableQuery`, a managed transaction, which
+    Neo4j refuses for a statement that commits as it goes. `form13/load!`
+    would have stopped at the relationship file on an empty database; it
+    had only ever met a loaded one and returned early. Found by experiment
+    008 on a local server, fixed, and run against Aura before the instance
+    expired. A loader that has only seen the already-loaded case is untested.
+30. **A click made by script opens no tab.** "Open preview" called through
+    the DOM did nothing, silently: the popup was blocked for want of a user
+    gesture. The same click as a mouse event at the element's position
+    worked. In a console, prefer real input events at positions the page
+    reports over `element.click()`.
+

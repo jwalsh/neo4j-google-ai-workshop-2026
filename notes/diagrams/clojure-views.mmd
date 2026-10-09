@@ -1,0 +1,70 @@
+%% Ours, not a redrawn slide. For notes/review-2026-10-08.org.
+%% The Clojure layer as built on 2026-10-08: the namespaces in src/workshop,
+%% what each talks to, and the entry points. Read from the ns forms and the
+%% code, not from the README. Arrows between namespaces are requires.
+%% Left out to keep it readable: workshop.env (read by most), workshop.msa,
+%% and the direct calls from cli to neo4j and gcp (bb ping, counts, cypher,
+%% datasets, peek). Dotted arrows are paths that exist in code and have never
+%% run, or are reached from nowhere.
+flowchart TB
+  subgraph entry_points["Entry points"]
+    direction LR
+    gmake_targets["gmake ping, gmake cypher<br/>curl, no JVM"]
+    bb_tasks["bb tasks<br/>bb.edn, workshop.cli"]
+    dashboard_page["Dashboard<br/>127.0.0.1:8377"]
+    repl_pages["REPL pages, CIDER<br/>dev/user.clj, dev/explore.clj,<br/>dev/labs_explore.clj"]
+  end
+
+  subgraph namespaces["src/workshop"]
+    direction TB
+    dashboard_ns["dashboard"]
+    status_ns["status<br/>one check per dependency"]
+    audit_ns["audit<br/>what the notes claim"]
+    labs_ns["labs<br/>each lab as a function"]
+    form13_ns["form13<br/>the file as maps: verify, load!"]
+    neo4j_ns["neo4j<br/>query returns rows as maps"]
+    gcp_ns["gcp"]
+    redact_ns["redact"]
+    graph_builder_ns["graph-builder<br/>REPL only"]
+    diagram_ns["diagram<br/>rows to mermaid, REPL only"]
+    extract_ns["extract<br/>required by nothing"]
+  end
+
+  subgraph outside["What it talks to"]
+    direction LR
+    query_api["Aura Query API<br/>https, basic auth"]
+    aura_bolt[("Aura instance<br/>Bolt, Java driver")]
+    dataset_bucket[("Dataset bucket<br/>public, no credentials")]
+    lab_browser["Lab browser<br/>DevTools, port 9333"]
+    local_tools["Local tools<br/>mmdc, tesseract, git, gcloud"]
+    graph_builder_backend["LLM Graph Builder backend<br/>bearer token from a login"]
+    local_model["Local model<br/>Ollama, port 11434"]
+  end
+
+  gmake_targets --> query_api
+  bb_tasks --> audit_ns
+  bb_tasks --> status_ns
+  bb_tasks --> redact_ns
+  dashboard_page --> dashboard_ns
+  repl_pages --> labs_ns
+  repl_pages --> neo4j_ns
+  repl_pages --> graph_builder_ns
+  repl_pages --> diagram_ns
+
+  dashboard_ns --> status_ns
+  status_ns --> labs_ns
+  audit_ns --> labs_ns
+  labs_ns --> form13_ns
+  form13_ns --> neo4j_ns
+  form13_ns --> gcp_ns
+
+  neo4j_ns --> aura_bolt
+  query_api --> aura_bolt
+  gcp_ns --> dataset_bucket
+  status_ns --> lab_browser
+  status_ns --> local_tools
+  redact_ns --> local_tools
+  diagram_ns --> local_tools
+  graph_builder_ns --> graph_builder_backend
+  graph_builder_backend -- "writes, with our credentials" --> aura_bolt
+  extract_ns -.-> local_model

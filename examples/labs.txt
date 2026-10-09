@@ -1,0 +1,36 @@
+
+| :lab |                       :step | :status |                                                                                                                                                             :evidence |
+|------+-----------------------------+---------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|    1 |                     Sign In | blocked |                                                                                                no API: an interactive Google sign-in to an ephemeral Vocareum account |
+|    2 |                Deploy Neo4j | blocked |                                                                                                               Aura API POST /v1/instances; no client credentials here |
+|    3 |            Connect to Neo4j |      ok |                                                                                                                      2 databases: neo4j online default, system online |
+|    4 |                       Query |      ok | already-loaded: 2251 companies, 28 managers, 7381 OWNS; 2 of 2 node keys; also here: Chunk, Competitor, Document, Organization, Product, Segment, Service, __Entity__ |
+|    5 |    Bloom: degree, in Cypher |      ok |                                                       file and graph agree on 28 of 28 managers and 2251 of 2251 companies; top ENVESTNET ASSET MANAGEMENT INC (1615) |
+|    5 | Bloom: degree, in a session | skipped |                                                                                               4 of 4 procedures offered; 0 sessions visible to this user; not started |
+|    6 |       Document Intelligence | blocked |                           console only, and not enabled for this account (finding 22); Graph Builder stand-in: 2 document, 35 chunks, 117 entities, 3 of 3 under Home |
+|    7 |          Deploy Neo4j Agent | blocked |                                                                                        Google Cloud console as the lab account; marketplace add has no documented API |
+|    8 |             Use Neo4j Agent | blocked |                                                                                             a chat in Gemini Enterprise with an OAuth consent click; depends on Lab 7 |
+|    9 |                 Aura Agents | blocked |                                                                                          creation is console only; invoking is an API, with credentials not held here |
+
+Lab 1, Sign In [blocked]
+  UI only. Google's sign-in takes a password and an Employee ID challenge and then terms to accept (finding 3); none of that has a service endpoint. The non-interactive equivalent is a service-account key for the lab project (gcloud auth activate-service-account --key-file), which Vocareum does not hand out. Not attempted: this machine's gcloud is the owner's and stays out of the lab.
+Lab 2, Deploy Neo4j [blocked]
+  Create a client credential in the Aura console (Account settings, Client credentials, Aura API). POST https://api.neo4j.io/oauth/token with basic auth client_id:client_secret and grant_type=client_credentials for a one-hour bearer token. GET https://api.neo4j.io/v1/tenants for the project id. Then the request in :evidence. The response carries the password, once. Poll GET /v1/instances/<id> until status is running, and do not resolve the hostname before then (finding 12). Not sent from here by instruction: the credential is made in the console, and an instance made this way lands in whichever organization the credential belongs to, which is the open question of findings 13 and 22. Nothing in this namespace sends it.
+Lab 3, Connect to Neo4j [ok]
+  Bolt with the Java driver as user neo4j from .env, where the console's Query tool goes in by sign-on. bb ping, bb databases.
+Lab 4, Query [ok]
+  The database matches the file, so there is nothing to load and nothing was sent but reads. bb form13 verify.
+Lab 5, Bloom: degree, in Cypher [ok]
+  Two aggregations over the whole graph, where Bloom ran the algorithm on a scene of 1,000 paths. Bloom's search, scene and size scaling are a picture and have no equivalent here. bb form13 degree gives the file's side.
+Lab 5, Bloom: degree, in a session [skipped]
+  Runnable from here with the database's own credentials: the Cypher API for Aura Graph Analytics starts a session with the first projection that names a memory size. Not run, because that starts billed compute on a trial nobody here can see the bill for, and the statements in :evidence have therefore never executed. The other route is the graphdatascience client's GdsSessions.get_or_create, which needs Aura API client credentials and a project id; that one is blocked the same way Lab 2 is.
+Lab 6, Document Intelligence [blocked]
+  Document Intelligence has no documented API. Neo4j's announcement lists API, command line and MCP access as what comes next, not what exists. It needs the preview on this organization, then a person in the console. The stand-in is scriptable and was run by another session: (workshop.graph-builder/run-lab-06!) sends the same PDF and prompt to the LLM Graph Builder's backend (experiments/005-graph-builder-api). That writes, so it is not called from here; what it left is counted in :evidence. It is not Document Intelligence, and the step stays blocked on that account.
+Lab 7, Deploy Neo4j Agent [blocked]
+  The lab adds a marketplace agent to a new Gemini Enterprise app. Google documents that path as console steps only. A custom A2A agent can be registered by REST: POST https://<location>-discoveryengine.googleapis.com/v1alpha/projects/<project>/locations/<location>/collections/default_collection/engines/<app>/assistants/default_assistant/agents with displayName, description and a2aAgentDefinition.jsonAgentCard. That needs a Google access token for the lab account with the Gemini Enterprise Admin role, an existing app, and the agent's card, which the marketplace listing does not publish. The lab account's token exists only in the lab browser.
+Lab 8, Use Neo4j Agent [blocked]
+  The agent is authorized lazily, by a consent screen on the first prompt: a person's click. It talks to a shared Business Critical instance that is the instructor's, not the one in .env, so nothing in this repository can check its answers. Needs Lab 7 and the lab browser.
+Lab 9, Aura Agents [blocked]
+  "Create with AI" has no documented API; the nearest thing is importing an agent from JSON, also in the console. Once an agent exists and is set to External, it is one request: POST <agent endpoint> with a bearer token from https://api.neo4j.io/oauth/token and the body {"input": "List managers investing in uncommon companies."}. Needs: the agent made in the console, External access (which is charged), and an Aura API client credential. The lab's question itself is answered in Cypher by the degree tables of Lab 5's step: uncommon is a company with few managers.
+
+3 ok, 1 skipped, 6 blocked

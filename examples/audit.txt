@@ -1,0 +1,62 @@
+
+|               :name |   :state |                                                                                                       :summary |
+|---------------------+----------+----------------------------------------------------------------------------------------------------------------|
+|          Repository | :unknown |                                                                                main at 69424c0, 12 uncommitted |
+|               Links |      :up |                                                                             37 links in 14 org files, 0 broken |
+|       Notes indexed |    :down |                                                              1 notes not in README.org, 0 images no note links |
+|      Paths in prose |    :down |                                                                                  64 paths named, 8 not on disk |
+|             Secrets |    :down |                                             .env untracked; 1 of 8 values found in tracked files, 1 in history |
+|                Lint |      :up |                                                                     linting took 287ms, errors: 0, warnings: 0 |
+|           Checklist |      :up |                                                                                           6 of 14 boxes ticked |
+|  Database inventory | :unknown |                   Neo4j Kernel 5.27-aura; 10 labels in use, 52 relationship patterns, 3 constraints, 8 indexes |
+|        Lab 4 intact |      :up | counts match the file; 0 node keys missing, 0 isolated, 0 properties not from the lab, quarters ["2023-03-31"] |
+| Claims in the notes |    :down |                                                                      14 claims: 11 hold, 2 do not, 1 undecided |
+[{:name "Notes indexed",
+  :summary "1 notes not in README.org, 0 images no note links",
+  :details
+  [["notes/review-2026-10-08.org" "not linked from README.org"]]}
+ {:name "Paths in prose",
+  :summary "64 paths named, 8 not on disk",
+  :details
+  [["CLAUDE.md" "labs/x.cypher"]
+   ["CLAUDE.md" ".meta/audit-YYYY-MM-DD.md"]
+   ["notes/review-2026-10-08.org" "experiments/002"]
+   ["notes/review-2026-10-08.org" "labs/lab-5"]
+   ["notes/review-2026-10-08.org" "labs/lab-4-decision"]
+   ["notes/review-2026-10-08.org"
+    "experiments/006-structured-extraction"]
+   ["notes/review-2026-10-08.org" "labs/statements"]
+   ["notes/review-2026-10-08.org" "labs/lab-04/06"]]}
+ {:name "Secrets",
+  :summary
+  ".env untracked; 1 of 8 values found in tracked files, 1 in history",
+  :details
+  [["AURA_INSTANCEID" "notes/lab-03-connect-to-neo4j.org"]
+   ["AURA_INSTANCEID" "in a commit's diff"]]}
+ {:name "Claims in the notes",
+  :summary "14 claims: 11 hold, 2 do not, 1 undecided",
+  :details
+  [["notes/lab-03: two databases, neo4j the default, both online"
+    "holds"]
+   ["notes/lab-04, .meta/README: 2,251 companies, 28 managers, 7,381 OWNS"
+    "holds"]
+   ["notes/lab-04: the file gives the same counts" "holds"]
+   ["notes/lab-04: constraints unique_company_id and unique_manager, both NODE KEY"
+    "holds"]
+   ["notes/lab-04: naive load: 2,605 nodes, 7,381 relationships, 27,325 properties, 2,577 companies"
+    "holds"]
+   ["notes/lab-04: 258 CUSIPs under more than one name" "holds"]
+   ["notes/lab-04: AT&T under four names" "holds"]
+   ["notes/lab-04: 7,381 rows, one quarter, 2023-03-31" "holds"]
+   ["notes/lab-05: most companies held: Envestnet 1615, Guggenheim 1318, Nomura 1019, M&T 972"
+    "holds"]
+   ["notes/lab-05: held by most managers: 22, 21, 21, 20, 20, Apple first"
+    "holds"]
+   ["notes/lab-05: Envestnet and Guggenheim share 1,099 companies"
+    "holds"]
+   ["notes/lab-05, .meta/README: a 4GB Graph Analytics session was left running"
+    "undecided"]
+   [".meta/README: the lectures are unticked"
+    "found [\"Lecture - Gemini Enterprise\"]"]
+   ["notes/lab-06: Lab 6 not done: no label from a document in the database"
+    "found #{\"Chunk\" \"__Community__\" \"__Entity__\" \"Document\"}"]]}]

@@ -1,0 +1,27 @@
+%% Ours, not a redrawn slide. For notes/review-2026-10-08.org.
+%% How the five data models in this repository relate: what each takes as its
+%% unit, what each adds, the query language over it, and on each edge what is
+%% gained and lost moving to the neighbour. Numbers are from the experiment
+%% READMEs (002, 003, 004) and labs/lab-04; the arrangement is the review's reading.
+flowchart TB
+  common{{"The thesis: what triples, datoms<br/>and relations share<br/>a fact is a tuple<br/>a query is a join over tuples<br/>a rule is a named join"}}
+
+  rows["Rows: Clojure maps<br/>unit: one record, 7 keys<br/>adds: nothing; it is the oracle<br/>query: group-by, filter, sort<br/>7,381 maps"]
+
+  property_graph["Property graph: Neo4j<br/>unit: node, and edge with properties<br/>adds: labels, edge identity, paths as values,<br/>node keys, a planner<br/>query: Cypher<br/>2,279 nodes, 7,381 edges"]
+
+  rdf["RDF: Jena<br/>unit: triple (s p o)<br/>adds: IRIs, shared vocabularies,<br/>a graph that is a set<br/>query: SPARQL<br/>66,183 triples"]
+
+  datoms["Datoms: DataScript, Asami<br/>unit: datom (e a v)<br/>adds: per-attribute cardinality and uniqueness,<br/>upsert, the database as a value<br/>query: Datalog, pull, rules<br/>56,523 datoms"]
+
+  relations["Relations: core.logic pldb<br/>unit: tuple of an n-ary relation<br/>adds: unification, search, constraints,<br/>one relation run in every direction<br/>query: miniKanren<br/>9,986 facts"]
+
+  rows -- "gain: constraints, persistence, paths<br/>lose: name variants (first one wins)" --> property_graph
+  property_graph -- "gain: global names, idempotent re-load<br/>lose: properties on the edge<br/>(1 edge becomes 8 triples)" --> rdf
+  rdf -- "gain: cardinality, unique-attribute upsert<br/>lose: IRIs, ORDER BY and HAVING in the query" --> datoms
+  datoms -- "gain: any arity (a holding is 1 fact), paths as terms<br/>lose: aggregation, uniform indexes, set results" --> relations
+  relations -- "gain: count, sum, sort<br/>lose: the join written once for every direction" --> rows
+
+  common -.- rdf
+  common -.- datoms
+  common -.- relations
