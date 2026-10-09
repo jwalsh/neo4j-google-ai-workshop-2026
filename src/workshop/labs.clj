@@ -34,7 +34,8 @@
             [clojure.string :as str]
             [workshop.env :as env]
             [workshop.form13 :as form13]
-            [workshop.neo4j :as neo4j]))
+            [workshop.neo4j :as neo4j]
+            [workshop.telemetry :as telemetry]))
 
 ;; Pure parts
 
@@ -466,11 +467,14 @@
 (defn- guarded
   "Runs step-fn. A throw becomes a :failed step with a scrubbed message."
   [lab title secrets step-fn]
-  (try (step-fn)
-       (catch Exception failure
-         (step lab title :failed
-               {:summary (scrub secrets (or (ex-message failure) (str (class failure))))}
-               "The step threw. Nothing was written by it."))))
+  (telemetry/span (str "lab " lab ": " title) {}
+    (let [result (try (step-fn)
+                      (catch Exception failure
+                        (step lab title :failed
+                              {:summary (scrub secrets (or (ex-message failure) (str (class failure))))}
+                              "The step threw. Nothing was written by it.")))]
+      (telemetry/annotate! {:status (:status result)})
+      result)))
 
 (defn run-all
   "Every lab in order, as a vector of step results. options:

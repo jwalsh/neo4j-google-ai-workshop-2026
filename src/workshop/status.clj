@@ -8,7 +8,8 @@
             [workshop.env :as env]
             [workshop.gcp :as gcp]
             [workshop.labs :as labs]
-            [workshop.neo4j :as neo4j])
+            [workshop.neo4j :as neo4j]
+            [workshop.telemetry :as telemetry])
   (:import (java.net URI)
            (java.net.http HttpClient HttpRequest HttpResponse$BodyHandlers)
            (java.time Duration OffsetDateTime)))
@@ -27,10 +28,14 @@
   limit. A throw or a timeout is :down with the reason as the summary."
   [check-name check-fn]
   (let [started-at (System/nanoTime)
-        pending (future (try (check-fn)
-                             (catch Exception failure
-                               {:state :down :summary (or (ex-message failure)
-                                                          (str (class failure)))})))
+        pending (future
+                  (telemetry/span (str "check: " check-name) {}
+                    (let [outcome (try (check-fn)
+                                       (catch Exception failure
+                                         {:state :down :summary (or (ex-message failure)
+                                                                    (str (class failure)))}))]
+                      (telemetry/annotate! {:state (:state outcome)})
+                      outcome)))
         outcome (deref pending check-timeout-ms
                        {:state :down :summary (str "no answer in " check-timeout-ms " ms")})]
     (future-cancel pending)
@@ -175,15 +180,16 @@
                          (driver-fn driver)
                          (with-open [fresh-driver (neo4j/connect env-map)]
                            (driver-fn fresh-driver))))]
-     (->> [["Neo4j Aura" #(with-driver (fn [open-driver] (neo4j-check open-driver env-map)))]
-           ["Labs" #(with-driver (fn [open-driver]
-                                   (labs/as-check (labs/run-all {:driver open-driver}))))]
-           ["Dataset bucket" datasets-check]
-           ["Lab browser" lab-browser-check]
-           ["Lab time" #(lab-expiry-check env-map)]
-           ["Environment" #(environment-check env-map)]
-           ["gcloud" gcloud-check]
-           ["Checklist" checklist-check]
-           ["Repository" repository-check]]
-          (mapv (fn [[check-name check-fn]] (future (run-check check-name check-fn))))
-          (mapv deref)))))
+     (telemetry/span "status" {}
+       (->> [["Neo4j Aura" #(with-driver (fn [open-driver] (neo4j-check open-driver env-map)))]
+             ["Labs" #(with-driver (fn [open-driver]
+                                     (labs/as-check (labs/run-all {:driver open-driver}))))]
+             ["Dataset bucket" datasets-check]
+             ["Lab browser" lab-browser-check]
+             ["Lab time" #(lab-expiry-check env-map)]
+             ["Environment" #(environment-check env-map)]
+             ["gcloud" gcloud-check]
+             ["Checklist" checklist-check]
+             ["Repository" repository-check]]
+            (mapv (fn [[check-name check-fn]] (future (run-check check-name check-fn))))
+            (mapv deref))))))

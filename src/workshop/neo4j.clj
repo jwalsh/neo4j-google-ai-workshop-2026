@@ -4,7 +4,8 @@
   `connect` opens a driver from the environment; `query` runs one statement
   and returns its rows as Clojure maps."
   (:require [clojure.string :as str]
-            [workshop.env :as env])
+            [workshop.env :as env]
+            [workshop.telemetry :as telemetry])
   (:import (java.util List Map)
            (org.neo4j.driver AuthTokens Driver GraphDatabase QueryConfig Record SessionConfig)
            (org.neo4j.driver.types Node Path Relationship)))
@@ -64,23 +65,29 @@
   "Runs one Cypher statement and returns a vector of row maps keyed by
   column keyword. parameters is a map with string or keyword keys. The
   statement runs in a managed transaction, except one that commits as it
-  goes (CALL {} IN TRANSACTIONS), which gets an auto-commit session."
+  goes (CALL {} IN TRANSACTIONS), which gets an auto-commit session. Each
+  call is a span: the statement's first line, parameter names, row count."
   ([driver statement] (query driver statement {}))
   ([^Driver driver ^String statement parameters]
-   (let [string-keyed (into {} (map (fn [[parameter-name parameter-value]]
-                                      [(name parameter-name) parameter-value]))
-                            parameters)
-         records (if (auto-commit? statement)
-                   (with-open [session (.session driver (SessionConfig/forDatabase (database-name)))]
-                     (.list (.run session statement ^Map string-keyed)))
-                   (-> (.executableQuery driver statement)
-                       (.withParameters ^Map string-keyed)
-                       (.withConfig (-> (QueryConfig/builder)
-                                        (.withDatabase (database-name))
-                                        (.build)))
-                       (.execute)
-                       (.records)))]
-     (mapv (fn [^Record record] (->clj (.asMap record))) records))))
+   (telemetry/span "cypher" {:statement (telemetry/first-line statement)
+                             :auto-commit? (auto-commit? statement)
+                             :parameters (vec (sort (map name (keys parameters))))}
+     (let [string-keyed (into {} (map (fn [[parameter-name parameter-value]]
+                                        [(name parameter-name) parameter-value]))
+                              parameters)
+           records (if (auto-commit? statement)
+                     (with-open [session (.session driver (SessionConfig/forDatabase (database-name)))]
+                       (.list (.run session statement ^Map string-keyed)))
+                     (-> (.executableQuery driver statement)
+                         (.withParameters ^Map string-keyed)
+                         (.withConfig (-> (QueryConfig/builder)
+                                          (.withDatabase (database-name))
+                                          (.build)))
+                         (.execute)
+                         (.records)))
+           rows (mapv (fn [^Record record] (->clj (.asMap record))) records)]
+       (telemetry/annotate! {:rows (count rows)})
+       rows))))
 
 (defn statements
   "The statements in Cypher text: split where a semicolon ends a line, with

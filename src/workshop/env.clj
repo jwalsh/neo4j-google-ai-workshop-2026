@@ -3,7 +3,11 @@
 
   .env is the same file direnv and the Makefile read: plain KEY=value lines,
   quotes around a value with spaces. A value in the file wins over one in the
-  environment, as it does in the Makefile."
+  environment, as it does in the Makefile.
+
+  WORKSHOP_ENV names another file to read in place of .env: the way to
+  point every command at a different server without editing the lab's
+  credentials, e.g. WORKSHOP_ENV=local-graph.env bb dashboard."
   (:require [clojure.java.io :as io]
             [clojure.string :as str]))
 
@@ -28,7 +32,7 @@
 
 (defn load-env
   "The process environment with .env laid over it. Empty values are dropped."
-  ([] (load-env ".env"))
+  ([] (load-env (or (System/getenv "WORKSHOP_ENV") ".env")))
   ([dotenv-path]
    (let [dotenv-file (io/file dotenv-path)
          from-file (if (.exists dotenv-file) (parse-dotenv (slurp dotenv-file)) {})]
