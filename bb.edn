@@ -37,7 +37,7 @@
   local     {:doc "Neo4j in this machine's JVM on bolt://localhost:7688, loaded and checked, until ctrl-c (experiments/008)"
              :task (do (shell {:dir "experiments/008-local-graph-dx"} "clojure" "-M:gate")
                        (shell {:dir "experiments/008-local-graph-dx"} "clojure" "-M:serve"))}
-  books     {:doc "A catalog of a directory of PDF books from their own metadata, kept in the XDG cache: bb books catalog|list"
+  books     {:doc "A catalog of a directory of PDF books from their own metadata, kept in the XDG cache: bb books catalog|list|only PLACE|fetch [SHELF]|outline"
              :requires ([books])
              :task (apply books/-main *command-line-args*)}
   papers    {:doc "arXiv papers a .bib names, fetched once into the XDG cache: bb papers where|list|fetch [n]|add DIR|index"
@@ -46,6 +46,12 @@
   local-papers {:doc "A second embedded Neo4j for the papers graph, on bolt://localhost:7689, until ctrl-c"
                 :task (shell {:dir "experiments/008-local-graph-dx"}
                              "clojure" "-M:small:serve" "scratch/neo4j-papers" "7689" "64m")}
+  local-books {:doc "A third embedded Neo4j for the books graph, on bolt://localhost:7690, until ctrl-c"
+               :task (shell {:dir "experiments/008-local-graph-dx"}
+                            "clojure" "-M:small:serve" "scratch/neo4j-books" "7690" "64m")}
+  books-load {:doc "Load the shelf's outlines into the books graph: books, headings, shared terms. Idempotent."
+              :task (shell {:extra-env {"WORKSHOP_ENV" "books-graph.env"}}
+                           "clojure" "-M:run" "books-load")}
   papers-load {:doc "Load the cached papers into the papers graph: authors, citations, categories. Idempotent."
                :task (shell {:extra-env {"WORKSHOP_ENV" "papers-graph.env"}}
                             "clojure" "-M:run" "papers-load")}

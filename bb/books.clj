@@ -82,6 +82,13 @@
   []
   (if (fs/exists? (catalog-path)) (edn/read-string (slurp (str (catalog-path)))) []))
 
+(defn- places-path [] (fs/path (cache-dir) "places.edn"))
+
+(defn places
+  "Where each place is, as the last catalog of it said: {place {:dir :host}}."
+  []
+  (if (fs/exists? (places-path)) (edn/read-string (slurp (str (places-path)))) {}))
+
 (defn- place-name
   "A short name for where a directory is: BOOKS_PLACE, else the host's last
   part, else \"local\"."
@@ -116,7 +123,93 @@
     (fs/create-dirs (cache-dir))
     (spit (str (catalog-path) ".part") (with-out-str (pprint/pprint books)))
     (fs/move (str (catalog-path) ".part") (catalog-path) {:replace-existing true})
+    (spit (str (places-path)) (with-out-str (pprint/pprint (assoc (places) place {:dir directory :host host}))))
     books))
+
+(defn- copy-path [book-id] (fs/path (cache-dir) "pdf" (str book-id ".pdf")))
+
+(defn shelf
+  "A shelf file: [{:file :shelf :why}]."
+  [shelf-path]
+  (edn/read-string (slurp shelf-path)))
+
+(defn fetch!
+  "Copies a shelf's books into the cache, each once, as <id>.pdf: from a
+  local place by cp, from a remote one by scp, to a .part file renamed when
+  whole. The cache's names are the shelf's ids, not the library's file
+  names, so two people with differently named copies share one layout.
+  Returns one row per book."
+  [shelf-path]
+  (fs/create-dirs (fs/path (cache-dir) "pdf"))
+  (let [by-file (into {} (map (juxt :file identity)) (catalog))
+        known-places (places)]
+    (vec (for [{:keys [file id]} (shelf shelf-path)]
+           (let [target (copy-path id)
+                 ;; a copy made under the library's own name, before ids
+                 earlier-copy (fs/path (cache-dir) "pdf" file)
+                 _ (when (and (fs/exists? earlier-copy) (not (fs/exists? target)))
+                     (fs/move earlier-copy target))
+                 ;; a local place first: it costs nothing
+                 from (->> (:places (by-file file))
+                           (map (fn [place] (assoc (known-places place) :place place)))
+                           (sort-by #(if (:host %) 1 0))
+                           first)
+                 outcome (cond
+                           (and (fs/exists? target) (pos? (fs/size target))) :cached
+                           (nil? from) :not-in-the-catalog
+                           :else (let [partial-file (str target ".part")
+                                       source (str (:dir from) "/" file)
+                                       {:keys [exit]} (if (:host from)
+                                                        (process/shell {:continue true :out :string :err :string}
+                                                                       "scp" "-q" "-o" "BatchMode=yes"
+                                                                       (str (:host from) ":" source) partial-file)
+                                                        (process/shell {:continue true :out :string :err :string}
+                                                                       "cp" source partial-file))]
+                                   (if (and (zero? exit) (fs/exists? partial-file))
+                                     (do (fs/move partial-file target {:replace-existing true})
+                                         (keyword (str "from-" (:place from))))
+                                     :failed)))]
+             {:id id
+              :copy outcome
+              :megabytes (when (fs/exists? target) (format "%.1f" (/ (fs/size target) 1e6)))})))))
+
+(defn- unescape
+  [xml-text]
+  (-> xml-text
+      (str/replace "&lt;" "<") (str/replace "&gt;" ">") (str/replace "&quot;" "\"")
+      (str/replace "&apos;" "'") (str/replace "&#39;" "'") (str/replace "&amp;" "&")))
+
+(defn parse-outline
+  "The bookmark outline in pdftohtml's XML as [{:level :page :title}]: an
+  <outline> element opens a level, an <item> is a heading at the level it
+  is in."
+  [xml-text]
+  (first
+   (reduce (fn [[entries level] line]
+             (cond
+               (str/starts-with? line "<outline>") [entries (inc level)]
+               (str/starts-with? line "</outline>") [entries (dec level)]
+               :else (if-let [[_ page title] (re-matches #"<item page=\"(\d+)\">(.*)</item>" line)]
+                       [(conj entries {:level level :page (parse-long page) :title (str/trim (unescape title))}) level]
+                       [entries level])))
+           [[] 0]
+           (map str/trim (str/split-lines xml-text)))))
+
+(defn outline!
+  "Reads the bookmark outline of every cached book with pdftohtml and
+  writes outlines.edn: [{:id :entries [...]}]. A book with no bookmarks
+  has no entries and is listed as such."
+  []
+  (let [outlines (vec (for [pdf-file (sort (fs/glob (fs/path (cache-dir) "pdf") "*.pdf"))]
+                        (let [{:keys [out]} (process/shell {:out :string :err :string :continue true}
+                                                           "pdftohtml" "-xml" "-i" "-stdout" "-f" "1" "-l" "1"
+                                                           (str pdf-file))]
+                          {:id (fs/strip-ext (str (fs/file-name pdf-file)))
+                           :entries (parse-outline (or out ""))})))
+        outlines-path (fs/path (cache-dir) "outlines.edn")]
+    (spit (str outlines-path ".part") (with-out-str (pprint/pprint outlines)))
+    (fs/move (str outlines-path ".part") outlines-path {:replace-existing true})
+    outlines))
 
 (defn -main
   [& [command]]
@@ -128,6 +221,14 @@
                 (println "  with a title: " (count (filter :title books)))
                 (println "  with an author:" (count (filter :author books)))
                 (println "  with a year:  " (count (filter :year books))))
+    "fetch" (let [rows (fetch! (or (second *command-line-args*) "shelves/homage.edn"))]
+              (pprint/print-table rows)
+              (println (count (remove #(#{:failed :not-in-the-catalog} (:copy %)) rows)) "of" (count rows)
+                       "in" (str (fs/path (cache-dir) "pdf"))))
+    "outline" (let [outlines (outline!)]
+                (pprint/print-table (for [{:keys [id entries]} outlines]
+                                      {:headings (count entries) :id id}))
+                (println (count outlines) "books," (reduce + (map (comp count :entries) outlines)) "headings"))
     "only" (doseq [book (catalog)
                    :when (= [(second *command-line-args*)] (:places book))]
              (println (:file book)))
@@ -137,7 +238,7 @@
                                      (update :title #(some-> % (subs 0 (min 48 (count %)))))
                                      (update :author #(some-> % (subs 0 (min 28 (count %)))))
                                      (update :file #(subs % 0 (min 36 (count %)))))))
-    (do (println "usage: bb books catalog | list | only PLACE")
+    (do (println "usage: bb books catalog | list | only PLACE | fetch [SHELF.edn] | outline")
         (println "  BOOKS_DIR   the directory of PDFs (required)")
         (println "  BOOKS_HOST  an ssh destination the directory is on (optional)")
         (println "  BOOKS_PLACE a name for this place in the catalog (default: the host, or local)")

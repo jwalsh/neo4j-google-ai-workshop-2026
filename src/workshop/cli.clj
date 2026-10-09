@@ -4,6 +4,7 @@
             [clojure.string :as str]
             [workshop.agent :as agent]
             [workshop.audit :as audit]
+            [workshop.books :as books]
             [workshop.labs :as labs]
             [workshop.dashboard :as dashboard]
             [workshop.form13 :as form13]
@@ -65,6 +66,10 @@
                              (do (println "no answer: " problem)
                                  (run! #(println "  " %) candidates))
                              (print-rows rows)))))}
+   "books-load" {:doc "MERGE the shelf's books and outlines into the server the env file names"
+                 :run (fn [_]
+                        (with-open [driver (neo4j/connect)]
+                          (pprint/pprint (books/load! driver (books/graph)))))}
    "papers-load" {:doc "MERGE the cached papers into the server the env file names"
                   :run (fn [_]
                          (with-open [driver (neo4j/connect)]

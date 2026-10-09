@@ -46,7 +46,7 @@
 
 (deftest registry-test
   (let [entries (agent/registry)]
-    (is (= ["form13" "papers"] (map :id entries)))
+    (is (= ["form13" "papers" "books"] (map :id entries)))
     (testing "every agent file and env file named is there, and loads"
       (doseq [{:keys [agent env]} entries]
         (is (.exists (java.io.File. ^String env)) env)

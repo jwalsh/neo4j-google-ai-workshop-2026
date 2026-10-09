@@ -110,11 +110,7 @@
                                                template)]
           {:label label :property property}))))
 
-(defn resolve-value
-  "The stored values a loosely written one could mean: an exact match
-  without regard to case if there is one, else every value containing it.
-  The model copies a name from the question; the database knows how the
-  name is spelled."
+(defn- stored-values
   [driver {:keys [label property]} written-value]
   (let [candidates (map :value
                         (neo4j/query driver
@@ -123,6 +119,18 @@
                                      {:written written-value}))
         exact (filter #(= (str/lower-case %) (str/lower-case written-value)) candidates)]
     (vec (if (seq exact) exact candidates))))
+
+(defn resolve-value
+  "The stored values a loosely written one could mean: an exact match
+  without regard to case if there is one, else every value containing it.
+  The model copies a name from the question; the database knows how the
+  name is spelled. A plural that matches nothing is tried once more
+  without its s, since a question says \"macros\" where a term is \"macro\"."
+  [driver place written-value]
+  (let [candidates (stored-values driver place written-value)]
+    (if (and (empty? candidates) (str/ends-with? written-value "s") (> (count written-value) 3))
+      (stored-values driver place (subs written-value 0 (dec (count written-value))))
+      candidates)))
 
 (defn grounded
   "A choice with every argument the question does not support removed, and

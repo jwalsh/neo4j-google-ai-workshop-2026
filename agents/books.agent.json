@@ -1,0 +1,75 @@
+{
+  "name": "Shelf Reader",
+  "description": "Answers questions about a shelf of technical books from their tables of contents: which books use a term, where, and which books share vocabulary.",
+  "system_prompt": "Answer from the books graph only. It holds headings, not the books' text.",
+  "is_private": true,
+  "is_mcp_enabled": false,
+  "tools": [
+    {
+      "name": "Which Books Mention a Term",
+      "description": "Ranks the books by how many of their headings use one term, such as telemetry, agent or transducer. Takes a term, not a book.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (book:Book)-[:HAS*1..5]->(heading:Heading)-[:ABOUT]->(term:Term) WHERE term.name = $termName RETURN book.title AS book, count(DISTINCT heading) AS headings ORDER BY headings DESC, book LIMIT $limit",
+        "parameters": [
+          {"name": "termName", "data_type": "string", "description": "One word, lower case, singular."},
+          {"name": "limit", "data_type": "integer", "description": "Maximum number of books to return.", "is_optional": true, "default": 15}
+        ]
+      }
+    },
+    {
+      "name": "Find a Term Inside One Book",
+      "description": "Lists the headings of one named book that use one term, with their page numbers. Takes both a book and a term.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (volume:Book)-[:HAS*1..5]->(heading:Heading)-[:ABOUT]->(subject:Term) WHERE volume.title = $bookTitle AND subject.name = $subjectTerm RETURN heading.page AS page, heading.title AS heading ORDER BY page LIMIT $limit",
+        "parameters": [
+          {"name": "bookTitle", "data_type": "string", "description": "The book's title, or a distinctive part of it."},
+          {"name": "subjectTerm", "data_type": "string", "description": "One word, lower case, singular."},
+          {"name": "limit", "data_type": "integer", "description": "Maximum number of headings to return.", "is_optional": true, "default": 30}
+        ]
+      }
+    },
+    {
+      "name": "Table of Contents of a Book",
+      "description": "Lists the top two levels of headings of one named book, in order, with page numbers. Takes a book and no term.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (tome:Book)-[:HAS*1..2]->(heading:Heading) WHERE tome.title = $contentsOf RETURN heading.page AS page, heading.level AS level, heading.title AS heading ORDER BY heading.position LIMIT $limit",
+        "parameters": [
+          {"name": "contentsOf", "data_type": "string", "description": "The book's title, or a distinctive part of it."},
+          {"name": "limit", "data_type": "integer", "description": "Maximum number of headings to return.", "is_optional": true, "default": 60}
+        ]
+      }
+    },
+    {
+      "name": "Books Similar to a Book",
+      "description": "Ranks the other books by how much heading vocabulary they share with one named book.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (origin:Book)-[:HAS*1..5]->(:Heading)-[:ABOUT]->(term:Term) WHERE origin.title = $similarTo WITH origin, collect(DISTINCT term) AS originTerms MATCH (other:Book)-[:HAS*1..5]->(:Heading)-[:ABOUT]->(term:Term) WHERE other <> origin WITH other, originTerms, collect(DISTINCT term) AS otherTerms WITH other, size([term IN originTerms WHERE term IN otherTerms]) AS shared, size(originTerms) AS originSize, size(otherTerms) AS otherSize RETURN other.title AS book, shared AS sharedTerms, round(1.0 * shared / (originSize + otherSize - shared), 3) AS jaccard ORDER BY jaccard DESC LIMIT $limit",
+        "parameters": [
+          {"name": "similarTo", "data_type": "string", "description": "The title of the book to compare the others with, or a distinctive part of it."},
+          {"name": "limit", "data_type": "integer", "description": "How many books to return.", "is_optional": true, "default": 8}
+        ]
+      }
+    },
+    {
+      "name": "Books on a Shelf",
+      "description": "Lists the books on one named shelf, such as graphs, agents, cloud, data or clojure, with the reason each is there.",
+      "enabled": true,
+      "type": "cypherTemplate",
+      "config": {
+        "template": "MATCH (shelf:Shelf)<-[:ON]-(book:Book) WHERE shelf.name = $shelfName RETURN book.title AS book, book.why AS why ORDER BY book LIMIT $limit",
+        "parameters": [
+          {"name": "shelfName", "data_type": "string", "description": "The shelf's name, one lower-case word."},
+          {"name": "limit", "data_type": "integer", "description": "Maximum number of books to return.", "is_optional": true, "default": 30}
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+;; A shelf: books, each with an :id that names it here and in the cache
+;; (<id>.pdf), a :title, and the reason it is on the shelf. :file is what
+;; the book is called in the owner's library, and is the only line that is
+;; about one person's disk: someone else keeps the ids and puts their own
+;; file names there, or drops a PDF named <id>.pdf into the cache's pdf/. This one is the workshop's own subjects,
+;; read back out of the owner's library: graphs, agents, the cloud it ran
+;; on, the telemetry we added, and the language it was all written in.
+;; There is no Emacs book in the library. The Lisp one stands in.
+[;; graphs
+ {:id "neo4j-in-action" :title "Neo4j in Action"
+  :file "Neo4j_in_Action.pdf" :shelf "graphs" :why "the database, a decade earlier"}
+ {:id "graph-algorithms-for-data-science" :title "Graph Algorithms for Data Science"
+  :file "graphalgorithmsfordatascience.pdf" :shelf "graphs" :why "Lab 5's degree centrality, with the rest of the family"}
+ {:id "linked-data" :title "Linked Data"
+  :file "Linked_Data.pdf" :shelf "graphs" :why "experiment 002's RDF triples"}
+ {:id "graphql-in-action" :title "GraphQL in Action"
+  :file "GraphQL_in_Action.pdf" :shelf "graphs" :why "Aura's GraphQL Data APIs, the sidebar entry no lab opened"}
+ ;; agents and models
+ {:id "building-applications-with-ai-agents" :title "Building Applications with AI Agents"
+  :file "buildingapplicationswithaiagents_designingandimplementingmultiagentsystems.pdf" :shelf "agents" :why "Labs 7 to 9"}
+ {:id "startup-technical-guide-ai-agents" :title "Startup Technical Guide: AI Agents"
+  :file "startup_technical_guide_ai_agents_final.pdf" :shelf "agents" :why "the host's own guide to agents"}
+ {:id "ai-engineering" :title "AI Engineering"
+  :file "aiengineering.pdf" :shelf "agents" :why "evaluation before belief: finding 26"}
+ {:id "learning-langchain" :title "Learning LangChain"
+  :file "learninglangchain.pdf" :shelf "agents" :why "the tool-calling loop workshop.agent declines to have"}
+ {:id "llmops" :title "LLMOps"
+  :file "llmops.pdf" :shelf "agents" :why "what /traces would grow into"}
+ {:id "prompt-engineering-for-llms" :title "Prompt Engineering for LLMs"
+  :file "promptengineeringforllms.pdf" :shelf "agents" :why "prompts/, one file each"}
+ {:id "generative-ai-design-patterns" :title "Generative AI Design Patterns"
+  :file "generativeaidesignpatterns.pdf" :shelf "agents" :why "structured output and grounding, as patterns"}
+ {:id "hands-on-large-language-models" :title "Hands-On Large Language Models"
+  :file "hands-onlargelanguagemodels.pdf" :shelf "agents" :why "embeddings: the vector index Lab 6 mentions and nobody queried"}
+ {:id "rag-driven-generative-ai" :title "RAG-Driven Generative AI"
+  :file "rag-drivengenerativeai.pdf" :shelf "agents" :why "Lab 6's chunks and what they are for"}
+ {:id "developers-playbook-for-llm-security" :title "The Developer's Playbook for Large Language Model Security"
+  :file "developersplaybookforlargelanguagemodelsecurity.pdf" :shelf "agents" :why "an agent that runs CREATE on a shared database: Lab 8"}
+ ;; the cloud it ran on, and watching it
+ {:id "kubernetes-in-action-2e" :title "Kubernetes in Action, Second Edition"
+  :file "Kubernetes_in_Action_Second_Edition_v15.pdf" :shelf "cloud" :why "under every console we clicked"}
+ {:id "platform-engineering-on-kubernetes" :title "Platform Engineering on Kubernetes"
+  :file "Platform_Engineering_on_Kubernetes.pdf" :shelf "cloud" :why "the marketplace, from the other side"}
+ {:id "terraform-in-action" :title "Terraform in Action"
+  :file "Terraform_in_Action.pdf" :shelf "cloud" :why "Lab 2 as code, which it was not"}
+ {:id "cloud-application-architecture-patterns" :title "Cloud Application Architecture Patterns"
+  :file "cloudapplicationarchitecturepatterns.pdf" :shelf "cloud" :why "the architecture slide, redrawn at length"}
+ {:id "cloud-observability-in-action" :title "Cloud Observability in Action"
+  :file "Cloud_Observability_in_Action.pdf" :shelf "cloud" :why "notes/telemetry.org"}
+ {:id "software-telemetry" :title "Software Telemetry"
+  :file "Software_Telemetry.pdf" :shelf "cloud" :why "workshop.telemetry, with a pipeline"}
+ {:id "logging-in-action" :title "Logging in Action"
+  :file "Logging_in_Action.pdf" :shelf "cloud" :why "what we print where a span would do"}
+ ;; data
+ {:id "data-mesh" :title "Data Mesh"
+  :file "datamesh.pdf" :shelf "data" :why "one graph per agent, argued for an organisation"}
+ {:id "data-engineering-design-patterns" :title "Data Engineering Design Patterns"
+  :file "dataengineeringdesignpatterns_recipesforsolvingthemostcommondataen.pdf" :shelf "data" :why "the idempotent load: Lab 4"}
+ ;; the language, and the editor that is not here
+ {:id "joy-of-clojure-2e" :title "The Joy of Clojure, Second Edition"
+  :file "The_Joy_of_Clojure_Second_Edition.pdf" :shelf "clojure" :why "src/workshop"}
+ {:id "clojure-in-action" :title "Clojure in Action"
+  :file "Clojure_in_Action.pdf" :shelf "clojure" :why "src/workshop, more slowly"}
+ {:id "clojure-the-essential-reference" :title "Clojure: The Essential Reference"
+  :file "Clojure_The_Essential_Reference_v31.pdf" :shelf "clojure" :why "every core function used here, and the rest"}
+ {:id "get-programming-with-clojure" :title "Get Programming with Clojure"
+  :file "Get_Programming_with_Clojure_v2.pdf" :shelf "clojure" :why "dev/explore.clj"}
+ {:id "grokking-simplicity" :title "Grokking Simplicity"
+  :file "Grokking_Simplicity.pdf" :shelf "clojure" :why "data, calculations, actions: each lab as a function returning data"}
+ {:id "common-lisp-a-gentle-introduction" :title "Common Lisp: A Gentle Introduction to Symbolic Computation"
+  :file "touretzky-common-lisp-gentle-introduction.pdf" :shelf "clojure" :why "no Emacs book in the library; this is the nearest Lisp to one"}]

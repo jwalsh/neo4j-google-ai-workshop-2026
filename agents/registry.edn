@@ -12,4 +12,9 @@
   :agent "agents/papers.agent.json"
   :env "papers-graph.env"
   :about "Two reading lists as a citation graph: 80 papers, categories, verdicts. Written by hand."
-  :example "Who cites SWE-bench?"}]
+  :example "Who cites SWE-bench?"}
+ {:id "books"
+  :agent "agents/books.agent.json"
+  :env "books-graph.env"
+  :about "A shelf of books as their tables of contents: headings, shared terms. No book text, no model."
+  :example "Which books mention telemetry?"}]
