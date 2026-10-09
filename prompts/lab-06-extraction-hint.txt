@@ -1,0 +1,17 @@
+Return every entity once, named as the text names it, without trademark symbols.
+
+Entity types:
+- Organization: the company the filing is about.
+- Segment: a product category or line the filing groups products under (for example a heading such as "Wearables, Home and Accessories", or a category named inside it such as "Home").
+- Product: a named device or piece of software.
+- Service: a named service.
+- Competitor: a company or kind of company the filing says it competes with.
+
+Relationship types, with their direction:
+- Organization OFFERS Product or Service.
+- Organization HAS_SEGMENT Segment.
+- Segment INCLUDES Product, Service or another Segment. When the text says a category "includes" named items, write one INCLUDES relationship per item.
+- Product RUNS_ON Product, for a device and its operating system.
+- Organization COMPETES_WITH Competitor.
+
+source and target must be names that appear in entities. evidence is the short phrase from the text that supports the relationship, copied exactly.

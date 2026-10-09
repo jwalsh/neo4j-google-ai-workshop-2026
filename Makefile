@@ -49,6 +49,12 @@ REQUIRE_NEO4J = for name in NEO4J_URI NEO4J_USERNAME NEO4J_PASSWORD; do \
 # data/ is ignored by git.
 #   gmake data/Apple_10-K_2025_2_pages.pdf    Lab 6's two pages of a 10-K
 #   gmake data/form13-2023-05-11.csv          Lab 4's day of Form 13 filings
+# The text of a fetched PDF, for anything that wants words and not pages.
+# Listed before the fetch rule so a .txt is made from its PDF, not downloaded.
+data/%.txt: data/%.pdf
+	pdftotext -layout $< $@.part
+	mv $@.part $@
+
 data/%:
 	@mkdir -p $(@D)
 	curl -fsSL --retry 3 -o $@.part $(DATASET_URL)/$*
@@ -90,7 +96,7 @@ status: ## Where things stand: git, .env, which variables are set (never their v
 ping: ## RETURN 1 against the database in .env
 	@$(LOAD_ENV); $(REQUIRE_NEO4J); echo 'RETURN 1 AS ok' | $(RUN_CYPHER)
 
-cypher: ## Run a Cypher file against the database in .env (FILE=labs/lab-04-query.cypher)
+cypher: ## Run a Cypher file against the database in .env (FILE=labs/lab-03-connect.cypher)
 	@[ -n "$(FILE)" ] || { echo "FILE= is required." >&2; exit 1; }
 	@$(LOAD_ENV); $(REQUIRE_NEO4J); $(RUN_CYPHER) < "$(FILE)"
 

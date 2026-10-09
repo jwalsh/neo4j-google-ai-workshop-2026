@@ -125,6 +125,39 @@
    ;; fails on the constraint. The filer and its rivals are Organization.
    :allowed-nodes "Organization,Product,Service,Segment,Competitor"})
 
+(def lab-06-text
+  "The same two pages as plain text (gmake data/Apple_10-K_2025_2_pages.txt),
+  with the relationships pinned as well as the labels: one
+  source,TYPE,target triple per line in prompts/. The backend hands these to
+  the model as the only relationships it may return."
+  {:object "Apple_10-K_2025_2_pages.txt"
+   :local-path "data/Apple_10-K_2025_2_pages.txt"
+   :prompt-path "prompts/lab-06-generate-model.txt"
+   :relationships-path "prompts/lab-06-allowed-relationships.txt"
+   :allowed-nodes "Organization,Product,Service,Segment,Competitor"})
+
+(defn allowed-relationships
+  "The triples file as the comma-separated string the backend wants."
+  [relationships-path]
+  (->> (str/split-lines (slurp relationships-path))
+       (map str/trim)
+       (remove str/blank?)
+       (str/join ",")))
+
+(defn run-source!
+  "Uploads and extracts one source described like lab-06 or lab-06-text,
+  unless the builder already lists it as Completed. Returns its row."
+  [{:keys [object local-path prompt-path relationships-path allowed-nodes]}]
+  (let [find-source (fn [] (first (filter #(= object (:fileName %)) (sources))))]
+    (when-not (= "Completed" (:status (find-source)))
+      (upload! local-path)
+      (extract! (cond-> {:file-name object
+                         :instructions (str/trim (slurp prompt-path))
+                         :allowed-nodes allowed-nodes}
+                  relationships-path
+                  (assoc :allowed-relationships (allowed-relationships relationships-path)))))
+    (find-source)))
+
 (defn run-lab-06!
   "Uploads the lab's PDF and extracts a graph from it, unless the builder
   already lists the file as Completed. Returns the source's row."

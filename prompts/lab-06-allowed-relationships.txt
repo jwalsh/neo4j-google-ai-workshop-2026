@@ -1,0 +1,8 @@
+Organization,OFFERS,Product
+Organization,OFFERS,Service
+Organization,HAS_SEGMENT,Segment
+Segment,INCLUDES,Product
+Segment,INCLUDES,Service
+Segment,INCLUDES,Segment
+Product,RUNS_ON,Product
+Organization,COMPETES_WITH,Competitor

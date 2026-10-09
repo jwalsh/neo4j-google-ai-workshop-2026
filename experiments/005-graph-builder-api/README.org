@@ -81,6 +81,35 @@ order, all on 2026-10-08.
    node that takes the label, and a company read out of a 10-K has no CUSIP.
 7. *The same with "Organization" in place of "Company".* Completed.
 
+8. *The same pages as plain text, with the relationships pinned.* The
+   owner asked whether a text input and a schema hint would do better than a
+   PDF and a sentence. =gmake data/Apple_10-K_2025_2_pages.txt= makes the
+   text with pdftotext. =prompts/lab-06-allowed-relationships.txt= holds
+   eight source,TYPE,target triples, which the backend passes to the model
+   as the only relationships allowed (=allowedRelationship=, parsed in
+   threes in =backend/src/llm.py=). =(run-source! lab-06-text)=: Completed
+   in 119 seconds, 130 nodes, 189 entity-to-entity relationships, 102,560
+   tokens. Slower and two and a half times the tokens of the PDF run, for
+   the same two pages: the text came out as more chunks.
+9. *What the pinning did.* Counting relationship types between entities
+   mentioned in the same chunk, by document
+   (=labs/lab-06/07-relationship-types-by-document.cypher=): the text run is
+   INCLUDES 79, OFFERS 31, HAS_SEGMENT 21, RUNS_ON 20, COMPETES_WITH 1, all
+   five of them types that were allowed. The free PDF run had made fourteen
+   types for fewer relationships, PRODUCT, SEGMENT, SERVES and PRODUCES
+   among them. The count is muddied where it matters: both runs merge
+   entities on =id=, so an old PRODUCT relationship between two entities the
+   text also mentions shows up under the text document too (3 PRODUCT, 2
+   OPERATING_SYSTEM, 1 BASED_ON there are the PDF run's). A clean
+   comparison needs the two runs in separate databases.
+
+Reading the backend for attempt 8 also answered the other half of the
+question: the Graph Builder already uses structured output. =llm.py= calls
+=llm.with_structured_output(_Graph)= through LangChain's graph transformer,
+so the model is held to a graph-shaped schema whatever the prompt says. What
+a caller controls is the vocabulary: allowed labels, allowed triples, and
+the free-text instructions.
+
 * What the failures say
 
 - Attempt 6 is the one worth keeping. Two loads into one database met on a

@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "required": ["entities", "relationships"],
+  "properties": {
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "description"],
+        "properties": {
+          "name": {"type": "string"},
+          "type": {"type": "string", "enum": ["Organization", "Product", "Service", "Segment", "Competitor"]},
+          "description": {"type": "string"}
+        }
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "type", "target", "evidence"],
+        "properties": {
+          "source": {"type": "string"},
+          "type": {"type": "string", "enum": ["OFFERS", "HAS_SEGMENT", "INCLUDES", "RUNS_ON", "COMPETES_WITH"]},
+          "target": {"type": "string"},
+          "evidence": {"type": "string"}
+        }
+      }
+    }
+  }
+}
