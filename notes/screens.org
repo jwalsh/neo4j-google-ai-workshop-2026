@@ -44,3 +44,49 @@ evaluated by keys sent to the pane. The picture is that pane's text and
 colour codes rendered to an image, so the palette is approximate and the
 font is not the terminal's. The session is real; a person at the keyboard
 was not.
+
+* The card
+
+[[file:img/workshop-card.png]]
+
+Ours, 2026-10-10. A small transit map held in a pair of parentheses: three
+lines meeting at one interchange, for a graph asked about from a Lisp. It
+is the image at the top of the README (the 256 pixel
+[[file:img/workshop-thumbnail.png][thumbnail]]) and the logo of the sign-in
+application; a grey [[file:img/workshop-banner.png][728 by 90 strip]] is cut
+from the same picture.
+
+It is drawn from data, not by hand. =bb/card.clj= holds each line as a
+colour and the points it runs through and each station as a place and a
+kind, and writes =notes/diagrams/workshop-card.svg= from them. To change the
+picture, change those values:
+
+#+begin_src sh
+bb card        # the SVG, from bb/card.clj
+gmake card     # the SVG and the three PNGs, each only if its source changed
+#+end_src
+
+It needs babashka, and =rsvg-convert= (librsvg) or ImageMagick to turn the
+SVG into a PNG; ImageMagick's =magick= makes the thumbnail and the strip.
+The three sizes are the ones the owner's site uses for a note's card,
+thumbnail and banner.
+
+The lines are made up. Drawing them from the transit graph, so that the
+card is the real map, is the next step and is not done: =svg= already takes
+lines and stations as arguments, and what is missing is a layout that turns
+stations' coordinates into a diagram of straight runs.
+
+** Two others, kept
+
+Drawn the same day as alternatives and kept beside the card. Both are SVG
+written by hand, in =notes/diagrams/=, and are not made by =bb card=.
+
+[[file:img/workshop-logo-prompt.png]]
+
+A prompt and the graph it answers with, on a dark rounded square. It is
+the one that reads best at the size of an application's icon.
+
+[[file:img/workshop-logo-lambda.png]]
+
+One line of a map bent into a lambda, with its stops.
+

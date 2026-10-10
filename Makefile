@@ -15,7 +15,7 @@ DATASET_URL ?= https://storage.googleapis.com/neo4j-datasets/hands-on-lab
 .DEFAULT_GOAL := help
 .DELETE_ON_ERROR:
 
-.PHONY: help deps todos agenda status ping cypher guard-env
+.PHONY: help deps todos agenda status ping cypher guard-env card
 
 # .env holds the Aura credentials and is loaded by direnv. A recipe that needs
 # them loads the file itself too, so the target works in a shell direnv has
@@ -99,6 +99,38 @@ ping: ## RETURN 1 against the database in .env
 cypher: ## Run a Cypher file against the database in .env (FILE=labs/lab-03-connect.cypher)
 	@[ -n "$(FILE)" ] || { echo "FILE= is required." >&2; exit 1; }
 	@$(LOAD_ENV); $(REQUIRE_NEO4J); $(RUN_CYPHER) < "$(FILE)"
+
+# The repository's card. The SVG is written from data by bb card; the PNGs
+# are rendered from the SVG, so each is rebuilt only when what it is made
+# from changes. Needs babashka, and rsvg-convert (librsvg) or ImageMagick
+# for the first step; ImageMagick for the other two.
+CARD_SVG := notes/diagrams/workshop-card.svg
+CARD_PNG := notes/img/workshop-card.png
+
+card: $(CARD_PNG) notes/img/workshop-thumbnail.png notes/img/workshop-banner.png notes/img/workshop-mark.png notes/img/favicon.ico ## Draw the card from bb/card.clj: the SVG, a 1024 square, a 256 thumbnail, a 728x90 grey banner, a transparent mark and a favicon
+
+$(CARD_SVG): bb/card.clj
+	bb card $@
+
+$(CARD_PNG): $(CARD_SVG)
+	@if command -v rsvg-convert >/dev/null; then rsvg-convert -w 1024 -h 1024 $< -o $@; \
+	else magick -background none $< -resize 1024x1024 $@; fi
+	magick $@ -strip -define png:compression-level=9 $@
+
+notes/img/workshop-thumbnail.png: $(CARD_PNG)
+	magick $< -strip -resize 256x256 -define png:compression-level=9 $@
+
+notes/img/workshop-banner.png: $(CARD_PNG)
+	magick $< -strip -resize 728x728 -gravity center -crop 728x90+0+0 +repage -colorspace Gray -depth 8 $@
+
+# The mark is the card with no ground: the same SVG without its background
+# rectangle, so it sits on any colour. The favicon is cut from the mark.
+notes/img/workshop-mark.png: $(CARD_SVG)
+	sed '/<rect /d' $< | rsvg-convert -w 1024 -h 1024 -o $@
+	magick $@ -strip -define png:compression-level=9 $@
+
+notes/img/favicon.ico: notes/img/workshop-mark.png
+	magick $< -define icon:auto-resize=48,32,16 $@
 
 # .gitignore keeps .env out of `git add .`; this is for `git add -f`, and for
 # a commit already made. Run it before a push.

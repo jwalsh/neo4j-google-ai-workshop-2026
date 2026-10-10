@@ -72,6 +72,9 @@
                           "clojure" "-M:run" "annotate" *command-line-args*)}
   ports     {:doc "This checkout's ports and who holds them in portclaim (PORTCLAIM names the registry): bb ports [show|claim SERVICE...|release [SERVICE...]]"
              :task (apply clojure "-M:run" "ports" *command-line-args*)}
+  card      {:doc "Write the repository's card, a small transit map in parentheses, as SVG from data: bb card [OUT.svg]; gmake card renders the PNGs"
+             :requires ([card])
+             :task (apply card/-main *command-line-args*)}
   papers-load {:doc "Load the cached papers into the papers graph: authors, citations, categories. Idempotent."
                :task (shell {:extra-env {"WORKSHOP_ENV" "papers-graph.env"}}
                             "clojure" "-M:run" "papers-load")}

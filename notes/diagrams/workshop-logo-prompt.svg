@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" rx="180" fill="#1d2733"/>
+  <!-- a prompt, then a small graph as its answer -->
+  <g fill="none" stroke="#f6f3ec" stroke-width="44" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 190 380 L 330 512 L 190 644"/>
+  </g>
+  <g fill="none" stroke="#8fa3b8" stroke-width="22" stroke-linecap="round">
+    <path d="M 470 512 L 640 340"/><path d="M 470 512 L 640 684"/>
+    <path d="M 640 340 L 640 684"/><path d="M 640 340 L 836 512"/><path d="M 640 684 L 836 512"/>
+  </g>
+  <g stroke="#1d2733" stroke-width="14">
+    <circle cx="470" cy="512" r="46" fill="#f6f3ec"/>
+    <circle cx="640" cy="340" r="46" fill="#d9541e"/>
+    <circle cx="640" cy="684" r="46" fill="#3f8fd6"/>
+    <circle cx="836" cy="512" r="46" fill="#3aa56c"/>
+  </g>
+</svg>

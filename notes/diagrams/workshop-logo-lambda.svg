@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#f6f3ec"/>
+  <!-- one line of a map, bent into a lambda, with its stops -->
+  <g fill="none" stroke="#1f5fa8" stroke-width="56" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 300 220 L 400 220 L 724 804"/>
+    <path d="M 512 422 L 300 804"/>
+  </g>
+  <g fill="#f6f3ec" stroke="#1d2733" stroke-width="16">
+    <circle cx="300" cy="220" r="38"/><circle cx="724" cy="804" r="38"/>
+    <circle cx="300" cy="804" r="38"/><circle cx="618" cy="613" r="28"/>
+    <circle cx="406" cy="613" r="28"/>
+    <circle cx="512" cy="422" r="52" stroke-width="20"/>
+  </g>
+</svg>
