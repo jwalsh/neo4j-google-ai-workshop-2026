@@ -110,9 +110,10 @@ returns whichever it finds first.
 "Kendall" in the question is "Kendall/MIT" in the graph; the agent's
 resolution step finds it, as it found "ALLSTATE CORP" for the filings.
 
-The templates were run with their arguments given by hand. The agent was
-not asked with a model: on 2026-10-09 afternoon no JVM on the laptop could
-reach the model's host.
+The templates were first run with their arguments given by hand: on
+2026-10-09 afternoon no JVM on the laptop could reach the model's host.
+That evening the agent was asked with a model on the laptop itself; the
+next section has what it answered.
 
 * Several ways, and places that are not stations
 
