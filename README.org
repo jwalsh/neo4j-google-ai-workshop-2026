@@ -2,6 +2,30 @@
 #+DATE: 2026-10-08
 #+STARTUP: overview
 
+[[file:LICENSE][https://img.shields.io/badge/license-Apache--2.0-blue.svg]]
+[[https://clojure.org][https://img.shields.io/badge/Clojure-1.12-5881D8.svg]]
+[[https://babashka.org][https://img.shields.io/badge/babashka-tasks-E2231A.svg]]
+[[https://neo4j.com][https://img.shields.io/badge/Neo4j-5%2C%20embedded-018BFF.svg]]
+[[https://docs.cider.mx][https://img.shields.io/badge/Emacs-CIDER%20%2B%20org--babel-7F5AB6.svg]]
+[[https://ollama.com][https://img.shields.io/badge/model-local%2C%20Ollama-000000.svg]]
+
+The workshop taught a graph through three consoles and a hosted model. This
+repository does the labs, then takes a different view of the same idea: the
+graph on this machine, a REPL in place of the console, and a small local
+model that chooses a query and never writes one. Its own example is the
+MBTA's rail network, asked three ways in one Emacs frame.
+
+[[file:notes/img/emacs-transit-three-views.png]]
+
+Left, =dev/mbta_explore.clj=: Clojure forms, evaluated one at a time. Top
+right, [[file:notes/transit-queries.org][notes/transit-queries.org]]: a Cypher block in an org file, run with
+=C-c C-c=, its rows written under it. Bottom right, the REPL both go
+through: Park Street to Maverick, two ways. The fourth way in is a sentence:
+"How do I get from Maverick to the ICA?" on the dashboard's =/ask= page,
+where a three-billion-parameter model on the laptop picks the template and
+the stations. To see it: =bb mbta network=, =bb local-mbta=, =bb mbta-load=,
+then =M-x workshop-repl=.
+
 Notes and my own queries from a three-hour hands-on lab on Neo4j Aura and
 Gemini Enterprise. The lab's own instructions live in its repository, linked
 under Materials; nothing of theirs is copied here: slides worth keeping are redrawn as
@@ -117,8 +141,12 @@ REPL in =dev/user.clj=, where =(q "MATCH ...")= runs a statement and returns
 rows as maps. =workshop.el= at the root, once loaded (=M-x load-file=), adds
 =M-x workshop-repl= (a REPL beside a page of forms: an existing one, else
 the one =bb repl= left a port for, else jack-in) and =M-x workshop-graph=
-(point that REPL at the lab's instance, the filings, the papers or the
-books, and open the matching page).
+(point that REPL at the transit graph, the books, the papers, the filings
+or the lab's instance, and open the matching page; transit is the page it
+starts on). It also makes Cypher a language
+org-babel runs: =C-c C-c= on a =#+begin_src cypher :graph books= block sends
+the statement through that REPL and puts the rows under it as a table;
+each =:var= is a query parameter.
 
 =bb form13= explores Lab 4's day file locally, with no database: =summary=,
 =top=, =degree=, =variants=, =odd=; =verify= compares the database with the
@@ -141,6 +169,8 @@ and a dated log of what was tried:
 - =010-papers-dataset=: a bibliography's arXiv papers as a graph; authors and citations passed, the model's layer did not
 - =011-heading-terms=: terms from book headings with spaCy beside a rule; plural folding and phrases ported to Clojure, part of speech not
 - =012-book-index=: concepts from each book's own index, read by word position in babashka; 8,288 concepts from 24 books, 777 shared
+- =013-laptop-models=: the agents on two small models on this machine, asked once and asked twice; 42 questions, more right both times, one new wrong answer
+- =014-dspy-mbta=: a prompt searched for by DSPy and a decision model (=laya=) on 211 generated transit questions; five more right from the search, half right from the decision model, neither gate passed
 
 =workshop.labs= is each lab as a function returning data: =(run-all)= in a
 REPL, =bb labs= in a shell, three ok, one skipped and six blocked on what they need.
@@ -173,8 +203,10 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lab-09-aura-agents.org][Lab 9 - Aura Agents]]: the generated agent and its exported tools, and its answers checked against the database
 - [[file:notes/writeup-2026-10-08.org][Write-up, 2026-10-08]]: the day in one page: what the labs do, what held, what did not, and how to run it again
 - [[file:notes/books-shelf.org][A shelf of books as a graph]]: 29 books on the workshop's subjects as headings, terms and the concepts in their own indexes, explored from Emacs, with why two books come out similar
-- [[file:notes/transit.org][Transit]]: the MBTA's rail network from its GTFS feed as stations, stops, routes and lines, a map drawn from it, and Maverick to Kendall
+- [[file:notes/transit.org][Transit]]: the MBTA's rail network from its GTFS feed as stations, stops, routes and lines, a map drawn from it, Maverick to Kendall, and several ways between two places with landmarks for ends
+- [[file:notes/transit-queries.org][Transit, a query at a time]]: Cypher blocks in an org file run through the REPL with their results, and the stations a walk from a landmark
 - [[file:notes/data-sources.org][Other data sources]]: fifteen public datasets checked by request, ranked, with what a dataset-agnostic loader would need from each
+- [[file:notes/system.org][The system as built]]: four embedded graphs, a registry of agents, the path of a question through a local model, and what runs on which port
 - [[file:notes/local-first.org][The lab, local first]]: the same path with an embedded Neo4j and a small local model, lab by lab, and what does not carry over
 - [[file:notes/telemetry.org][Telemetry]]: spans around every statement, check and lab step, and the dashboard's Data and Traces pages
 - [[file:notes/review-framework-2026-10-08.org][Review as a framework, 2026-10-08]]: what a next workshop would copy from this repository, and ten changes that would make the copy cheap

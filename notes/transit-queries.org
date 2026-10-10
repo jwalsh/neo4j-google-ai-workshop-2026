@@ -1,0 +1,100 @@
+#+TITLE: Transit, a query at a time
+#+DATE: 2026-10-09
+#+PROPERTY: header-args:cypher :graph transit
+
+Cypher against the transit graph from an org file. =workshop.el= makes
+=cypher= a language org-babel runs: =C-c C-c= on a block sends the statement
+through the workshop's REPL and puts the rows under it. =:graph transit=
+names the graph for every block here, whatever the REPL is on; each =:var=
+is a query parameter. The results below are from the feed cached on
+2026-10-09.
+
+The same graph as Clojure forms is =dev/mbta_explore.clj=, and as questions
+to a model, =/ask= on the dashboard. [[file:transit.org][Transit]] says how the graph is built.
+
+[[file:img/emacs-transit-three-views.png]]
+
+The frame is the X11 build of Emacs 30.2 on a virtual display, captured
+whole on 2026-10-09: this file top right, the Clojure page left, the REPL
+both go through below.
+
+* Where the lines meet
+
+#+begin_src cypher
+MATCH (l:Line)<-[:ON]-(:Route)-[:SERVES]->(s:Station)
+RETURN s.name AS station, count(DISTINCT l) AS lines
+ORDER BY lines DESC, station LIMIT 6
+#+end_src
+
+#+RESULTS:
+| station       | lines |
+|---------------+-------|
+| South Station |    10 |
+| Back Bay      |     6 |
+| North Station |     6 |
+| Quincy Center |     4 |
+| Ruggles       |     4 |
+| Braintree     |     3 |
+
+* The routes through a station
+
+#+begin_src cypher :var station="Government Center"
+MATCH (l:Line)<-[:ON]-(r:Route)-[:SERVES]->(s:Station)
+WHERE s.name = $station
+RETURN r.name AS route, l.name AS line, r.kind AS kind
+ORDER BY r.order
+#+end_src
+
+#+RESULTS:
+| route        | line       | kind       |
+|--------------+------------+------------|
+| Green Line B | Green Line | light rail |
+| Green Line C | Green Line | light rail |
+| Green Line D | Green Line | light rail |
+| Green Line E | Green Line | light rail |
+| Blue Line    | Blue Line  | subway     |
+
+* The stations in walking distance of a landmark
+
+A landmark is a =:Place= entered by hand in =agents/mbta-places.edn=. The
+ICA is not a station; these are the ones a journey to it can end at. The
+Silver Line is a bus and is not in the graph, so Courthouse is missing.
+
+#+begin_src cypher :var place="ICA (Institute of Contemporary Art)"
+MATCH (p:Place {name: $place}), (s:Station)-[c:CONNECTS]->()
+WHERE c.kind <> 'commuter rail'
+  AND point.distance(p.location, s.location) <= 1200
+RETURN DISTINCT s.name AS station,
+       toInteger(point.distance(p.location, s.location)) AS metres
+ORDER BY metres
+#+end_src
+
+#+RESULTS:
+| station       | metres |
+|---------------+--------|
+| South Station |   1009 |
+| Aquarium      |   1045 |
+
+* A line, end to end
+
+#+begin_src cypher :var route="Blue Line"
+MATCH (r:Route)-[v:SERVES]->(s:Station) WHERE r.name = $route
+RETURN v.sequence + 1 AS position, s.name AS station, s.municipality AS town
+ORDER BY position
+#+end_src
+
+#+RESULTS:
+| position | station           | town   |
+|----------+-------------------+--------|
+|        1 | Wonderland        | Revere |
+|        2 | Revere Beach      | Revere |
+|        3 | Beachmont         | Revere |
+|        4 | Suffolk Downs     | Boston |
+|        5 | Orient Heights    | Boston |
+|        6 | Wood Island       | Boston |
+|        7 | Airport           | Boston |
+|        8 | Maverick          | Boston |
+|        9 | Aquarium          | Boston |
+|       10 | State             | Boston |
+|       11 | Government Center | Boston |
+|       12 | Bowdoin           | Boston |
