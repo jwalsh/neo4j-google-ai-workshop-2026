@@ -9,3 +9,4 @@
 **/.clj-kondo/.cache/
 # Other people's material kept for reference: lab step images, slides.
 /resources/
+__pycache__/
