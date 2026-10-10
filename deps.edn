@@ -1,5 +1,5 @@
 {:paths ["src"]
- :deps {org.clojure/clojure {:mvn/version "1.12.0"}
+ :deps {org.clojure/clojure {:mvn/version "1.13.0-alpha8"}
         ;; The official Neo4j driver, over Bolt. No Clojure wrapper.
         org.neo4j.driver/neo4j-java-driver {:mvn/version "5.28.15"}
         ;; Google's Cloud Storage client, for the workshop's dataset bucket.
