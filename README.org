@@ -2,6 +2,8 @@
 #+SUBTITLE: Neo4j, Clojure and Emacs on one machine, begun at a workshop
 #+STARTUP: overview
 
+[[file:notes/img/workshop-thumbnail.png]]
+
 [[https://clojure.org][https://img.shields.io/badge/Clojure-1.13.0--alpha8-5881D8.svg]]
 [[https://babashka.org][https://img.shields.io/badge/babashka-tasks-E2231A.svg]]
 [[https://neo4j.com][https://img.shields.io/badge/Neo4j-embedded-018BFF.svg]]
@@ -153,6 +155,7 @@ In =notes/=, one file per session or topic. The system first:
 - [[file:notes/books-shelf.org][A shelf of books as a graph]]: 29 books on the workshop's subjects as headings, terms and the concepts in their own indexes, explored from Emacs, with why two books come out similar, and notes kept on them outside the repository
 - [[file:notes/local-first.org][The lab, local first]]: the same path with an embedded Neo4j and a small local model, lab by lab, and what does not carry over
 - [[file:notes/telemetry.org][Telemetry]]: spans around every statement, check and lab step, and the dashboard's Data and Traces pages
+- [[file:notes/project-setup.org][Setting a project up]]: the order this one was set up in, from conventions to a hosted page, with what each step is proven to do, which are still on unreviewed branches, and what breaks when it is repeated for many projects
 - [[file:notes/data-sources.org][Other data sources]]: fifteen public datasets checked by request, ranked, with what a dataset-agnostic loader would need from each
 
 The workshop record:

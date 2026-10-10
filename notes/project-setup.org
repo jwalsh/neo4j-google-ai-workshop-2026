@@ -1,0 +1,244 @@
+#+TITLE: Setting a project up, from a checkout to a hosted page
+#+DATE: 2026-10-10
+
+Ours; nothing here is from the lab or the slides. This is the order things
+were set up in for this repository on 2026-10-10, written so that it can be
+done again for another project, with what each step is proven to do and
+what it is not. The intent is to host this one under the owner's own domain
+and to repeat the build, the development setup, the deployment, the
+telemetry and the monitoring for many more projects, on the order of a
+hundred.
+
+Most of it is not on =main=. Seven pieces were worked out the same day, each
+in a git worktree beside this checkout on a =proto/*= branch, each with a
+note that gives its commands and their output. None is merged or pushed. A
+step below says where it lives.
+
+| state    | means                                                        |
+|----------+--------------------------------------------------------------|
+| main     | in this checkout                                             |
+| branch   | on the =proto/*= branch named, committed there, not reviewed |
+| not done | nobody has done it; the step says what is missing            |
+
+* The steps, in order
+
+| #  | step                         | where                          | proven by                                    |
+|----+------------------------------+--------------------------------+----------------------------------------------|
+| 1  | conventions                  | main                           | =gmake guard-env=, =bb audit=                |
+| 2  | a development setup          | main                           | =bb test=, =workshop-repl= from a cold Emacs |
+| 3  | data outside the checkout    | main                           | tests; a worktree with no ignored files      |
+| 4  | ports per checkout           | main                           | =bb ports= read; no claim made yet           |
+| 5  | secrets                      | =proto/secrets=                | a throwaway store only                       |
+| 6  | an identity for agents       | partly, outside the repository | config parses; no login                      |
+| 7  | one artifact                 | =proto/build=                  | =gmake jar=, the page served from the jar    |
+| 8  | pages safe to show           | =proto/ui=                     | each route's status in each profile          |
+| 9  | a library out of it          | =proto/libs=                   | built, installed locally, consumed three ways |
+| 10 | manifests, run locally       | =proto/deploy-clouds=          | containers on this machine, both graphs      |
+| 11 | a cluster and a process      | =proto/deploy-gke=             | image built, containers ran; no cluster      |
+| 12 | telemetry                    | main, in memory only           | =/traces=                                    |
+| 13 | monitoring                   | not done                       |                                              |
+| 14 | a login                      | not done                       |                                              |
+
+** 1. Conventions
+
+=CLAUDE.md= at the root says what the repository is and how to work in it;
+=.meta/README.md= says what was never verified. Notes are org files, each
+linked from the README. Commits are conventional and small. =.env= is
+ignored and =gmake guard-env= fails if it is tracked or in history; it runs
+before every commit. For a new project this is the part to copy first,
+because every later step leans on it: the agents that did steps 5 to 11
+were each told to read =CLAUDE.md= and nothing else about style.
+
+** 2. A development setup
+
+=bb tasks= is the whole surface. babashka runs the tasks and the JVM runs
+the code: =bb test=, =bb repl=, the =local-*= servers, the =*-load= tasks.
+Emacs joins the nREPL through =workshop.el=. A new project needs a
+=bb.edn=, a =deps.edn=, a =dev/user.clj= and one page of forms to evaluate;
+the rest is the project's own.
+
+** 3. Data outside the checkout
+
+Anything that is not source is kept under the XDG directories, by kind:
+what can be fetched or derived again under =$XDG_CACHE_HOME/<project>-<what>=
+(the transit feed, the papers, the books' outlines), what cannot under
+=$XDG_DATA_HOME= (notes on books). Each has an environment variable that
+moves it. This is what makes a git worktree usable: a worktree has none of
+the ignored files, so a project that keeps its data in the checkout cannot
+be worked on in two places at once. See "Notes on a book" in
+[[file:books-shelf.org][the books note]] for the store that was built with this in mind.
+
+** 4. Ports per checkout
+
+=bb ports= asks [[https://github.com/aygp-dr/portclaim][portclaim]], the estate's registry of who holds which port.
+The main checkout keeps the ports the notes name. A worktree runs
+=bb ports claim SERVICE= and is given a slot of ten ports from 11000, the
+one a checksum of its branch name picks or, if that is held or in use, the
+next free one, written to an ignored =.env.ports=
+that the env loader and the server tasks read. =PORTCLAIM= names the
+registry; its address is a fact about a network and is in no file.
+
+Not proven: a claim or a release has never been sent, and no server has run
+on a block's port.
+
+** 5. Secrets
+
+=notes/proposal-secrets.org= on =proto/secrets=. Its layout: project
+secrets under =project/<repository>/<environment>/<service>= in =pass=, the
+secret on the first line and =key: value= lines after; a value reaches a
+tool at the edge, through a task that renders an ignored file or pipes into
+a dry-run Kubernetes Secret, and is never in a tracked file, a manifest, an
+image or a log. For a one-day cluster it recommends a plain Secret made out
+of band. All of that was run against a throwaway store with throwaway keys
+and nothing else.
+
+=notes/research-secrets-stores.org= on =proto/secrets-research= compares the
+stores other people use and says when to leave =pass=: about ten people.
+The two notes disagree in places and neither has been reviewed.
+
+** 6. An identity for agents
+
+Agents act as one named identity with its own mailbox and its own
+read-only, expiring tokens, so that what an agent can reach is not what the
+owner can. Set up so far, outside the repository: a mail configuration for
+that identity alone, pull only, with its password to come from the store.
+It parses and has not logged in. Not done: the store entry, the tokens for
+any source, and the decision whether the identity is an account of its own
+at each service or a token under the owner's.
+
+** 7. One artifact
+
+=notes/proposal-build.org= on =proto/build=. =gmake jar= builds one jar
+with tools.build, and the dashboard was served from it. What it found is
+the thing to fix before any container: the jar holds the code and not the
+files the code reads by relative path (the agents' registry, the templates,
+the shelf), so started anywhere but a checkout the first page fails. The
+jar is not byte-for-byte reproducible.
+
+** 8. Pages safe to show
+
+=notes/proposal-ui.org= on =proto/ui=. The dashboard's pages rebuilt from
+one namespace of components, and a second profile for an audience: the
+overview, the map, the data page and the question page answer, and the
+configuration, the traces and the two raw data routes do not. A hostile
+question was sent and ran only its template. It lists what stands between
+that and a room of people: no login, a server that answers one request at a
+time, and a database session that is allowed to write.
+
+** 9. A library out of it
+
+=notes/proposal-libraries.org= on =proto/libs=. The one piece judged worth
+sharing, the choosing of a query template by a model, as a library of its
+own with a build, declared against a released Clojure and not the alpha
+this repository runs. Consumed by coordinate, by path and by git. Nothing
+was published.
+
+** 10. Manifests, run locally
+
+=notes/proposal-deploy-clouds.org= on =proto/deploy-clouds=. A
+provider-neutral base (the dashboard, one Neo4j, a load job) with a thin
+file per provider. On this machine the pair ran in containers with the
+transit and filings graphs loaded and every page answering; the per-provider
+files were validated by their own offline tools and by nothing else. Two
+faults showed only when it ran: the filings load asks for a constraint the
+Community server does not have, and the Neo4j image stops when handed a
+variable named =NEO4J_PASSWORD=. Only the two graphs made from public data
+are deployed; the books and the papers are the owner's and stay here.
+
+** 11. A cluster and a process
+
+=notes/proposal-deploy-gke.org= on =proto/deploy-gke=. Kubernetes manifests
+with a Google overlay and a local one, an Argo CD application, an image and
+a workflow that builds and pushes it when started by hand. The image was
+built and answered its health route; as containers, Neo4j, the transit load
+and the dashboard worked end to end. No cluster ran: none of the local
+cluster tools is installed. The manifests were built by kustomize and
+checked by nothing else, and the workflow and the application were only
+read as YAML. It changes the dashboard to take its bind address from the
+environment, answer a health route and serve from several threads, which
+overlaps what =proto/ui= did. It also read how the owner's reference setup
+deploys: by labelled Actions calling a script per target, with no Argo CD
+in it. Cutting the transit feed needs about 3 GB of memory.
+
+** 12. Telemetry
+
+On main: a span around every statement, check, model call and lab step,
+held in memory and shown on =/traces=; see [[file:telemetry.org][the telemetry note]]. It dies with
+the process and leaves the machine by no route. For anything hosted, not
+done: an exporter, and somewhere to export to.
+
+** 13. Monitoring
+
+Not done. =bb status= and =/config= run each connection check when asked,
+which is a person looking and not a monitor. =proto/build= adds a version
+route. There is no health route on main, no alert, no uptime check and no
+log kept.
+
+** 14. A login
+
+Not done, and the dashboard should not grow one: every proposal puts an
+identity-aware door in front of it. Which door is undecided.
+
+* Doing it a hundred times
+
+What was done once here is of two kinds, and only one of them should be
+done again per project.
+
+Once, for all of them:
+
+- the port registry, already running;
+- the layout of the secret store and the agents' identity;
+- a template to start a project from, holding steps 1 to 4 as files. The
+  owner's scaffold for the =aygp-dr= organisation is the place; it was not
+  looked at for this note;
+- the build and the image workflow, called and not copied;
+- the base manifests, referred to and not copied;
+- wherever spans and logs are sent, and whatever watches a health route.
+
+Per project:
+
+- its =CLAUDE.md=, its tasks, its page of forms;
+- its entry in the registry of sources and its env profiles;
+- its ports, claimed when something will listen;
+- its subtree in the secret store;
+- a name under the domain, and one application in whatever deploys.
+
+Three things here do not survive the multiplication as built, and are
+stated so nobody finds out at project thirty:
+
+- Ports. =bb ports= has a hundred slots of ten, 11000 to 11999, sized for
+  this project's own branches by the owner's decision on 2026-10-10. Every
+  project using the same tool would share those hundred, and a branch named
+  the same in two projects is offered the same slot first; the registry
+  settles it, the second one moving on. A range per project is the change
+  to make if this is copied.
+- The copies. Every piece above exists in this repository only. Until the
+  shared ones live somewhere else, a second project copies them and a fix
+  is made a hundred times.
+- The review. Seven branches were written in one sitting by agents and none
+  has been read through by a person. Repeating a process is repeating
+  whatever is wrong in it.
+
+A procedure that would work on a project nobody here has seen belongs with
+the owner's skills, not in one repository's notes. This note is the record
+of the one time; the portable form has not been written.
+
+* Decisions not made
+
+- Which door gives the login, and whether people sign in with an account
+  they already have or are sent a code.
+- Whether an audience may edit a query before running it. If so the
+  read-only database user is required, not advisable.
+- Whether the agents' identity is an account of its own at each service.
+- Where a deployed project's spans and logs go.
+- Which provider. The comparison ranks them; nothing was chosen.
+
+* Not verified
+
+- Every claim about a =proto/*= branch is its own agent's report. Of the
+  seven, one note was opened to check its outline and its diff was searched
+  for addresses and passwords; none was read through.
+- Nothing has run on any provider, under any account.
+- No login, no export of telemetry and no monitor exists to be verified.
+- =bb ports claim= and =release=, and the load of notes into the books
+  graph, as their own notes say.
