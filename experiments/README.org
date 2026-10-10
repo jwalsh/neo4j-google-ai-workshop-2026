@@ -1,0 +1,21 @@
+#+TITLE: Experiments
+
+Each directory is one thing tried before it was built: a source, a
+hypothesis, a gate set beforehand, the result, a dated log and what was
+not done. A gate that was not passed is a result. What survives is
+rewritten into =src/workshop/= in Clojure or babashka.
+
+- =001-msa-similarity=: the Dataproc notebook's similarity graph in Python, then in Clojure as =bb msa=
+- =002-form13-rdf=: the Form 13 data as RDF triples with Jena and SPARQL
+- =003-form13-datalog=: as datoms in DataScript and triples in Asami
+- =004-form13-core-logic=: as core.logic facts
+- =005-graph-builder-api=: Lab 6's result through the LLM Graph Builder's API
+- =006-structured-extraction=: the same extraction with a local model held to a JSON schema; the gate was not passed
+- =007-query-ui-cljs=: a ClojureScript replica of the Query tool, and Bombadil properties run against it
+- =008-local-graph-dx=: Lab 4's load on an embedded Neo4j, a container and Memgraph, before any cloud
+- =009-local-agent=: Lab 9's agent as a small local model that only chooses a template; passed by one model of four
+- =010-papers-dataset=: a bibliography's arXiv papers as a graph; authors and citations passed, the model's layer did not
+- =011-heading-terms=: terms from book headings with spaCy beside a rule; plural folding and phrases ported to Clojure, part of speech not
+- =012-book-index=: concepts from each book's own index, read by word position in babashka; 8,288 concepts from 24 books, 777 shared
+- =013-laptop-models=: the agents on two small models on this machine, asked once and asked twice; 42 questions, more right both times, one new wrong answer
+- =014-dspy-mbta=: a prompt searched for by DSPy and a decision model (=laya=) on 211 generated transit questions; five more right from the search, half right from the decision model, neither gate passed
