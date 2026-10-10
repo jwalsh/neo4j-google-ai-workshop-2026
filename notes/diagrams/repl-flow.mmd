@@ -1,0 +1,44 @@
+%% Ours, not a redrawn slide. For README.org and notes/system.org.
+%% Control flow in one picture: three ways a person asks, the one nREPL the
+%% first two share, and the four graphs behind it. A question in words takes
+%% the lower path: the model picks a template and fills its parameters from
+%% the graph's own values; the Cypher that runs was written by a person.
+flowchart LR
+  subgraph emacs["Emacs"]
+    direction TB
+    forms["Clojure forms<br/>dev/*_explore.clj"]
+    blocks["Cypher blocks in org<br/>C-c C-c"]
+  end
+
+  question["A question in words<br/>bb ask, /ask"]
+
+  nrepl["one nREPL<br/>q, table, use-env!"]
+
+  subgraph agent["agent"]
+    direction TB
+    choose["pick a template"]
+    fill["fill its parameters"]
+  end
+
+  model["a small local model<br/>Ollama"]
+  templates["Cypher templates<br/>agents/*.agent.json"]
+
+  subgraph graphs["Four embedded Neo4j, on loopback"]
+    direction TB
+    transit[("transit :7691")]
+    books[("books :7690")]
+    papers[("papers :7689")]
+    filings[("filings :7688")]
+  end
+
+  forms --> nrepl
+  blocks --> nrepl
+  nrepl -->|Cypher, as written| graphs
+
+  question --> choose
+  choose --> fill
+  choose <-->|which one| model
+  fill <-->|which values| model
+  graphs -.->|stored names to pick from| fill
+  templates --> choose
+  fill -->|the template, with parameters| graphs

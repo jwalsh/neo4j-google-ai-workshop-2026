@@ -8,6 +8,11 @@ runs on one machine in its place, as of 2026-10-09. The diagram is
 
 [[file:img/local-system.png]]
 
+The control flow alone, as the README shows it, from
+[[file:diagrams/repl-flow.mmd][diagrams/repl-flow.mmd]]:
+
+[[file:img/repl-flow.png]]
+
 * The idea in one paragraph
 
 Each data source gets its own Neo4j, embedded in a JVM, on its own port. An

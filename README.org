@@ -14,6 +14,12 @@ local model picks a query template and never writes Cypher.
 
 [[file:notes/img/emacs-transit-three-views.png]]
 
+[[file:notes/img/repl-flow.png]]
+
+Forms and org blocks send Cypher as written. A question in words takes the
+upper path: the model picks a template and its parameters, and a person
+wrote the Cypher that runs.
+
 * Run it
 
 The transit graph needs no account. =bb local-mbta= and =bb repl= run until
