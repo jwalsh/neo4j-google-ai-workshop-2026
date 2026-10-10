@@ -1,86 +1,117 @@
-#+TITLE: AI Workshop with Neo4j and Google
-#+DATE: 2026-10-08
+#+TITLE: Graphs from a REPL
+#+SUBTITLE: Neo4j, Clojure and Emacs on one machine, begun at a workshop
 #+STARTUP: overview
 
-[[file:LICENSE][https://img.shields.io/badge/license-Apache--2.0-blue.svg]]
-[[https://clojure.org][https://img.shields.io/badge/Clojure-1.12-5881D8.svg]]
+[[https://clojure.org][https://img.shields.io/badge/Clojure-1.13.0--alpha8-5881D8.svg]]
 [[https://babashka.org][https://img.shields.io/badge/babashka-tasks-E2231A.svg]]
-[[https://neo4j.com][https://img.shields.io/badge/Neo4j-5%2C%20embedded-018BFF.svg]]
+[[https://neo4j.com][https://img.shields.io/badge/Neo4j-embedded-018BFF.svg]]
 [[https://docs.cider.mx][https://img.shields.io/badge/Emacs-CIDER%20%2B%20org--babel-7F5AB6.svg]]
 [[https://ollama.com][https://img.shields.io/badge/model-local%2C%20Ollama-000000.svg]]
 
-The workshop taught a graph through three consoles and a hosted model. This
-repository does the labs, then takes a different view of the same idea: the
-graph on this machine, a REPL in place of the console, and a small local
-model that chooses a query and never writes one. Its own example is the
-MBTA's rail network, asked three ways in one Emacs frame.
+A graph database explored from a REPL, on one machine: four embedded Neo4j
+servers, Clojure forms evaluated one at a time, Cypher run from org files,
+and a small local model that chooses a query and never writes one. It began
+as notes from a workshop that taught the same idea through hosted consoles
+and a hosted model; this is a different view of it. The example up front is
+the MBTA's rail network, which is not the workshop's data.
 
 [[file:notes/img/emacs-transit-three-views.png]]
 
-Left, =dev/mbta_explore.clj=: Clojure forms, evaluated one at a time. Top
-right, [[file:notes/transit-queries.org][notes/transit-queries.org]]: a Cypher block in an org file, run with
-=C-c C-c=, its rows written under it. Bottom right, the REPL both go
-through: Park Street to Maverick, two ways. The fourth way in is a sentence:
-"How do I get from Maverick to the ICA?" on the dashboard's =/ask= page,
-where a three-billion-parameter model on the laptop picks the template and
-the stations. To see it: =bb mbta network=, =bb local-mbta=, =bb mbta-load=,
-then =M-x workshop-repl=.
+* Run it
 
-Notes and my own queries from a three-hour hands-on lab on Neo4j Aura and
-Gemini Enterprise. The lab's own instructions live in its repository, linked
-under Materials; nothing of theirs is copied here: slides worth keeping are redrawn as
+The transit graph needs no account. =bb local-mbta= and =bb repl= run until
+ctrl-c, so each gets its own terminal.
+
+#+begin_src sh
+bb mbta network     # fetch the MBTA's GTFS feed and cut the rail network from it
+bb local-mbta       # an embedded Neo4j on bolt://localhost:7691
+bb mbta-load        # stations, stops, routes, lines, landmarks
+bb repl             # an nREPL for Emacs to join
+#+end_src
+
+In Emacs, =M-x load-file= on =workshop.el= at the root, then
+=M-x workshop-repl=: the transit page on the left, the REPL on the right.
+It needs CIDER; =cypher-mode= colours the org blocks and is optional. A JVM
+and babashka are the only other requirements.
+
+* Four ways in
+
+- *Forms.* =dev/mbta_explore.clj= and =dev/books_explore.clj= are pages of
+  =(comment ...)= blocks: put the cursor after a form and evaluate it.
+  =(ways "Park Street" "Maverick")= returns rows; =print-table= shows them.
+- *Cypher in org.* =workshop.el= makes =cypher= a language org-babel runs.
+  =C-c C-c= on a =#+begin_src cypher :graph transit= block sends the
+  statement through the same REPL and writes the rows under the block; each
+  =:var= is a query parameter. [[file:notes/transit-queries.org][notes/transit-queries.org]] is a file of them.
+- *The shell.* =bb tasks= lists every command: =bb counts=,
+  =bb cypher FILE=, =bb ask --agent mbta "..."=, the =local-*= servers and
+  their =*-load= tasks. =WORKSHOP_ENV=mbta-graph.env= names the graph.
+- *A sentence.* =OLLAMA_MODEL=qwen2.5:3b bb dashboard=, then =/ask= with
+  the transit agent chosen: "How do I get from Maverick to the ICA?"
+
+=M-x workshop-graph= points the REPL's =q= at another graph and opens its
+page. It evaluates =(use-env! "books-graph.env")=; there is one REPL
+throughout.
+
+* The graphs
+
+| graph   | holds                                        | start             | load              | page                    | note        |
+|---------+----------------------------------------------+-------------------+-------------------+-------------------------+-------------|
+| transit | the MBTA's rail network from its GTFS feed   | =bb local-mbta=   | =bb mbta-load=    | =dev/mbta_explore.clj=  | [[file:notes/transit.org][transit]]     |
+| books   | a shelf of books: headings, terms, concepts  | =bb local-books=  | =bb books-load=   | =dev/books_explore.clj= | [[file:notes/books-shelf.org][books]]       |
+| papers  | arXiv papers a bibliography names, citations | =bb local-papers= | =bb papers-load=  | =dev/explore.clj=       | [[file:notes/system.org][system]]      |
+| filings | one day of SEC Form 13 filings, Lab 4's file | =bb local=        | =bb form13 load=  | =dev/explore.clj=       | [[file:notes/local-first.org][local first]] |
+
+Ports 7691, 7690, 7689 and 7688 in that order: one Neo4j Community server
+and one store each. A shell command reaches one through its env file, as in
+=WORKSHOP_ENV=local-graph.env bb form13 load=. Transit and filings fetch
+public data. Books and papers read a cache the owner fills from their own
+library and bibliography; none of that is in the repository.
+[[file:notes/system.org][The system as built]] has the whole picture.
+
+* A question through a model
+
+=agents/registry.edn= ties each graph to an agent: a file of named Cypher
+templates. A question goes to a local model twice: once to pick a template,
+once to fill its parameters from a list of the values the graph holds, so
+"Kendall" becomes "Kendall/MIT". The template runs; the rows are the
+answer. The model never writes Cypher, and an argument the question does
+not support is dropped. A wrong choice of template is not caught.
+
+It is measured: =experiments/013-laptop-models= has two small models on 42
+questions, 38 and 40 right when asked twice. =OLLAMA_URL= and
+=OLLAMA_MODEL= choose the model; the default named in the code may not be
+installed, so name one.
+
+* The dashboard
+
+=bb dashboard= serves =http://127.0.0.1:8377/=, loopback only: an overview
+of every graph in the registry, =/map= for the transit stations where they
+are, =/data= for five questions of the filings graph, =/ask= for a question
+to any agent, =/traces= for what every statement cost, and =/config= for
+the connection checks.
+
+* Experiments
+
+=experiments/NNN-name/= is where something is tried before it is built:
+each has a hypothesis, a gate set beforehand, a result and a dated log,
+and several did not pass. [[file:experiments/README.org][The list]] has fourteen. What survives is
+rewritten into =src/workshop/=.
+
+* The workshop
+
+"AI Workshop with Neo4j and Google", Boston AI Developers Group through
+AICamp, Google Cambridge, 2026-10-08. Speakers: Ben Lackey, Neo4j, and
+Upasana Pati, Google. https://www.aicamp.ai/event/eventdetails/W2026100810
+
+The lab's own instructions live in its repository, linked under Materials.
+Nothing of theirs is copied here: slides worth keeping are redrawn as
 diagrams, and a statement or prompt taken from a lab is marked as theirs.
+[[file:notes/writeup-2026-10-08.org][The write-up]] is the day in one page; [[file:notes/v2-cli-path.org][the labs again, by code]] says per
+lab what was done in a console and what can be done from here.
 
-Start with [[file:notes/writeup-2026-10-08.org][the write-up]]: one page on what the labs do, what held up and
-what did not. To run it with no account, [[file:notes/local-first.org][the local-first path]]: =bb local=, then
-=WORKSHOP_ENV=local-graph.env bb dashboard=.
-
-* AI Workshop with Neo4j and Google
-
-Boston AI Developers Group, through AICamp.
-Thursday, October 8, 2026, 1:30 PM EDT.
-
-- Event: https://www.aicamp.ai/event/eventdetails/W2026100810
-
-Address:
-Google Cambridge, 355 Main St
-Cambridge, Massachusetts
-
-Speakers: Ben Lackey, Neo4j. Upasana Pati, Google.
-
-A hands-on workshop on building AI agents backed by knowledge graphs,
-worked on real datasets.
-
-** Assignments
-
-From the class page, "Neo4j and Google". All complete: the class page showed
-every lecture, lab and the cloud environment as "Viewed" at the end of the
-day, 2026-10-08. The boxes below are org checkboxes, which GitHub shows as
-plain =[X]= text. Lab 6 was done with a stand-in, not Document Intelligence;
-its note says why.
-
-*** DONE Assignment 1 - Getting Started
-- [X] Lecture - Introduction to Neo4j
-- [X] Lab 1 - Sign In
-- [X] Lab 2 - Deploy Neo4j
-- [X] Lab 3 - Connect to Neo4j
-
-*** DONE Assignment 2 - Moving Data
-- [X] Lecture - Moving Data
-- [X] Lab 4 - Query
-- [X] Lab 5 - Bloom
-
-*** DONE Assignment 3 - AI and Agents
-- [X] Lecture - Gemini Enterprise
-- [X] Lecture - Neo4j and AI
-- [X] Lab 6 - Document Intelligence
-- [X] Lab 7 - Deploy Neo4j Agent
-- [X] Lab 8 - Use Neo4j Agent
-- [X] Lab 9 - Aura Agents
-- [X] Lecture - Next Steps
-
-*** DONE Cloud Environment
-Ungrouped on the class page.
+The lab account, project and instance expired on 2026-10-08 at 21:20 EDT.
+Commands that need the instance fail until =.env= names another.
 
 ** Materials
 
@@ -97,101 +128,32 @@ Ungrouped on the class page.
 The data is quarterly filings to SEC EDGAR by asset managers with over $100m
 under management: who holds what.
 
-** The flow, lab by lab
+** Lab tooling
 
-What each lab does, where it was done, what is here to do it again, and the
-note that has the detail. "Console" means a browser signed in as the lab
-account; nothing in this repository replaces that.
+=gmake help= lists the targets: =gmake agenda= and =gmake todos= read
+[[file:notes/assignments.org][the checklist]], =gmake .env= starts a credentials file, =gmake ping= and
+=gmake cypher FILE=...= need no JVM. =bb form13= explores Lab 4's file with
+no database. =bb labs= is each lab as a step returning data and =bb audit=
+checks the notes against the repository; =dev/labs_explore.clj= walks both.
+=bb status= runs every connection check once. Queries run are in =labs/=,
+prompts typed into a model in =prompts/=, and what bit in
+=.meta/findings.md=.
 
-| lab | what it does                             | done in                     | to do it again                                                     | note  |
-|-----+------------------------------------------+-----------------------------+--------------------------------------------------------------------+-------|
-|   1 | sign in to the lab's Google account      | console                     | nothing                                                            | -     |
-|   2 | deploy Aura from the marketplace         | console                     | =gmake .env=, then fill it from the credentials file               | [[file:notes/lab-02-deploy-neo4j.org][lab 2]] |
-|   3 | connect and list databases               | console, then Clojure       | =bb ping=, =bb databases=                                          | [[file:notes/lab-03-connect-to-neo4j.org][lab 3]] |
-|   4 | load a day of Form 13 filings, keyed     | console, then Clojure       | =bb form13 load=, =bb form13 verify=, =labs/lab-04/=               | [[file:notes/lab-04-query.org][lab 4]] |
-|   5 | Bloom: search, degree centrality         | console                     | =bb form13 degree= for the numbers, no picture                     | [[file:notes/lab-05-bloom.org][lab 5]] |
-|   6 | a 10-K into a graph                      | not available; API instead  | =experiments/005-graph-builder-api=, =labs/lab-06/=                | [[file:notes/lab-06-document-intelligence.org][lab 6]] |
-|   7 | add the Neo4j Agent to Gemini Enterprise | console                     | nothing                                                            | [[file:notes/lab-07-deploy-neo4j-agent.org][lab 7]] |
-|   8 | three prompts to that agent              | console                     | =prompts/lab-08-*=                                                 | [[file:notes/lab-08-use-neo4j-agent.org][lab 8]] |
-|   9 | an Aura agent made from a prompt         | console, checked in Clojure | =prompts/lab-09-*=, =labs/lab-09/= (the exported agent and checks) | [[file:notes/lab-09-aura-agents.org][lab 9]] |
+* Notes
 
-Before any of it, with no account: =experiments/008-local-graph-dx= runs
-Lab 4's load on an embedded Neo4j and checks it against the file. After it:
-=examples/= holds what the commands printed on the day, and
-[[file:notes/writeup-2026-10-08.org][the write-up]] says what was learned.
+In =notes/=, one file per session or topic. The system first:
 
-The lab account, project and instance expired on 2026-10-08 at 21:20 EDT.
-Commands that need the instance fail after that until =.env= names another.
+- [[file:notes/system.org][The system as built]]: four embedded graphs, a registry of agents, the path of a question through a local model, and what runs on which port
+- [[file:notes/transit.org][Transit]]: the MBTA's rail network from its GTFS feed as stations, stops, routes and lines, a map drawn from it, Maverick to Kendall, and several ways between two places with landmarks for ends
+- [[file:notes/transit-queries.org][Transit, a query at a time]]: Cypher blocks in an org file run through the REPL with their results, and the stations a walk from a landmark
+- [[file:notes/books-shelf.org][A shelf of books as a graph]]: 29 books on the workshop's subjects as headings, terms and the concepts in their own indexes, explored from Emacs, with why two books come out similar
+- [[file:notes/local-first.org][The lab, local first]]: the same path with an embedded Neo4j and a small local model, lab by lab, and what does not carry over
+- [[file:notes/telemetry.org][Telemetry]]: spans around every statement, check and lab step, and the dashboard's Data and Traces pages
+- [[file:notes/data-sources.org][Other data sources]]: fifteen public datasets checked by request, ranked, with what a dataset-agnostic loader would need from each
 
-** Tooling
+The workshop record:
 
-=gmake help= lists the targets. =gmake agenda= and =gmake todos= read the
-checklist above. =gmake .env= starts a credentials file from =.env.template=;
-=gmake ping= and =gmake cypher FILE=...= run against the instance it names.
-=gmake data/<name>= fetches one of the workshop's datasets into =data/=, once.
-The labs themselves need only a browser. The queries run go in =labs/=, the
-prompts typed into a model go in =prompts/=, one named file each, and what
-bit goes in =.meta/findings.md=.
-
-The same and more in Clojure, in =src/workshop/=: =workshop.neo4j= over the
-official Java driver, =workshop.gcp= over Google's Cloud Storage client.
-=bb tasks= lists the commands (=bb ping=, =bb counts=, =bb cypher FILE=,
-=bb datasets=, =bb peek OBJECT=, =bb test=). In Emacs, =cider-jack-in= opens a
-REPL in =dev/user.clj=, where =(q "MATCH ...")= runs a statement and returns
-rows as maps. =workshop.el= at the root, once loaded (=M-x load-file=), adds
-=M-x workshop-repl= (a REPL beside a page of forms: an existing one, else
-the one =bb repl= left a port for, else jack-in) and =M-x workshop-graph=
-(point that REPL at the transit graph, the books, the papers, the filings
-or the lab's instance, and open the matching page; transit is the page it
-starts on). It also makes Cypher a language
-org-babel runs: =C-c C-c= on a =#+begin_src cypher :graph books= block sends
-the statement through that REPL and puts the rows under it as a table;
-each =:var= is a query parameter.
-
-=bb form13= explores Lab 4's day file locally, with no database: =summary=,
-=top=, =degree=, =variants=, =odd=; =verify= compares the database with the
-file and =load= runs the keyed load only when they differ. =dev/explore.clj=
-is a page of =(comment ...)= blocks to evaluate one form at a time, lab by
-lab; =bb repl= starts the nREPL for it.
-
-=experiments/= holds numbered experiments, each with a hypothesis, a gate
-and a dated log of what was tried:
-
-- =001-msa-similarity=: the Dataproc notebook's similarity graph in Python, then in Clojure as =bb msa=
-- =002-form13-rdf=: the Form 13 data as RDF triples with Jena and SPARQL
-- =003-form13-datalog=: as datoms in DataScript and triples in Asami
-- =004-form13-core-logic=: as core.logic facts
-- =005-graph-builder-api=: Lab 6's result through the LLM Graph Builder's API
-- =006-structured-extraction=: the same extraction with a local model held to a JSON schema; the gate was not passed
-- =007-query-ui-cljs=: a ClojureScript replica of the Query tool, and Bombadil properties run against it
-- =008-local-graph-dx=: Lab 4's load on an embedded Neo4j, a container and Memgraph, before any cloud
-- =009-local-agent=: Lab 9's agent as a small local model that only chooses a template; passed by one model of four
-- =010-papers-dataset=: a bibliography's arXiv papers as a graph; authors and citations passed, the model's layer did not
-- =011-heading-terms=: terms from book headings with spaCy beside a rule; plural folding and phrases ported to Clojure, part of speech not
-- =012-book-index=: concepts from each book's own index, read by word position in babashka; 8,288 concepts from 24 books, 777 shared
-- =013-laptop-models=: the agents on two small models on this machine, asked once and asked twice; 42 questions, more right both times, one new wrong answer
-- =014-dspy-mbta=: a prompt searched for by DSPy and a decision model (=laya=) on 211 generated transit questions; five more right from the search, half right from the decision model, neither gate passed
-
-=workshop.labs= is each lab as a function returning data: =(run-all)= in a
-REPL, =bb labs= in a shell, three ok, one skipped and six blocked on what they need.
-=workshop.audit= (=bb audit=) is the same for what the notes claim.
-=dev/labs_explore.clj= walks both, one form at a time. Neither writes.
-
-=bb status= runs every connection check once: the instance, the dataset
-bucket, the lab browser, the lab's remaining time, the environment, the
-checklist. =bb dashboard= serves pages on =http://127.0.0.1:8377/=: an
-overview of every data source in =agents/registry.edn= (filings, papers,
-books, transit) with what each graph holds, =/map= for the transit graph's
-stations where they are, =/data= with five questions of the graph, =/ask=
-for a question to any source's agent, =/traces= for what every statement
-cost, and =/config= for the connection checks.
-=WORKSHOP_ENV=local-graph.env= points =/data= and =/config= at the local
-server.
-
-** Notes
-
-In =notes/=, one file per session or topic.
-
+- [[file:notes/assignments.org][Assignments]]: the class page's lectures and labs as a checklist, all ticked, which =gmake agenda= and =bb audit= read
 - [[file:notes/architecture.org][What gets built]]: the architecture slide and where each lab sits on it
 - [[file:notes/lab-02-deploy-neo4j.org][Lab 2 - Deploy Neo4j]]: the path taken, where it left the lab's text, and the check
 - [[file:notes/lab-03-connect-to-neo4j.org][Lab 3 - Connect to Neo4j]]: Connect, Query, and =SHOW DATABASES= two ways
@@ -202,13 +164,6 @@ In =notes/=, one file per session or topic.
 - [[file:notes/lab-08-use-neo4j-agent.org][Lab 8 - Use Neo4j Agent]]: the three prompts, the lazy authorization, and what the shared database turned out to hold
 - [[file:notes/lab-09-aura-agents.org][Lab 9 - Aura Agents]]: the generated agent and its exported tools, and its answers checked against the database
 - [[file:notes/writeup-2026-10-08.org][Write-up, 2026-10-08]]: the day in one page: what the labs do, what held, what did not, and how to run it again
-- [[file:notes/books-shelf.org][A shelf of books as a graph]]: 29 books on the workshop's subjects as headings, terms and the concepts in their own indexes, explored from Emacs, with why two books come out similar
-- [[file:notes/transit.org][Transit]]: the MBTA's rail network from its GTFS feed as stations, stops, routes and lines, a map drawn from it, Maverick to Kendall, and several ways between two places with landmarks for ends
-- [[file:notes/transit-queries.org][Transit, a query at a time]]: Cypher blocks in an org file run through the REPL with their results, and the stations a walk from a landmark
-- [[file:notes/data-sources.org][Other data sources]]: fifteen public datasets checked by request, ranked, with what a dataset-agnostic loader would need from each
-- [[file:notes/system.org][The system as built]]: four embedded graphs, a registry of agents, the path of a question through a local model, and what runs on which port
-- [[file:notes/local-first.org][The lab, local first]]: the same path with an embedded Neo4j and a small local model, lab by lab, and what does not carry over
-- [[file:notes/telemetry.org][Telemetry]]: spans around every statement, check and lab step, and the dashboard's Data and Traces pages
 - [[file:notes/review-framework-2026-10-08.org][Review as a framework, 2026-10-08]]: what a next workshop would copy from this repository, and ten changes that would make the copy cheap
 - [[file:notes/review-2026-10-08.org][Review, 2026-10-08]]: the work read as one design, with the five forms of one fact drawn
 - [[file:notes/v2-cli-path.org][The labs again, by code]]: per lab, the console path, the CLI or API path, whether it ran here, and what the rest need
@@ -217,7 +172,7 @@ In =notes/=, one file per session or topic.
 - [[file:notes/screens.org][Screens]]: the consoles and the dashboard as they stood, for after the lab expires
 - [[file:notes/resources.org][Resources from the slides]]: the Dataflow template and the Dataproc notebooks
 
-** Licence
+* Licence
 
 Apache 2.0, in =LICENSE=. =NOTICE= says which text is the lab's and under
 what terms.

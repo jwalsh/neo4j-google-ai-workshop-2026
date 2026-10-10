@@ -1,7 +1,7 @@
 # Start here
 
 For someone, or some agent, arriving cold. `CLAUDE.md` has the conventions,
-`README.org` the event and the lab checklist, `gmake help` the targets. This
+`README.org` how to run it and the index of notes, `notes/assignments.org` the lab checklist, `gmake help` the targets. This
 directory holds only what those do not say.
 
 | file | read it for |
@@ -31,7 +31,7 @@ early on was removed from the tree on 2026-10-08; it is still in history
 - The workshop is over. Labs 1 to 5 and 7 to 9 were done as written; the
   database held Lab 4's keyed load (2,251 companies, 28 managers, 7,381
   OWNS, two node keys), which `bb form13 verify` checks against the file.
-  Every box in `README.org` is ticked and every assignment is DONE, on the
+  Every box in `notes/assignments.org` is ticked and every assignment is DONE, on the
   owner's word and the class page, which showed all sixteen items as
   "Viewed".
 - Lab 6 was blocked as written: this Aura account had no Document

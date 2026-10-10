@@ -19,7 +19,7 @@ them, do not copy them in.
 ## Commands
 
 `gmake help` lists the targets. `gmake agenda` and `gmake todos` report
-progress from the checklist in `README.org`. `gmake status` shows git state
+progress from the checklist in `notes/assignments.org`. `gmake status` shows git state
 and which connection variables are set, never their values. `gmake .env`
 starts `.env` from `.env.template`; `gmake ping` and
 `gmake cypher FILE=labs/x.cypher` run against the instance it names, through
@@ -58,9 +58,12 @@ workshop.env-test/parse-dotenv-test`.
 
 ## Layout
 
-- `README.org` is the index: event details, the assignment/lab checklist
-  copied from the class page, Materials (the lab repository and the dataset
-  URLs), and a list of links into `notes/`.
+- `README.org` is about exploring graphs from a REPL, not about the day: how
+  to run it, the four ways in, the graphs, the model's part, then a short
+  section on the workshop (event, Materials) and a list of links into
+  `notes/`. The assignment/lab checklist copied from the class page is
+  `notes/assignments.org`; the list of experiments is
+  `experiments/README.org`.
 - `notes/` holds one org file per session or topic. Images a note links to go
   in `notes/img/` and are committed alongside it.
 - `labs/` holds the queries run, one file per lab, or a directory of
@@ -121,7 +124,7 @@ below is a reading of the lab titles, not something the slide states.
   database and to a Gemini Enterprise app.
 - Labs 1 to 3 are sign-in, deploy and connect.
 
-The lab checklist in `README.org` uses org TODO headings per assignment and
+The lab checklist in `notes/assignments.org` uses org TODO headings per assignment and
 checkboxes per lecture or lab. Tick the checkbox; flip the heading to DONE
 only when every box under it is ticked.
 
