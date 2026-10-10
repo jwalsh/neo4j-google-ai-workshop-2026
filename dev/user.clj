@@ -57,6 +57,23 @@
   ([statement] (neo4j/query (driver) statement))
   ([statement parameters] (neo4j/query (driver) statement parameters)))
 
+(defn table
+  "One statement's rows as a vector of vectors of strings, the column names
+  first: what an org-babel block prints as a table. env-file names another
+  graph for this one statement and leaves the session's alone; nil asks the
+  session's. Columns keep the statement's order up to eight of them."
+  ([env-file statement] (table env-file statement {}))
+  ([env-file statement parameters]
+   (let [rows (if env-file
+                (with-open [other-driver (neo4j/connect (env/load-env env-file))]
+                  (neo4j/query other-driver statement parameters))
+                (q statement parameters))
+         columns (vec (keys (first rows)))
+         cell (fn [value] (if (string? value) value (pr-str value)))]
+     (into [(mapv name columns)]
+           (map (fn [row] (mapv #(cell (get row %)) columns)))
+           rows))))
+
 (defn run-file [cypher-path] (neo4j/run-file (driver) cypher-path))
 (defn ping [] (neo4j/ping (driver)))
 (defn counts [] (neo4j/counts (driver)))

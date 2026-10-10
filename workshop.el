@@ -13,11 +13,23 @@
 ;;   M-x workshop-layout     the layout again, after wandering off
 ;;   M-x workshop-dashboard  start the status page from the REPL and browse it
 ;;
+;; It also makes Cypher a language org-babel can run.  C-c C-c on
+;;
+;;   #+begin_src cypher :graph books :var shelf="graphs"
+;;   MATCH (b:Book) WHERE b.shelf = $shelf RETURN b.title LIMIT 5
+;;   #+end_src
+;;
+;; sends the statement through the workshop REPL and puts the rows under the
+;; block as a table.  :graph is a name from `workshop-graphs' and asks that
+;; graph for this one block; without it the block asks whichever graph the
+;; REPL is on.  Each :var is a query parameter.  The cypher-mode package, if
+;; installed, colours the block; nothing here needs it.
+;;
 ;; `workshop-graph' does not start a second REPL.  It evaluates
 ;; (user/use-env! "books-graph.env"), which closes the session's driver and
 ;; opens the next one from that file, so `q' in the REPL asks the new graph.
-;; The embedded servers are started outside Emacs: bb local, bb local-papers,
-;; bb local-books.
+;; The embedded servers are started outside Emacs: bb local-mbta, bb local-books,
+;; bb local-papers, bb local.  The transit graph is the one shown first.
 ;;
 ;; Load it once per Emacs session with M-x load-file, or from an init file:
 ;;
@@ -36,18 +48,20 @@
   "The repository this file is at the root of.")
 
 (defvar workshop-graphs
-  '(("lab"     nil                "dev/explore.clj")
-    ("filings" "local-graph.env"  "dev/explore.clj")
-    ("papers"  "papers-graph.env" "dev/explore.clj")
+  '(("transit" "mbta-graph.env"   "dev/mbta_explore.clj")
     ("books"   "books-graph.env"  "dev/books_explore.clj")
-    ("transit" "mbta-graph.env"   "src/workshop/mbta.clj"))
+    ("papers"  "papers-graph.env" "dev/explore.clj")
+    ("filings" "local-graph.env"  "dev/explore.clj")
+    ("lab"     nil                "dev/explore.clj"))
   "The graphs on offer, each as (NAME ENV-FILE PAGE).
 ENV-FILE names the Neo4j, nil meaning .env, the lab's own instance.  PAGE is
 the file of forms opened beside the REPL.  Another workshop's data is one
 more entry here and one more env file.")
 
-(defvar workshop-page "dev/explore.clj"
-  "The page the layout shows, relative to `workshop-root'.")
+(defvar workshop-page "dev/mbta_explore.clj"
+  "The page the layout shows, relative to `workshop-root'.
+It starts as the transit graph's: that one needs no account and no lab, only
+bb local-mbta, and its page names its own graph whatever the REPL is on.")
 
 (defun workshop--path (relative-path)
   "RELATIVE-PATH under `workshop-root'."
@@ -147,6 +161,51 @@ is opened as it is: a second one could not take the same port."
     (unless (workshop--listening-p workshop-dashboard-port)
       (workshop--eval (format "(dashboard %d)" workshop-dashboard-port)))
     (browse-url url)))
+
+;;; Cypher in org-babel
+
+(declare-function org-babel--get-vars "ob-core" (params))
+
+(defvar org-babel-default-header-args:cypher '((:results . "table"))
+  "A Cypher block's rows are a table unless the block says otherwise.")
+
+(defun workshop--clojure-literal (value)
+  "VALUE, a string or number from an org header, as Clojure source."
+  (let ((print-escape-newlines nil))
+    (prin1-to-string (if (symbolp value) (symbol-name value) value))))
+
+(defun workshop--table-form (graph-name statement variables)
+  "The Clojure form that runs STATEMENT on the graph named GRAPH-NAME.
+VARIABLES is an alist of query parameters.  A nil GRAPH-NAME is the graph the
+REPL is on."
+  (let ((env-file (when graph-name
+                    (pcase (assoc graph-name workshop-graphs)
+                      (`(,_ ,graph-env-file ,_) (or graph-env-file ".env"))
+                      (_ (user-error "No graph named %s" graph-name))))))
+    (format "(table %s %s {%s})"
+            (if env-file (workshop--clojure-literal env-file) "nil")
+            (workshop--clojure-literal statement)
+            (mapconcat (lambda (variable)
+                         (format "%s %s"
+                                 (workshop--clojure-literal (symbol-name (car variable)))
+                                 (workshop--clojure-literal (cdr variable))))
+                       variables " "))))
+
+(defun org-babel-execute:cypher (body params)
+  "Run BODY, one Cypher statement, through the workshop REPL.
+PARAMS are the block's header arguments: :graph names a graph in
+`workshop-graphs', each :var is a query parameter.  Returns the column names,
+a rule, and the rows."
+  (let* ((graph-name (cdr (assq :graph params)))
+         (variables (org-babel--get-vars params))
+         (printed-rows (workshop--eval
+                        (workshop--table-form (and graph-name (format "%s" graph-name))
+                                              (string-trim body)
+                                              variables)))
+         (rows (mapcar (lambda (row) (append row nil)) (car (read-from-string printed-rows)))))
+    ;; No rows means no column names either: an empty result, not a table.
+    (when (cdr rows)
+      (cons (car rows) (cons 'hline (cdr rows))))))
 
 (provide 'workshop)
 

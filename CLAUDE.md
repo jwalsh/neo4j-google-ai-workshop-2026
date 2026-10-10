@@ -77,7 +77,10 @@ workshop.env-test/parse-dotenv-test`.
   `.dir-locals.el` makes `cider-jack-in` start in it. `workshop.el` at the
   root is the Emacs side: `workshop-repl` lays out a page beside the REPL,
   `workshop-graph` switches graphs by evaluating `(user/use-env! FILE)`. A
-  new data source gets an entry in its `workshop-graphs`. `dev/explore.clj` is
+  new data source gets an entry in its `workshop-graphs`. It also defines
+  `org-babel-execute:cypher`: a `#+begin_src cypher :graph NAME` block in an
+  org file runs through that REPL (`user/table`), as in
+  `notes/transit-queries.org`. `dev/explore.clj` is
   `(comment ...)` blocks per lab, evaluated a form at a time; a new lab
   gets a block there.
 - `prompts/` holds every prompt a lab has a person type into a model, one
