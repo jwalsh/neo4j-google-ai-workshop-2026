@@ -379,19 +379,18 @@
   (page "/ask" "Neo4j and Google workshop: ask"
         "a local model chooses a Cypher template; the rows are the answer"
         "wide"
-        (str "<section><form method=\"get\" action=\"/ask\"><select name=\"agent\">"
-             (str/join (map (fn [{:keys [id]}]
-                              (str "<option" (when (= id agent-id) " selected") ">" (escape-html id) "</option>"))
+        ;; Choosing a data source puts its example in the field, so the field
+        ;; is never empty and never holds another source's question.
+        (str "<section><form method=\"get\" action=\"/ask\"><select name=\"agent\""
+             " onchange=\"this.form.q.value = this.selectedOptions[0].dataset.example\">"
+             (str/join (map (fn [{:keys [id about example]}]
+                              (str "<option" (when (= id agent-id) " selected")
+                                   " title=\"" (escape-html about) "\""
+                                   " data-example=\"" (escape-html example) "\">" (escape-html id) "</option>"))
                             (agent/registry)))
              "</select><input type=\"text\" name=\"q\" value=\""
-             (escape-html question) "\" placeholder=\"" (escape-html (:example (agent/entry agent-id))) "\">"
-             "<button>Ask</button></form><table>"
-             (str/join (map (fn [{:keys [id about example]}]
-                              (str "<tr><td>" (escape-html id) "</td><td>" (escape-html about)
-                                   " <a href=\"/ask?agent=" id "&q=" (java.net.URLEncoder/encode ^String example "UTF-8")
-                                   "\">" (escape-html example) "</a></td></tr>"))
-                            (agent/registry)))
-             "</table></section>"
+             (escape-html (if (str/blank? question) (:example (agent/entry agent-id)) question)) "\">"
+             "<button>Ask</button></form></section>"
              (when outcome
                (str "<section><h2><span>" (escape-html (or tool (:tool choice) "no tool")) "</span>"
                     (if problem
