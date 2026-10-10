@@ -217,7 +217,7 @@
            {:exit exit})))
 
 (defn checklist
-  "README.org's boxes beside what workshop.labs can show for each lab. A
+  "The boxes of notes/assignments.org beside what workshop.labs can show for each lab. A
   ticked lab whose step is blocked was done in a console: that is recorded,
   not a fault. An unticked lab whose step is :ok would be one."
   ([] (checklist (labs/run-all)))
@@ -226,7 +226,7 @@
                                {} lab-results)
          rows (mapv (fn [{:keys [item] :as box}]
                       (assoc box :by-code (get status-by-lab (lab-number item))))
-                    (checklist-items (slurp "README.org")))
+                    (checklist-items (slurp "notes/assignments.org")))
          unticked-but-run (filter #(and (not (:ticked? %)) (some #{:ok} (:by-code %))) rows)]
      (check "Checklist" (if (seq unticked-but-run) :down :up)
             (format "%d of %d boxes ticked" (count (filter :ticked? rows)) (count rows))
@@ -338,7 +338,7 @@
          lab-5-evidence (:evidence (labs/lab-5 driver holdings))
          shared (first (ask driver :shared-holdings))
          session-rows (ask driver :sessions)
-         boxes (checklist-items (slurp "README.org"))
+         boxes (checklist-items (slurp "notes/assignments.org"))
          ticked-lectures (mapv :item (filter #(and (:ticked? %) (nil? (lab-number (:item %)))) boxes))
          label-tokens (set (map :label (ask driver :label-tokens)))]
      [(claim "notes/lab-03" "two databases, neo4j the default, both online"

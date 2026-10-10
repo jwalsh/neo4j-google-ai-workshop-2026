@@ -152,7 +152,7 @@
 
 (defn- checklist-check
   []
-  (let [assignments (checklist (slurp (io/file "README.org")))
+  (let [assignments (checklist (slurp (io/file "notes/assignments.org")))
         ticked (reduce + (map :ticked assignments))
         total (reduce + (map :total assignments))]
     {:state :unknown

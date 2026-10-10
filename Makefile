@@ -1,6 +1,6 @@
 # The checklist the progress targets read. Org headings `*** TODO name` with
 # `- [ ]` boxes under them.
-CHECKLIST ?= README.org
+CHECKLIST ?= notes/assignments.org
 # A Cypher file for `gmake cypher`. One statement per file when cypher-shell
 # is missing and the Query API is used instead.
 FILE      ?=
