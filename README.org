@@ -8,12 +8,12 @@
 [[https://docs.cider.mx][https://img.shields.io/badge/Emacs-CIDER%20%2B%20org--babel-7F5AB6.svg]]
 [[https://ollama.com][https://img.shields.io/badge/model-local%2C%20Ollama-000000.svg]]
 
-A graph database explored from a REPL, on one machine: four embedded Neo4j
-servers, Clojure forms evaluated one at a time, Cypher run from org files,
-and a small local model that chooses a query and never writes one. It began
-as notes from a workshop that taught the same idea through hosted consoles
-and a hosted model; this is a different view of it. The example up front is
-the MBTA's rail network, which is not the workshop's data.
+Four embedded Neo4j graphs on one machine, explored from a REPL. Clojure
+forms and Cypher blocks in org files go through the same nREPL; a small
+local model picks a query template and never writes Cypher. Begun at a
+Neo4j and Google workshop, which did this with hosted consoles and a hosted
+model. The lead example, the MBTA's rail network, is not the workshop's
+data.
 
 [[file:notes/img/emacs-transit-three-views.png]]
 
