@@ -1,5 +1,6 @@
 (ns workshop.mbta-test
   (:require [clojure.edn :as edn]
+            [clojure.string :as str]
             [clojure.test :refer [deftest is testing]]
             [workshop.agent :as agent]
             [workshop.mbta :as mbta]))
@@ -45,14 +46,24 @@
     (testing "the longer branch gives the order, the other's stations follow"
       (is (= [["R" "St" 0] ["R" "Sa1" 1] ["R" "Sa2" 2] ["R" "Sb1" 3]] (sort-by peek (:serves projection)))))))
 
+(deftest landmarks-test
+  (let [landmarks (mbta/landmarks)]
+    (testing "a landmark's id cannot be taken for a station's, which the feed starts place-"
+      (is (seq landmarks))
+      (is (every? #(str/starts-with? (:id %) "landmark-") landmarks))
+      (is (apply distinct? (map :id landmarks)))
+      (is (apply distinct? (map :name landmarks))))))
+
 (deftest mbta-agent-test
   (let [guide (agent/load-agent "agents/mbta.agent.json")
         template-of (fn [tool-name] (:template (first (filter #(= tool-name (:name %)) (:tools guide)))))]
     (is (= 6 (count (:tools guide))))
     (testing "every string parameter is compared with a property the graph can resolve"
-      (is (= {:label "Station" :property "name"}
+      ;; a journey's ends are places: every station, and each landmark
+      (is (= {:label "Place" :property "name"}
              (agent/lookup (template-of "Subway Journey Between Two Stations") "fromStation")
-             (agent/lookup (template-of "Subway Journey Between Two Stations") "toStation")
+             (agent/lookup (template-of "Subway Journey Between Two Stations") "toStation")))
+      (is (= {:label "Station" :property "name"}
              (agent/lookup (template-of "Which Routes Serve a Station") "stationName")
              (agent/lookup (template-of "Stations Near a Station") "nearStation")
              (agent/lookup (template-of "Platforms in a Station") "platformsOf")))

@@ -11,10 +11,17 @@
     (:Route)-[:SERVES {sequence}]->(:Station)   derived: the stops' stations
     (:Station)-[:CONNECTS {route routeName line kind color}]->(:Station)
 
+    (:Place)                                    every station, and each landmark
+
   NEXT is what the feed says. SERVES and CONNECTS are derived from it by
   replacing each stop with its station, and are what a map or a journey
   between stations asks. A station has a `location` point, so distance is
-  a function in Cypher."
+  a function in Cypher.
+
+  A :Place is somewhere a journey can start or end. Every station is one.
+  So is each :Landmark in agents/mbta-places.edn, entered by hand and not
+  from the feed: the ICA is not a station, and is reached on foot from the
+  stations near it."
   (:require [clojure.edn :as edn]
             [clojure.java.io :as io]
             [workshop.neo4j :as neo4j]))
@@ -34,6 +41,13 @@
     (when-not (.exists network-file)
       (throw (ex-info "No network cached. bb mbta network." {:cache (cache-dir)})))
     (edn/read-string (slurp network-file))))
+
+(def places-path "agents/mbta-places.edn")
+
+(defn landmarks
+  "The places that are not stations, as the file lists them."
+  []
+  (edn/read-string (slurp places-path)))
 
 (defn graph
   "The projection as data: the network's own tables, and the edges derived
@@ -127,6 +141,14 @@
                     "MERGE (a)-[c:CONNECTS {route: row[2]}]->(b) "
                     "SET c.routeName = row[3], c.kind = row[4], c.color = row[5], c.line = row[6]")
                {:rows connects})
+  (neo4j/query driver "CREATE CONSTRAINT place_id IF NOT EXISTS FOR (n:Place) REQUIRE n.id IS UNIQUE")
+  (neo4j/query driver "CREATE POINT INDEX place_location IF NOT EXISTS FOR (p:Place) ON (p.location)")
+  (neo4j/query driver "MATCH (s:Station) SET s:Place")
+  (neo4j/query driver
+               (str "UNWIND $rows AS row MERGE (p:Place {id: row.id}) "
+                    "SET p:Landmark, p.name = row.name, p.latitude = row.latitude, p.longitude = row.longitude, "
+                    "p.location = point({latitude: row.latitude, longitude: row.longitude})")
+               {:rows (mapv #(update-keys % name) (landmarks))})
   (neo4j/counts driver))
 
 (def rapid-transit #{"subway" "light rail"})

@@ -1,0 +1,19 @@
+;; Places a rider names that are not stations, for the transit agent's
+;; journeys. Entered by hand, not from the GTFS feed; the coordinates are
+;; approximate, good to a block or so. The name leads with what a question
+;; says ("ICA", "MFA") and the full name follows, because an argument has to
+;; share a word with the question to be kept. An id must not start "place-":
+;; that is how the feed names its stations.
+[{:id "landmark-ica" :name "ICA (Institute of Contemporary Art)" :latitude 42.3529 :longitude -71.0430}
+ {:id "landmark-mfa" :name "MFA museum (Museum of Fine Arts)" :latitude 42.3394 :longitude -71.0940}
+ {:id "landmark-gardner" :name "Gardner Museum (Isabella Stewart Gardner)" :latitude 42.3382 :longitude -71.0991}
+ {:id "landmark-fenway-park" :name "Fenway Park" :latitude 42.3467 :longitude -71.0972}
+ {:id "landmark-td-garden" :name "TD Garden" :latitude 42.3662 :longitude -71.0621}
+ {:id "landmark-museum-of-science" :name "Museum of Science" :latitude 42.3677 :longitude -71.0709}
+ {:id "landmark-childrens-museum" :name "Boston Children's Museum" :latitude 42.3519 :longitude -71.0499}
+ {:id "landmark-bcec" :name "BCEC (Boston Convention and Exhibition Center)" :latitude 42.3456 :longitude -71.0446}
+ {:id "landmark-public-library" :name "Boston Public Library" :latitude 42.3493 :longitude -71.0782}
+ {:id "landmark-faneuil-hall" :name "Faneuil Hall" :latitude 42.3600 :longitude -71.0548}
+ {:id "landmark-boston-common" :name "Boston Common" :latitude 42.3550 :longitude -71.0656}
+ {:id "landmark-bunker-hill" :name "Bunker Hill Monument" :latitude 42.3764 :longitude -71.0608}
+ {:id "landmark-google-cambridge" :name "Google Cambridge" :latitude 42.3626 :longitude -71.0877}]

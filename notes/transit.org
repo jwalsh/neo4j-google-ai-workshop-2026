@@ -114,6 +114,46 @@ The templates were run with their arguments given by hand. The agent was
 not asked with a model: on 2026-10-09 afternoon no JVM on the laptop could
 reach the model's host.
 
+* Several ways, and places that are not stations
+
+Asked on 2026-10-09, after Park Street to Maverick came back as Red, Orange,
+Blue: four stops and two changes, when Green to Government Center and then
+Blue is four stops and one. =shortestPath= returns one path of the fewest
+stops and does not look at the lines.
+
+The journey tool now returns up to four ways, best first, one row each:
+
+| start                           | ride                                                        | finish | stops | changes | aboutMinutes |
+|---------------------------------+-------------------------------------------------------------+--------+-------+---------+--------------|
+| Park Street                     | Green Line to Government Center, then Blue Line to Maverick |        |     4 |       1 |           13 |
+| walk 205 m to Downtown Crossing | Orange Line to State, then Blue Line to Maverick            |        |     3 |       1 |           14 |
+
+How, all of it in the one template in =agents/mbta.agent.json=:
+
+- Each end is a =:Place=. Every station is one, and so is each =:Landmark=
+  in =agents/mbta-places.edn=: thirteen places entered by hand with
+  approximate coordinates, not from the feed. "The ICA" and "MFA" are in
+  the list of names the model picks from, beside the stations.
+- An end stands for the three subway or light rail stations nearest it
+  within 1,200 metres, itself included at no walk. Every pair of those is
+  a candidate, which is where a second way comes from: ride to Massachusetts
+  Avenue and walk, in place of changing for Prudential.
+- =allShortestPaths= between a pair gives every path of the fewest stops.
+  A change is the route changing, so Kenmore to Prudential is a change at
+  Copley though both are the Green Line. Of a pair's paths, those with the
+  fewest changes are kept.
+- A ride names a branch when only that branch will do ("Green Line E to
+  Prudential") and the line when any will ("Green Line to Government
+  Center").
+- A way that walks to a station and then rides past a nearer one is
+  dropped, and of the ways that ride the same lines only the best is kept.
+
+Measured against the running graph: Alewife to Prudential, Maverick to the
+ICA, Maverick to MFA, Park to Maverick and Kendall to Fenway Park each
+answer through =/ask= with =qwen2.5:3b=, in about two seconds once the
+model is warm. The step-by-step rows the tool used to return are gone; the
+ride says where each change is.
+
 * The front page
 
 [[file:img/dashboard-overview.png]]
@@ -127,11 +167,13 @@ one more entry in that file.
 
 * Not done
 
-- Travel time. The journey is the fewest stops, not the fastest: the cut
-  keeps the order of calls and drops their times.
-- Changing between two Green Line routes is not a change of line, so the
-  journey reports the line. Which of B, C, D or E it names for a shared
-  stretch is whichever the path took.
+- Travel time. =aboutMinutes= is arithmetic, not a timetable: two minutes
+  a stop, five a change, eighty metres a minute on foot. The cut keeps the
+  order of calls and drops their times.
+- A way with one more stop and one fewer change. Each way is a shortest
+  path between a pair of stations, so it is not found.
+- Buses, so no Silver Line: the ICA is a kilometre's walk from Aquarium
+  here, when Courthouse is beside it.
 - Buses, ferries and the 8,000 stops they add.
 - Entrances, lifts and the pathways inside a station, which the feed has.
 - The agent with a model, and a scored set of questions for it.

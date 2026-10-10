@@ -43,7 +43,7 @@
   :agent "agents/mbta.agent.json"
   :env "mbta-graph.env"
   :start "bb local-mbta"
-  :about "The MBTA's subway, light rail and commuter rail from its GTFS feed: stations, the stops in them, routes and lines."
+  :about "The MBTA's subway, light rail and commuter rail from its GTFS feed: stations, the stops in them, routes and lines. A journey can also start or end at a landmark from agents/mbta-places.edn, which is entered by hand."
   :shape "(:Line)<-[:ON]-(:Route)-[:CALLS_AT]->(:Stop)-[:IN]->(:Station)-[:CONNECTS]->(:Station)"
   :glance {:title "Stations where the most lines meet"
            :statement "MATCH (l:Line)<-[:ON]-(:Route)-[:SERVES]->(s:Station) RETURN s.name AS station, count(DISTINCT l) AS lines ORDER BY lines DESC, station LIMIT 6"}
