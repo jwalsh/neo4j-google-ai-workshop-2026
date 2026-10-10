@@ -1,0 +1,68 @@
+%% Ours, not a redrawn slide. For notes/system.org.
+%% The local system as built on 2026-10-09: what runs, on which port, and
+%% the path of a question. Solid arrows are calls made at run time. Dotted
+%% arrows are loads done once, by hand, from a cache outside the repository.
+%% Left out: the hosted lab instance (.env), which every box here can be
+%% pointed at instead, and experiments/.
+flowchart LR
+  subgraph sources["Sources, fetched once"]
+    direction TB
+    gcs_file["Form 13 day file<br/>Cloud Storage, public"]
+    arxiv_pdfs["arXiv PDFs<br/>named by a .bib or a directory"]
+    book_pdfs["Book PDFs<br/>a personal library"]
+    gtfs_feed["MBTA GTFS feed<br/>cdn.mbta.com"]
+  end
+
+  subgraph cache["XDG cache, never committed"]
+    direction TB
+    papers_cache["workshop-papers<br/>PDFs, text, index.edn"]
+    books_cache["workshop-books<br/>catalog, outlines, index.edn"]
+    mbta_cache["workshop-mbta<br/>feed, network.edn"]
+  end
+
+  subgraph graphs["Four embedded Neo4j, one JVM each"]
+    direction TB
+    filings_graph[("filings<br/>:7688")]
+    papers_graph[("papers<br/>:7689")]
+    books_graph[("books<br/>:7690")]
+    transit_graph[("transit<br/>:7691")]
+  end
+
+  subgraph core["src/workshop, one JVM per command"]
+    direction TB
+    registry["agents/registry.edn<br/>id, agent file, env file"]
+    agent_ns["agent<br/>choose, ground, resolve, run"]
+    dashboard_ns["dashboard<br/>127.0.0.1:8377"]
+    telemetry_ns["telemetry<br/>spans in memory"]
+  end
+
+  subgraph model_host["Ollama, this machine or another"]
+    chat_model["a small chat model<br/>held to a JSON schema"]
+  end
+
+  subgraph people["Entry points"]
+    direction TB
+    shell["bb tasks"]
+    browser["browser<br/>/ /map /data /ask /traces /config"]
+    emacs["Emacs, CIDER<br/>workshop.el, dev/*.clj"]
+  end
+
+  gcs_file -.->|bb local| filings_graph
+  arxiv_pdfs -.->|bb papers fetch, add| papers_cache
+  book_pdfs -.->|bb books catalog, outline, index| books_cache
+  gtfs_feed -.->|bb mbta fetch, network| mbta_cache
+  papers_cache -.->|bb papers-load| papers_graph
+  books_cache -.->|bb books-load| books_graph
+  mbta_cache -.->|bb mbta-load| transit_graph
+
+  shell --> agent_ns
+  browser --> dashboard_ns
+  emacs -->|nREPL, use-env!| agent_ns
+  dashboard_ns --> agent_ns
+  dashboard_ns --> registry
+  agent_ns --> registry
+  agent_ns -->|which tool, which arguments| chat_model
+  agent_ns -->|stored names, then the template| graphs
+  dashboard_ns -->|counts, map, data pages| graphs
+  agent_ns --> telemetry_ns
+  dashboard_ns --> telemetry_ns
