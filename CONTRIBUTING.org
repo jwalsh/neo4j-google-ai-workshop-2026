@@ -1,0 +1,139 @@
+#+TITLE: Working on this repository
+#+STARTUP: overview
+
+How to get a checkout to the point where a form can be evaluated against a
+graph, and the rules that keep several people, several worktrees and
+several agents out of each other's way. =README.org= says what the
+repository is; =CLAUDE.md= says how it is laid out. This says how to work in
+it.
+
+* What you need
+
+| needed for          | tool                                              |
+|---------------------+---------------------------------------------------|
+| everything          | a JVM (21), the Clojure CLI, babashka, GNU make   |
+| the REPL view       | Emacs with CIDER; =cypher-mode= is optional       |
+| the books' outlines | poppler (=pdfinfo=, =pdftohtml=, =pdftotext=)     |
+| a question in words | Ollama with a small model, on any reachable host  |
+| a second checkout   | git worktrees, and the port registry (below)      |
+
+=gmake help= and =bb tasks= list every command. It is =gmake=, not =make=.
+
+* First hour
+
+The transit graph needs no account, so it is the one to start with.
+
+#+begin_src sh
+bb test             # the unit tests; they touch no network and no server
+bb mbta network     # fetch the public feed into the cache, cut the rail network
+bb local-mbta       # an embedded Neo4j, in its own terminal, until ctrl-c
+bb mbta-load        # load it
+bb repl             # an nREPL, in its own terminal
+#+end_src
+
+In Emacs: =M-x load-file= on =workshop.el=, then =M-x workshop-repl=. The
+page on the left is =dev/mbta_explore.clj=; put the cursor after a form and
+evaluate it. =notes/transit-queries.org= is the same graph asked in Cypher,
+a block at a time, with =C-c C-c=.
+
+* Where things are kept
+
+The rule that makes a second checkout possible: nothing a checkout needs
+is kept only in that checkout.
+
+| what                                        | where                                   | moved by             |
+|---------------------------------------------+-----------------------------------------+----------------------|
+| source, notes, queries, prompts             | the repository                          |                      |
+| what can be fetched or derived again        | =$XDG_CACHE_HOME/workshop-<what>=       | =MBTA_CACHE= and its kin |
+| what cannot: notes kept on books            | =$XDG_DATA_HOME/workshop-books=         | =BOOKS_ANNOTATIONS=  |
+| connection details and anything host-specific | =.env=, ignored                       | =WORKSHOP_ENV=       |
+| this checkout's ports                       | =.env.ports=, ignored                   | =bb ports claim=     |
+| each graph's store                          | under =experiments/008-local-graph-dx/scratch/=, ignored | per checkout, on purpose |
+
+A git worktree has none of the ignored files. It gets its own empty graph
+stores, which is what is wanted, and reaches the same caches as every other
+checkout.
+
+Not yet moved: the Form 13 file is fetched into =data/= in the checkout, so
+a worktree fetches its own.
+
+* A second checkout, or an agent
+
+Worktrees are siblings of the checkout, named for what they are for:
+
+#+begin_src sh
+git worktree add ../neo4j-google-ai-workshop-2026-<slug> -b <branch>
+#+end_src
+
+Two checkouts cannot share a port. =bb ports= asks the port registry who
+holds what, and in a worktree gives it a slot of ten ports of its own:
+
+#+begin_src sh
+export PORTCLAIM=...          # where the registry is; a fact about your network
+bb ports                      # this checkout's ports and who holds them
+bb ports claim books          # in a worktree: take a slot, write .env.ports
+bb local-books                # now on that slot, with this checkout's own store
+bb ports release              # when the branch merges
+#+end_src
+
+The slot is =11000 + 10 × (CRC32 of the branch name mod 100)=, or the next
+free one if that is taken. The main checkout keeps the ports the notes
+name. Never write a port into code; read =.env.ports=.
+
+An agent that should not write where a person writes is given its own
+place and its own name, and what it made is merged back afterwards:
+
+#+begin_src sh
+BOOKS_ANNOTATIONS=<dir> WORKSHOP_AUTHOR=<name> bb annotate add <book> <page> "..."
+bb annotate merge <dir>
+#+end_src
+
+A brief for an agent says which worktree it works in, what it may not
+touch, and that its result is a note with the commands it ran and their
+output. A claim without its command is not finished work.
+
+* Secrets and the host you deploy to
+
+Nothing specific to a person, a machine or a network is in a tracked file.
+That includes a password, a token, a hostname, an address and a user name.
+
+- =.env= holds them and is ignored. =.env.template= is tracked and lists
+  the names with empty values. =gmake .env= starts one from the other.
+- A tracked file names the variable, never its value: a script says
+  =$STAGING_SSH=, a note says "the host named by =STAGING_SSH=".
+- A value is fetched where it is used and not before, from the environment
+  or from a password store, and is never an argument on a command line.
+- =gmake guard-env= fails if =.env= is tracked, staged or in history. Run
+  it before every commit.
+- A screenshot goes through =bb redact= and is looked at before it is
+  added.
+
+The lab's own credentials are throwaway and may be used freely; the rule is
+only that they are not committed.
+
+* Before a commit
+
+#+begin_src sh
+bb test
+gmake guard-env
+bb audit            # the notes against the repository; reads only
+#+end_src
+
+- Commits are conventional and small: =feat(books): ...=, =docs(notes): ...=.
+- Org, not Markdown, except =CLAUDE.md= and =.meta/=.
+- A new note is linked from =README.org= under Notes with one line saying
+  what is in it.
+- What was not run is said to be not run, in the note and in
+  =.meta/README.md= under "Never verified". A dry statement of what is
+  unproven is worth more here than a confident one that is not.
+- An experiment has a hypothesis and a gate written before it is run, in
+  =experiments/NNN-name/=. What survives is rewritten into =src/workshop/=.
+
+* Deploying
+
+Not on =main= yet. The branch =integration/deploy= builds one jar, runs a
+staging stack on a laptop from one command, and has a deployment target
+per kind of host; =deploy/README.org= there is the operator's guide and
+=notes/release-pipeline.org= says what has been proven. Each environment
+names its target in one file, and every host-specific value comes from
+=.env=.
