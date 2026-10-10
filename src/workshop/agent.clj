@@ -80,20 +80,79 @@
                           "none")
                         ".")))))
 
+(defn- string-keyed
+  [arguments]
+  (into {} (map (fn [[argument-name argument-value]] [(name argument-name) argument-value])) arguments))
+
+(defn argument-schema
+  "The JSON schema for one tool's arguments alone, with every parameter the
+  tool cannot do without required. `choice-schema` offers every parameter
+  of every tool and requires none, and a small model handed that tends to
+  fill in a few at random and leave out the ones the tool needs.
+
+  `domains` maps a parameter's name to the values stored for it. Such a
+  parameter becomes an enum, so the model picks a station that exists
+  where it would have copied a word and hoped."
+  [{:keys [parameters]} domains]
+  {"type" "object"
+   "properties" (into {}
+                      (for [{:keys [data_type] parameter-name :name} parameters]
+                        [parameter-name (if-let [stored (seq (get domains parameter-name))]
+                                          {"type" "string" "enum" (vec stored)}
+                                          {"type" (json-types data_type "string")})]))
+   "required" (vec (for [{:keys [is_optional] parameter-name :name} parameters
+                         :when (not is_optional)]
+                     parameter-name))})
+
+(defn- argument-instructions
+  [{:keys [description parameters] tool-name :name}]
+  (str "Fill in the arguments of the tool \"" tool-name "\": " description "\n"
+       "Copy each value from the question as written, or pick the listed value the question means. "
+       "Do not invent one.\n\nArguments:\n"
+       (str/join "\n" (for [{:keys [data_type] parameter-name :name parameter-description :description} parameters]
+                        (str "- " parameter-name " (" data_type "): " parameter-description)))))
+
+(defn- missing-arguments
+  [{:keys [parameters]} arguments]
+  (for [{:keys [is_optional] parameter-name :name} parameters
+        :when (and (not is_optional) (nil? (get arguments parameter-name)))]
+    parameter-name))
+
 (defn choose
   "Asks the model which tool answers the question. Returns
-  {:tool :arguments} as the model gave them, with the call's timing."
+  {:tool :arguments} as the model gave them, with the call's timing. When
+  the tool chosen is left without an argument it needs, or the graph has a
+  short list of values for one of its arguments, the model is asked once
+  more for that tool's arguments alone (`argument-schema`); :asked-twice
+  says so and :from-graph names the arguments picked from a list.
+
+  The option :domains is a function of a tool to {parameter-name [values]};
+  `ask` supplies it, since only it has a driver. :single-call true leaves
+  the second question out, which is what experiment 013 measures against."
   ([agent question] (choose agent question {}))
   ([agent question options]
    (let [{:keys [parsed] :as answer}
          (ollama/chat [{:role "system" :content (instructions agent)}
                        {:role "user" :content question}]
-                      (assoc options :schema (choice-schema agent)))]
-     (merge {:tool (:tool parsed)
-             :arguments (into {} (map (fn [[argument-name argument-value]]
-                                        [(name argument-name) argument-value]))
-                              (:arguments parsed))}
-            (select-keys answer [:model :seconds :prompt-tokens :answer-tokens])))))
+                      (assoc (dissoc options :domains) :schema (choice-schema agent)))
+         timing #(select-keys % [:model :seconds :prompt-tokens :answer-tokens])
+         arguments (string-keyed (:arguments parsed))
+         chosen (first (filter #(= (:tool parsed) (:name %)) (:tools agent)))
+         domains (when (and chosen (:domains options)) ((:domains options) chosen))
+         options (dissoc options :domains)]
+     (if (and chosen (not (:single-call options))
+              (or (seq domains) (seq (missing-arguments chosen arguments))))
+       (let [second-answer (ollama/chat [{:role "system" :content (argument-instructions chosen)}
+                                         {:role "user" :content question}]
+                                        (assoc options :schema (argument-schema chosen domains)))]
+         (merge {:tool (:tool parsed)
+                 :arguments (string-keyed (:parsed second-answer))
+                 :from-graph (set (keys domains))
+                 :asked-twice true}
+                (merge-with (fn [first-value second-value]
+                              (if (number? first-value) (+ first-value second-value) second-value))
+                            (timing answer) (timing second-answer))))
+       (merge {:tool (:tool parsed) :arguments arguments} (timing answer))))))
 
 (defn lookup
   "Where a template compares a string parameter with a property, as
@@ -137,17 +196,49 @@
   those removed listed under :dropped. A string must appear in the question,
   without regard to case; a number must appear as a number. A model asked
   for arguments tends to supply them, and an invented name or threshold is
-  the one thing a schema cannot rule out. This can."
-  [question {:keys [arguments] :as choice}]
+  the one thing a schema cannot rule out. This can.
+
+  An argument picked from a list of stored values (:from-graph) is spelled
+  as the graph spells it, \"Kendall/MIT\" for a question's \"Kendall\", so
+  it need only share a word of three letters or more with the question."
+  [question {:keys [arguments from-graph] :as choice}]
   (let [lowered (str/lower-case question)
         numbers (set (re-seq #"\d+(?:\.\d+)?" question))
-        supported? (fn [argument-value]
-                     (cond (string? argument-value) (and (not (str/blank? argument-value))
+        shares-a-word? (fn [stored-value]
+                         (some #(str/includes? lowered %)
+                               (re-seq #"[a-z0-9]{3,}" (str/lower-case stored-value))))
+        supported? (fn [[argument-name argument-value]]
+                     (cond (and (string? argument-value) (contains? from-graph argument-name))
+                           (shares-a-word? argument-value)
+                           (string? argument-value) (and (not (str/blank? argument-value))
                                                          (str/includes? lowered (str/lower-case argument-value)))
                            (number? argument-value) (contains? numbers (str argument-value))
                            :else true))
-        {kept true dropped false} (group-by (comp boolean supported? val) arguments)]
+        {kept true dropped false} (group-by (comp boolean supported?) arguments)]
     (assoc choice :arguments (into {} kept) :dropped (into {} dropped))))
+
+(def largest-domain
+  "A property with more stored values than this is not offered as a list:
+  254 stations make a grammar, some thousands of company names do not."
+  400)
+
+(defn domains
+  "For one tool, the stored values of each string parameter its template
+  compares with a property, as {parameter-name [values]}, leaving out any
+  property with more than `largest-domain` of them."
+  [driver {:keys [template parameters]}]
+  (into {}
+        (for [{:keys [data_type] parameter-name :name} parameters
+              :when (= "string" data_type)
+              :let [{:keys [label property] :as place} (lookup template parameter-name)]
+              :when place
+              :let [stored (map :value
+                                (neo4j/query driver
+                                             (str "MATCH (n:`" label "`) WHERE n.`" property "` IS NOT NULL "
+                                                  "RETURN DISTINCT n.`" property "` AS value ORDER BY value LIMIT "
+                                                  (inc largest-domain))))]
+              :when (<= 1 (count stored) largest-domain)]
+          [parameter-name (vec stored)])))
 
 (defn validate
   "Checks a choice against the tool it names and fills in defaults. Returns
@@ -183,7 +274,7 @@
   ([driver agent question] (ask driver agent question {}))
   ([driver agent question options]
    (telemetry/span "agent: ask" {:agent (:name agent)}
-     (let [choice (grounded question (choose agent question options))
+     (let [choice (grounded question (choose agent question (assoc options :domains #(domains driver %))))
            {:keys [tool parameters problem]} (validate agent choice)
            base {:question question :choice choice :tool (:name tool)}]
        (telemetry/annotate! {:tool (:tool choice)})

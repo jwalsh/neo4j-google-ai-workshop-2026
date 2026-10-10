@@ -64,3 +64,27 @@
       (is (= {:label "Category" :property "name"} (agent/lookup (template-of "Papers Filed Under a Category") "categoryCode")))
       (is (= {:label "Author" :property "name"} (agent/lookup (template-of "Papers by an Author") "authorName")))
       (is (= {:label "Paper" :property "verdict"} (agent/lookup (template-of "Papers With a Verification Verdict") "verdict"))))))
+
+(deftest argument-schema-test
+  (let [journey (first (filter #(= "Subway Journey Between Two Stations" (:name %))
+                               (:tools (agent/load-agent "agents/mbta.agent.json"))))
+        schema (agent/argument-schema journey nil)]
+    (testing "only the chosen tool's parameters are on offer"
+      (is (= #{"fromStation" "toStation" "limit"} (set (keys (schema "properties"))))))
+    (testing "what the tool cannot do without is required, the rest is not"
+      (is (= ["fromStation" "toStation"] (schema "required"))))
+    (testing "stored values make a parameter an enum"
+      (is (= {"type" "string" "enum" ["Kendall/MIT" "Maverick"]}
+             (get-in (agent/argument-schema journey {"toStation" ["Kendall/MIT" "Maverick"]})
+                     ["properties" "toStation"]))))))
+
+(deftest grounded-from-graph-test
+  (let [question "How do I get from Maverick to Kendall?"]
+    (testing "a stored spelling stands when it shares a word with the question"
+      (is (= {"toStation" "Kendall/MIT"}
+             (:arguments (agent/grounded question {:arguments {"toStation" "Kendall/MIT"}
+                                                   :from-graph #{"toStation"}})))))
+    (testing "a stored value the question does not mention is still dropped"
+      (is (= {"toStation" "Park Street"}
+             (:dropped (agent/grounded question {:arguments {"toStation" "Park Street"}
+                                                 :from-graph #{"toStation"}})))))))
