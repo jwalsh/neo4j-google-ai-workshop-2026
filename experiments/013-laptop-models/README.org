@@ -1,0 +1,109 @@
+#+TITLE: 013 - The agents on the laptop's own models, asked once and asked twice
+#+DATE: 2026-10-09
+
+* Source
+
+Experiment 009 measured the tool-choosing agent with models on another
+machine. On 2026-10-09 that machine could not be reached from a JVM here,
+and the laptop had two small models of its own: =qwen2.5:3b= and
+=qwen3:4b=. The first question put to the transit agent through either,
+"How do I get from Maverick to Kendall?", chose the right tool and gave it
+no stations. =workshop.agent/choose= gained a second question for that
+case, and this is the measurement of it.
+
+* Hypothesis
+
+The model's first answer is held to one schema for every tool: a tool name
+and an arguments object with every parameter of every tool, none required.
+A small model picks the tool well and fills the arguments badly. Asking a
+second time, for the chosen tool's arguments alone, with the ones it needs
+required and with the stored values as an enum where the graph has 400 or
+fewer of them (=agent/argument-schema=, =agent/domains=), turns refusals
+into answers and adds no wrong ones.
+
+* Gate
+
+42 questions: the 12 for filings and the 12 for papers from experiment
+009, unchanged, and 18 new ones for transit in =questions-mbta.edn=, five
+of which say a station loosely or out of order. Graded as 009 grades:
+right, refused, wrong. Each model runs them twice, =:single-call true=
+and not.
+
+The gate is more right answers with two calls than with one, for both
+models, and no more wrong ones.
+
+* Result
+
+Half passed. More right for both models; one more wrong for one of them.
+One pass, temperature 0, M1 Pro with 16 GB, four Neo4j JVMs running
+beside the model.
+
+| model      | calls | right | refused | wrong | of | tool chosen | median seconds |
+|------------+-------+-------+---------+-------+----+-------------+----------------|
+| qwen2.5:3b | one   |    33 |       8 |     1 | 42 |          34 |           0.63 |
+| qwen2.5:3b | two   |    38 |       3 |     1 | 42 |          34 |           1.24 |
+| qwen3:4b   | one   |    36 |       5 |     1 | 42 |          37 |           1.04 |
+| qwen3:4b   | two   |    40 |       0 |     2 | 42 |          37 |           1.72 |
+
+"Tool chosen" is the model's first answer alone: the expected tool, or
+"none" when no tool answers. It does not move between the two rows of a
+model, since the second call never changes the tool.
+
+By agent, right answers, one call then two:
+
+| model      | filings (12) | papers (12) | transit (18) |
+|------------+--------------+-------------+--------------|
+| qwen2.5:3b | 9, 9         | 12, 12      | 12, 17       |
+| qwen3:4b   | 12, 12       | 12, 12      | 12, 16       |
+
+=results.edn= has every row.
+
+* What the failures say
+
+- All of the gain is the five journey questions. Asked once, neither
+  model gave a journey its two stations, ten refusals of ten. Asked twice,
+  nine of ten are right. It is the only tool here with two required
+  arguments of the same kind, and the flat schema is where they are lost.
+- The new wrong answer: "To South Station from Wonderland, please." came
+  back from =qwen3:4b= as a journey from South Station to Wonderland. Both
+  names are in the question, so grounding passes it, and the rows look
+  like an answer. =qwen2.5:3b= got the direction right. A check for it
+  would have to read the question's grammar, which is the model's job.
+- "When is the next train from Park Street?" is wrong from both models in
+  both modes: it runs "Which Routes Serve a Station". No tool knows a
+  timetable and the model does not say "none". This is 009's finding
+  again, a wrong choice passes through a tool whose one argument the
+  question happens to supply.
+- =qwen2.5:3b= still loses three filings questions, the same three either
+  way. Two are the pair of tool names that differ by an apostrophe (009).
+  The third is "Who owns 2U Inc?", written back as "2U, Inc." with a
+  comma the question does not have, and dropped. Company names are too
+  many for an enum, so the second call cannot help there.
+- Where the second call offered a list and the question named nothing on
+  it, the model picked a real manager anyway (GOLDENTREE ASSET MANAGEMENT
+  LP). An enum removes "invented" and leaves "not asked for". The
+  shared-word rule in =grounded= dropped it.
+- The second call about doubles the time and is made whenever a list
+  exists, needed or not.
+
+* Log
+
+1. Both models, transit example, one call: right tool, no stations.
+2. =argument-schema= and the second call when a needed argument is
+   missing. Both models answer the example.
+3. =domains=: stored values as an enum in the second call; =grounded=
+   lets a listed value stand on a shared word. "Gov Center", "Park St",
+   "the airport" resolve.
+4. The run above.
+
+* Not done
+
+- Books. The question set would name titles from a personal library, and
+  those stay out of the repository.
+- A 7B model on this machine. 009's best, qwen2.5-coder 7B, scored 11 and
+  12 of 12 on filings and papers with one call; it has not been run on
+  transit or on the laptop.
+- Variance: one run per row.
+- The second call only when the first one's arguments fail, which would
+  save the time on the questions that were already right.
+- A tool that says no: a timetable question has nowhere right to go.

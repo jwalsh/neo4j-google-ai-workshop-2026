@@ -1,0 +1,41 @@
+;; Questions for the transit agent, in the form experiment 009 uses: the
+;; tool and the parameters a right answer runs, :tool nil when nothing
+;; should run. The first group says a station loosely or out of order,
+;; which is what the list of stored names is for.
+[{:question "How do I get from Maverick to Kendall?"
+  :tool "Subway Journey Between Two Stations"
+  :parameters {"fromStation" "Maverick" "toStation" "Kendall/MIT"}}
+ {:question "How do I get from the airport to Harvard?"
+  :tool "Subway Journey Between Two Stations"
+  :parameters {"fromStation" "Airport" "toStation" "Harvard"}}
+ {:question "Get me from Gov Center to Davis."
+  :tool "Subway Journey Between Two Stations"
+  :parameters {"fromStation" "Government Center" "toStation" "Davis"}}
+ {:question "I'm at Alewife and need to reach Forest Hills."
+  :tool "Subway Journey Between Two Stations"
+  :parameters {"fromStation" "Alewife" "toStation" "Forest Hills"}}
+ {:question "To South Station from Wonderland, please."
+  :tool "Subway Journey Between Two Stations"
+  :parameters {"fromStation" "Wonderland" "toStation" "South Station"}}
+ {:question "Which routes serve Park St?"
+  :tool "Which Routes Serve a Station" :parameters {"stationName" "Park Street"}}
+ {:question "What lines stop at North Station?"
+  :tool "Which Routes Serve a Station" :parameters {"stationName" "North Station"}}
+ {:question "List the stops on the Orange Line in order."
+  :tool "Stations on a Route in Order" :parameters {"routeName" "Orange Line"}}
+ {:question "What stations are on the Fitchburg line?"
+  :tool "Stations on a Route in Order" :parameters {"routeName" "Fitchburg Line"}}
+ {:question "What is near Kendall?"
+  :tool "Stations Near a Station" :parameters {"nearStation" "Kendall/MIT"}}
+ {:question "Which stations are within 800 metres of Downtown Crossing?"
+  :tool "Stations Near a Station" :parameters {"nearStation" "Downtown Crossing" "withinMetres" 800}}
+ {:question "What platforms does South Station have?"
+  :tool "Platforms in a Station" :parameters {"platformsOf" "South Station"}}
+ {:question "Which stations are in Somerville?"
+  :tool "Stations in a Municipality" :parameters {"municipalityName" "Somerville"}}
+ {:question "What stations are there in Cambridge?"
+  :tool "Stations in a Municipality" :parameters {"municipalityName" "Cambridge"}}
+ {:question "What is the weather in Boston?" :tool nil}
+ {:question "Which managers hold Allstate?" :tool nil}
+ {:question "How do I get from Maverick to Hogwarts?" :tool nil}
+ {:question "When is the next train from Park Street?" :tool nil}]
