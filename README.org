@@ -10,10 +10,7 @@
 
 Four embedded Neo4j graphs on one machine, explored from a REPL. Clojure
 forms and Cypher blocks in org files go through the same nREPL; a small
-local model picks a query template and never writes Cypher. Begun at a
-Neo4j and Google workshop, which did this with hosted consoles and a hosted
-model. The lead example, the MBTA's rail network, is not the workshop's
-data.
+local model picks a query template and never writes Cypher.
 
 [[file:notes/img/emacs-transit-three-views.png]]
 
