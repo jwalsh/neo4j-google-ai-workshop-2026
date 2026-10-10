@@ -1,5 +1,7 @@
 .env
 .envrc.local
+# This checkout's ports, written by bb ports claim.
+.env.ports
 *.dump
 /data/
 .DS_Store

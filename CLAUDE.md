@@ -46,8 +46,20 @@ Cypher templates; `agents/registry.edn` ties each agent to its own Neo4j),
 for the MBTA's rail network from its GTFS feed, kept in the XDG cache),
 `bb local-books` and `bb books-load` (a third on 7690 for a shelf of books;
 `bb books catalog|fetch|outline|index` fill the cache it reads (`index` is each book's back-of-book index, as concepts); the library's
-catalog and PDFs stay in the XDG cache and are never committed), and `bb papers where|list|fetch|add DIR|index` (arXiv papers a `.bib`
+catalog and PDFs stay in the XDG cache and are never committed),
+`bb annotate where|list|add BOOK PAGE TEXT|merge DIR|load` (notes on those
+books, one file each under `$XDG_DATA_HOME/workshop-books/annotations`, never
+committed; a subagent or worktree that must not write the owner's notes gets
+its own `BOOKS_ANNOTATIONS` and `WORKSHOP_AUTHOR`, merged back afterwards), and `bb papers where|list|fetch|add DIR|index` (arXiv papers a `.bib`
 names or a directory holds, kept in the XDG cache; this one runs in babashka itself, from `bb/`).
+`bb ports [show|claim SERVICE...|release]` asks portclaim (`PORTCLAIM` names
+the registry; no address is written in this repository) who holds this
+checkout's ports. In a git worktree `bb ports claim books` takes a slot of
+ten ports between 11000 and 11999, the one a checksum of the branch name
+picks or the next free one, and writes the ignored `.env.ports`, which
+`workshop.env` and the `local-*` tasks read, so a worktree runs its own
+servers; the main checkout keeps 8377 and 7688-7691. Never hardcode a port
+in new code: read `.env.ports`.
 `WORKSHOP_ENV=local-graph.env` points every command at the local server in
 place of `.env`. `OLLAMA_URL` and `OLLAMA_MODEL` choose the model; the
 default is this machine. Do not run a model on this machine unless asked:
@@ -76,12 +88,15 @@ workshop.env-test/parse-dotenv-test`.
   against it; `status` holds one check per dependency and `dashboard` renders
   them; `telemetry` holds spans in memory for `/traces`; `ollama` is the
   one model client; `agent` answers a question by choosing a template;
-  `papers` reads the paper cache; `cli` is what `bb` calls. `dev/user.clj` is the REPL namespace;
+  `papers` reads the paper cache; `ports` is this checkout's ports and their
+claims in portclaim; `annotations` is the store of notes on books
+and its projection into the books graph; `cli` is what `bb` calls. `dev/user.clj` is the REPL namespace;
   `.dir-locals.el` makes `cider-jack-in` start in it. `workshop.el` at the
   root is the Emacs side: `workshop-repl` lays out a page beside the REPL,
   `workshop-graph` switches graphs by evaluating `(user/use-env! FILE)`. A
   new data source gets an entry in its `workshop-graphs`. It also defines
-  `org-babel-execute:cypher`: a `#+begin_src cypher :graph NAME` block in an
+  `workshop-annotate` and `workshop-annotations` (notes on books, through
+`user/annotate!`) and `org-babel-execute:cypher`: a `#+begin_src cypher :graph NAME` block in an
   org file runs through that REPL (`user/table`), as in
   `notes/transit-queries.org`. `dev/explore.clj` is
   `(comment ...)` blocks per lab, evaluated a form at a time; a new lab

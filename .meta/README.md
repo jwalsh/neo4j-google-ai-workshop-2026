@@ -78,6 +78,12 @@ early on was removed from the tree on 2026-10-08; it is still in history
 
 ## Never verified
 
+- `bb ports claim` and `bb ports release` have never written to the registry,
+  and no server has run on a block's port. `bb ports` (read only) has.
+- `workshop.annotations/load!` has not run against a server: the store, the
+  merge and the page-to-heading rule are tested, the Cypher that puts notes
+  in the books graph is not. First `bb books-load` with a note in the store
+  is the check.
 - `gmake ping` and `gmake cypher` have run only through the Query API.
   `cypher-shell` is not installed, so that branch of the Makefile has never
   executed.

@@ -12,6 +12,8 @@
 ;;   M-x workshop-graph      point the REPL at another Neo4j and open its page
 ;;   M-x workshop-layout     the layout again, after wandering off
 ;;   M-x workshop-dashboard  start the status page from the REPL and browse it
+;;   M-x workshop-annotate   keep a note on a book, with the region as its quote
+;;   M-x workshop-annotations  a book's notes, as an org buffer
 ;;
 ;; It also makes Cypher a language org-babel can run.  C-c C-c on
 ;;
@@ -24,6 +26,12 @@
 ;; graph for this one block; without it the block asks whichever graph the
 ;; REPL is on.  Each :var is a query parameter.  The cypher-mode package, if
 ;; installed, colours the block; nothing here needs it.
+;;
+;; Notes on books are kept outside the repository, one file each under
+;; $XDG_DATA_HOME/workshop-books/annotations, so a git worktree reaches the
+;; same notes and an agent given its own BOOKS_ANNOTATIONS reaches none of
+;; them.  In a buffer showing a cached PDF, `workshop-annotate' offers that
+;; book and the page in view.  bb books-load puts the notes in the graph.
 ;;
 ;; `workshop-graph' does not start a second REPL.  It evaluates
 ;; (user/use-env! "books-graph.env"), which closes the session's driver and
@@ -206,6 +214,68 @@ a rule, and the rows."
     ;; No rows means no column names either: an empty result, not a table.
     (when (cdr rows)
       (cons (car rows) (cons 'hline (cdr rows))))))
+
+;;; Notes on books
+
+(declare-function doc-view-current-page "doc-view" ())
+(declare-function pdf-view-current-page "ext:pdf-view" (&optional window))
+
+(defun workshop--shelf-ids ()
+  "The ids of the books on the shelf, asked of the REPL."
+  (append (car (read-from-string (workshop--eval "(mapv :id (shelf-books))"))) nil))
+
+(defun workshop--page-in-view ()
+  "The page the buffer shows, when it is a PDF in doc-view or pdf-tools."
+  (cond ((and (derived-mode-p 'pdf-view-mode) (fboundp 'pdf-view-current-page))
+         (pdf-view-current-page))
+        ((and (derived-mode-p 'doc-view-mode) (fboundp 'doc-view-current-page))
+         (doc-view-current-page))))
+
+(defun workshop--read-book ()
+  "A book id from the shelf, offering the one the buffer's file is named for."
+  (let* ((shelf-ids (workshop--shelf-ids))
+         (visited (and buffer-file-name (file-name-base buffer-file-name))))
+    (completing-read "Book: " shelf-ids nil t nil nil (car (member visited shelf-ids)))))
+
+;;;###autoload
+(defun workshop-annotate (book-id page note-text &optional quoted-text)
+  "Keep NOTE-TEXT as a note on page PAGE of the book BOOK-ID.
+QUOTED-TEXT is the passage it is about; interactively, the region.  PAGE is
+the PDF's own page count, or nil.  The note is a file of its own in the XDG
+data directory, never in the repository."
+  (interactive
+   (let ((quoted-text (when (use-region-p)
+                        (string-trim (buffer-substring-no-properties (region-beginning) (region-end))))))
+     (list (workshop--read-book)
+           (let ((answer (read-string "Page (empty for none): "
+                                      (let ((page-in-view (workshop--page-in-view)))
+                                        (and page-in-view (number-to-string page-in-view))))))
+             (unless (string-empty-p answer) (string-to-number answer)))
+           (read-string "Note: ")
+           quoted-text)))
+  (let ((kept-id (workshop--eval
+                  (format "(:id (annotate! {:book %s :page %s :text %s :quote %s}))"
+                          (workshop--clojure-literal book-id)
+                          (if page (number-to-string page) "nil")
+                          (workshop--clojure-literal note-text)
+                          (if quoted-text (workshop--clojure-literal quoted-text) "nil")))))
+    (message "Kept %s on %s" (car (read-from-string kept-id)) book-id)))
+
+;;;###autoload
+(defun workshop-annotations (book-id)
+  "Show the notes kept on the book BOOK-ID in an org buffer.
+The buffer is a view: the notes are the files, and editing it changes none."
+  (interactive (list (workshop--read-book)))
+  (let ((org-text (car (read-from-string
+                        (workshop--eval (format "(annotations-org %s)" (workshop--clojure-literal book-id)))))))
+    (with-current-buffer (get-buffer-create (format "*notes: %s*" book-id))
+      (let ((inhibit-read-only t))
+        (erase-buffer)
+        (insert org-text)
+        (org-mode)
+        (goto-char (point-min)))
+      (view-mode 1)
+      (pop-to-buffer (current-buffer)))))
 
 (provide 'workshop)
 

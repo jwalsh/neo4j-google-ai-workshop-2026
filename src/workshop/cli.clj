@@ -1,18 +1,22 @@
 (ns workshop.cli
   "clojure -M:run <command>. The tasks in bb.edn call this."
-  (:require [clojure.pprint :as pprint]
+  (:require [clojure.edn :as edn]
+            [clojure.pprint :as pprint]
             [clojure.string :as str]
             [workshop.agent :as agent]
+            [workshop.annotations :as annotations]
             [workshop.audit :as audit]
             [workshop.books :as books]
             [workshop.labs :as labs]
             [workshop.mbta :as mbta]
             [workshop.dashboard :as dashboard]
+            [workshop.env :as env]
             [workshop.form13 :as form13]
             [workshop.gcp :as gcp]
             [workshop.msa :as msa]
             [workshop.neo4j :as neo4j]
             [workshop.papers :as papers]
+            [workshop.ports :as ports]
             [workshop.redact :as redact]
             [workshop.status :as status]))
 
@@ -67,10 +71,35 @@
                              (do (println "no answer: " problem)
                                  (run! #(println "  " %) candidates))
                              (print-rows rows)))))}
-   "books-load" {:doc "MERGE the shelf's books and outlines into the server the env file names"
+   "books-load" {:doc "MERGE the shelf's books, outlines and notes into the server the env file names"
                  :run (fn [_]
                         (with-open [driver (neo4j/connect)]
-                          (pprint/pprint (books/load! driver (books/graph)))))}
+                          (pprint/pprint (books/load! driver (books/graph)))
+                          ;; after the books: their load replaces the concepts a note points at
+                          (pprint/pprint (annotations/load! driver (annotations/rows (annotations/annotations)
+                                                                                     (books/outlines))))))}
+   "annotate"  {:doc "Notes on the shelf's books, in the XDG data directory: annotate where|list [BOOK]|add BOOK PAGE TEXT|merge DIR|load"
+                :run (fn [[view & arguments]]
+                       (case (or view "where")
+                         "where" (println (annotations/store-dir))
+                         "list" (print-rows (for [note (annotations/annotations (first arguments))]
+                                              (-> (select-keys note [:book :page :by :id :text])
+                                                  (update :text #(some-> % (subs 0 (min 60 (count %))))))))
+                         "add" (let [[book page & words] arguments]
+                                 (when-not (and book page)
+                                   (throw (ex-info "add needs a book id, a page (or -) and the note." {})))
+                                 (when-not (some #{book} (map :id (edn/read-string (slurp books/default-shelf))))
+                                   (throw (ex-info (str "No book " book " on the shelf in " books/default-shelf ".") {})))
+                                 (prn (annotations/annotate! {:book book
+                                                              :page (when-not (= "-" page) (parse-long page))
+                                                              :text (str/join " " words)})))
+                         "merge" (do (when-not (first arguments)
+                                       (throw (ex-info "merge needs the other store's directory." {})))
+                                     (prn (annotations/merge! (first arguments))))
+                         "load" (with-open [driver (neo4j/connect)]
+                                  (pprint/pprint (annotations/load! driver (annotations/rows (annotations/annotations)
+                                                                                             (books/outlines)))))
+                         (throw (ex-info (str "annotate has no view " view) {}))))}
    "mbta-load" {:doc "MERGE the cached rail network into the server the env file names"
                 :run (fn [_]
                        (with-open [driver (neo4j/connect)]
@@ -85,10 +114,21 @@
                                         (status/all-checks))))}
    "dashboard" {:doc "Serve the status page on 127.0.0.1: dashboard [port]"
                 :run (fn [[port]]
-                       (let [listen-port (if port (parse-long port) dashboard/default-port)]
+                       (let [listen-port (if port
+                                           (parse-long port)
+                                           (get (env/assigned-ports) "DASHBOARD_PORT" dashboard/default-port))]
                          (dashboard/start listen-port)
                          (println (str "http://127.0.0.1:" listen-port "/  (ctrl-c stops it)"))
                          @(promise)))}
+   "ports"     {:doc "This checkout's ports and who holds them in portclaim: ports [show|claim SERVICE...|release [SERVICE...]]"
+                :run (fn [[view & wanted-services]]
+                       (case (or view "show")
+                         "show" (do (println "registry:" (ports/registry))
+                                    (print-rows (ports/status)))
+                         "claim" (do (print-rows (ports/claim! wanted-services))
+                                     (print-rows (ports/status)))
+                         "release" (print-rows (ports/release! wanted-services))
+                         (throw (ex-info (str "ports has no view " view) {}))))}
    "form13"    {:doc "The Form 13 day file, locally: form13 [summary|top|degree|variants|odd|verify|load]"
                 :run (fn [[view]]
                        (let [holdings @form13/rows]

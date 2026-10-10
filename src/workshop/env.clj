@@ -30,15 +30,49 @@
                   [variable-name (unquote-value raw-value)])))
         (str/split-lines dotenv-text)))
 
+(def default-ports
+  "The ports the main checkout's servers listen on, which the graph profiles
+  and the notes name."
+  {"DASHBOARD_PORT" 8377 "FILINGS_PORT" 7688 "PAPERS_PORT" 7689 "BOOKS_PORT" 7690 "TRANSIT_PORT" 7691})
+
+(defn assigned-ports
+  "The ports .env.ports gives this checkout, by variable; empty without the
+  file. `bb ports claim` writes it in a git worktree, so that two checkouts
+  do not share a server (see `workshop.ports`)."
+  ([] (assigned-ports ".env.ports"))
+  ([ports-path]
+   (let [ports-file (io/file ports-path)]
+     (if (.exists ports-file)
+       (into {}
+             (keep (fn [[variable-name value]]
+                     (when (and (default-ports variable-name) (re-matches #"\d+" value))
+                       [variable-name (parse-long value)])))
+             (parse-dotenv (slurp ports-file)))
+       {}))))
+
+(defn local-uri
+  "A URI with its port replaced by this checkout's, when it names one of the
+  main checkout's ports on this machine. Any other URI is returned as it is:
+  a hosted instance is not a port of ours."
+  [uri assigned]
+  (if-let [[_ before port after] (re-matches #"(.*://(?:localhost|127\.0\.0\.1):)(\d+)(.*)" (str uri))]
+    (let [variable-name (some (fn [[candidate default-port]] (when (= default-port (parse-long port)) candidate))
+                              default-ports)]
+      (str before (get assigned variable-name port) after))
+    uri))
+
 (defn load-env
-  "The process environment with .env laid over it. Empty values are dropped."
+  "The process environment with .env laid over it. Empty values are dropped.
+  A NEO4J_URI on this machine takes this checkout's port for that graph."
   ([] (load-env (or (System/getenv "WORKSHOP_ENV") ".env")))
   ([dotenv-path]
    (let [dotenv-file (io/file dotenv-path)
-         from-file (if (.exists dotenv-file) (parse-dotenv (slurp dotenv-file)) {})]
-     (into {}
-           (remove (comp str/blank? val))
-           (merge (into {} (System/getenv)) from-file)))))
+         from-file (if (.exists dotenv-file) (parse-dotenv (slurp dotenv-file)) {})
+         merged (into {}
+                      (remove (comp str/blank? val))
+                      (merge (into {} (System/getenv)) from-file))]
+     (cond-> merged
+       (merged "NEO4J_URI") (update "NEO4J_URI" local-uri (assigned-ports))))))
 
 (defn require-vars
   "The values of variable-names from env, or an exception naming the missing

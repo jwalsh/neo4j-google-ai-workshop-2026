@@ -87,3 +87,21 @@
   (is (neo4j/auto-commit? "LOAD CSV FROM 'x' AS row CALL (row) { MERGE (n) } IN TRANSACTIONS OF 1000 ROWS"))
   (is (neo4j/auto-commit? "CALL { RETURN 1 } IN 4 CONCURRENT TRANSACTIONS"))
   (is (not (neo4j/auto-commit? "MATCH (n) RETURN count(n) AS transactions"))))
+
+(deftest local-uri-test
+  (let [assigned {"BOOKS_PORT" 7723 "TRANSIT_PORT" 7724}]
+    (is (= "bolt://localhost:7723" (env/local-uri "bolt://localhost:7690" assigned)))
+    (is (= "bolt://127.0.0.1:7724/x" (env/local-uri "bolt://127.0.0.1:7691/x" assigned)))
+    (testing "a graph with no port of its own here keeps the main checkout's"
+      (is (= "bolt://localhost:7689" (env/local-uri "bolt://localhost:7689" assigned))))
+    (testing "a port that is not one of ours, and a host that is not this machine, are left alone"
+      (is (= "bolt://localhost:7687" (env/local-uri "bolt://localhost:7687" assigned)))
+      (is (= "neo4j+s://abc.databases.neo4j.io" (env/local-uri "neo4j+s://abc.databases.neo4j.io" assigned)))
+      (is (= "bolt://db.example:7690" (env/local-uri "bolt://db.example:7690" assigned))))
+    (is (= "bolt://localhost:7690" (env/local-uri "bolt://localhost:7690" {})))))
+
+(deftest assigned-ports-test
+  (let [ports-file (java.io.File/createTempFile "ports" ".env")]
+    (spit ports-file "# a comment\nBOOKS_PORT=7723\nDASHBOARD_PORT=7720\nOTHER_PORT=1\nTRANSIT_PORT=soon\n")
+    (is (= {"BOOKS_PORT" 7723 "DASHBOARD_PORT" 7720} (env/assigned-ports (str ports-file))))
+    (is (= {} (env/assigned-ports "no-such-file")))))

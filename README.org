@@ -49,6 +49,7 @@ and babashka are the only other requirements.
 - *The shell.* =bb tasks= lists every command: =bb counts=,
   =bb cypher FILE=, =bb ask --agent mbta "..."=, the =local-*= servers and
   their =*-load= tasks. =WORKSHOP_ENV=mbta-graph.env= names the graph.
+  =bb annotate= keeps notes on the books.
 - *A sentence.* =OLLAMA_MODEL=qwen2.5:3b bb dashboard=, then =/ask= with
   the transit agent chosen: "How do I get from Maverick to the ICA?"
 
@@ -149,7 +150,7 @@ In =notes/=, one file per session or topic. The system first:
 - [[file:notes/system.org][The system as built]]: four embedded graphs, a registry of agents, the path of a question through a local model, and what runs on which port
 - [[file:notes/transit.org][Transit]]: the MBTA's rail network from its GTFS feed as stations, stops, routes and lines, a map drawn from it, Maverick to Kendall, and several ways between two places with landmarks for ends
 - [[file:notes/transit-queries.org][Transit, a query at a time]]: Cypher blocks in an org file run through the REPL with their results, and the stations a walk from a landmark
-- [[file:notes/books-shelf.org][A shelf of books as a graph]]: 29 books on the workshop's subjects as headings, terms and the concepts in their own indexes, explored from Emacs, with why two books come out similar
+- [[file:notes/books-shelf.org][A shelf of books as a graph]]: 29 books on the workshop's subjects as headings, terms and the concepts in their own indexes, explored from Emacs, with why two books come out similar, and notes kept on them outside the repository
 - [[file:notes/local-first.org][The lab, local first]]: the same path with an embedded Neo4j and a small local model, lab by lab, and what does not carry over
 - [[file:notes/telemetry.org][Telemetry]]: spans around every statement, check and lab step, and the dashboard's Data and Traces pages
 - [[file:notes/data-sources.org][Other data sources]]: fifteen public datasets checked by request, ranked, with what a dataset-agnostic loader would need from each

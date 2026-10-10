@@ -4,6 +4,12 @@
 {:paths ["bb"]
  :tasks
  {:requires ([babashka.tasks :refer [clojure]])
+  ;; A graph's port in this checkout: .env.ports where bb ports claim wrote
+  ;; one, else the main checkout's.
+  :init (defn port [variable default-port]
+          (or (when (.exists (clojure.java.io/file ".env.ports"))
+                (second (re-find (re-pattern (str "(?m)^" variable "=(\\d+)")) (slurp ".env.ports"))))
+              default-port))
   ping      {:doc "RETURN 1 against the instance in .env"
              :task (clojure "-M:run" "ping")}
   databases {:doc "SHOW DATABASES"
@@ -48,19 +54,24 @@
              :task (apply mbta/-main *command-line-args*)}
   local-mbta {:doc "A fourth embedded Neo4j for the transit graph, on bolt://localhost:7691, until ctrl-c"
               :task (shell {:dir "experiments/008-local-graph-dx"}
-                           "clojure" "-M:small:serve" "scratch/neo4j-mbta" "7691" "64m")}
+                           "clojure" "-M:small:serve" "scratch/neo4j-mbta" (port "TRANSIT_PORT" "7691") "64m")}
   mbta-load {:doc "Load the rail network into the transit graph: lines, routes, stations, stops. Idempotent."
              :task (shell {:extra-env {"WORKSHOP_ENV" "mbta-graph.env"}}
                           "clojure" "-M:run" "mbta-load")}
   local-papers {:doc "A second embedded Neo4j for the papers graph, on bolt://localhost:7689, until ctrl-c"
                 :task (shell {:dir "experiments/008-local-graph-dx"}
-                             "clojure" "-M:small:serve" "scratch/neo4j-papers" "7689" "64m")}
+                             "clojure" "-M:small:serve" "scratch/neo4j-papers" (port "PAPERS_PORT" "7689") "64m")}
   local-books {:doc "A third embedded Neo4j for the books graph, on bolt://localhost:7690, until ctrl-c"
                :task (shell {:dir "experiments/008-local-graph-dx"}
-                            "clojure" "-M:small:serve" "scratch/neo4j-books" "7690" "64m")}
-  books-load {:doc "Load the shelf's outlines into the books graph: books, headings, terms, and concepts from their indexes. Idempotent."
+                            "clojure" "-M:small:serve" "scratch/neo4j-books" (port "BOOKS_PORT" "7690") "64m")}
+  books-load {:doc "Load the shelf's outlines into the books graph: books, headings, terms, concepts from their indexes, and the notes kept on them. Idempotent."
               :task (shell {:extra-env {"WORKSHOP_ENV" "books-graph.env"}}
                            "clojure" "-M:run" "books-load")}
+  annotate  {:doc "Notes on the shelf's books, one file each in the XDG data directory: bb annotate where|list [BOOK]|add BOOK PAGE TEXT|merge DIR|load"
+             :task (apply shell {:extra-env {"WORKSHOP_ENV" "books-graph.env"}}
+                          "clojure" "-M:run" "annotate" *command-line-args*)}
+  ports     {:doc "This checkout's ports and who holds them in portclaim (PORTCLAIM names the registry): bb ports [show|claim SERVICE...|release [SERVICE...]]"
+             :task (apply clojure "-M:run" "ports" *command-line-args*)}
   papers-load {:doc "Load the cached papers into the papers graph: authors, citations, categories. Idempotent."
                :task (shell {:extra-env {"WORKSHOP_ENV" "papers-graph.env"}}
                             "clojure" "-M:run" "papers-load")}

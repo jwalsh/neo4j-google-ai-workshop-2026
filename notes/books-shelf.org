@@ -136,7 +136,117 @@ could reach the model's host ("No route to host"), while curl could.
 - A tagger makes better terms than the rule in two ways and worse in one
   (=experiments/011-heading-terms=). The phrases were worth porting.
 
+* Notes on a book
+
+Ours, added 2026-10-10. A note is a book's id, a page, some text, optionally
+the passage it is about and the concepts it touches. It is kept as one file,
+=<book-id>/<id>.edn=, under =$XDG_DATA_HOME/workshop-books/annotations=
+(=~/.local/share/...= when that is unset), or wherever =BOOKS_ANNOTATIONS=
+says. That is the data directory, not the cache beside the PDFs: an outline
+can be read out of a PDF again and a note cannot. A note may quote a book,
+so none is in the repository.
+
+The page is the PDF's own count, as a viewer shows it and as a heading's
+=page= has it, not the printed number an index gives.
+
+#+begin_src sh
+bb annotate where                           # the store
+bb annotate add neo4j-in-action 40 "..."    # a note; - for no page
+bb annotate list [BOOK]
+bb annotate merge DIR                       # copy in another store's notes
+bb books-load                               # books, then notes, into the graph
+#+end_src
+
+From Emacs, =M-x workshop-annotate= asks for the book, the page and the
+note, and takes the region as the passage; in a buffer showing a cached PDF
+it offers that book and the page in view. =M-x workshop-annotations= shows
+one book's notes as an org buffer, which is a view and not the store. At the
+REPL it is =(annotate! {:book "..." :page 40 :text "..."})=.
+
+** Writers that do not meet
+
+No file in the store is rewritten. A note is written beside its final name
+and renamed, and its id is the second it was written and eight random hex
+digits, so two processes writing at once each leave their own file; a test
+writes 200 from several threads and reads back 200. That is what lets more
+than one agent, or more than one git worktree, write at the same time.
+
+A worktree has none of the ignored files, so anything kept in the checkout
+would be missing from it. The store is outside every checkout: all of them
+reach the same notes. An agent that should not touch the owner's notes is
+started with its own =BOOKS_ANNOTATIONS= (or its own =XDG_DATA_HOME=) and
+=WORKSHOP_AUTHOR=, and what it wrote comes back with =bb annotate merge=,
+which copies the files the store lacks and overwrites nothing. Each note
+says who it is =:by=.
+
+#+begin_src sh
+BOOKS_ANNOTATIONS=/tmp/agent-1 WORKSHOP_AUTHOR=agent-1 bb annotate add linked-data 12 "..."
+bb annotate merge /tmp/agent-1
+#+end_src
+
+The graph is isolated by port, not by store. In the main checkout the books
+graph is the one server on 7690, and =bb books-load= replaces its notes with
+one store's. A worktree takes ports of its own from the estate's port
+registry, [[https://github.com/aygp-dr/portclaim][portclaim]], and runs its own server on them:
+
+#+begin_src sh
+export PORTCLAIM=http://<the host running it>:4700
+bb ports                  # this checkout's ports, who holds each, what is listening
+bb ports claim books      # in a worktree: a slot of ten from 11000, written to .env.ports
+bb local-books            # now on that block's port, with the worktree's own store
+bb books-load             # books-graph.env means this checkout's books graph
+bb ports release          # when the branch merges
+#+end_src
+
+=.env.ports= is ignored by git. =workshop.env= reads it, so a graph profile's
+loopback port becomes the block's and the profile itself is not edited; the
+embedded server's store is under the checkout already. There are a hundred
+slots, 11000 to 11999. A branch is offered the one a checksum of its name
+picks, so the same branch has the same ports everywhere; if the registry
+holds a port in it, or something listens there, the next slot is taken
+instead. Only the services named are claimed. The main checkout keeps 8377
+and 7688 to 7691.
+
+Checked on 2026-10-10: =bb ports= against the running registry, the block a
+worktree would be given, and the slot rule and port rewriting by tests. Not run: a
+claim, a release, or a server on a block's port. Emacs' =workshop-dashboard=
+still opens 8377 whatever the checkout.
+
+** In the graph
+
+: (:Annotation)-[:ANNOTATES]->(:Book)
+: (:Annotation)-[:AT]->(:Heading)       the last heading starting on or before its page
+: (:Annotation)-[:ABOUT]->(:Concept)    where a book's index has that entry
+
+The load replaces the graph's notes with the store's, so a file deleted
+there is gone here. It runs after the books' load, which replaces the
+concepts a note points at.
+
+#+begin_src cypher :graph books :eval no
+MATCH (a:Annotation)-[:AT]->(h:Heading), (a)-[:ANNOTATES]->(b:Book)
+RETURN b.title AS book, a.page AS page, h.title AS section, left(a.text, 40) AS note
+ORDER BY book, page
+#+end_src
+
+Concepts noted in one book that another book's index also lists, which is
+where to read next:
+
+#+begin_src cypher :graph books :eval no
+MATCH (a:Annotation)-[:ABOUT]->(c:Concept)<-[i:INDEXES]-(other:Book)
+WHERE other.id <> a.book
+RETURN c.name AS concept, other.title AS alsoIn, i.pages AS pages LIMIT 20
+#+end_src
+
+Checked: the store, the merge, the heading a page falls under and the org
+view, by the tests and by =bb annotate= against a scratch store. Not run:
+the load into the graph and the two statements above. The graph held no
+notes on 2026-10-10 and the owner's store was empty.
+
 * Not done
+
+- Notes loaded into the graph and asked about there: see above.
+- A note anchored to a place on the page. It has a page and a passage.
+- An agent tool for notes.
 
 - The index's sub-entries and its "see also" lines, which are edges
   between concepts.

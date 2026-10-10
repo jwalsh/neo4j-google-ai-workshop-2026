@@ -9,7 +9,10 @@
     (dashboard)
     (use-env! \"books-graph.env\")   ; another graph, same REPL
     (peek-dataset \"hands-on-lab/form13-2023.csv\")"
-  (:require [workshop.dashboard :as dashboard]
+  (:require [clojure.edn :as edn]
+            [workshop.annotations :as annotations]
+            [workshop.books :as books]
+            [workshop.dashboard :as dashboard]
             [workshop.env :as env]
             [workshop.form13 :as form13]
             [workshop.gcp :as gcp]
@@ -73,6 +76,30 @@
      (into [(mapv name columns)]
            (map (fn [row] (mapv #(cell (get row %)) columns)))
            rows))))
+
+(defn shelf-books
+  "The shelf's books as [{:id :title}]: what a note can be about."
+  []
+  (mapv #(select-keys % [:id :title]) (edn/read-string (slurp books/default-shelf))))
+
+(defn annotate!
+  "Keeps a note on a book in the XDG data directory, outside the repository:
+  (annotate! {:book \"graph-databases\" :page 30 :text \"...\"}). bb books-load
+  or (load-annotations!) puts the notes in the books graph."
+  [note]
+  (annotations/annotate! note))
+
+(defn annotations-org
+  "One book's notes as org text, for M-x workshop-annotations."
+  [book]
+  (annotations/org book (annotations/annotations book)))
+
+(defn load-annotations!
+  "Replaces the books graph's notes with the store's, whatever graph the
+  session is on."
+  []
+  (with-open [books-driver (neo4j/connect (env/load-env "books-graph.env"))]
+    (annotations/load! books-driver (annotations/rows (annotations/annotations) (books/outlines)))))
 
 (defn run-file [cypher-path] (neo4j/run-file (driver) cypher-path))
 (defn ping [] (neo4j/ping (driver)))
