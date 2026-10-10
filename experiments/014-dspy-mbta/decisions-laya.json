@@ -1,0 +1,3171 @@
+{
+ "model": "laya",
+ "seconds_each": 0.083,
+ "rows": [
+  {
+   "question": "To State from Haymarket, please.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.433,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.138,
+    "Stations on a Route in Order": 0.101,
+    "Subway Journey Between Two Stations": 0.067,
+    "Stations Near a Station": 0.158,
+    "Platforms in a Station": 0.064,
+    "Stations in a Municipality": 0.039,
+    "none": 0.433
+   }
+  },
+  {
+   "question": "When is the next train from Capen Street?",
+   "expected": "none",
+   "chose": "Stations Near a Station",
+   "probability": 0.291,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.205,
+    "Stations on a Route in Order": 0.132,
+    "Subway Journey Between Two Stations": 0.092,
+    "Stations Near a Station": 0.291,
+    "Platforms in a Station": 0.129,
+    "Stations in a Municipality": 0.073,
+    "none": 0.079
+   }
+  },
+  {
+   "question": "Starting at Griggs Street, how do I reach Fenwood Road?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.257,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.171,
+    "Stations on a Route in Order": 0.15,
+    "Subway Journey Between Two Stations": 0.213,
+    "Stations Near a Station": 0.257,
+    "Platforms in a Station": 0.1,
+    "Stations in a Municipality": 0.06,
+    "none": 0.049
+   }
+  },
+  {
+   "question": "Get me from Capen Street to Airport.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.312,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.151,
+    "Stations on a Route in Order": 0.125,
+    "Subway Journey Between Two Stations": 0.312,
+    "Stations Near a Station": 0.171,
+    "Platforms in a Station": 0.069,
+    "Stations in a Municipality": 0.042,
+    "none": 0.13
+   }
+  },
+  {
+   "question": "What's the way to Heath Street if I start at Charles/MGH?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.365,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.116,
+    "Stations on a Route in Order": 0.12,
+    "Subway Journey Between Two Stations": 0.365,
+    "Stations Near a Station": 0.205,
+    "Platforms in a Station": 0.045,
+    "Stations in a Municipality": 0.042,
+    "none": 0.108
+   }
+  },
+  {
+   "question": "I need to be at Wellington. I'm at Amory Street now.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.3,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.16,
+    "Stations on a Route in Order": 0.106,
+    "Subway Journey Between Two Stations": 0.098,
+    "Stations Near a Station": 0.211,
+    "Platforms in a Station": 0.092,
+    "Stations in a Municipality": 0.033,
+    "none": 0.3
+   }
+  },
+  {
+   "question": "What's the way to Downtown Crossing if I start at Chestnut Hill?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.292,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.176,
+    "Stations on a Route in Order": 0.147,
+    "Subway Journey Between Two Stations": 0.292,
+    "Stations Near a Station": 0.205,
+    "Platforms in a Station": 0.051,
+    "Stations in a Municipality": 0.026,
+    "none": 0.103
+   }
+  },
+  {
+   "question": "What's the way to Haymarket if I start at Ball Square?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.258,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.137,
+    "Stations on a Route in Order": 0.142,
+    "Subway Journey Between Two Stations": 0.258,
+    "Stations Near a Station": 0.195,
+    "Platforms in a Station": 0.062,
+    "Stations in a Municipality": 0.033,
+    "none": 0.173
+   }
+  },
+  {
+   "question": "Stations in Shirley?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.204,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.2,
+    "Stations on a Route in Order": 0.138,
+    "Subway Journey Between Two Stations": 0.083,
+    "Stations Near a Station": 0.204,
+    "Platforms in a Station": 0.128,
+    "Stations in a Municipality": 0.202,
+    "none": 0.045
+   }
+  },
+  {
+   "question": "Going to Cedar Grove, leaving from Brookline Village.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.257,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.257,
+    "Stations on a Route in Order": 0.153,
+    "Subway Journey Between Two Stations": 0.113,
+    "Stations Near a Station": 0.23,
+    "Platforms in a Station": 0.079,
+    "Stations in a Municipality": 0.048,
+    "none": 0.121
+   }
+  },
+  {
+   "question": "Starting at Broadway, how do I reach Medford/Tufts?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.318,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.174,
+    "Stations on a Route in Order": 0.17,
+    "Subway Journey Between Two Stations": 0.318,
+    "Stations Near a Station": 0.199,
+    "Platforms in a Station": 0.05,
+    "Stations in a Municipality": 0.025,
+    "none": 0.063
+   }
+  },
+  {
+   "question": "List the stops on the Green Line B in order.",
+   "expected": "Stations on a Route in Order",
+   "chose": "Stations on a Route in Order",
+   "probability": 0.311,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.138,
+    "Stations on a Route in Order": 0.311,
+    "Subway Journey Between Two Stations": 0.066,
+    "Stations Near a Station": 0.185,
+    "Platforms in a Station": 0.11,
+    "Stations in a Municipality": 0.132,
+    "none": 0.058
+   }
+  },
+  {
+   "question": "Get me from Kent Street to Back Bay.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.211,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.177,
+    "Stations on a Route in Order": 0.149,
+    "Subway Journey Between Two Stations": 0.149,
+    "Stations Near a Station": 0.211,
+    "Platforms in a Station": 0.099,
+    "Stations in a Municipality": 0.055,
+    "none": 0.161
+   }
+  },
+  {
+   "question": "Where does the Mattapan Line go?",
+   "expected": "Stations on a Route in Order",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.271,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.271,
+    "Stations on a Route in Order": 0.133,
+    "Subway Journey Between Two Stations": 0.088,
+    "Stations Near a Station": 0.201,
+    "Platforms in a Station": 0.123,
+    "Stations in a Municipality": 0.11,
+    "none": 0.076
+   }
+  },
+  {
+   "question": "What is near West Concord?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.694,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.044,
+    "Stations on a Route in Order": 0.066,
+    "Subway Journey Between Two Stations": 0.063,
+    "Stations Near a Station": 0.694,
+    "Platforms in a Station": 0.024,
+    "Stations in a Municipality": 0.018,
+    "none": 0.091
+   }
+  },
+  {
+   "question": "Which platforms at Magoun Square are wheelchair accessible?",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.506,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.119,
+    "Stations on a Route in Order": 0.063,
+    "Subway Journey Between Two Stations": 0.066,
+    "Stations Near a Station": 0.17,
+    "Platforms in a Station": 0.506,
+    "Stations in a Municipality": 0.046,
+    "none": 0.03
+   }
+  },
+  {
+   "question": "How do I get from Boston College to State?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.245,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.205,
+    "Stations on a Route in Order": 0.148,
+    "Subway Journey Between Two Stations": 0.245,
+    "Stations Near a Station": 0.198,
+    "Platforms in a Station": 0.061,
+    "Stations in a Municipality": 0.022,
+    "none": 0.122
+   }
+  },
+  {
+   "question": "Which platforms at Brookline Village are wheelchair accessible?",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.569,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.113,
+    "Stations on a Route in Order": 0.06,
+    "Subway Journey Between Two Stations": 0.055,
+    "Stations Near a Station": 0.142,
+    "Platforms in a Station": 0.569,
+    "Stations in a Municipality": 0.03,
+    "none": 0.03
+   }
+  },
+  {
+   "question": "Stations in Scituate?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.232,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.173,
+    "Stations on a Route in Order": 0.136,
+    "Subway Journey Between Two Stations": 0.099,
+    "Stations Near a Station": 0.232,
+    "Platforms in a Station": 0.121,
+    "Stations in a Municipality": 0.176,
+    "none": 0.064
+   }
+  },
+  {
+   "question": "Is the Mattapan Line delayed right now?",
+   "expected": "none",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.286,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.286,
+    "Stations on a Route in Order": 0.136,
+    "Subway Journey Between Two Stations": 0.09,
+    "Stations Near a Station": 0.184,
+    "Platforms in a Station": 0.104,
+    "Stations in a Municipality": 0.062,
+    "none": 0.138
+   }
+  },
+  {
+   "question": "I'm at Suffolk Downs and need to reach Haymarket.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.257,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.233,
+    "Stations on a Route in Order": 0.14,
+    "Subway Journey Between Two Stations": 0.108,
+    "Stations Near a Station": 0.257,
+    "Platforms in a Station": 0.119,
+    "Stations in a Municipality": 0.045,
+    "none": 0.098
+   }
+  },
+  {
+   "question": "Rename Central to Newton Centre.",
+   "expected": "none",
+   "chose": "Stations Near a Station",
+   "probability": 0.217,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.179,
+    "Stations on a Route in Order": 0.135,
+    "Subway Journey Between Two Stations": 0.088,
+    "Stations Near a Station": 0.217,
+    "Platforms in a Station": 0.115,
+    "Stations in a Municipality": 0.113,
+    "none": 0.154
+   }
+  },
+  {
+   "question": "Medford/Tufts to Kendall/MIT?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.221,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.221,
+    "Stations on a Route in Order": 0.134,
+    "Subway Journey Between Two Stations": 0.188,
+    "Stations Near a Station": 0.202,
+    "Platforms in a Station": 0.08,
+    "Stations in a Municipality": 0.048,
+    "none": 0.128
+   }
+  },
+  {
+   "question": "Which stations are in Westwood?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.252,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.224,
+    "Stations on a Route in Order": 0.118,
+    "Subway Journey Between Two Stations": 0.097,
+    "Stations Near a Station": 0.252,
+    "Platforms in a Station": 0.143,
+    "Stations in a Municipality": 0.112,
+    "none": 0.053
+   }
+  },
+  {
+   "question": "Where does the Green Line B go?",
+   "expected": "Stations on a Route in Order",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.23,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.23,
+    "Stations on a Route in Order": 0.138,
+    "Subway Journey Between Two Stations": 0.086,
+    "Stations Near a Station": 0.216,
+    "Platforms in a Station": 0.144,
+    "Stations in a Municipality": 0.109,
+    "none": 0.078
+   }
+  },
+  {
+   "question": "I need to be at Forest Hills. I'm at Central Avenue now.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.452,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.14,
+    "Stations on a Route in Order": 0.085,
+    "Subway Journey Between Two Stations": 0.077,
+    "Stations Near a Station": 0.163,
+    "Platforms in a Station": 0.052,
+    "Stations in a Municipality": 0.03,
+    "none": 0.452
+   }
+  },
+  {
+   "question": "Starting at North Quincy, how do I reach Boston University Central?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.245,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.207,
+    "Stations on a Route in Order": 0.154,
+    "Subway Journey Between Two Stations": 0.245,
+    "Stations Near a Station": 0.226,
+    "Platforms in a Station": 0.059,
+    "Stations in a Municipality": 0.02,
+    "none": 0.089
+   }
+  },
+  {
+   "question": "List the stops inside Coolidge Corner.",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.329,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.189,
+    "Stations on a Route in Order": 0.136,
+    "Subway Journey Between Two Stations": 0.08,
+    "Stations Near a Station": 0.191,
+    "Platforms in a Station": 0.329,
+    "Stations in a Municipality": 0.042,
+    "none": 0.032
+   }
+  },
+  {
+   "question": "What stations are there in Freetown?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations in a Municipality",
+   "probability": 0.263,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.173,
+    "Stations on a Route in Order": 0.134,
+    "Subway Journey Between Two Stations": 0.083,
+    "Stations Near a Station": 0.198,
+    "Platforms in a Station": 0.103,
+    "Stations in a Municipality": 0.263,
+    "none": 0.045
+   }
+  },
+  {
+   "question": "What's the way to Brookline Village if I start at Boston University East?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.278,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.16,
+    "Stations on a Route in Order": 0.14,
+    "Subway Journey Between Two Stations": 0.278,
+    "Stations Near a Station": 0.2,
+    "Platforms in a Station": 0.048,
+    "Stations in a Municipality": 0.025,
+    "none": 0.148
+   }
+  },
+  {
+   "question": "I need to be at Dean Road. I'm at Beaconsfield now.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.373,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.144,
+    "Stations on a Route in Order": 0.104,
+    "Subway Journey Between Two Stations": 0.079,
+    "Stations Near a Station": 0.194,
+    "Platforms in a Station": 0.074,
+    "Stations in a Municipality": 0.032,
+    "none": 0.373
+   }
+  },
+  {
+   "question": "Starting at Warren Street, how do I reach Tufts Medical Center?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.264,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.194,
+    "Stations on a Route in Order": 0.134,
+    "Subway Journey Between Two Stations": 0.264,
+    "Stations Near a Station": 0.226,
+    "Platforms in a Station": 0.049,
+    "Stations in a Municipality": 0.024,
+    "none": 0.108
+   }
+  },
+  {
+   "question": "Which routes serve Lowell?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.907,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.907,
+    "Stations on a Route in Order": 0.021,
+    "Subway Journey Between Two Stations": 0.008,
+    "Stations Near a Station": 0.032,
+    "Platforms in a Station": 0.015,
+    "Stations in a Municipality": 0.005,
+    "none": 0.013
+   }
+  },
+  {
+   "question": "List the stops inside Grafton.",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.282,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.195,
+    "Stations on a Route in Order": 0.136,
+    "Subway Journey Between Two Stations": 0.084,
+    "Stations Near a Station": 0.193,
+    "Platforms in a Station": 0.282,
+    "Stations in a Municipality": 0.085,
+    "none": 0.027
+   }
+  },
+  {
+   "question": "Starting at Broadway, how do I reach Kendall?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.317,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.188,
+    "Stations on a Route in Order": 0.144,
+    "Subway Journey Between Two Stations": 0.317,
+    "Stations Near a Station": 0.196,
+    "Platforms in a Station": 0.051,
+    "Stations in a Municipality": 0.04,
+    "none": 0.064
+   }
+  },
+  {
+   "question": "What is near Cedar Grove?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.764,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.038,
+    "Stations on a Route in Order": 0.053,
+    "Subway Journey Between Two Stations": 0.042,
+    "Stations Near a Station": 0.764,
+    "Platforms in a Station": 0.019,
+    "Stations in a Municipality": 0.017,
+    "none": 0.066
+   }
+  },
+  {
+   "question": "To Roxbury Crossing from State, please.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.275,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.148,
+    "Stations on a Route in Order": 0.168,
+    "Subway Journey Between Two Stations": 0.102,
+    "Stations Near a Station": 0.186,
+    "Platforms in a Station": 0.085,
+    "Stations in a Municipality": 0.035,
+    "none": 0.275
+   }
+  },
+  {
+   "question": "I need to be at Fenway. I'm at Malden Center now.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.287,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.19,
+    "Stations on a Route in Order": 0.103,
+    "Subway Journey Between Two Stations": 0.111,
+    "Stations Near a Station": 0.221,
+    "Platforms in a Station": 0.069,
+    "Stations in a Municipality": 0.02,
+    "none": 0.287
+   }
+  },
+  {
+   "question": "I need to be at East Somerville. I'm at Wonderland now.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.52,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.122,
+    "Stations on a Route in Order": 0.078,
+    "Subway Journey Between Two Stations": 0.076,
+    "Stations Near a Station": 0.134,
+    "Platforms in a Station": 0.05,
+    "Stations in a Municipality": 0.02,
+    "none": 0.52
+   }
+  },
+  {
+   "question": "Going to Fenway, leaving from Airport.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.244,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.244,
+    "Stations on a Route in Order": 0.136,
+    "Subway Journey Between Two Stations": 0.114,
+    "Stations Near a Station": 0.197,
+    "Platforms in a Station": 0.076,
+    "Stations in a Municipality": 0.054,
+    "none": 0.179
+   }
+  },
+  {
+   "question": "When is the next train from Chestnut Hill?",
+   "expected": "none",
+   "chose": "Stations Near a Station",
+   "probability": 0.266,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.261,
+    "Stations on a Route in Order": 0.144,
+    "Subway Journey Between Two Stations": 0.099,
+    "Stations Near a Station": 0.266,
+    "Platforms in a Station": 0.098,
+    "Stations in a Municipality": 0.022,
+    "none": 0.11
+   }
+  },
+  {
+   "question": "Is the Lowell Line delayed right now?",
+   "expected": "none",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.29,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.29,
+    "Stations on a Route in Order": 0.151,
+    "Subway Journey Between Two Stations": 0.094,
+    "Stations Near a Station": 0.171,
+    "Platforms in a Station": 0.09,
+    "Stations in a Municipality": 0.023,
+    "none": 0.181
+   }
+  },
+  {
+   "question": "What's the way to Fields Corner if I start at Longwood?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.256,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.171,
+    "Stations on a Route in Order": 0.142,
+    "Subway Journey Between Two Stations": 0.256,
+    "Stations Near a Station": 0.214,
+    "Platforms in a Station": 0.056,
+    "Stations in a Municipality": 0.031,
+    "none": 0.13
+   }
+  },
+  {
+   "question": "Get me from Haymarket to Museum of Fine Arts.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.238,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.15,
+    "Stations on a Route in Order": 0.133,
+    "Subway Journey Between Two Stations": 0.219,
+    "Stations Near a Station": 0.238,
+    "Platforms in a Station": 0.068,
+    "Stations in a Municipality": 0.052,
+    "none": 0.139
+   }
+  },
+  {
+   "question": "Stations in Cambridge?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.267,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.192,
+    "Stations on a Route in Order": 0.142,
+    "Subway Journey Between Two Stations": 0.103,
+    "Stations Near a Station": 0.267,
+    "Platforms in a Station": 0.166,
+    "Stations in a Municipality": 0.082,
+    "none": 0.048
+   }
+  },
+  {
+   "question": "What platforms does Wood Island have?",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.85,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.04,
+    "Stations on a Route in Order": 0.022,
+    "Subway Journey Between Two Stations": 0.019,
+    "Stations Near a Station": 0.05,
+    "Platforms in a Station": 0.85,
+    "Stations in a Municipality": 0.008,
+    "none": 0.012
+   }
+  },
+  {
+   "question": "What's the way to Government Center if I start at East Somerville?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.244,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.166,
+    "Stations on a Route in Order": 0.142,
+    "Subway Journey Between Two Stations": 0.244,
+    "Stations Near a Station": 0.219,
+    "Platforms in a Station": 0.053,
+    "Stations in a Municipality": 0.018,
+    "none": 0.158
+   }
+  },
+  {
+   "question": "List the stops inside Boston University East.",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.27,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.207,
+    "Stations on a Route in Order": 0.134,
+    "Subway Journey Between Two Stations": 0.107,
+    "Stations Near a Station": 0.193,
+    "Platforms in a Station": 0.27,
+    "Stations in a Municipality": 0.052,
+    "none": 0.037
+   }
+  },
+  {
+   "question": "Which platforms at Chiswick Road are wheelchair accessible?",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.476,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.144,
+    "Stations on a Route in Order": 0.075,
+    "Subway Journey Between Two Stations": 0.062,
+    "Stations Near a Station": 0.175,
+    "Platforms in a Station": 0.476,
+    "Stations in a Municipality": 0.034,
+    "none": 0.034
+   }
+  },
+  {
+   "question": "Which routes serve Lansdowne?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.813,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.813,
+    "Stations on a Route in Order": 0.039,
+    "Subway Journey Between Two Stations": 0.017,
+    "Stations Near a Station": 0.057,
+    "Platforms in a Station": 0.04,
+    "Stations in a Municipality": 0.015,
+    "none": 0.019
+   }
+  },
+  {
+   "question": "Stations in Providence?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.232,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.2,
+    "Stations on a Route in Order": 0.141,
+    "Subway Journey Between Two Stations": 0.103,
+    "Stations Near a Station": 0.232,
+    "Platforms in a Station": 0.12,
+    "Stations in a Municipality": 0.164,
+    "none": 0.041
+   }
+  },
+  {
+   "question": "What's the way to Beaconsfield if I start at Dean Road?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.277,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.167,
+    "Stations on a Route in Order": 0.15,
+    "Subway Journey Between Two Stations": 0.277,
+    "Stations Near a Station": 0.192,
+    "Platforms in a Station": 0.069,
+    "Stations in a Municipality": 0.024,
+    "none": 0.12
+   }
+  },
+  {
+   "question": "What's the way to Union Square if I start at Brookline Hills?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.306,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.153,
+    "Stations on a Route in Order": 0.134,
+    "Subway Journey Between Two Stations": 0.306,
+    "Stations Near a Station": 0.19,
+    "Platforms in a Station": 0.057,
+    "Stations in a Municipality": 0.026,
+    "none": 0.134
+   }
+  },
+  {
+   "question": "Where does the Green Line E go?",
+   "expected": "Stations on a Route in Order",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.25,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.25,
+    "Stations on a Route in Order": 0.142,
+    "Subway Journey Between Two Stations": 0.088,
+    "Stations Near a Station": 0.211,
+    "Platforms in a Station": 0.148,
+    "Stations in a Municipality": 0.105,
+    "none": 0.056
+   }
+  },
+  {
+   "question": "How long does it take from Arlington to Wonderland?",
+   "expected": "none",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.357,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.166,
+    "Stations on a Route in Order": 0.11,
+    "Subway Journey Between Two Stations": 0.357,
+    "Stations Near a Station": 0.211,
+    "Platforms in a Station": 0.05,
+    "Stations in a Municipality": 0.014,
+    "none": 0.09
+   }
+  },
+  {
+   "question": "Delete the Needham Line.",
+   "expected": "none",
+   "chose": "none",
+   "probability": 0.306,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.196,
+    "Stations on a Route in Order": 0.138,
+    "Subway Journey Between Two Stations": 0.074,
+    "Stations Near a Station": 0.148,
+    "Platforms in a Station": 0.082,
+    "Stations in a Municipality": 0.054,
+    "none": 0.306
+   }
+  },
+  {
+   "question": "Which bus goes to Medford/Tufts?",
+   "expected": "none",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.396,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.396,
+    "Stations on a Route in Order": 0.117,
+    "Subway Journey Between Two Stations": 0.084,
+    "Stations Near a Station": 0.197,
+    "Platforms in a Station": 0.084,
+    "Stations in a Municipality": 0.015,
+    "none": 0.106
+   }
+  },
+  {
+   "question": "What is the weather in Boston?",
+   "expected": "none",
+   "chose": "none",
+   "probability": 0.358,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.209,
+    "Stations on a Route in Order": 0.096,
+    "Subway Journey Between Two Stations": 0.086,
+    "Stations Near a Station": 0.158,
+    "Platforms in a Station": 0.052,
+    "Stations in a Municipality": 0.039,
+    "none": 0.358
+   }
+  },
+  {
+   "question": "Going to Oak Grove, leaving from Maverick.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.29,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.237,
+    "Stations on a Route in Order": 0.122,
+    "Subway Journey Between Two Stations": 0.086,
+    "Stations Near a Station": 0.176,
+    "Platforms in a Station": 0.06,
+    "Stations in a Municipality": 0.029,
+    "none": 0.29
+   }
+  },
+  {
+   "question": "Which bus goes to Wonderland?",
+   "expected": "none",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.343,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.343,
+    "Stations on a Route in Order": 0.119,
+    "Subway Journey Between Two Stations": 0.087,
+    "Stations Near a Station": 0.207,
+    "Platforms in a Station": 0.094,
+    "Stations in a Municipality": 0.041,
+    "none": 0.11
+   }
+  },
+  {
+   "question": "To Stony Brook from Kendall/MIT, please.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.235,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.235,
+    "Stations on a Route in Order": 0.145,
+    "Subway Journey Between Two Stations": 0.166,
+    "Stations Near a Station": 0.23,
+    "Platforms in a Station": 0.068,
+    "Stations in a Municipality": 0.046,
+    "none": 0.111
+   }
+  },
+  {
+   "question": "Directions from Beachmont to Hynes Convention Center.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.275,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.275,
+    "Stations on a Route in Order": 0.142,
+    "Subway Journey Between Two Stations": 0.121,
+    "Stations Near a Station": 0.245,
+    "Platforms in a Station": 0.063,
+    "Stations in a Municipality": 0.047,
+    "none": 0.107
+   }
+  },
+  {
+   "question": "List the stops inside Newton Centre.",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.276,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.188,
+    "Stations on a Route in Order": 0.127,
+    "Subway Journey Between Two Stations": 0.091,
+    "Stations Near a Station": 0.21,
+    "Platforms in a Station": 0.276,
+    "Stations in a Municipality": 0.074,
+    "none": 0.034
+   }
+  },
+  {
+   "question": "What runs through Needham Heights?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.667,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.667,
+    "Stations on a Route in Order": 0.077,
+    "Subway Journey Between Two Stations": 0.043,
+    "Stations Near a Station": 0.105,
+    "Platforms in a Station": 0.047,
+    "Stations in a Municipality": 0.022,
+    "none": 0.038
+   }
+  },
+  {
+   "question": "Is there parking at Assembly?",
+   "expected": "none",
+   "chose": "Stations Near a Station",
+   "probability": 0.233,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.204,
+    "Stations on a Route in Order": 0.13,
+    "Subway Journey Between Two Stations": 0.081,
+    "Stations Near a Station": 0.233,
+    "Platforms in a Station": 0.111,
+    "Stations in a Municipality": 0.154,
+    "none": 0.087
+   }
+  },
+  {
+   "question": "Who cites SWE-bench?",
+   "expected": "none",
+   "chose": "none",
+   "probability": 0.621,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.125,
+    "Stations on a Route in Order": 0.064,
+    "Subway Journey Between Two Stations": 0.041,
+    "Stations Near a Station": 0.09,
+    "Platforms in a Station": 0.038,
+    "Stations in a Municipality": 0.021,
+    "none": 0.621
+   }
+  },
+  {
+   "question": "What is near Quincy Center?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.779,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.037,
+    "Stations on a Route in Order": 0.052,
+    "Subway Journey Between Two Stations": 0.048,
+    "Stations Near a Station": 0.779,
+    "Platforms in a Station": 0.019,
+    "Stations in a Municipality": 0.012,
+    "none": 0.053
+   }
+  },
+  {
+   "question": "What is within 1000 metres of Tappan Street?",
+   "expected": "Stations Near a Station",
+   "chose": "none",
+   "probability": 0.457,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.029,
+    "Stations on a Route in Order": 0.051,
+    "Subway Journey Between Two Stations": 0.082,
+    "Stations Near a Station": 0.341,
+    "Platforms in a Station": 0.023,
+    "Stations in a Municipality": 0.017,
+    "none": 0.457
+   }
+  },
+  {
+   "question": "Starting at Boston University East, how do I reach Chestnut Hill Avenue?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.281,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.194,
+    "Stations on a Route in Order": 0.137,
+    "Subway Journey Between Two Stations": 0.281,
+    "Stations Near a Station": 0.228,
+    "Platforms in a Station": 0.077,
+    "Stations in a Municipality": 0.043,
+    "none": 0.041
+   }
+  },
+  {
+   "question": "Who built Brookline Village?",
+   "expected": "none",
+   "chose": "Stations Near a Station",
+   "probability": 0.239,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.219,
+    "Stations on a Route in Order": 0.135,
+    "Subway Journey Between Two Stations": 0.096,
+    "Stations Near a Station": 0.239,
+    "Platforms in a Station": 0.11,
+    "Stations in a Municipality": 0.109,
+    "none": 0.092
+   }
+  },
+  {
+   "question": "What is within 1000 metres of Brookline Hills?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.426,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.035,
+    "Stations on a Route in Order": 0.067,
+    "Subway Journey Between Two Stations": 0.1,
+    "Stations Near a Station": 0.426,
+    "Platforms in a Station": 0.028,
+    "Stations in a Municipality": 0.017,
+    "none": 0.328
+   }
+  },
+  {
+   "question": "Which stations are close to Dedham Corporate Center?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.717,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.058,
+    "Stations on a Route in Order": 0.074,
+    "Subway Journey Between Two Stations": 0.067,
+    "Stations Near a Station": 0.717,
+    "Platforms in a Station": 0.024,
+    "Stations in a Municipality": 0.025,
+    "none": 0.034
+   }
+  },
+  {
+   "question": "Get me from Massachusetts Avenue to Fairbanks Street.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.257,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.182,
+    "Stations on a Route in Order": 0.152,
+    "Subway Journey Between Two Stations": 0.257,
+    "Stations Near a Station": 0.191,
+    "Platforms in a Station": 0.08,
+    "Stations in a Municipality": 0.031,
+    "none": 0.107
+   }
+  },
+  {
+   "question": "How do I get from Green Street to Downtown Crossing?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.336,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.171,
+    "Stations on a Route in Order": 0.135,
+    "Subway Journey Between Two Stations": 0.336,
+    "Stations Near a Station": 0.204,
+    "Platforms in a Station": 0.051,
+    "Stations in a Municipality": 0.035,
+    "none": 0.067
+   }
+  },
+  {
+   "question": "Which routes serve Coolidge Corner?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.905,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.905,
+    "Stations on a Route in Order": 0.02,
+    "Subway Journey Between Two Stations": 0.007,
+    "Stations Near a Station": 0.036,
+    "Platforms in a Station": 0.015,
+    "Stations in a Municipality": 0.006,
+    "none": 0.011
+   }
+  },
+  {
+   "question": "List the stops inside Newmarket.",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.354,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.168,
+    "Stations on a Route in Order": 0.111,
+    "Subway Journey Between Two Stations": 0.08,
+    "Stations Near a Station": 0.183,
+    "Platforms in a Station": 0.354,
+    "Stations in a Municipality": 0.081,
+    "none": 0.024
+   }
+  },
+  {
+   "question": "Who built Northeastern University?",
+   "expected": "none",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.247,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.247,
+    "Stations on a Route in Order": 0.118,
+    "Subway Journey Between Two Stations": 0.092,
+    "Stations Near a Station": 0.196,
+    "Platforms in a Station": 0.081,
+    "Stations in a Municipality": 0.083,
+    "none": 0.183
+   }
+  },
+  {
+   "question": "How do I get from Washington Street to Braintree?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.308,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.193,
+    "Stations on a Route in Order": 0.16,
+    "Subway Journey Between Two Stations": 0.308,
+    "Stations Near a Station": 0.185,
+    "Platforms in a Station": 0.058,
+    "Stations in a Municipality": 0.014,
+    "none": 0.083
+   }
+  },
+  {
+   "question": "How long does it take from Harvard to Brandon Hall?",
+   "expected": "none",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.32,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.18,
+    "Stations on a Route in Order": 0.107,
+    "Subway Journey Between Two Stations": 0.32,
+    "Stations Near a Station": 0.217,
+    "Platforms in a Station": 0.06,
+    "Stations in a Municipality": 0.028,
+    "none": 0.088
+   }
+  },
+  {
+   "question": "Which stations are in Attleboro?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.277,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.239,
+    "Stations on a Route in Order": 0.125,
+    "Subway Journey Between Two Stations": 0.101,
+    "Stations Near a Station": 0.277,
+    "Platforms in a Station": 0.148,
+    "Stations in a Municipality": 0.069,
+    "none": 0.042
+   }
+  },
+  {
+   "question": "Where does the Fitchburg Line go?",
+   "expected": "Stations on a Route in Order",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.265,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.265,
+    "Stations on a Route in Order": 0.151,
+    "Subway Journey Between Two Stations": 0.091,
+    "Stations Near a Station": 0.216,
+    "Platforms in a Station": 0.125,
+    "Stations in a Municipality": 0.082,
+    "none": 0.07
+   }
+  },
+  {
+   "question": "What time does the last train leave Back Bay?",
+   "expected": "none",
+   "chose": "none",
+   "probability": 0.307,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.223,
+    "Stations on a Route in Order": 0.124,
+    "Subway Journey Between Two Stations": 0.091,
+    "Stations Near a Station": 0.154,
+    "Platforms in a Station": 0.062,
+    "Stations in a Municipality": 0.038,
+    "none": 0.307
+   }
+  },
+  {
+   "question": "What platforms does Hersey have?",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.859,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.033,
+    "Stations on a Route in Order": 0.023,
+    "Subway Journey Between Two Stations": 0.016,
+    "Stations Near a Station": 0.048,
+    "Platforms in a Station": 0.859,
+    "Stations in a Municipality": 0.009,
+    "none": 0.012
+   }
+  },
+  {
+   "question": "What stations are there in Ashland?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.24,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.223,
+    "Stations on a Route in Order": 0.168,
+    "Subway Journey Between Two Stations": 0.09,
+    "Stations Near a Station": 0.24,
+    "Platforms in a Station": 0.109,
+    "Stations in a Municipality": 0.097,
+    "none": 0.074
+   }
+  },
+  {
+   "question": "I need to be at Packard's Corner. I'm at Harvard Avenue now.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.299,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.207,
+    "Stations on a Route in Order": 0.118,
+    "Subway Journey Between Two Stations": 0.099,
+    "Stations Near a Station": 0.177,
+    "Platforms in a Station": 0.067,
+    "Stations in a Municipality": 0.033,
+    "none": 0.299
+   }
+  },
+  {
+   "question": "To Gilman Square from Massachusetts Avenue, please.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.279,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.203,
+    "Stations on a Route in Order": 0.148,
+    "Subway Journey Between Two Stations": 0.17,
+    "Stations Near a Station": 0.279,
+    "Platforms in a Station": 0.073,
+    "Stations in a Municipality": 0.041,
+    "none": 0.086
+   }
+  },
+  {
+   "question": "I need to be at Ball Square. I'm at Ruggles now.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.418,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.144,
+    "Stations on a Route in Order": 0.096,
+    "Subway Journey Between Two Stations": 0.073,
+    "Stations Near a Station": 0.182,
+    "Platforms in a Station": 0.059,
+    "Stations in a Municipality": 0.028,
+    "none": 0.418
+   }
+  },
+  {
+   "question": "Delete the Fall River/New Bedford Line.",
+   "expected": "none",
+   "chose": "none",
+   "probability": 0.354,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.177,
+    "Stations on a Route in Order": 0.169,
+    "Subway Journey Between Two Stations": 0.087,
+    "Stations Near a Station": 0.129,
+    "Platforms in a Station": 0.063,
+    "Stations in a Municipality": 0.022,
+    "none": 0.354
+   }
+  },
+  {
+   "question": "Rename Oak Grove to Blandford Street.",
+   "expected": "none",
+   "chose": "none",
+   "probability": 0.232,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.143,
+    "Stations on a Route in Order": 0.148,
+    "Subway Journey Between Two Stations": 0.101,
+    "Stations Near a Station": 0.206,
+    "Platforms in a Station": 0.111,
+    "Stations in a Municipality": 0.059,
+    "none": 0.232
+   }
+  },
+  {
+   "question": "What time does the last train leave Green Street?",
+   "expected": "none",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.223,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.223,
+    "Stations on a Route in Order": 0.144,
+    "Subway Journey Between Two Stations": 0.11,
+    "Stations Near a Station": 0.196,
+    "Platforms in a Station": 0.096,
+    "Stations in a Municipality": 0.075,
+    "none": 0.156
+   }
+  },
+  {
+   "question": "Starting at Englewood Avenue, how do I reach Mission Park?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.26,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.197,
+    "Stations on a Route in Order": 0.134,
+    "Subway Journey Between Two Stations": 0.247,
+    "Stations Near a Station": 0.26,
+    "Platforms in a Station": 0.066,
+    "Stations in a Municipality": 0.034,
+    "none": 0.061
+   }
+  },
+  {
+   "question": "List the stops on the Providence/Stoughton Line in order.",
+   "expected": "Stations on a Route in Order",
+   "chose": "Stations on a Route in Order",
+   "probability": 0.369,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.13,
+    "Stations on a Route in Order": 0.369,
+    "Subway Journey Between Two Stations": 0.071,
+    "Stations Near a Station": 0.196,
+    "Platforms in a Station": 0.105,
+    "Stations in a Municipality": 0.034,
+    "none": 0.096
+   }
+  },
+  {
+   "question": "Rename Community College to Medford/Tufts.",
+   "expected": "none",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.232,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.232,
+    "Stations on a Route in Order": 0.148,
+    "Subway Journey Between Two Stations": 0.091,
+    "Stations Near a Station": 0.189,
+    "Platforms in a Station": 0.075,
+    "Stations in a Municipality": 0.044,
+    "none": 0.22
+   }
+  },
+  {
+   "question": "Which platforms at Valley Road are wheelchair accessible?",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.432,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.158,
+    "Stations on a Route in Order": 0.084,
+    "Subway Journey Between Two Stations": 0.065,
+    "Stations Near a Station": 0.184,
+    "Platforms in a Station": 0.432,
+    "Stations in a Municipality": 0.042,
+    "none": 0.034
+   }
+  },
+  {
+   "question": "Directions from Symphony to Lechmere.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.25,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.214,
+    "Stations on a Route in Order": 0.138,
+    "Subway Journey Between Two Stations": 0.143,
+    "Stations Near a Station": 0.25,
+    "Platforms in a Station": 0.083,
+    "Stations in a Municipality": 0.039,
+    "none": 0.133
+   }
+  },
+  {
+   "question": "Government Center to Malden Center?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.255,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.172,
+    "Stations on a Route in Order": 0.125,
+    "Subway Journey Between Two Stations": 0.138,
+    "Stations Near a Station": 0.255,
+    "Platforms in a Station": 0.089,
+    "Stations in a Municipality": 0.072,
+    "none": 0.149
+   }
+  },
+  {
+   "question": "Which stations are in Cambridge?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.239,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.219,
+    "Stations on a Route in Order": 0.112,
+    "Subway Journey Between Two Stations": 0.103,
+    "Stations Near a Station": 0.239,
+    "Platforms in a Station": 0.183,
+    "Stations in a Municipality": 0.082,
+    "none": 0.062
+   }
+  },
+  {
+   "question": "I'm at Beaconsfield and need to reach East Somerville.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.241,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.226,
+    "Stations on a Route in Order": 0.146,
+    "Subway Journey Between Two Stations": 0.141,
+    "Stations Near a Station": 0.241,
+    "Platforms in a Station": 0.105,
+    "Stations in a Municipality": 0.05,
+    "none": 0.092
+   }
+  },
+  {
+   "question": "To Wollaston from Quincy Adams, please.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.252,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.176,
+    "Stations on a Route in Order": 0.142,
+    "Subway Journey Between Two Stations": 0.102,
+    "Stations Near a Station": 0.212,
+    "Platforms in a Station": 0.084,
+    "Stations in a Municipality": 0.032,
+    "none": 0.252
+   }
+  },
+  {
+   "question": "Going to Cedar Grove, leaving from Community College.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.251,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.251,
+    "Stations on a Route in Order": 0.148,
+    "Subway Journey Between Two Stations": 0.1,
+    "Stations Near a Station": 0.209,
+    "Platforms in a Station": 0.067,
+    "Stations in a Municipality": 0.045,
+    "none": 0.18
+   }
+  },
+  {
+   "question": "Who built Allston Street?",
+   "expected": "none",
+   "chose": "Stations Near a Station",
+   "probability": 0.231,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.209,
+    "Stations on a Route in Order": 0.132,
+    "Subway Journey Between Two Stations": 0.097,
+    "Stations Near a Station": 0.231,
+    "Platforms in a Station": 0.119,
+    "Stations in a Municipality": 0.068,
+    "none": 0.144
+   }
+  },
+  {
+   "question": "I'm at Chiswick Road and need to reach Reservoir.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.241,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.208,
+    "Stations on a Route in Order": 0.14,
+    "Subway Journey Between Two Stations": 0.102,
+    "Stations Near a Station": 0.241,
+    "Platforms in a Station": 0.084,
+    "Stations in a Municipality": 0.048,
+    "none": 0.177
+   }
+  },
+  {
+   "question": "What's the way to Savin Hill if I start at Central?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.382,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.126,
+    "Stations on a Route in Order": 0.123,
+    "Subway Journey Between Two Stations": 0.382,
+    "Stations Near a Station": 0.166,
+    "Platforms in a Station": 0.052,
+    "Stations in a Municipality": 0.024,
+    "none": 0.127
+   }
+  },
+  {
+   "question": "What can I walk to from Shirley?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.485,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.058,
+    "Stations on a Route in Order": 0.07,
+    "Subway Journey Between Two Stations": 0.275,
+    "Stations Near a Station": 0.485,
+    "Platforms in a Station": 0.023,
+    "Stations in a Municipality": 0.029,
+    "none": 0.06
+   }
+  },
+  {
+   "question": "Going to Aquarium, leaving from Boston University Central.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.251,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.251,
+    "Stations on a Route in Order": 0.14,
+    "Subway Journey Between Two Stations": 0.127,
+    "Stations Near a Station": 0.207,
+    "Platforms in a Station": 0.071,
+    "Stations in a Municipality": 0.041,
+    "none": 0.163
+   }
+  },
+  {
+   "question": "List the stops inside North Billerica.",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.253,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.191,
+    "Stations on a Route in Order": 0.131,
+    "Subway Journey Between Two Stations": 0.087,
+    "Stations Near a Station": 0.209,
+    "Platforms in a Station": 0.253,
+    "Stations in a Municipality": 0.098,
+    "none": 0.03
+   }
+  },
+  {
+   "question": "Where does the Orange Line go?",
+   "expected": "Stations on a Route in Order",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.24,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.24,
+    "Stations on a Route in Order": 0.135,
+    "Subway Journey Between Two Stations": 0.094,
+    "Stations Near a Station": 0.201,
+    "Platforms in a Station": 0.135,
+    "Stations in a Municipality": 0.076,
+    "none": 0.119
+   }
+  },
+  {
+   "question": "I need to be at Copley. I'm at Saint Mary's Street now.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.417,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.128,
+    "Stations on a Route in Order": 0.09,
+    "Subway Journey Between Two Stations": 0.085,
+    "Stations Near a Station": 0.185,
+    "Platforms in a Station": 0.062,
+    "Stations in a Municipality": 0.034,
+    "none": 0.417
+   }
+  },
+  {
+   "question": "What lines stop at Middleborough?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.851,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.851,
+    "Stations on a Route in Order": 0.027,
+    "Subway Journey Between Two Stations": 0.014,
+    "Stations Near a Station": 0.053,
+    "Platforms in a Station": 0.032,
+    "Stations in a Municipality": 0.01,
+    "none": 0.013
+   }
+  },
+  {
+   "question": "Starting at Newton Highlands, how do I reach Fairbanks Street?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.307,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.163,
+    "Stations on a Route in Order": 0.128,
+    "Subway Journey Between Two Stations": 0.307,
+    "Stations Near a Station": 0.24,
+    "Platforms in a Station": 0.072,
+    "Stations in a Municipality": 0.023,
+    "none": 0.067
+   }
+  },
+  {
+   "question": "Get me from Forest Hills to Prudential.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.24,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.191,
+    "Stations on a Route in Order": 0.134,
+    "Subway Journey Between Two Stations": 0.17,
+    "Stations Near a Station": 0.169,
+    "Platforms in a Station": 0.072,
+    "Stations in a Municipality": 0.025,
+    "none": 0.24
+   }
+  },
+  {
+   "question": "Who built Shawmut?",
+   "expected": "none",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.216,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.216,
+    "Stations on a Route in Order": 0.124,
+    "Subway Journey Between Two Stations": 0.092,
+    "Stations Near a Station": 0.21,
+    "Platforms in a Station": 0.101,
+    "Stations in a Municipality": 0.143,
+    "none": 0.115
+   }
+  },
+  {
+   "question": "To Oak Grove from Milton, please.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.242,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.208,
+    "Stations on a Route in Order": 0.148,
+    "Subway Journey Between Two Stations": 0.182,
+    "Stations Near a Station": 0.242,
+    "Platforms in a Station": 0.073,
+    "Stations in a Municipality": 0.031,
+    "none": 0.116
+   }
+  },
+  {
+   "question": "Get me from Beachmont to Downtown Crossing.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.238,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.187,
+    "Stations on a Route in Order": 0.135,
+    "Subway Journey Between Two Stations": 0.238,
+    "Stations Near a Station": 0.2,
+    "Platforms in a Station": 0.06,
+    "Stations in a Municipality": 0.025,
+    "none": 0.156
+   }
+  },
+  {
+   "question": "What can I walk to from Wilmington?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.427,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.076,
+    "Stations on a Route in Order": 0.077,
+    "Subway Journey Between Two Stations": 0.26,
+    "Stations Near a Station": 0.427,
+    "Platforms in a Station": 0.024,
+    "Stations in a Municipality": 0.019,
+    "none": 0.118
+   }
+  },
+  {
+   "question": "What is within 500 metres of Cohasset?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.565,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.031,
+    "Stations on a Route in Order": 0.066,
+    "Subway Journey Between Two Stations": 0.128,
+    "Stations Near a Station": 0.565,
+    "Platforms in a Station": 0.026,
+    "Stations in a Municipality": 0.016,
+    "none": 0.169
+   }
+  },
+  {
+   "question": "List the stops inside Suffolk Downs.",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.42,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.156,
+    "Stations on a Route in Order": 0.107,
+    "Subway Journey Between Two Stations": 0.072,
+    "Stations Near a Station": 0.154,
+    "Platforms in a Station": 0.42,
+    "Stations in a Municipality": 0.058,
+    "none": 0.033
+   }
+  },
+  {
+   "question": "How long does it take from Wonderland to Harvard?",
+   "expected": "none",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.266,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.196,
+    "Stations on a Route in Order": 0.111,
+    "Subway Journey Between Two Stations": 0.266,
+    "Stations Near a Station": 0.197,
+    "Platforms in a Station": 0.062,
+    "Stations in a Municipality": 0.033,
+    "none": 0.136
+   }
+  },
+  {
+   "question": "What runs through Davis?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.815,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.815,
+    "Stations on a Route in Order": 0.043,
+    "Subway Journey Between Two Stations": 0.026,
+    "Stations Near a Station": 0.058,
+    "Platforms in a Station": 0.027,
+    "Stations in a Municipality": 0.006,
+    "none": 0.026
+   }
+  },
+  {
+   "question": "Stations in Norfolk?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.244,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.192,
+    "Stations on a Route in Order": 0.135,
+    "Subway Journey Between Two Stations": 0.102,
+    "Stations Near a Station": 0.244,
+    "Platforms in a Station": 0.144,
+    "Stations in a Municipality": 0.14,
+    "none": 0.042
+   }
+  },
+  {
+   "question": "Rename Butler to Symphony.",
+   "expected": "none",
+   "chose": "none",
+   "probability": 0.44,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.13,
+    "Stations on a Route in Order": 0.106,
+    "Subway Journey Between Two Stations": 0.063,
+    "Stations Near a Station": 0.151,
+    "Platforms in a Station": 0.06,
+    "Stations in a Municipality": 0.05,
+    "none": 0.44
+   }
+  },
+  {
+   "question": "Get me from Fenwood Road to Newton Highlands.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.264,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.171,
+    "Stations on a Route in Order": 0.14,
+    "Subway Journey Between Two Stations": 0.264,
+    "Stations Near a Station": 0.196,
+    "Platforms in a Station": 0.078,
+    "Stations in a Municipality": 0.025,
+    "none": 0.125
+   }
+  },
+  {
+   "question": "I need to be at Orient Heights. I'm at Fenwood Road now.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.333,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.17,
+    "Stations on a Route in Order": 0.11,
+    "Subway Journey Between Two Stations": 0.08,
+    "Stations Near a Station": 0.205,
+    "Platforms in a Station": 0.069,
+    "Stations in a Municipality": 0.033,
+    "none": 0.333
+   }
+  },
+  {
+   "question": "Which stations are close to Brigham Circle?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.851,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.031,
+    "Stations on a Route in Order": 0.039,
+    "Subway Journey Between Two Stations": 0.027,
+    "Stations Near a Station": 0.851,
+    "Platforms in a Station": 0.015,
+    "Stations in a Municipality": 0.015,
+    "none": 0.022
+   }
+  },
+  {
+   "question": "When is the next train from Hynes Convention Center?",
+   "expected": "none",
+   "chose": "Stations Near a Station",
+   "probability": 0.298,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.26,
+    "Stations on a Route in Order": 0.14,
+    "Subway Journey Between Two Stations": 0.128,
+    "Stations Near a Station": 0.298,
+    "Platforms in a Station": 0.075,
+    "Stations in a Municipality": 0.029,
+    "none": 0.069
+   }
+  },
+  {
+   "question": "Which routes serve Amory Street?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.856,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.856,
+    "Stations on a Route in Order": 0.03,
+    "Subway Journey Between Two Stations": 0.013,
+    "Stations Near a Station": 0.054,
+    "Platforms in a Station": 0.024,
+    "Stations in a Municipality": 0.009,
+    "none": 0.014
+   }
+  },
+  {
+   "question": "What runs through Stoughton?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.767,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.767,
+    "Stations on a Route in Order": 0.047,
+    "Subway Journey Between Two Stations": 0.033,
+    "Stations Near a Station": 0.081,
+    "Platforms in a Station": 0.04,
+    "Stations in a Municipality": 0.012,
+    "none": 0.02
+   }
+  },
+  {
+   "question": "Which stations are close to Montserrat?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.689,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.071,
+    "Stations on a Route in Order": 0.069,
+    "Subway Journey Between Two Stations": 0.064,
+    "Stations Near a Station": 0.689,
+    "Platforms in a Station": 0.03,
+    "Stations in a Municipality": 0.032,
+    "none": 0.046
+   }
+  },
+  {
+   "question": "What platforms does Fall River Depot have?",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.879,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.029,
+    "Stations on a Route in Order": 0.021,
+    "Subway Journey Between Two Stations": 0.012,
+    "Stations Near a Station": 0.039,
+    "Platforms in a Station": 0.879,
+    "Stations in a Municipality": 0.005,
+    "none": 0.014
+   }
+  },
+  {
+   "question": "Andrew to Babcock Street?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.289,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.156,
+    "Stations on a Route in Order": 0.122,
+    "Subway Journey Between Two Stations": 0.123,
+    "Stations Near a Station": 0.289,
+    "Platforms in a Station": 0.102,
+    "Stations in a Municipality": 0.068,
+    "none": 0.14
+   }
+  },
+  {
+   "question": "What stations are there in Southborough?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.223,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.195,
+    "Stations on a Route in Order": 0.142,
+    "Subway Journey Between Two Stations": 0.089,
+    "Stations Near a Station": 0.223,
+    "Platforms in a Station": 0.139,
+    "Stations in a Municipality": 0.165,
+    "none": 0.046
+   }
+  },
+  {
+   "question": "Directions from Forest Hills to Brookline Hills.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.247,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.24,
+    "Stations on a Route in Order": 0.141,
+    "Subway Journey Between Two Stations": 0.136,
+    "Stations Near a Station": 0.247,
+    "Platforms in a Station": 0.083,
+    "Stations in a Municipality": 0.05,
+    "none": 0.103
+   }
+  },
+  {
+   "question": "Which routes serve Ashland?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.905,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.905,
+    "Stations on a Route in Order": 0.02,
+    "Subway Journey Between Two Stations": 0.008,
+    "Stations Near a Station": 0.033,
+    "Platforms in a Station": 0.017,
+    "Stations in a Municipality": 0.006,
+    "none": 0.011
+   }
+  },
+  {
+   "question": "To Boston University Central from Prudential, please.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.278,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.174,
+    "Stations on a Route in Order": 0.145,
+    "Subway Journey Between Two Stations": 0.125,
+    "Stations Near a Station": 0.193,
+    "Platforms in a Station": 0.07,
+    "Stations in a Municipality": 0.013,
+    "none": 0.278
+   }
+  },
+  {
+   "question": "How do I get from Magoun Square to Airport?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.351,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.172,
+    "Stations on a Route in Order": 0.127,
+    "Subway Journey Between Two Stations": 0.351,
+    "Stations Near a Station": 0.176,
+    "Platforms in a Station": 0.05,
+    "Stations in a Municipality": 0.049,
+    "none": 0.075
+   }
+  },
+  {
+   "question": "How do I get from Savin Hill to Riverway?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.307,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.181,
+    "Stations on a Route in Order": 0.144,
+    "Subway Journey Between Two Stations": 0.307,
+    "Stations Near a Station": 0.183,
+    "Platforms in a Station": 0.064,
+    "Stations in a Municipality": 0.029,
+    "none": 0.093
+   }
+  },
+  {
+   "question": "How much is a ticket from Northeastern University to Central?",
+   "expected": "none",
+   "chose": "Stations Near a Station",
+   "probability": 0.209,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.184,
+    "Stations on a Route in Order": 0.165,
+    "Subway Journey Between Two Stations": 0.177,
+    "Stations Near a Station": 0.209,
+    "Platforms in a Station": 0.074,
+    "Stations in a Municipality": 0.016,
+    "none": 0.175
+   }
+  },
+  {
+   "question": "Is the Green Line B delayed right now?",
+   "expected": "none",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.245,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.245,
+    "Stations on a Route in Order": 0.144,
+    "Subway Journey Between Two Stations": 0.078,
+    "Stations Near a Station": 0.19,
+    "Platforms in a Station": 0.104,
+    "Stations in a Municipality": 0.042,
+    "none": 0.197
+   }
+  },
+  {
+   "question": "Starting at Boston University East, how do I reach Science Park?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.295,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.179,
+    "Stations on a Route in Order": 0.131,
+    "Subway Journey Between Two Stations": 0.295,
+    "Stations Near a Station": 0.236,
+    "Platforms in a Station": 0.056,
+    "Stations in a Municipality": 0.038,
+    "none": 0.066
+   }
+  },
+  {
+   "question": "I'm at Mattapan and need to reach JFK/UMass.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.245,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.245,
+    "Stations on a Route in Order": 0.133,
+    "Subway Journey Between Two Stations": 0.134,
+    "Stations Near a Station": 0.22,
+    "Platforms in a Station": 0.078,
+    "Stations in a Municipality": 0.117,
+    "none": 0.072
+   }
+  },
+  {
+   "question": "What time does the last train leave Chiswick Road?",
+   "expected": "none",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.233,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.233,
+    "Stations on a Route in Order": 0.154,
+    "Subway Journey Between Two Stations": 0.115,
+    "Stations Near a Station": 0.193,
+    "Platforms in a Station": 0.097,
+    "Stations in a Municipality": 0.046,
+    "none": 0.162
+   }
+  },
+  {
+   "question": "Stations in Ashland?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.249,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.166,
+    "Stations on a Route in Order": 0.143,
+    "Subway Journey Between Two Stations": 0.093,
+    "Stations Near a Station": 0.249,
+    "Platforms in a Station": 0.122,
+    "Stations in a Municipality": 0.192,
+    "none": 0.034
+   }
+  },
+  {
+   "question": "I'm at Prudential and need to reach Ashmont.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.225,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.214,
+    "Stations on a Route in Order": 0.134,
+    "Subway Journey Between Two Stations": 0.162,
+    "Stations Near a Station": 0.225,
+    "Platforms in a Station": 0.108,
+    "Stations in a Municipality": 0.038,
+    "none": 0.12
+   }
+  },
+  {
+   "question": "What can I walk to from Medford/Tufts?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.401,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.059,
+    "Stations on a Route in Order": 0.07,
+    "Subway Journey Between Two Stations": 0.231,
+    "Stations Near a Station": 0.401,
+    "Platforms in a Station": 0.024,
+    "Stations in a Municipality": 0.012,
+    "none": 0.203
+   }
+  },
+  {
+   "question": "Where does the CapeFLYER go?",
+   "expected": "Stations on a Route in Order",
+   "chose": "none",
+   "probability": 0.373,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.157,
+    "Stations on a Route in Order": 0.094,
+    "Subway Journey Between Two Stations": 0.07,
+    "Stations Near a Station": 0.174,
+    "Platforms in a Station": 0.077,
+    "Stations in a Municipality": 0.055,
+    "none": 0.373
+   }
+  },
+  {
+   "question": "What's the way to Oak Grove if I start at Saint Paul Street?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.303,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.136,
+    "Stations on a Route in Order": 0.131,
+    "Subway Journey Between Two Stations": 0.303,
+    "Stations Near a Station": 0.194,
+    "Platforms in a Station": 0.052,
+    "Stations in a Municipality": 0.02,
+    "none": 0.164
+   }
+  },
+  {
+   "question": "How do I get from Dean Road to Packard's Corner?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.287,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.174,
+    "Stations on a Route in Order": 0.149,
+    "Subway Journey Between Two Stations": 0.287,
+    "Stations Near a Station": 0.209,
+    "Platforms in a Station": 0.067,
+    "Stations in a Municipality": 0.03,
+    "none": 0.084
+   }
+  },
+  {
+   "question": "Get me from Wonderland to Summit Avenue.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.188,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.182,
+    "Stations on a Route in Order": 0.156,
+    "Subway Journey Between Two Stations": 0.176,
+    "Stations Near a Station": 0.188,
+    "Platforms in a Station": 0.074,
+    "Stations in a Municipality": 0.038,
+    "none": 0.186
+   }
+  },
+  {
+   "question": "Get me from Jackson Square to Warren Street.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.245,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.177,
+    "Stations on a Route in Order": 0.134,
+    "Subway Journey Between Two Stations": 0.245,
+    "Stations Near a Station": 0.2,
+    "Platforms in a Station": 0.085,
+    "Stations in a Municipality": 0.046,
+    "none": 0.114
+   }
+  },
+  {
+   "question": "What's the way to Wood Island if I start at Waban?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.321,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.112,
+    "Stations on a Route in Order": 0.14,
+    "Subway Journey Between Two Stations": 0.321,
+    "Stations Near a Station": 0.207,
+    "Platforms in a Station": 0.049,
+    "Stations in a Municipality": 0.022,
+    "none": 0.149
+   }
+  },
+  {
+   "question": "What stations are on the Fall River/New Bedford Line?",
+   "expected": "Stations on a Route in Order",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.291,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.291,
+    "Stations on a Route in Order": 0.239,
+    "Subway Journey Between Two Stations": 0.08,
+    "Stations Near a Station": 0.215,
+    "Platforms in a Station": 0.098,
+    "Stations in a Municipality": 0.02,
+    "none": 0.056
+   }
+  },
+  {
+   "question": "Stations in Warwick?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.265,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.175,
+    "Stations on a Route in Order": 0.152,
+    "Subway Journey Between Two Stations": 0.106,
+    "Stations Near a Station": 0.265,
+    "Platforms in a Station": 0.123,
+    "Stations in a Municipality": 0.116,
+    "none": 0.063
+   }
+  },
+  {
+   "question": "Delete the CapeFLYER.",
+   "expected": "none",
+   "chose": "none",
+   "probability": 0.408,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.195,
+    "Stations on a Route in Order": 0.11,
+    "Subway Journey Between Two Stations": 0.068,
+    "Stations Near a Station": 0.136,
+    "Platforms in a Station": 0.055,
+    "Stations in a Municipality": 0.028,
+    "none": 0.408
+   }
+  },
+  {
+   "question": "Which stations are within 500 metres of Swampscott?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.808,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.021,
+    "Stations on a Route in Order": 0.05,
+    "Subway Journey Between Two Stations": 0.049,
+    "Stations Near a Station": 0.808,
+    "Platforms in a Station": 0.013,
+    "Stations in a Municipality": 0.01,
+    "none": 0.049
+   }
+  },
+  {
+   "question": "What runs through Ipswich?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.731,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.731,
+    "Stations on a Route in Order": 0.061,
+    "Subway Journey Between Two Stations": 0.035,
+    "Stations Near a Station": 0.088,
+    "Platforms in a Station": 0.047,
+    "Stations in a Municipality": 0.018,
+    "none": 0.02
+   }
+  },
+  {
+   "question": "Stations in Concord?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.226,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.189,
+    "Stations on a Route in Order": 0.14,
+    "Subway Journey Between Two Stations": 0.093,
+    "Stations Near a Station": 0.226,
+    "Platforms in a Station": 0.112,
+    "Stations in a Municipality": 0.193,
+    "none": 0.047
+   }
+  },
+  {
+   "question": "Directions from Union Square to Hawes Street.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.26,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.26,
+    "Stations on a Route in Order": 0.138,
+    "Subway Journey Between Two Stations": 0.133,
+    "Stations Near a Station": 0.227,
+    "Platforms in a Station": 0.093,
+    "Stations in a Municipality": 0.047,
+    "none": 0.102
+   }
+  },
+  {
+   "question": "When is the next train from Wollaston?",
+   "expected": "none",
+   "chose": "Stations Near a Station",
+   "probability": 0.256,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.243,
+    "Stations on a Route in Order": 0.128,
+    "Subway Journey Between Two Stations": 0.094,
+    "Stations Near a Station": 0.256,
+    "Platforms in a Station": 0.111,
+    "Stations in a Municipality": 0.087,
+    "none": 0.082
+   }
+  },
+  {
+   "question": "To Washington Street from Orient Heights, please.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.271,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.187,
+    "Stations on a Route in Order": 0.168,
+    "Subway Journey Between Two Stations": 0.147,
+    "Stations Near a Station": 0.271,
+    "Platforms in a Station": 0.088,
+    "Stations in a Municipality": 0.047,
+    "none": 0.093
+   }
+  },
+  {
+   "question": "What stations are on the Kingston Line?",
+   "expected": "Stations on a Route in Order",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.257,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.257,
+    "Stations on a Route in Order": 0.223,
+    "Subway Journey Between Two Stations": 0.088,
+    "Stations Near a Station": 0.216,
+    "Platforms in a Station": 0.139,
+    "Stations in a Municipality": 0.033,
+    "none": 0.044
+   }
+  },
+  {
+   "question": "I need to be at Woodland. I'm at Washington Square now.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.511,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.123,
+    "Stations on a Route in Order": 0.073,
+    "Subway Journey Between Two Stations": 0.071,
+    "Stations Near a Station": 0.153,
+    "Platforms in a Station": 0.044,
+    "Stations in a Municipality": 0.025,
+    "none": 0.511
+   }
+  },
+  {
+   "question": "What lines stop at Chestnut Hill?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.876,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.876,
+    "Stations on a Route in Order": 0.021,
+    "Subway Journey Between Two Stations": 0.011,
+    "Stations Near a Station": 0.045,
+    "Platforms in a Station": 0.026,
+    "Stations in a Municipality": 0.005,
+    "none": 0.016
+   }
+  },
+  {
+   "question": "What lines stop at Suffolk Downs?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.852,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.852,
+    "Stations on a Route in Order": 0.03,
+    "Subway Journey Between Two Stations": 0.014,
+    "Stations Near a Station": 0.045,
+    "Platforms in a Station": 0.037,
+    "Stations in a Municipality": 0.005,
+    "none": 0.017
+   }
+  },
+  {
+   "question": "What stations are on the Green Line B?",
+   "expected": "Stations on a Route in Order",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.282,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.282,
+    "Stations on a Route in Order": 0.185,
+    "Subway Journey Between Two Stations": 0.084,
+    "Stations Near a Station": 0.208,
+    "Platforms in a Station": 0.109,
+    "Stations in a Municipality": 0.101,
+    "none": 0.031
+   }
+  },
+  {
+   "question": "How long does it take from Alewife to Hynes Convention Center?",
+   "expected": "none",
+   "chose": "Stations Near a Station",
+   "probability": 0.303,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.159,
+    "Stations on a Route in Order": 0.112,
+    "Subway Journey Between Two Stations": 0.254,
+    "Stations Near a Station": 0.303,
+    "Platforms in a Station": 0.046,
+    "Stations in a Municipality": 0.028,
+    "none": 0.097
+   }
+  },
+  {
+   "question": "Which stations are in Salem?",
+   "expected": "Stations in a Municipality",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.261,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.261,
+    "Stations on a Route in Order": 0.114,
+    "Subway Journey Between Two Stations": 0.083,
+    "Stations Near a Station": 0.253,
+    "Platforms in a Station": 0.113,
+    "Stations in a Municipality": 0.134,
+    "none": 0.043
+   }
+  },
+  {
+   "question": "How do I get from Newton Centre to Washington Square?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.347,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.18,
+    "Stations on a Route in Order": 0.132,
+    "Subway Journey Between Two Stations": 0.347,
+    "Stations Near a Station": 0.18,
+    "Platforms in a Station": 0.059,
+    "Stations in a Municipality": 0.032,
+    "none": 0.07
+   }
+  },
+  {
+   "question": "What is near Hawes Street?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.839,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.02,
+    "Stations on a Route in Order": 0.039,
+    "Subway Journey Between Two Stations": 0.033,
+    "Stations Near a Station": 0.839,
+    "Platforms in a Station": 0.018,
+    "Stations in a Municipality": 0.009,
+    "none": 0.042
+   }
+  },
+  {
+   "question": "What stations are there in Gloucester?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.243,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.208,
+    "Stations on a Route in Order": 0.15,
+    "Subway Journey Between Two Stations": 0.093,
+    "Stations Near a Station": 0.243,
+    "Platforms in a Station": 0.153,
+    "Stations in a Municipality": 0.086,
+    "none": 0.068
+   }
+  },
+  {
+   "question": "Who built Forest Hills?",
+   "expected": "none",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.242,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.242,
+    "Stations on a Route in Order": 0.127,
+    "Subway Journey Between Two Stations": 0.088,
+    "Stations Near a Station": 0.204,
+    "Platforms in a Station": 0.092,
+    "Stations in a Municipality": 0.091,
+    "none": 0.155
+   }
+  },
+  {
+   "question": "What can I walk to from Arlington?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.485,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.062,
+    "Stations on a Route in Order": 0.069,
+    "Subway Journey Between Two Stations": 0.271,
+    "Stations Near a Station": 0.485,
+    "Platforms in a Station": 0.027,
+    "Stations in a Municipality": 0.016,
+    "none": 0.069
+   }
+  },
+  {
+   "question": "List the stops inside Four Corners.",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.27,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.183,
+    "Stations on a Route in Order": 0.138,
+    "Subway Journey Between Two Stations": 0.087,
+    "Stations Near a Station": 0.208,
+    "Platforms in a Station": 0.27,
+    "Stations in a Municipality": 0.081,
+    "none": 0.032
+   }
+  },
+  {
+   "question": "Where does the Greenbush Line go?",
+   "expected": "Stations on a Route in Order",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.262,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.262,
+    "Stations on a Route in Order": 0.153,
+    "Subway Journey Between Two Stations": 0.096,
+    "Stations Near a Station": 0.218,
+    "Platforms in a Station": 0.123,
+    "Stations in a Municipality": 0.072,
+    "none": 0.077
+   }
+  },
+  {
+   "question": "How do I get from Amory Street to Central Avenue?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.381,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.154,
+    "Stations on a Route in Order": 0.133,
+    "Subway Journey Between Two Stations": 0.381,
+    "Stations Near a Station": 0.175,
+    "Platforms in a Station": 0.063,
+    "Stations in a Municipality": 0.038,
+    "none": 0.055
+   }
+  },
+  {
+   "question": "Directions from Boston College to Sutherland Road.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.278,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.278,
+    "Stations on a Route in Order": 0.147,
+    "Subway Journey Between Two Stations": 0.127,
+    "Stations Near a Station": 0.226,
+    "Platforms in a Station": 0.078,
+    "Stations in a Municipality": 0.034,
+    "none": 0.11
+   }
+  },
+  {
+   "question": "What stations are on the Green Line C?",
+   "expected": "Stations on a Route in Order",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.274,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.274,
+    "Stations on a Route in Order": 0.186,
+    "Subway Journey Between Two Stations": 0.081,
+    "Stations Near a Station": 0.207,
+    "Platforms in a Station": 0.116,
+    "Stations in a Municipality": 0.103,
+    "none": 0.033
+   }
+  },
+  {
+   "question": "Directions from Malden Center to Capen Street.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.253,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.253,
+    "Stations on a Route in Order": 0.137,
+    "Subway Journey Between Two Stations": 0.133,
+    "Stations Near a Station": 0.231,
+    "Platforms in a Station": 0.077,
+    "Stations in a Municipality": 0.045,
+    "none": 0.122
+   }
+  },
+  {
+   "question": "Which platforms at Science Park are wheelchair accessible?",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.514,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.127,
+    "Stations on a Route in Order": 0.068,
+    "Subway Journey Between Two Stations": 0.066,
+    "Stations Near a Station": 0.167,
+    "Platforms in a Station": 0.514,
+    "Stations in a Municipality": 0.023,
+    "none": 0.035
+   }
+  },
+  {
+   "question": "What runs through Rockport?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.828,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.828,
+    "Stations on a Route in Order": 0.037,
+    "Subway Journey Between Two Stations": 0.021,
+    "Stations Near a Station": 0.055,
+    "Platforms in a Station": 0.032,
+    "Stations in a Municipality": 0.011,
+    "none": 0.016
+   }
+  },
+  {
+   "question": "List the stops on the Foxboro Event Service in order.",
+   "expected": "Stations on a Route in Order",
+   "chose": "Stations on a Route in Order",
+   "probability": 0.308,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.114,
+    "Stations on a Route in Order": 0.308,
+    "Subway Journey Between Two Stations": 0.068,
+    "Stations Near a Station": 0.195,
+    "Platforms in a Station": 0.108,
+    "Stations in a Municipality": 0.059,
+    "none": 0.148
+   }
+  },
+  {
+   "question": "Which books mention telemetry?",
+   "expected": "none",
+   "chose": "none",
+   "probability": 0.74,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.073,
+    "Stations on a Route in Order": 0.045,
+    "Subway Journey Between Two Stations": 0.029,
+    "Stations Near a Station": 0.074,
+    "Platforms in a Station": 0.024,
+    "Stations in a Municipality": 0.014,
+    "none": 0.74
+   }
+  },
+  {
+   "question": "What platforms does Haymarket have?",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.816,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.046,
+    "Stations on a Route in Order": 0.029,
+    "Subway Journey Between Two Stations": 0.018,
+    "Stations Near a Station": 0.06,
+    "Platforms in a Station": 0.816,
+    "Stations in a Municipality": 0.011,
+    "none": 0.02
+   }
+  },
+  {
+   "question": "Stations in Sharon?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations in a Municipality",
+   "probability": 0.218,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.191,
+    "Stations on a Route in Order": 0.136,
+    "Subway Journey Between Two Stations": 0.083,
+    "Stations Near a Station": 0.205,
+    "Platforms in a Station": 0.125,
+    "Stations in a Municipality": 0.218,
+    "none": 0.042
+   }
+  },
+  {
+   "question": "Which stations are within 800 metres of Manchester?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.775,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.027,
+    "Stations on a Route in Order": 0.059,
+    "Subway Journey Between Two Stations": 0.061,
+    "Stations Near a Station": 0.775,
+    "Platforms in a Station": 0.031,
+    "Stations in a Municipality": 0.009,
+    "none": 0.039
+   }
+  },
+  {
+   "question": "What's the way to Sullivan Square if I start at Harvard?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.271,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.165,
+    "Stations on a Route in Order": 0.126,
+    "Subway Journey Between Two Stations": 0.271,
+    "Stations Near a Station": 0.216,
+    "Platforms in a Station": 0.047,
+    "Stations in a Municipality": 0.031,
+    "none": 0.144
+   }
+  },
+  {
+   "question": "I need to be at Aquarium. I'm at Tappan Street now.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.358,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.153,
+    "Stations on a Route in Order": 0.105,
+    "Subway Journey Between Two Stations": 0.094,
+    "Stations Near a Station": 0.205,
+    "Platforms in a Station": 0.061,
+    "Stations in a Municipality": 0.023,
+    "none": 0.358
+   }
+  },
+  {
+   "question": "What is near Needham Heights?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.848,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.019,
+    "Stations on a Route in Order": 0.034,
+    "Subway Journey Between Two Stations": 0.033,
+    "Stations Near a Station": 0.848,
+    "Platforms in a Station": 0.014,
+    "Stations in a Municipality": 0.01,
+    "none": 0.041
+   }
+  },
+  {
+   "question": "Is there parking at Ball Square?",
+   "expected": "none",
+   "chose": "Stations Near a Station",
+   "probability": 0.271,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.172,
+    "Stations on a Route in Order": 0.134,
+    "Subway Journey Between Two Stations": 0.084,
+    "Stations Near a Station": 0.271,
+    "Platforms in a Station": 0.114,
+    "Stations in a Municipality": 0.151,
+    "none": 0.074
+   }
+  },
+  {
+   "question": "To Longwood Medical Area from Medford/Tufts, please.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "none",
+   "probability": 0.244,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.18,
+    "Stations on a Route in Order": 0.138,
+    "Subway Journey Between Two Stations": 0.11,
+    "Stations Near a Station": 0.235,
+    "Platforms in a Station": 0.069,
+    "Stations in a Municipality": 0.025,
+    "none": 0.244
+   }
+  },
+  {
+   "question": "Which platforms at West Medford are wheelchair accessible?",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.634,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.091,
+    "Stations on a Route in Order": 0.053,
+    "Subway Journey Between Two Stations": 0.047,
+    "Stations Near a Station": 0.124,
+    "Platforms in a Station": 0.634,
+    "Stations in a Municipality": 0.023,
+    "none": 0.028
+   }
+  },
+  {
+   "question": "Which routes serve Hersey?",
+   "expected": "Which Routes Serve a Station",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.896,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.896,
+    "Stations on a Route in Order": 0.022,
+    "Subway Journey Between Two Stations": 0.009,
+    "Stations Near a Station": 0.034,
+    "Platforms in a Station": 0.019,
+    "Stations in a Municipality": 0.008,
+    "none": 0.013
+   }
+  },
+  {
+   "question": "Get me from Saint Paul Street to Malden Center.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.24,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.185,
+    "Stations on a Route in Order": 0.134,
+    "Subway Journey Between Two Stations": 0.24,
+    "Stations Near a Station": 0.205,
+    "Platforms in a Station": 0.067,
+    "Stations in a Municipality": 0.029,
+    "none": 0.139
+   }
+  },
+  {
+   "question": "I'm at Stony Brook and need to reach Milton.",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.244,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.24,
+    "Stations on a Route in Order": 0.131,
+    "Subway Journey Between Two Stations": 0.157,
+    "Stations Near a Station": 0.244,
+    "Platforms in a Station": 0.089,
+    "Stations in a Municipality": 0.042,
+    "none": 0.097
+   }
+  },
+  {
+   "question": "What time does the last train leave Arlington?",
+   "expected": "none",
+   "chose": "none",
+   "probability": 0.254,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.245,
+    "Stations on a Route in Order": 0.143,
+    "Subway Journey Between Two Stations": 0.108,
+    "Stations Near a Station": 0.164,
+    "Platforms in a Station": 0.061,
+    "Stations in a Municipality": 0.025,
+    "none": 0.254
+   }
+  },
+  {
+   "question": "List the stops on the Fairmount Line in order.",
+   "expected": "Stations on a Route in Order",
+   "chose": "Stations on a Route in Order",
+   "probability": 0.359,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.119,
+    "Stations on a Route in Order": 0.359,
+    "Subway Journey Between Two Stations": 0.068,
+    "Stations Near a Station": 0.204,
+    "Platforms in a Station": 0.107,
+    "Stations in a Municipality": 0.067,
+    "none": 0.077
+   }
+  },
+  {
+   "question": "When is the next train from Butler?",
+   "expected": "none",
+   "chose": "Stations Near a Station",
+   "probability": 0.287,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.233,
+    "Stations on a Route in Order": 0.141,
+    "Subway Journey Between Two Stations": 0.106,
+    "Stations Near a Station": 0.287,
+    "Platforms in a Station": 0.108,
+    "Stations in a Municipality": 0.045,
+    "none": 0.08
+   }
+  },
+  {
+   "question": "South Street to Malden Center?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.251,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.193,
+    "Stations on a Route in Order": 0.135,
+    "Subway Journey Between Two Stations": 0.19,
+    "Stations Near a Station": 0.251,
+    "Platforms in a Station": 0.092,
+    "Stations in a Municipality": 0.062,
+    "none": 0.077
+   }
+  },
+  {
+   "question": "Starting at Downtown Crossing, how do I reach Washington Square?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.275,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.187,
+    "Stations on a Route in Order": 0.133,
+    "Subway Journey Between Two Stations": 0.275,
+    "Stations Near a Station": 0.249,
+    "Platforms in a Station": 0.06,
+    "Stations in a Municipality": 0.022,
+    "none": 0.073
+   }
+  },
+  {
+   "question": "Starting at Wollaston, how do I reach North Station?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.301,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.13,
+    "Stations on a Route in Order": 0.125,
+    "Subway Journey Between Two Stations": 0.301,
+    "Stations Near a Station": 0.245,
+    "Platforms in a Station": 0.092,
+    "Stations in a Municipality": 0.043,
+    "none": 0.064
+   }
+  },
+  {
+   "question": "Which platforms at Tufts Medical Center are wheelchair accessible?",
+   "expected": "Platforms in a Station",
+   "chose": "Platforms in a Station",
+   "probability": 0.486,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.129,
+    "Stations on a Route in Order": 0.068,
+    "Subway Journey Between Two Stations": 0.072,
+    "Stations Near a Station": 0.159,
+    "Platforms in a Station": 0.486,
+    "Stations in a Municipality": 0.041,
+    "none": 0.045
+   }
+  },
+  {
+   "question": "Delete the Newburyport/Rockport Line.",
+   "expected": "none",
+   "chose": "none",
+   "probability": 0.361,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.186,
+    "Stations on a Route in Order": 0.156,
+    "Subway Journey Between Two Stations": 0.076,
+    "Stations Near a Station": 0.135,
+    "Platforms in a Station": 0.064,
+    "Stations in a Municipality": 0.022,
+    "none": 0.361
+   }
+  },
+  {
+   "question": "When is the next train from Massachusetts Avenue?",
+   "expected": "none",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.274,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.274,
+    "Stations on a Route in Order": 0.135,
+    "Subway Journey Between Two Stations": 0.102,
+    "Stations Near a Station": 0.253,
+    "Platforms in a Station": 0.105,
+    "Stations in a Municipality": 0.045,
+    "none": 0.086
+   }
+  },
+  {
+   "question": "What stations are on the CapeFLYER?",
+   "expected": "Stations on a Route in Order",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.288,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.288,
+    "Stations on a Route in Order": 0.167,
+    "Subway Journey Between Two Stations": 0.087,
+    "Stations Near a Station": 0.225,
+    "Platforms in a Station": 0.125,
+    "Stations in a Municipality": 0.053,
+    "none": 0.054
+   }
+  },
+  {
+   "question": "What stations are there in New Bedford?",
+   "expected": "Stations in a Municipality",
+   "chose": "Stations Near a Station",
+   "probability": 0.224,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.223,
+    "Stations on a Route in Order": 0.153,
+    "Subway Journey Between Two Stations": 0.094,
+    "Stations Near a Station": 0.224,
+    "Platforms in a Station": 0.118,
+    "Stations in a Municipality": 0.13,
+    "none": 0.058
+   }
+  },
+  {
+   "question": "Starting at Riverside, how do I reach Lechmere?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.354,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.157,
+    "Stations on a Route in Order": 0.13,
+    "Subway Journey Between Two Stations": 0.354,
+    "Stations Near a Station": 0.182,
+    "Platforms in a Station": 0.065,
+    "Stations in a Municipality": 0.035,
+    "none": 0.076
+   }
+  },
+  {
+   "question": "Which stations are within 500 metres of Wellesley Square?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.769,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.03,
+    "Stations on a Route in Order": 0.058,
+    "Subway Journey Between Two Stations": 0.065,
+    "Stations Near a Station": 0.769,
+    "Platforms in a Station": 0.026,
+    "Stations in a Municipality": 0.013,
+    "none": 0.04
+   }
+  },
+  {
+   "question": "Which stations are close to Savin Hill?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.758,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.059,
+    "Stations on a Route in Order": 0.057,
+    "Subway Journey Between Two Stations": 0.051,
+    "Stations Near a Station": 0.758,
+    "Platforms in a Station": 0.026,
+    "Stations in a Municipality": 0.019,
+    "none": 0.03
+   }
+  },
+  {
+   "question": "Starting at Griggs Street, how do I reach Broadway?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Stations Near a Station",
+   "probability": 0.264,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.203,
+    "Stations on a Route in Order": 0.149,
+    "Subway Journey Between Two Stations": 0.201,
+    "Stations Near a Station": 0.264,
+    "Platforms in a Station": 0.081,
+    "Stations in a Municipality": 0.062,
+    "none": 0.04
+   }
+  },
+  {
+   "question": "Which bus goes to Chestnut Hill Avenue?",
+   "expected": "none",
+   "chose": "Which Routes Serve a Station",
+   "probability": 0.312,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.312,
+    "Stations on a Route in Order": 0.124,
+    "Subway Journey Between Two Stations": 0.121,
+    "Stations Near a Station": 0.253,
+    "Platforms in a Station": 0.101,
+    "Stations in a Municipality": 0.031,
+    "none": 0.057
+   }
+  },
+  {
+   "question": "How do I get from Kent Street to Blandford Street?",
+   "expected": "Subway Journey Between Two Stations",
+   "chose": "Subway Journey Between Two Stations",
+   "probability": 0.307,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.173,
+    "Stations on a Route in Order": 0.15,
+    "Subway Journey Between Two Stations": 0.307,
+    "Stations Near a Station": 0.195,
+    "Platforms in a Station": 0.072,
+    "Stations in a Municipality": 0.025,
+    "none": 0.078
+   }
+  },
+  {
+   "question": "What is near Rockport?",
+   "expected": "Stations Near a Station",
+   "chose": "Stations Near a Station",
+   "probability": 0.87,
+   "probabilities": {
+    "Which Routes Serve a Station": 0.016,
+    "Stations on a Route in Order": 0.029,
+    "Subway Journey Between Two Stations": 0.025,
+    "Stations Near a Station": 0.87,
+    "Platforms in a Station": 0.01,
+    "Stations in a Municipality": 0.006,
+    "none": 0.043
+   }
+  }
+ ]
+}

@@ -1,0 +1,165 @@
+#+TITLE: 014 - A prompt searched for, and a model that only decides, on transit questions
+#+DATE: 2026-10-09
+
+* Source
+
+Experiment 013 left the transit agent on a 3B model with a prompt written
+by hand and three kinds of failure: a question no tool answers is answered
+anyway, "To X from Y" is read backwards, and one tool is taken for
+another. Two things were proposed for it on the same afternoon:
+
+- DSPy, a Python library that takes a program of model calls, a metric and
+  examples, and searches for the prompt that scores best on one model.
+- Decision models, new in Ollama 0.35: =POST /v1/systemone= takes a text
+  and a question with named options and returns a probability for each
+  option. No text is generated. =laya= (Convai, 421M parameters, 846 MB)
+  is the smallest.
+
+* Hypothesis
+
+Two, tested apart.
+
+1. A search over worked examples in the prompt raises the 3B model's score
+   on transit questions it has not seen, by more than run-to-run noise.
+2. A decision model chooses the tool as well as the 3B chat model does, in
+   a tenth of the time, and its probabilities give a threshold that says
+   "none" where the chat model answers anyway.
+
+* Method
+
+This is the part to reuse.
+
+1. *Questions from the graph, not from the author.* =questions.py= draws
+   stations, routes and municipalities from the transit Neo4j with a fixed
+   seed and puts them into fixed phrasings: ten for a journey, three per
+   other tool, ten for questions no tool answers (timetables, fares,
+   buses, parking, writes) and six off the subject. A station is sometimes
+   written short, "Kendall" for "Kendall/MIT", when the short form still
+   matches one stored name. 371 questions, split by row into 80 to train,
+   80 to validate and 211 held out. Each carries the tool and parameters a
+   right answer runs, so grading needs no judge.
+2. *The agent as a DSPy program.* =optimize.py= has the same two steps as
+   =workshop.agent=: choose a tool, then fill that tool's arguments. Tool
+   names and descriptions are read from =agents/mbta.agent.json=. The
+   checks around the model are copied without a database: an argument must
+   appear in the question, and a name must match one stored name.
+3. *One metric, the one already in use.* Right, refused or wrong, as
+   experiments 009 and 013 grade. The optimizer is given "right".
+4. *Baseline first.* The program with no optimizer, on the 211.
+5. *Then an optimizer*, compiled on the 80 and scored on the other 80
+   while it searches, and its result scored once on the 211.
+6. *The decision model on the same 211*, tool choice only (=decide.py=),
+   since it cannot fill a string.
+
+All of it ran on the laptop: an M1 Pro, 16 GB, four Neo4j JVMs beside the
+model. =qwen2.5:3b= through Ollama's OpenAI-compatible endpoint.
+
+* Gate
+
+1. The optimized program gets at least 10 more of 211 right than the
+   baseline and no more wrong.
+2. The decision model's tool choice is within 5 of the chat model's of 211.
+
+* Result
+
+Neither passed.
+
+End to end, =qwen2.5:3b=, 211 held-out questions:
+
+| prompt                                  | right | refused | wrong | seconds each | search |
+|-----------------------------------------+-------+---------+-------+--------------+--------|
+| DSPy's default, no examples             |   188 |      10 |    13 |         1.06 | none   |
+| BootstrapFewShotWithRandomSearch        |   193 |       9 |     9 |         0.72 | 11.5 min |
+
+Five more right and four fewer wrong: the right direction, half the gate,
+and one run. Tool choice alone, the same 211:
+
+| chooser                        | tool chosen | time each |
+|--------------------------------+-------------+-----------|
+| =qwen2.5:3b=, no examples      |         186 | about 0.5 s |
+| =qwen2.5:3b=, searched examples |        187 | about 0.4 s |
+| =laya=, decision model         |         106 | 83 ms     |
+
+=laya= with a threshold on its probability:
+
+| below this, say "none" | tool chosen of 211 | "none" said of 39 |
+|------------------------+--------------------+-------------------|
+|                   0.00 |                106 |                11 |
+|                   0.30 |                102 |                33 |
+|                   0.40 |                 84 |                39 |
+|                   0.50 |                 75 |                39 |
+
+=results-qwen2-5-3b.json= and =decisions-laya.json= have every row;
+=program-qwen2-5-3b-fewshot.json= is the prompt the search kept.
+
+* What the failures say
+
+- The search moved failures more than it removed them. With no examples,
+  nine "Where does the Orange Line go?" questions went to the tool that
+  takes a station. With the searched examples two do, and five journeys
+  now go to the route tool, which did not happen before. The three
+  examples it kept for choosing a tool are two "what is near" and one
+  "what runs through": none is a journey, a route in order, or a "none".
+- Questions no tool answers are still answered. Eight wrong before, eight
+  after: "How long does it take from Arlington to Wonderland?" runs a
+  journey, "Which bus goes to Medford/Tufts?" runs routes at a station.
+  No example of "none" was among those kept, and the metric gives the
+  search no more reason to keep one than any other.
+- =laya= is twelve times faster and right half the time. Its limits
+  decide that: every option shares a budget of 176 tokens, so each tool
+  got its name and about nine words of its description. It sends journeys
+  to "Stations Near a Station" (19) and to "none" (18), and municipalities
+  to "Stations Near a Station" (15 of 18).
+- Its threshold does what was hoped and costs too much. At 0.4 every one
+  of the 39 no-tool questions is refused, and so are most of the others.
+  Its probabilities are flat: a right answer at 0.35 beside a wrong one
+  at 0.34.
+- The generated questions are harder than 013's eighteen in one way and
+  easier in another. They are 211 and not written to be answered; but
+  their phrasings are thirteen fixed strings per kind, the same in train
+  and test, so a kept example can match a test question's wording
+  exactly. The gain measured here is an upper bound on what a stranger's
+  questions would see.
+
+* What carries back to the Clojure agent
+
+Nothing was ported. What the search found is a set of nine worked
+examples, three per step, and the instructions unchanged. Adding examples
+to =agent/instructions= is a few lines. On this evidence it is worth
+five questions in two hundred and should be chosen by hand to include a
+journey, a route and a "none", which the search did not do.
+
+* Log
+
+1. DSPy 3.4.0 against Ollama. Its own Ollama route failed (a credential
+   check, then a 404); the OpenAI-compatible endpoint works. =qwen3:4b=
+   could not be made to stop thinking through it, 6 to 13 seconds a call
+   against 1.7 with =workshop.ollama='s =think false=, so only
+   =qwen2.5:3b= was tuned.
+2. =questions.py=: 371 questions, 80 / 80 / 211.
+3. Baseline: 188 / 10 / 13.
+4. BootstrapFewShotWithRandomSearch, 8 candidate programs, 3 bootstrapped
+   and 3 labelled examples each, 691 seconds: 193 / 9 / 9.
+5. MIPROv2, =auto="light"=, the 3B model proposing its own instructions.
+   First run stopped on a missing dependency (optuna). The second scored
+   the default program at 87.5% on validation, then took 40 minutes over
+   one trial with the laptop busy, and was stopped at trial 4 of 88 with
+   no better program found. Not a result.
+6. =laya= pulled. The endpoint wants options as a map of key to
+   description, refuses an option over 48 tokens and all options over 176.
+   106 of 211.
+
+* Not done
+
+- MIPROv2 to completion, and with a larger model writing the candidate
+  instructions. A 3B model proposing prompts for itself is the weakest
+  form of it.
+- =qwen3:4b=, the better of the two laptop models in 013.
+- Phrasings held out, not only stations: train on some wordings, test on
+  others. That is the honest test of a searched prompt.
+- Options written for =laya=, short and unlike each other, in place of
+  truncated descriptions written for a chat model; and =tev1:4b= or
+  =nimble=, decision models with more room.
+- The winning examples in =workshop.agent=, scored by experiment 013's
+  runner on both models.
+- Variance. One run of each.

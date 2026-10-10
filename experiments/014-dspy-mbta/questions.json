@@ -1,0 +1,3109 @@
+{
+ "seed": 20261009,
+ "names": {
+  "stations": [
+   "Abington",
+   "Airport",
+   "Alewife",
+   "Allston Street",
+   "Amory Street",
+   "Anderson/Woburn",
+   "Andover",
+   "Andrew",
+   "Aquarium",
+   "Arlington",
+   "Ashland",
+   "Ashmont",
+   "Assembly",
+   "Attleboro",
+   "Auburndale",
+   "Ayer",
+   "Babcock Street",
+   "Back Bay",
+   "Back of the Hill",
+   "Ball Square",
+   "Ballardvale",
+   "Beachmont",
+   "Beaconsfield",
+   "Bellevue",
+   "Belmont",
+   "Beverly",
+   "Beverly Farms",
+   "Blandford Street",
+   "Blue Hill Avenue",
+   "Boston College",
+   "Boston Landing",
+   "Boston University Central",
+   "Boston University East",
+   "Bowdoin",
+   "Boylston",
+   "Bradford",
+   "Braintree",
+   "Brandeis/Roberts",
+   "Brandon Hall",
+   "Bridgewater",
+   "Brigham Circle",
+   "Broadway",
+   "Brockton",
+   "Brookline Hills",
+   "Brookline Village",
+   "Butler",
+   "Campello",
+   "Canton Center",
+   "Canton Junction",
+   "Capen Street",
+   "Cedar Grove",
+   "Central",
+   "Central Avenue",
+   "Charles/MGH",
+   "Chelsea",
+   "Chestnut Hill",
+   "Chestnut Hill Avenue",
+   "Chinatown",
+   "Chiswick Road",
+   "Church Street",
+   "Cleveland Circle",
+   "Cohasset",
+   "Community College",
+   "Concord",
+   "Coolidge Corner",
+   "Copley",
+   "Davis",
+   "Dean Road",
+   "Dedham Corporate Center",
+   "Downtown Crossing",
+   "East Somerville",
+   "East Taunton",
+   "East Weymouth",
+   "Eliot",
+   "Endicott",
+   "Englewood Avenue",
+   "Fairbanks Street",
+   "Fairmount",
+   "Fall River Depot",
+   "Fenway",
+   "Fenwood Road",
+   "Fields Corner",
+   "Fitchburg",
+   "Forest Hills",
+   "Forge Park/495",
+   "Four Corners/Geneva",
+   "Foxboro",
+   "Framingham",
+   "Franklin",
+   "Freetown",
+   "Gilman Square",
+   "Gloucester",
+   "Government Center",
+   "Grafton",
+   "Green Street",
+   "Greenbush",
+   "Greenwood",
+   "Griggs Street",
+   "Halifax",
+   "Hamilton/Wenham",
+   "Hanson",
+   "Harvard",
+   "Harvard Avenue",
+   "Haverhill",
+   "Hawes Street",
+   "Haymarket",
+   "Heath Street",
+   "Hersey",
+   "Highland",
+   "Holbrook/Randolph",
+   "Hyde Park",
+   "Hynes Convention Center",
+   "Ipswich",
+   "Islington",
+   "JFK/UMass",
+   "Jackson Square",
+   "Kendal Green",
+   "Kendall/MIT",
+   "Kenmore",
+   "Kent Street",
+   "Kingston",
+   "Lansdowne",
+   "Lawrence",
+   "Lechmere",
+   "Lincoln",
+   "Littleton/Route 495",
+   "Longwood",
+   "Longwood Medical Area",
+   "Lowell",
+   "Lynn Interim",
+   "Magoun Square",
+   "Malden Center",
+   "Manchester",
+   "Mansfield",
+   "Massachusetts Avenue",
+   "Mattapan",
+   "Maverick",
+   "Medford/Tufts",
+   "Melrose Highlands",
+   "Melrose/Cedar Park",
+   "Middleborough",
+   "Milton",
+   "Mission Park",
+   "Montello",
+   "Montserrat",
+   "Morton Street",
+   "Museum of Fine Arts",
+   "Nantasket Junction",
+   "Natick Center",
+   "Needham Center",
+   "Needham Heights",
+   "Needham Junction",
+   "New Bedford",
+   "Newburyport",
+   "Newmarket",
+   "Newton Centre",
+   "Newton Highlands",
+   "Newtonville",
+   "Norfolk",
+   "North Beverly",
+   "North Billerica",
+   "North Leominster",
+   "North Quincy",
+   "North Scituate",
+   "North Station",
+   "North Wilmington",
+   "Northeastern University",
+   "Norwood Central",
+   "Norwood Depot",
+   "Oak Grove",
+   "Orient Heights",
+   "Packard's Corner",
+   "Park Street",
+   "Pawtucket/Central Falls",
+   "Porter",
+   "Providence",
+   "Prudential",
+   "Quincy Adams",
+   "Quincy Center",
+   "Reading",
+   "Readville",
+   "Reservoir",
+   "Revere Beach",
+   "Riverside",
+   "Riverway",
+   "Rockport",
+   "Roslindale Village",
+   "Route 128",
+   "Rowley",
+   "Roxbury Crossing",
+   "Ruggles",
+   "Saint Mary's Street",
+   "Saint Paul Street",
+   "Salem",
+   "Savin Hill",
+   "Science Park/West End",
+   "Sharon",
+   "Shawmut",
+   "Shirley",
+   "South Acton",
+   "South Station",
+   "South Street",
+   "South Weymouth",
+   "Southborough",
+   "State",
+   "Stony Brook",
+   "Stoughton",
+   "Suffolk Downs",
+   "Sullivan Square",
+   "Summit Avenue",
+   "Sutherland Road",
+   "Swampscott",
+   "Symphony",
+   "TF Green Airport",
+   "Talbot Avenue",
+   "Tappan Street",
+   "Tufts Medical Center",
+   "Union Square",
+   "Uphams Corner",
+   "Valley Road",
+   "Waban",
+   "Wachusett",
+   "Wakefield",
+   "Walpole",
+   "Waltham",
+   "Warren Street",
+   "Washington Square",
+   "Washington Street",
+   "Waverley",
+   "Wedgemere",
+   "Wellesley Farms",
+   "Wellesley Hills",
+   "Wellesley Square",
+   "Wellington",
+   "West Concord",
+   "West Gloucester",
+   "West Hingham",
+   "West Medford",
+   "West Natick",
+   "West Newton",
+   "West Roxbury",
+   "Westborough",
+   "Weymouth Landing/East Braintree",
+   "Whitman",
+   "Wickford Junction",
+   "Wilmington",
+   "Winchester Center",
+   "Windsor Gardens",
+   "Wollaston",
+   "Wonderland",
+   "Wood Island",
+   "Woodland",
+   "Worcester",
+   "Wyoming Hill"
+  ],
+  "subway_stations": [
+   "Airport",
+   "Alewife",
+   "Allston Street",
+   "Amory Street",
+   "Andrew",
+   "Aquarium",
+   "Arlington",
+   "Ashmont",
+   "Assembly",
+   "Babcock Street",
+   "Back Bay",
+   "Back of the Hill",
+   "Ball Square",
+   "Beachmont",
+   "Beaconsfield",
+   "Blandford Street",
+   "Boston College",
+   "Boston University Central",
+   "Boston University East",
+   "Bowdoin",
+   "Boylston",
+   "Braintree",
+   "Brandon Hall",
+   "Brigham Circle",
+   "Broadway",
+   "Brookline Hills",
+   "Brookline Village",
+   "Butler",
+   "Capen Street",
+   "Cedar Grove",
+   "Central",
+   "Central Avenue",
+   "Charles/MGH",
+   "Chestnut Hill",
+   "Chestnut Hill Avenue",
+   "Chinatown",
+   "Chiswick Road",
+   "Cleveland Circle",
+   "Community College",
+   "Coolidge Corner",
+   "Copley",
+   "Davis",
+   "Dean Road",
+   "Downtown Crossing",
+   "East Somerville",
+   "Eliot",
+   "Englewood Avenue",
+   "Fairbanks Street",
+   "Fenway",
+   "Fenwood Road",
+   "Fields Corner",
+   "Forest Hills",
+   "Gilman Square",
+   "Government Center",
+   "Green Street",
+   "Griggs Street",
+   "Harvard",
+   "Harvard Avenue",
+   "Hawes Street",
+   "Haymarket",
+   "Heath Street",
+   "Hynes Convention Center",
+   "JFK/UMass",
+   "Jackson Square",
+   "Kendall/MIT",
+   "Kenmore",
+   "Kent Street",
+   "Lechmere",
+   "Longwood",
+   "Longwood Medical Area",
+   "Magoun Square",
+   "Malden Center",
+   "Massachusetts Avenue",
+   "Mattapan",
+   "Maverick",
+   "Medford/Tufts",
+   "Milton",
+   "Mission Park",
+   "Museum of Fine Arts",
+   "Newton Centre",
+   "Newton Highlands",
+   "North Quincy",
+   "North Station",
+   "Northeastern University",
+   "Oak Grove",
+   "Orient Heights",
+   "Packard's Corner",
+   "Park Street",
+   "Porter",
+   "Prudential",
+   "Quincy Adams",
+   "Quincy Center",
+   "Reservoir",
+   "Revere Beach",
+   "Riverside",
+   "Riverway",
+   "Roxbury Crossing",
+   "Ruggles",
+   "Saint Mary's Street",
+   "Saint Paul Street",
+   "Savin Hill",
+   "Science Park/West End",
+   "Shawmut",
+   "South Station",
+   "South Street",
+   "State",
+   "Stony Brook",
+   "Suffolk Downs",
+   "Sullivan Square",
+   "Summit Avenue",
+   "Sutherland Road",
+   "Symphony",
+   "Tappan Street",
+   "Tufts Medical Center",
+   "Union Square",
+   "Valley Road",
+   "Waban",
+   "Warren Street",
+   "Washington Square",
+   "Washington Street",
+   "Wellington",
+   "Wollaston",
+   "Wonderland",
+   "Wood Island",
+   "Woodland"
+  ],
+  "routes": [
+   "Blue Line",
+   "CapeFLYER",
+   "Fairmount Line",
+   "Fall River/New Bedford Line",
+   "Fitchburg Line",
+   "Foxboro Event Service",
+   "Framingham/Worcester Line",
+   "Franklin/Foxboro Line",
+   "Green Line B",
+   "Green Line C",
+   "Green Line D",
+   "Green Line E",
+   "Greenbush Line",
+   "Haverhill Line",
+   "Kingston Line",
+   "Lowell Line",
+   "Mattapan Line",
+   "Needham Line",
+   "Newburyport/Rockport Line",
+   "Orange Line",
+   "Providence/Stoughton Line",
+   "Red Line"
+  ],
+  "municipalities": [
+   "Abington",
+   "Acton",
+   "Andover",
+   "Ashland",
+   "Attleboro",
+   "Ayer",
+   "Belmont",
+   "Beverly",
+   "Billerica",
+   "Boston",
+   "Braintree",
+   "Bridgewater",
+   "Brockton",
+   "Brookline",
+   "Cambridge",
+   "Canton",
+   "Chelsea",
+   "Cohasset",
+   "Concord",
+   "Dedham",
+   "Fall River",
+   "Fitchburg",
+   "Foxborough",
+   "Framingham",
+   "Franklin",
+   "Freetown",
+   "Gloucester",
+   "Grafton",
+   "Halifax",
+   "Hamilton",
+   "Hanson",
+   "Haverhill",
+   "Hingham",
+   "Ipswich",
+   "Kingston",
+   "Lawrence",
+   "Leominster",
+   "Lincoln",
+   "Littleton",
+   "Lowell",
+   "Lynn",
+   "Malden",
+   "Manchester-by-the-Sea",
+   "Mansfield",
+   "Medford",
+   "Melrose",
+   "Middleborough",
+   "Milton",
+   "Natick",
+   "Needham",
+   "New Bedford",
+   "Newburyport",
+   "Newton",
+   "Norfolk",
+   "North Kingstown",
+   "Norwood",
+   "Pawtucket",
+   "Providence",
+   "Quincy",
+   "Randolph",
+   "Reading",
+   "Revere",
+   "Rockport",
+   "Rowley",
+   "Salem",
+   "Scituate",
+   "Sharon",
+   "Shirley",
+   "Somerville",
+   "Southborough",
+   "Stoughton",
+   "Swampscott",
+   "Taunton",
+   "Wakefield",
+   "Walpole",
+   "Waltham",
+   "Warwick",
+   "Wellesley",
+   "Westborough",
+   "Weston",
+   "Westwood",
+   "Weymouth",
+   "Whitman",
+   "Wilmington",
+   "Winchester",
+   "Woburn",
+   "Worcester"
+  ]
+ },
+ "train": [
+  {
+   "question": "What is near TF Green Airport?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "TF Green Airport"
+   }
+  },
+  {
+   "question": "What can I walk to from Providence?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Providence"
+   }
+  },
+  {
+   "question": "What runs through Reading?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Reading"
+   }
+  },
+  {
+   "question": "What lines stop at Swampscott?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Swampscott"
+   }
+  },
+  {
+   "question": "Kendall to Boston College?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Kendall/MIT",
+    "toStation": "Boston College"
+   }
+  },
+  {
+   "question": "I need to be at Hynes Convention Center. I'm at Valley Road now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Valley Road",
+    "toStation": "Hynes Convention Center"
+   }
+  },
+  {
+   "question": "Going to Chestnut Hill Avenue, leaving from Hawes Street.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Hawes Street",
+    "toStation": "Chestnut Hill Avenue"
+   }
+  },
+  {
+   "question": "Delete the Fairmount Line.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Who built Summit Avenue?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Who built Community College?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Delete the Orange Line.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which stations are within 500 metres of Wakefield?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Wakefield",
+    "withinMetres": 500
+   }
+  },
+  {
+   "question": "List the stops on the Fitchburg Line in order.",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Fitchburg Line"
+   }
+  },
+  {
+   "question": "To Chestnut Hill from Community College, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Community College",
+    "toStation": "Chestnut Hill"
+   }
+  },
+  {
+   "question": "Going to Assembly, leaving from Longwood Medical Area.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Longwood Medical Area",
+    "toStation": "Assembly"
+   }
+  },
+  {
+   "question": "Rename Kent Street to Tufts Medical Center.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What can I walk to from Uphams Corner?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Uphams Corner"
+   }
+  },
+  {
+   "question": "What can I walk to from Haverhill?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Haverhill"
+   }
+  },
+  {
+   "question": "Get me from JFK/UMass to Gilman Square.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "JFK/UMass",
+    "toStation": "Gilman Square"
+   }
+  },
+  {
+   "question": "What is within 500 metres of Norwood Depot?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Norwood Depot",
+    "withinMetres": 500
+   }
+  },
+  {
+   "question": "How long does it take from Amory Street to Hynes Convention Center?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which stations are close to Boston University Central?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Boston University Central"
+   }
+  },
+  {
+   "question": "Starting at Wollaston, how do I reach Ruggles?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Wollaston",
+    "toStation": "Ruggles"
+   }
+  },
+  {
+   "question": "Stations in Middleborough?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Middleborough"
+   }
+  },
+  {
+   "question": "List the stops inside Bellevue.",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Bellevue"
+   }
+  },
+  {
+   "question": "List the stops inside Reservoir.",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Reservoir"
+   }
+  },
+  {
+   "question": "Going to Northeastern University, leaving from South Street.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "South Street",
+    "toStation": "Northeastern University"
+   }
+  },
+  {
+   "question": "What is near New Bedford?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "New Bedford"
+   }
+  },
+  {
+   "question": "What is within 1000 metres of Saint Paul Street?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Saint Paul Street",
+    "withinMetres": 1000
+   }
+  },
+  {
+   "question": "Starting at Hawes Street, how do I reach Andrew?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Hawes Street",
+    "toStation": "Andrew"
+   }
+  },
+  {
+   "question": "Which routes serve Foxboro?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Foxboro"
+   }
+  },
+  {
+   "question": "Museum of Fine Arts to Alewife?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Museum of Fine Arts",
+    "toStation": "Alewife"
+   }
+  },
+  {
+   "question": "What lines stop at North Station?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "North Station"
+   }
+  },
+  {
+   "question": "Rename Boston University Central to Prudential.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What runs through Chelsea?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Chelsea"
+   }
+  },
+  {
+   "question": "What is 17 times 23?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Who built Downtown Crossing?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which stations are in Boston?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Boston"
+   }
+  },
+  {
+   "question": "Which stations are within 500 metres of Nantasket Junction?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Nantasket Junction",
+    "withinMetres": 500
+   }
+  },
+  {
+   "question": "How do I get from Fenwood Road to Heath Street?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Fenwood Road",
+    "toStation": "Heath Street"
+   }
+  },
+  {
+   "question": "When is the next train from Fairbanks Street?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What lines stop at Hyde Park?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Hyde Park"
+   }
+  },
+  {
+   "question": "What is within 1000 metres of Wellesley Square?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Wellesley Square",
+    "withinMetres": 1000
+   }
+  },
+  {
+   "question": "Which stations are within 2000 metres of Eliot?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Eliot",
+    "withinMetres": 2000
+   }
+  },
+  {
+   "question": "Blandford Street to Ball Square?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Blandford Street",
+    "toStation": "Ball Square"
+   }
+  },
+  {
+   "question": "What can I walk to from Newton Centre?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Newton Centre"
+   }
+  },
+  {
+   "question": "Stations in Fitchburg?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Fitchburg"
+   }
+  },
+  {
+   "question": "I'm at Haymarket and need to reach Magoun Square.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Haymarket",
+    "toStation": "Magoun Square"
+   }
+  },
+  {
+   "question": "What's the way to Hawes Street if I start at Chinatown?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Chinatown",
+    "toStation": "Hawes Street"
+   }
+  },
+  {
+   "question": "Where does the Providence/Stoughton Line go?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Providence/Stoughton Line"
+   }
+  },
+  {
+   "question": "Is there parking at Back of the Hill?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which platforms at Rockport are wheelchair accessible?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Rockport"
+   }
+  },
+  {
+   "question": "What time does the last train leave Bowdoin?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What's the way to Union Square if I start at Beaconsfield?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Beaconsfield",
+    "toStation": "Union Square"
+   }
+  },
+  {
+   "question": "I need to be at Downtown Crossing. I'm at Broadway now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Broadway",
+    "toStation": "Downtown Crossing"
+   }
+  },
+  {
+   "question": "To Boston College from Orient Heights, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Orient Heights",
+    "toStation": "Boston College"
+   }
+  },
+  {
+   "question": "Which platforms at Pawtucket/Central Falls are wheelchair accessible?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Pawtucket/Central Falls"
+   }
+  },
+  {
+   "question": "Which stations are close to Sharon?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Sharon"
+   }
+  },
+  {
+   "question": "List the stops inside Mattapan.",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Mattapan"
+   }
+  },
+  {
+   "question": "Going to Central, leaving from Fields Corner.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Fields Corner",
+    "toStation": "Central"
+   }
+  },
+  {
+   "question": "Get me from Stony Brook to North Quincy.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Stony Brook",
+    "toStation": "North Quincy"
+   }
+  },
+  {
+   "question": "What is near Boston University East?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Boston University East"
+   }
+  },
+  {
+   "question": "Going to Bowdoin, leaving from Savin Hill.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Savin Hill",
+    "toStation": "Bowdoin"
+   }
+  },
+  {
+   "question": "To Back Bay from Dean Road, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Dean Road",
+    "toStation": "Back Bay"
+   }
+  },
+  {
+   "question": "Going to Boston College, leaving from Amory Street.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Amory Street",
+    "toStation": "Boston College"
+   }
+  },
+  {
+   "question": "Starting at Cedar Grove, how do I reach Butler?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Cedar Grove",
+    "toStation": "Butler"
+   }
+  },
+  {
+   "question": "How do I get from JFK to Riverway?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "JFK/UMass",
+    "toStation": "Riverway"
+   }
+  },
+  {
+   "question": "What can I walk to from Assembly?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Assembly"
+   }
+  },
+  {
+   "question": "How long does it take from Ruggles to Eliot?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "I need to be at Woodland. I'm at Griggs Street now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Griggs Street",
+    "toStation": "Woodland"
+   }
+  },
+  {
+   "question": "Going to Lechmere, leaving from Haymarket.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Haymarket",
+    "toStation": "Lechmere"
+   }
+  },
+  {
+   "question": "Which stations are within 2000 metres of Halifax?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Halifax",
+    "withinMetres": 2000
+   }
+  },
+  {
+   "question": "Which stations are in Somerville?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Somerville"
+   }
+  },
+  {
+   "question": "How do I get from State to East Somerville?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "State",
+    "toStation": "East Somerville"
+   }
+  },
+  {
+   "question": "Which routes serve Holbrook?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Holbrook/Randolph"
+   }
+  },
+  {
+   "question": "List the stops on the Needham Line in order.",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Needham Line"
+   }
+  },
+  {
+   "question": "Is there parking at Ruggles?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What is near Maverick?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Maverick"
+   }
+  },
+  {
+   "question": "What's the way to Symphony if I start at Boston College?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Boston College",
+    "toStation": "Symphony"
+   }
+  },
+  {
+   "question": "Directions from Summit Avenue to Malden Center.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Summit Avenue",
+    "toStation": "Malden Center"
+   }
+  }
+ ],
+ "validation": [
+  {
+   "question": "How do I get from Hawes Street to Suffolk Downs?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Hawes Street",
+    "toStation": "Suffolk Downs"
+   }
+  },
+  {
+   "question": "What can I walk to from Brandeis?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Brandeis/Roberts"
+   }
+  },
+  {
+   "question": "What stations are there in Newburyport?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Newburyport"
+   }
+  },
+  {
+   "question": "What's the way to Sullivan Square if I start at Lechmere?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Lechmere",
+    "toStation": "Sullivan Square"
+   }
+  },
+  {
+   "question": "Directions from South Station to Waban.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "South Station",
+    "toStation": "Waban"
+   }
+  },
+  {
+   "question": "Which routes serve Saint Paul Street?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Saint Paul Street"
+   }
+  },
+  {
+   "question": "How do I get from Copley to Longwood Medical Area?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Copley",
+    "toStation": "Longwood Medical Area"
+   }
+  },
+  {
+   "question": "Which bus goes to Green Street?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What is near West Medford?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "West Medford"
+   }
+  },
+  {
+   "question": "Directions from Prudential to State.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Prudential",
+    "toStation": "State"
+   }
+  },
+  {
+   "question": "How long does it take from Quincy Adams to Aquarium?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Directions from Valley Road to Suffolk Downs.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Valley Road",
+    "toStation": "Suffolk Downs"
+   }
+  },
+  {
+   "question": "When is the next train from Griggs Street?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What runs through Walpole?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Walpole"
+   }
+  },
+  {
+   "question": "How much is a ticket from Fields Corner to Allston Street?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "When is the next train from Saint Paul Street?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What's the way to Chiswick Road if I start at Park Street?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Park Street",
+    "toStation": "Chiswick Road"
+   }
+  },
+  {
+   "question": "How long does it take from Quincy Center to Fenway?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "How do I get from Central to Kent Street?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Central",
+    "toStation": "Kent Street"
+   }
+  },
+  {
+   "question": "How do I get from Community College to Mission Park?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Community College",
+    "toStation": "Mission Park"
+   }
+  },
+  {
+   "question": "To Downtown Crossing from Englewood Avenue, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Englewood Avenue",
+    "toStation": "Downtown Crossing"
+   }
+  },
+  {
+   "question": "Delete the Kingston Line.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "List the stops on the Orange Line in order.",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Orange Line"
+   }
+  },
+  {
+   "question": "What platforms does Halifax have?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Halifax"
+   }
+  },
+  {
+   "question": "I'm at Packard's Corner and need to reach Kendall.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Packard's Corner",
+    "toStation": "Kendall/MIT"
+   }
+  },
+  {
+   "question": "What time does the last train leave Newton Centre?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which platforms at Capen Street are wheelchair accessible?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Capen Street"
+   }
+  },
+  {
+   "question": "How do I get from Central to Longwood Medical Area?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Central",
+    "toStation": "Longwood Medical Area"
+   }
+  },
+  {
+   "question": "What lines stop at Riverway?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Riverway"
+   }
+  },
+  {
+   "question": "Where does the Fall River/New Bedford Line go?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Fall River/New Bedford Line"
+   }
+  },
+  {
+   "question": "What runs through Wakefield?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Wakefield"
+   }
+  },
+  {
+   "question": "What stations are on the Mattapan Line?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Mattapan Line"
+   }
+  },
+  {
+   "question": "List the stops inside Davis.",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Davis"
+   }
+  },
+  {
+   "question": "Starting at Summit Avenue, how do I reach Kenmore?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Summit Avenue",
+    "toStation": "Kenmore"
+   }
+  },
+  {
+   "question": "What lines stop at Riverside?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Riverside"
+   }
+  },
+  {
+   "question": "Rename Fairbanks Street to Central.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What is near State?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "State"
+   }
+  },
+  {
+   "question": "What is within 1000 metres of Gilman Square?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Gilman Square",
+    "withinMetres": 1000
+   }
+  },
+  {
+   "question": "Is the Newburyport/Rockport Line delayed right now?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which stations are in Milton?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Milton"
+   }
+  },
+  {
+   "question": "To Museum of Fine Arts from Beachmont, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Beachmont",
+    "toStation": "Museum of Fine Arts"
+   }
+  },
+  {
+   "question": "I need to be at Northeastern University. I'm at Orient Heights now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Orient Heights",
+    "toStation": "Northeastern University"
+   }
+  },
+  {
+   "question": "I need to be at Kenmore. I'm at Green Street now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Green Street",
+    "toStation": "Kenmore"
+   }
+  },
+  {
+   "question": "Directions from Hynes Convention Center to Fenway.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Hynes Convention Center",
+    "toStation": "Fenway"
+   }
+  },
+  {
+   "question": "Which bus goes to Brookline Hills?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Is the Orange Line delayed right now?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "I'm at Newton Centre and need to reach Bowdoin.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Newton Centre",
+    "toStation": "Bowdoin"
+   }
+  },
+  {
+   "question": "How long does it take from Roxbury Crossing to Heath Street?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which bus goes to Massachusetts Avenue?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What platforms does Dedham Corporate Center have?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Dedham Corporate Center"
+   }
+  },
+  {
+   "question": "Savin Hill to South Street?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Savin Hill",
+    "toStation": "South Street"
+   }
+  },
+  {
+   "question": "How much is a ticket from Heath Street to Ball Square?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What stations are there in Rockport?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Rockport"
+   }
+  },
+  {
+   "question": "What lines stop at Morton Street?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Morton Street"
+   }
+  },
+  {
+   "question": "Where does the Red Line go?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Red Line"
+   }
+  },
+  {
+   "question": "Going to Boston College, leaving from Airport.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Airport",
+    "toStation": "Boston College"
+   }
+  },
+  {
+   "question": "List the stops inside Manchester.",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Manchester"
+   }
+  },
+  {
+   "question": "What stations are on the Green Line D?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Green Line D"
+   }
+  },
+  {
+   "question": "List the stops on the Framingham/Worcester Line in order.",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Framingham/Worcester Line"
+   }
+  },
+  {
+   "question": "Which stations are close to North Leominster?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "North Leominster"
+   }
+  },
+  {
+   "question": "Is the Framingham/Worcester Line delayed right now?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Savin Hill to Downtown Crossing?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Savin Hill",
+    "toStation": "Downtown Crossing"
+   }
+  },
+  {
+   "question": "Get me from Lechmere to Packard's Corner.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Lechmere",
+    "toStation": "Packard's Corner"
+   }
+  },
+  {
+   "question": "Is there parking at Bowdoin?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What time does the last train leave North Quincy?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which routes serve Englewood Avenue?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Englewood Avenue"
+   }
+  },
+  {
+   "question": "To Symphony from Summit Avenue, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Summit Avenue",
+    "toStation": "Symphony"
+   }
+  },
+  {
+   "question": "Which routes serve Freetown?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Freetown"
+   }
+  },
+  {
+   "question": "Which stations are within 800 metres of Talbot Avenue?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Talbot Avenue",
+    "withinMetres": 800
+   }
+  },
+  {
+   "question": "What stations are there in Somerville?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Somerville"
+   }
+  },
+  {
+   "question": "How do I get from Museum of Fine Arts to JFK?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Museum of Fine Arts",
+    "toStation": "JFK/UMass"
+   }
+  },
+  {
+   "question": "Which managers hold Allstate?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Rename Porter to Brigham Circle.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "How long does it take from Symphony to Stony Brook?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What platforms does Fenway have?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Fenway"
+   }
+  },
+  {
+   "question": "Write a haiku about the subway.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Starting at Museum of Fine Arts, how do I reach Harvard?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Museum of Fine Arts",
+    "toStation": "Harvard"
+   }
+  },
+  {
+   "question": "I need to be at Davis. I'm at Revere Beach now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Revere Beach",
+    "toStation": "Davis"
+   }
+  },
+  {
+   "question": "List the stops on the Haverhill Line in order.",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Haverhill Line"
+   }
+  },
+  {
+   "question": "Stations in Boston?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Boston"
+   }
+  }
+ ],
+ "test": [
+  {
+   "question": "To State from Haymarket, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Haymarket",
+    "toStation": "State"
+   }
+  },
+  {
+   "question": "When is the next train from Capen Street?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Starting at Griggs Street, how do I reach Fenwood Road?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Griggs Street",
+    "toStation": "Fenwood Road"
+   }
+  },
+  {
+   "question": "Get me from Capen Street to Airport.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Capen Street",
+    "toStation": "Airport"
+   }
+  },
+  {
+   "question": "What's the way to Heath Street if I start at Charles/MGH?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Charles/MGH",
+    "toStation": "Heath Street"
+   }
+  },
+  {
+   "question": "I need to be at Wellington. I'm at Amory Street now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Amory Street",
+    "toStation": "Wellington"
+   }
+  },
+  {
+   "question": "What's the way to Downtown Crossing if I start at Chestnut Hill?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Chestnut Hill",
+    "toStation": "Downtown Crossing"
+   }
+  },
+  {
+   "question": "What's the way to Haymarket if I start at Ball Square?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Ball Square",
+    "toStation": "Haymarket"
+   }
+  },
+  {
+   "question": "Stations in Shirley?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Shirley"
+   }
+  },
+  {
+   "question": "Going to Cedar Grove, leaving from Brookline Village.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Brookline Village",
+    "toStation": "Cedar Grove"
+   }
+  },
+  {
+   "question": "Starting at Broadway, how do I reach Medford/Tufts?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Broadway",
+    "toStation": "Medford/Tufts"
+   }
+  },
+  {
+   "question": "List the stops on the Green Line B in order.",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Green Line B"
+   }
+  },
+  {
+   "question": "Get me from Kent Street to Back Bay.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Kent Street",
+    "toStation": "Back Bay"
+   }
+  },
+  {
+   "question": "Where does the Mattapan Line go?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Mattapan Line"
+   }
+  },
+  {
+   "question": "What is near West Concord?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "West Concord"
+   }
+  },
+  {
+   "question": "Which platforms at Magoun Square are wheelchair accessible?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Magoun Square"
+   }
+  },
+  {
+   "question": "How do I get from Boston College to State?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Boston College",
+    "toStation": "State"
+   }
+  },
+  {
+   "question": "Which platforms at Brookline Village are wheelchair accessible?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Brookline Village"
+   }
+  },
+  {
+   "question": "Stations in Scituate?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Scituate"
+   }
+  },
+  {
+   "question": "Is the Mattapan Line delayed right now?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "I'm at Suffolk Downs and need to reach Haymarket.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Suffolk Downs",
+    "toStation": "Haymarket"
+   }
+  },
+  {
+   "question": "Rename Central to Newton Centre.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Medford/Tufts to Kendall/MIT?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Medford/Tufts",
+    "toStation": "Kendall/MIT"
+   }
+  },
+  {
+   "question": "Which stations are in Westwood?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Westwood"
+   }
+  },
+  {
+   "question": "Where does the Green Line B go?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Green Line B"
+   }
+  },
+  {
+   "question": "I need to be at Forest Hills. I'm at Central Avenue now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Central Avenue",
+    "toStation": "Forest Hills"
+   }
+  },
+  {
+   "question": "Starting at North Quincy, how do I reach Boston University Central?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "North Quincy",
+    "toStation": "Boston University Central"
+   }
+  },
+  {
+   "question": "List the stops inside Coolidge Corner.",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Coolidge Corner"
+   }
+  },
+  {
+   "question": "What stations are there in Freetown?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Freetown"
+   }
+  },
+  {
+   "question": "What's the way to Brookline Village if I start at Boston University East?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Boston University East",
+    "toStation": "Brookline Village"
+   }
+  },
+  {
+   "question": "I need to be at Dean Road. I'm at Beaconsfield now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Beaconsfield",
+    "toStation": "Dean Road"
+   }
+  },
+  {
+   "question": "Starting at Warren Street, how do I reach Tufts Medical Center?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Warren Street",
+    "toStation": "Tufts Medical Center"
+   }
+  },
+  {
+   "question": "Which routes serve Lowell?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Lowell"
+   }
+  },
+  {
+   "question": "List the stops inside Grafton.",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Grafton"
+   }
+  },
+  {
+   "question": "Starting at Broadway, how do I reach Kendall?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Broadway",
+    "toStation": "Kendall/MIT"
+   }
+  },
+  {
+   "question": "What is near Cedar Grove?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Cedar Grove"
+   }
+  },
+  {
+   "question": "To Roxbury Crossing from State, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "State",
+    "toStation": "Roxbury Crossing"
+   }
+  },
+  {
+   "question": "I need to be at Fenway. I'm at Malden Center now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Malden Center",
+    "toStation": "Fenway"
+   }
+  },
+  {
+   "question": "I need to be at East Somerville. I'm at Wonderland now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Wonderland",
+    "toStation": "East Somerville"
+   }
+  },
+  {
+   "question": "Going to Fenway, leaving from Airport.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Airport",
+    "toStation": "Fenway"
+   }
+  },
+  {
+   "question": "When is the next train from Chestnut Hill?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Is the Lowell Line delayed right now?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What's the way to Fields Corner if I start at Longwood?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Longwood",
+    "toStation": "Fields Corner"
+   }
+  },
+  {
+   "question": "Get me from Haymarket to Museum of Fine Arts.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Haymarket",
+    "toStation": "Museum of Fine Arts"
+   }
+  },
+  {
+   "question": "Stations in Cambridge?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Cambridge"
+   }
+  },
+  {
+   "question": "What platforms does Wood Island have?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Wood Island"
+   }
+  },
+  {
+   "question": "What's the way to Government Center if I start at East Somerville?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "East Somerville",
+    "toStation": "Government Center"
+   }
+  },
+  {
+   "question": "List the stops inside Boston University East.",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Boston University East"
+   }
+  },
+  {
+   "question": "Which platforms at Chiswick Road are wheelchair accessible?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Chiswick Road"
+   }
+  },
+  {
+   "question": "Which routes serve Lansdowne?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Lansdowne"
+   }
+  },
+  {
+   "question": "Stations in Providence?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Providence"
+   }
+  },
+  {
+   "question": "What's the way to Beaconsfield if I start at Dean Road?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Dean Road",
+    "toStation": "Beaconsfield"
+   }
+  },
+  {
+   "question": "What's the way to Union Square if I start at Brookline Hills?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Brookline Hills",
+    "toStation": "Union Square"
+   }
+  },
+  {
+   "question": "Where does the Green Line E go?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Green Line E"
+   }
+  },
+  {
+   "question": "How long does it take from Arlington to Wonderland?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Delete the Needham Line.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which bus goes to Medford/Tufts?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What is the weather in Boston?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Going to Oak Grove, leaving from Maverick.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Maverick",
+    "toStation": "Oak Grove"
+   }
+  },
+  {
+   "question": "Which bus goes to Wonderland?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "To Stony Brook from Kendall/MIT, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Kendall/MIT",
+    "toStation": "Stony Brook"
+   }
+  },
+  {
+   "question": "Directions from Beachmont to Hynes Convention Center.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Beachmont",
+    "toStation": "Hynes Convention Center"
+   }
+  },
+  {
+   "question": "List the stops inside Newton Centre.",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Newton Centre"
+   }
+  },
+  {
+   "question": "What runs through Needham Heights?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Needham Heights"
+   }
+  },
+  {
+   "question": "Is there parking at Assembly?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Who cites SWE-bench?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What is near Quincy Center?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Quincy Center"
+   }
+  },
+  {
+   "question": "What is within 1000 metres of Tappan Street?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Tappan Street",
+    "withinMetres": 1000
+   }
+  },
+  {
+   "question": "Starting at Boston University East, how do I reach Chestnut Hill Avenue?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Boston University East",
+    "toStation": "Chestnut Hill Avenue"
+   }
+  },
+  {
+   "question": "Who built Brookline Village?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What is within 1000 metres of Brookline Hills?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Brookline Hills",
+    "withinMetres": 1000
+   }
+  },
+  {
+   "question": "Which stations are close to Dedham Corporate Center?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Dedham Corporate Center"
+   }
+  },
+  {
+   "question": "Get me from Massachusetts Avenue to Fairbanks Street.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Massachusetts Avenue",
+    "toStation": "Fairbanks Street"
+   }
+  },
+  {
+   "question": "How do I get from Green Street to Downtown Crossing?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Green Street",
+    "toStation": "Downtown Crossing"
+   }
+  },
+  {
+   "question": "Which routes serve Coolidge Corner?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Coolidge Corner"
+   }
+  },
+  {
+   "question": "List the stops inside Newmarket.",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Newmarket"
+   }
+  },
+  {
+   "question": "Who built Northeastern University?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "How do I get from Washington Street to Braintree?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Washington Street",
+    "toStation": "Braintree"
+   }
+  },
+  {
+   "question": "How long does it take from Harvard to Brandon Hall?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which stations are in Attleboro?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Attleboro"
+   }
+  },
+  {
+   "question": "Where does the Fitchburg Line go?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Fitchburg Line"
+   }
+  },
+  {
+   "question": "What time does the last train leave Back Bay?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What platforms does Hersey have?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Hersey"
+   }
+  },
+  {
+   "question": "What stations are there in Ashland?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Ashland"
+   }
+  },
+  {
+   "question": "I need to be at Packard's Corner. I'm at Harvard Avenue now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Harvard Avenue",
+    "toStation": "Packard's Corner"
+   }
+  },
+  {
+   "question": "To Gilman Square from Massachusetts Avenue, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Massachusetts Avenue",
+    "toStation": "Gilman Square"
+   }
+  },
+  {
+   "question": "I need to be at Ball Square. I'm at Ruggles now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Ruggles",
+    "toStation": "Ball Square"
+   }
+  },
+  {
+   "question": "Delete the Fall River/New Bedford Line.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Rename Oak Grove to Blandford Street.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What time does the last train leave Green Street?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Starting at Englewood Avenue, how do I reach Mission Park?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Englewood Avenue",
+    "toStation": "Mission Park"
+   }
+  },
+  {
+   "question": "List the stops on the Providence/Stoughton Line in order.",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Providence/Stoughton Line"
+   }
+  },
+  {
+   "question": "Rename Community College to Medford/Tufts.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which platforms at Valley Road are wheelchair accessible?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Valley Road"
+   }
+  },
+  {
+   "question": "Directions from Symphony to Lechmere.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Symphony",
+    "toStation": "Lechmere"
+   }
+  },
+  {
+   "question": "Government Center to Malden Center?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Government Center",
+    "toStation": "Malden Center"
+   }
+  },
+  {
+   "question": "Which stations are in Cambridge?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Cambridge"
+   }
+  },
+  {
+   "question": "I'm at Beaconsfield and need to reach East Somerville.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Beaconsfield",
+    "toStation": "East Somerville"
+   }
+  },
+  {
+   "question": "To Wollaston from Quincy Adams, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Quincy Adams",
+    "toStation": "Wollaston"
+   }
+  },
+  {
+   "question": "Going to Cedar Grove, leaving from Community College.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Community College",
+    "toStation": "Cedar Grove"
+   }
+  },
+  {
+   "question": "Who built Allston Street?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "I'm at Chiswick Road and need to reach Reservoir.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Chiswick Road",
+    "toStation": "Reservoir"
+   }
+  },
+  {
+   "question": "What's the way to Savin Hill if I start at Central?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Central",
+    "toStation": "Savin Hill"
+   }
+  },
+  {
+   "question": "What can I walk to from Shirley?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Shirley"
+   }
+  },
+  {
+   "question": "Going to Aquarium, leaving from Boston University Central.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Boston University Central",
+    "toStation": "Aquarium"
+   }
+  },
+  {
+   "question": "List the stops inside North Billerica.",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "North Billerica"
+   }
+  },
+  {
+   "question": "Where does the Orange Line go?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Orange Line"
+   }
+  },
+  {
+   "question": "I need to be at Copley. I'm at Saint Mary's Street now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Saint Mary's Street",
+    "toStation": "Copley"
+   }
+  },
+  {
+   "question": "What lines stop at Middleborough?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Middleborough"
+   }
+  },
+  {
+   "question": "Starting at Newton Highlands, how do I reach Fairbanks Street?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Newton Highlands",
+    "toStation": "Fairbanks Street"
+   }
+  },
+  {
+   "question": "Get me from Forest Hills to Prudential.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Forest Hills",
+    "toStation": "Prudential"
+   }
+  },
+  {
+   "question": "Who built Shawmut?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "To Oak Grove from Milton, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Milton",
+    "toStation": "Oak Grove"
+   }
+  },
+  {
+   "question": "Get me from Beachmont to Downtown Crossing.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Beachmont",
+    "toStation": "Downtown Crossing"
+   }
+  },
+  {
+   "question": "What can I walk to from Wilmington?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Wilmington"
+   }
+  },
+  {
+   "question": "What is within 500 metres of Cohasset?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Cohasset",
+    "withinMetres": 500
+   }
+  },
+  {
+   "question": "List the stops inside Suffolk Downs.",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Suffolk Downs"
+   }
+  },
+  {
+   "question": "How long does it take from Wonderland to Harvard?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What runs through Davis?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Davis"
+   }
+  },
+  {
+   "question": "Stations in Norfolk?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Norfolk"
+   }
+  },
+  {
+   "question": "Rename Butler to Symphony.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Get me from Fenwood Road to Newton Highlands.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Fenwood Road",
+    "toStation": "Newton Highlands"
+   }
+  },
+  {
+   "question": "I need to be at Orient Heights. I'm at Fenwood Road now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Fenwood Road",
+    "toStation": "Orient Heights"
+   }
+  },
+  {
+   "question": "Which stations are close to Brigham Circle?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Brigham Circle"
+   }
+  },
+  {
+   "question": "When is the next train from Hynes Convention Center?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which routes serve Amory Street?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Amory Street"
+   }
+  },
+  {
+   "question": "What runs through Stoughton?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Stoughton"
+   }
+  },
+  {
+   "question": "Which stations are close to Montserrat?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Montserrat"
+   }
+  },
+  {
+   "question": "What platforms does Fall River Depot have?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Fall River Depot"
+   }
+  },
+  {
+   "question": "Andrew to Babcock Street?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Andrew",
+    "toStation": "Babcock Street"
+   }
+  },
+  {
+   "question": "What stations are there in Southborough?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Southborough"
+   }
+  },
+  {
+   "question": "Directions from Forest Hills to Brookline Hills.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Forest Hills",
+    "toStation": "Brookline Hills"
+   }
+  },
+  {
+   "question": "Which routes serve Ashland?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Ashland"
+   }
+  },
+  {
+   "question": "To Boston University Central from Prudential, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Prudential",
+    "toStation": "Boston University Central"
+   }
+  },
+  {
+   "question": "How do I get from Magoun Square to Airport?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Magoun Square",
+    "toStation": "Airport"
+   }
+  },
+  {
+   "question": "How do I get from Savin Hill to Riverway?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Savin Hill",
+    "toStation": "Riverway"
+   }
+  },
+  {
+   "question": "How much is a ticket from Northeastern University to Central?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Is the Green Line B delayed right now?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Starting at Boston University East, how do I reach Science Park?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Boston University East",
+    "toStation": "Science Park/West End"
+   }
+  },
+  {
+   "question": "I'm at Mattapan and need to reach JFK/UMass.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Mattapan",
+    "toStation": "JFK/UMass"
+   }
+  },
+  {
+   "question": "What time does the last train leave Chiswick Road?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Stations in Ashland?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Ashland"
+   }
+  },
+  {
+   "question": "I'm at Prudential and need to reach Ashmont.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Prudential",
+    "toStation": "Ashmont"
+   }
+  },
+  {
+   "question": "What can I walk to from Medford/Tufts?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Medford/Tufts"
+   }
+  },
+  {
+   "question": "Where does the CapeFLYER go?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "CapeFLYER"
+   }
+  },
+  {
+   "question": "What's the way to Oak Grove if I start at Saint Paul Street?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Saint Paul Street",
+    "toStation": "Oak Grove"
+   }
+  },
+  {
+   "question": "How do I get from Dean Road to Packard's Corner?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Dean Road",
+    "toStation": "Packard's Corner"
+   }
+  },
+  {
+   "question": "Get me from Wonderland to Summit Avenue.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Wonderland",
+    "toStation": "Summit Avenue"
+   }
+  },
+  {
+   "question": "Get me from Jackson Square to Warren Street.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Jackson Square",
+    "toStation": "Warren Street"
+   }
+  },
+  {
+   "question": "What's the way to Wood Island if I start at Waban?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Waban",
+    "toStation": "Wood Island"
+   }
+  },
+  {
+   "question": "What stations are on the Fall River/New Bedford Line?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Fall River/New Bedford Line"
+   }
+  },
+  {
+   "question": "Stations in Warwick?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Warwick"
+   }
+  },
+  {
+   "question": "Delete the CapeFLYER.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which stations are within 500 metres of Swampscott?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Swampscott",
+    "withinMetres": 500
+   }
+  },
+  {
+   "question": "What runs through Ipswich?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Ipswich"
+   }
+  },
+  {
+   "question": "Stations in Concord?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Concord"
+   }
+  },
+  {
+   "question": "Directions from Union Square to Hawes Street.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Union Square",
+    "toStation": "Hawes Street"
+   }
+  },
+  {
+   "question": "When is the next train from Wollaston?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "To Washington Street from Orient Heights, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Orient Heights",
+    "toStation": "Washington Street"
+   }
+  },
+  {
+   "question": "What stations are on the Kingston Line?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Kingston Line"
+   }
+  },
+  {
+   "question": "I need to be at Woodland. I'm at Washington Square now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Washington Square",
+    "toStation": "Woodland"
+   }
+  },
+  {
+   "question": "What lines stop at Chestnut Hill?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Chestnut Hill"
+   }
+  },
+  {
+   "question": "What lines stop at Suffolk Downs?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Suffolk Downs"
+   }
+  },
+  {
+   "question": "What stations are on the Green Line B?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Green Line B"
+   }
+  },
+  {
+   "question": "How long does it take from Alewife to Hynes Convention Center?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "Which stations are in Salem?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Salem"
+   }
+  },
+  {
+   "question": "How do I get from Newton Centre to Washington Square?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Newton Centre",
+    "toStation": "Washington Square"
+   }
+  },
+  {
+   "question": "What is near Hawes Street?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Hawes Street"
+   }
+  },
+  {
+   "question": "What stations are there in Gloucester?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Gloucester"
+   }
+  },
+  {
+   "question": "Who built Forest Hills?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What can I walk to from Arlington?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Arlington"
+   }
+  },
+  {
+   "question": "List the stops inside Four Corners.",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Four Corners/Geneva"
+   }
+  },
+  {
+   "question": "Where does the Greenbush Line go?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Greenbush Line"
+   }
+  },
+  {
+   "question": "How do I get from Amory Street to Central Avenue?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Amory Street",
+    "toStation": "Central Avenue"
+   }
+  },
+  {
+   "question": "Directions from Boston College to Sutherland Road.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Boston College",
+    "toStation": "Sutherland Road"
+   }
+  },
+  {
+   "question": "What stations are on the Green Line C?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Green Line C"
+   }
+  },
+  {
+   "question": "Directions from Malden Center to Capen Street.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Malden Center",
+    "toStation": "Capen Street"
+   }
+  },
+  {
+   "question": "Which platforms at Science Park are wheelchair accessible?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Science Park/West End"
+   }
+  },
+  {
+   "question": "What runs through Rockport?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Rockport"
+   }
+  },
+  {
+   "question": "List the stops on the Foxboro Event Service in order.",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Foxboro Event Service"
+   }
+  },
+  {
+   "question": "Which books mention telemetry?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What platforms does Haymarket have?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Haymarket"
+   }
+  },
+  {
+   "question": "Stations in Sharon?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "Sharon"
+   }
+  },
+  {
+   "question": "Which stations are within 800 metres of Manchester?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Manchester",
+    "withinMetres": 800
+   }
+  },
+  {
+   "question": "What's the way to Sullivan Square if I start at Harvard?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Harvard",
+    "toStation": "Sullivan Square"
+   }
+  },
+  {
+   "question": "I need to be at Aquarium. I'm at Tappan Street now.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Tappan Street",
+    "toStation": "Aquarium"
+   }
+  },
+  {
+   "question": "What is near Needham Heights?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Needham Heights"
+   }
+  },
+  {
+   "question": "Is there parking at Ball Square?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "To Longwood Medical Area from Medford/Tufts, please.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Medford/Tufts",
+    "toStation": "Longwood Medical Area"
+   }
+  },
+  {
+   "question": "Which platforms at West Medford are wheelchair accessible?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "West Medford"
+   }
+  },
+  {
+   "question": "Which routes serve Hersey?",
+   "tool": "Which Routes Serve a Station",
+   "parameters": {
+    "stationName": "Hersey"
+   }
+  },
+  {
+   "question": "Get me from Saint Paul Street to Malden Center.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Saint Paul Street",
+    "toStation": "Malden Center"
+   }
+  },
+  {
+   "question": "I'm at Stony Brook and need to reach Milton.",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Stony Brook",
+    "toStation": "Milton"
+   }
+  },
+  {
+   "question": "What time does the last train leave Arlington?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "List the stops on the Fairmount Line in order.",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "Fairmount Line"
+   }
+  },
+  {
+   "question": "When is the next train from Butler?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "South Street to Malden Center?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "South Street",
+    "toStation": "Malden Center"
+   }
+  },
+  {
+   "question": "Starting at Downtown Crossing, how do I reach Washington Square?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Downtown Crossing",
+    "toStation": "Washington Square"
+   }
+  },
+  {
+   "question": "Starting at Wollaston, how do I reach North Station?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Wollaston",
+    "toStation": "North Station"
+   }
+  },
+  {
+   "question": "Which platforms at Tufts Medical Center are wheelchair accessible?",
+   "tool": "Platforms in a Station",
+   "parameters": {
+    "platformsOf": "Tufts Medical Center"
+   }
+  },
+  {
+   "question": "Delete the Newburyport/Rockport Line.",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "When is the next train from Massachusetts Avenue?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "What stations are on the CapeFLYER?",
+   "tool": "Stations on a Route in Order",
+   "parameters": {
+    "routeName": "CapeFLYER"
+   }
+  },
+  {
+   "question": "What stations are there in New Bedford?",
+   "tool": "Stations in a Municipality",
+   "parameters": {
+    "municipalityName": "New Bedford"
+   }
+  },
+  {
+   "question": "Starting at Riverside, how do I reach Lechmere?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Riverside",
+    "toStation": "Lechmere"
+   }
+  },
+  {
+   "question": "Which stations are within 500 metres of Wellesley Square?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Wellesley Square",
+    "withinMetres": 500
+   }
+  },
+  {
+   "question": "Which stations are close to Savin Hill?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Savin Hill"
+   }
+  },
+  {
+   "question": "Starting at Griggs Street, how do I reach Broadway?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Griggs Street",
+    "toStation": "Broadway"
+   }
+  },
+  {
+   "question": "Which bus goes to Chestnut Hill Avenue?",
+   "tool": null,
+   "parameters": {}
+  },
+  {
+   "question": "How do I get from Kent Street to Blandford Street?",
+   "tool": "Subway Journey Between Two Stations",
+   "parameters": {
+    "fromStation": "Kent Street",
+    "toStation": "Blandford Street"
+   }
+  },
+  {
+   "question": "What is near Rockport?",
+   "tool": "Stations Near a Station",
+   "parameters": {
+    "nearStation": "Rockport"
+   }
+  }
+ ]
+}

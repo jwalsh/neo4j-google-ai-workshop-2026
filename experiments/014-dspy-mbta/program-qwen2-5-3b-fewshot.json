@@ -1,0 +1,289 @@
+{
+  "choose": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "question": "What is near TF Green Airport?",
+        "tool": "Stations Near a Station"
+      },
+      {
+        "augmented": true,
+        "question": "What can I walk to from Providence?",
+        "tool": "Stations Near a Station"
+      },
+      {
+        "augmented": true,
+        "question": "What runs through Reading?",
+        "tool": "Which Routes Serve a Station"
+      }
+    ],
+    "signature": {
+      "instructions": "You route a question to one tool of the agent \"MBTA Rail Guide\". If no tool can answer the question, the tool is \"none\".\n\nTools:\n- Which Routes Serve a Station: Lists the routes and lines that serve one station, such as Park Street or South Station. Takes a station, not a route.\n- Stations on a Route in Order: Lists every station one route serves, in the order a train reaches them, such as the Red Line or the Fitchburg Line. Takes a route, not a station.\n- Subway Journey Between Two Stations: Finds the journey with the fewest stops from one station to another by subway and light rail, step by step, with the line ridden on each step, so a change of line shows as the line changing. Takes two stations. Commuter rail is left out, so a station only it serves gives no rows.\n- Stations Near a Station: Lists the stations within walking distance of one station, nearest first, with the distance in metres. Takes one station.\n- Platforms in a Station: Lists the stops inside one station: each platform, the route that calls at it and whether it is wheelchair accessible. Takes one station.\n- Stations in a Municipality: Lists the stations in one city or town, such as Cambridge or Somerville, with the routes serving each. Takes a municipality.",
+      "fields": [
+        {
+          "prefix": "Question:",
+          "description": "${question}"
+        },
+        {
+          "prefix": "Tool:",
+          "description": "${tool}"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "fill['Which Routes Serve a Station']": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "question": "What runs through Reading?",
+        "stationName": "Reading"
+      },
+      {
+        "question": "Where does the Providence/Stoughton Line go?",
+        "tool": "Stations on a Route in Order",
+        "parameters": {
+          "routeName": "Providence/Stoughton Line"
+        }
+      },
+      {
+        "question": "Which stations are in Somerville?",
+        "tool": "Stations in a Municipality",
+        "parameters": {
+          "municipalityName": "Somerville"
+        }
+      }
+    ],
+    "signature": {
+      "instructions": "Fill in the arguments of the tool \"Which Routes Serve a Station\": Lists the routes and lines that serve one station, such as Park Street or South Station. Takes a station, not a route. Copy each value from the question as written. Do not invent one.",
+      "fields": [
+        {
+          "prefix": "Question:",
+          "description": "${question}"
+        },
+        {
+          "prefix": "Station Name:",
+          "description": "The station's name as written in the question."
+        }
+      ]
+    },
+    "lm": null
+  },
+  "fill['Stations on a Route in Order']": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "question": "List the stops on the Needham Line in order.",
+        "tool": "Stations on a Route in Order",
+        "parameters": {
+          "routeName": "Needham Line"
+        }
+      },
+      {
+        "question": "Get me from Stony Brook to North Quincy.",
+        "tool": "Subway Journey Between Two Stations",
+        "parameters": {
+          "fromStation": "Stony Brook",
+          "toStation": "North Quincy"
+        }
+      },
+      {
+        "question": "What can I walk to from Assembly?",
+        "tool": "Stations Near a Station",
+        "parameters": {
+          "nearStation": "Assembly"
+        }
+      }
+    ],
+    "signature": {
+      "instructions": "Fill in the arguments of the tool \"Stations on a Route in Order\": Lists every station one route serves, in the order a train reaches them, such as the Red Line or the Fitchburg Line. Takes a route, not a station. Copy each value from the question as written. Do not invent one.",
+      "fields": [
+        {
+          "prefix": "Question:",
+          "description": "${question}"
+        },
+        {
+          "prefix": "Route Name:",
+          "description": "The route's name as written in the question."
+        }
+      ]
+    },
+    "lm": null
+  },
+  "fill['Subway Journey Between Two Stations']": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "question": "Which stations are within 500 metres of Wakefield?",
+        "tool": "Stations Near a Station",
+        "parameters": {
+          "nearStation": "Wakefield",
+          "withinMetres": 500
+        }
+      },
+      {
+        "question": "Starting at Wollaston, how do I reach Ruggles?",
+        "tool": "Subway Journey Between Two Stations",
+        "parameters": {
+          "fromStation": "Wollaston",
+          "toStation": "Ruggles"
+        }
+      },
+      {
+        "question": "What can I walk to from Uphams Corner?",
+        "tool": "Stations Near a Station",
+        "parameters": {
+          "nearStation": "Uphams Corner"
+        }
+      }
+    ],
+    "signature": {
+      "instructions": "Fill in the arguments of the tool \"Subway Journey Between Two Stations\": Finds the journey with the fewest stops from one station to another by subway and light rail, step by step, with the line ridden on each step, so a change of line shows as the line changing. Takes two stations. Commuter rail is left out, so a station only it serves gives no rows. Copy each value from the question as written. Do not invent one.",
+      "fields": [
+        {
+          "prefix": "Question:",
+          "description": "${question}"
+        },
+        {
+          "prefix": "From Station:",
+          "description": "The station the journey starts at."
+        },
+        {
+          "prefix": "To Station:",
+          "description": "The station the journey ends at."
+        }
+      ]
+    },
+    "lm": null
+  },
+  "fill['Stations Near a Station']": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "question": "What is near TF Green Airport?",
+        "nearStation": "TF Green Airport",
+        "withinMetres": null
+      },
+      {
+        "augmented": true,
+        "question": "What can I walk to from Providence?",
+        "nearStation": "Providence",
+        "withinMetres": null
+      },
+      {
+        "question": "Which platforms at Rockport are wheelchair accessible?",
+        "tool": "Platforms in a Station",
+        "parameters": {
+          "platformsOf": "Rockport"
+        }
+      }
+    ],
+    "signature": {
+      "instructions": "Fill in the arguments of the tool \"Stations Near a Station\": Lists the stations within walking distance of one station, nearest first, with the distance in metres. Takes one station. Copy each value from the question as written. Do not invent one.",
+      "fields": [
+        {
+          "prefix": "Question:",
+          "description": "${question}"
+        },
+        {
+          "prefix": "Near Station:",
+          "description": "The station to measure from."
+        },
+        {
+          "prefix": "Within Metres:",
+          "description": "The distance in metres, only if the question gives one."
+        }
+      ]
+    },
+    "lm": null
+  },
+  "fill['Platforms in a Station']": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "question": "Rename Boston University Central to Prudential.",
+        "tool": null,
+        "parameters": {}
+      },
+      {
+        "question": "Who built Summit Avenue?",
+        "tool": null,
+        "parameters": {}
+      },
+      {
+        "question": "Rename Kent Street to Tufts Medical Center.",
+        "tool": null,
+        "parameters": {}
+      }
+    ],
+    "signature": {
+      "instructions": "Fill in the arguments of the tool \"Platforms in a Station\": Lists the stops inside one station: each platform, the route that calls at it and whether it is wheelchair accessible. Takes one station. Copy each value from the question as written. Do not invent one.",
+      "fields": [
+        {
+          "prefix": "Question:",
+          "description": "${question}"
+        },
+        {
+          "prefix": "Platforms Of:",
+          "description": "The station's name as written in the question."
+        }
+      ]
+    },
+    "lm": null
+  },
+  "fill['Stations in a Municipality']": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "question": "How long does it take from Amory Street to Hynes Convention Center?",
+        "tool": null,
+        "parameters": {}
+      },
+      {
+        "question": "What is near New Bedford?",
+        "tool": "Stations Near a Station",
+        "parameters": {
+          "nearStation": "New Bedford"
+        }
+      },
+      {
+        "question": "List the stops inside Mattapan.",
+        "tool": "Platforms in a Station",
+        "parameters": {
+          "platformsOf": "Mattapan"
+        }
+      }
+    ],
+    "signature": {
+      "instructions": "Fill in the arguments of the tool \"Stations in a Municipality\": Lists the stations in one city or town, such as Cambridge or Somerville, with the routes serving each. Takes a municipality. Copy each value from the question as written. Do not invent one.",
+      "fields": [
+        {
+          "prefix": "Question:",
+          "description": "${question}"
+        },
+        {
+          "prefix": "Municipality Name:",
+          "description": "The city or town as written in the question."
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.14",
+      "dspy": "3.4.0",
+      "cloudpickle": "3.1"
+    }
+  }
+}

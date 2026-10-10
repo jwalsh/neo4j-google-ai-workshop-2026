@@ -1,0 +1,5225 @@
+{
+ "plain": {
+  "model": "qwen2.5:3b",
+  "search_seconds": 0,
+  "right": 188,
+  "refused": 10,
+  "wrong": 13,
+  "of": 211,
+  "seconds_each": 1.06,
+  "rows": [
+   {
+    "question": "To State from Haymarket, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "wrong",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Haymarket"
+    },
+    "ran": {
+     "stationName": "Haymarket"
+    }
+   },
+   {
+    "question": "When is the next train from Capen Street?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Starting at Griggs Street, how do I reach Fenwood Road?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Griggs Street",
+     "toStation": "Fenwood Road"
+    },
+    "ran": {
+     "fromStation": "Griggs Street",
+     "toStation": "Fenwood Road"
+    }
+   },
+   {
+    "question": "Get me from Capen Street to Airport.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Capen Street",
+     "toStation": "Airport"
+    },
+    "ran": {
+     "fromStation": "Capen Street",
+     "toStation": "Airport"
+    }
+   },
+   {
+    "question": "What's the way to Heath Street if I start at Charles/MGH?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Charles/MGH",
+     "toStation": "Heath Street"
+    },
+    "ran": {
+     "fromStation": "Charles/MGH",
+     "toStation": "Heath Street"
+    }
+   },
+   {
+    "question": "I need to be at Wellington. I'm at Amory Street now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Amory Street",
+     "toStation": "Wellington"
+    },
+    "ran": {
+     "fromStation": "Amory Street",
+     "toStation": "Wellington"
+    }
+   },
+   {
+    "question": "What's the way to Downtown Crossing if I start at Chestnut Hill?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Chestnut Hill",
+     "toStation": "Downtown Crossing"
+    },
+    "ran": {
+     "fromStation": "Chestnut Hill",
+     "toStation": "Downtown Crossing"
+    }
+   },
+   {
+    "question": "What's the way to Haymarket if I start at Ball Square?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Ball Square",
+     "toStation": "Haymarket"
+    },
+    "ran": {
+     "fromStation": "Ball Square",
+     "toStation": "Haymarket"
+    }
+   },
+   {
+    "question": "Stations in Shirley?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Shirley"
+    },
+    "ran": {
+     "municipalityName": "Shirley"
+    }
+   },
+   {
+    "question": "Going to Cedar Grove, leaving from Brookline Village.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Brookline Village",
+     "toStation": "Cedar Grove"
+    },
+    "ran": {
+     "fromStation": "Brookline Village",
+     "toStation": "Cedar Grove"
+    }
+   },
+   {
+    "question": "Starting at Broadway, how do I reach Medford/Tufts?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Broadway",
+     "toStation": "Medford/Tufts"
+    },
+    "ran": {
+     "fromStation": "Broadway",
+     "toStation": "Medford/Tufts"
+    }
+   },
+   {
+    "question": "List the stops on the Green Line B in order.",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Green Line B"
+    },
+    "ran": {
+     "routeName": "Green Line B"
+    }
+   },
+   {
+    "question": "Get me from Kent Street to Back Bay.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Kent Street",
+     "toStation": "Back Bay"
+    },
+    "ran": {
+     "fromStation": "Kent Street",
+     "toStation": "Back Bay"
+    }
+   },
+   {
+    "question": "Where does the Mattapan Line go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "refused",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Mattapan Line"
+    },
+    "ran": "0 stored values match 'Mattapan Line'"
+   },
+   {
+    "question": "What is near West Concord?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "West Concord",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "West Concord"
+    }
+   },
+   {
+    "question": "Which platforms at Magoun Square are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Magoun Square"
+    },
+    "ran": {
+     "platformsOf": "Magoun Square"
+    }
+   },
+   {
+    "question": "How do I get from Boston College to State?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Boston College",
+     "toStation": "State"
+    },
+    "ran": {
+     "fromStation": "Boston College",
+     "toStation": "State"
+    }
+   },
+   {
+    "question": "Which platforms at Brookline Village are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Brookline Village"
+    },
+    "ran": {
+     "platformsOf": "Brookline Village"
+    }
+   },
+   {
+    "question": "Stations in Scituate?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Scituate"
+    },
+    "ran": {
+     "municipalityName": "Scituate"
+    }
+   },
+   {
+    "question": "Is the Mattapan Line delayed right now?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "I'm at Suffolk Downs and need to reach Haymarket.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Suffolk Downs",
+     "toStation": "Haymarket"
+    },
+    "ran": {
+     "fromStation": "Suffolk Downs",
+     "toStation": "Haymarket"
+    }
+   },
+   {
+    "question": "Rename Central to Newton Centre.",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Medford/Tufts to Kendall/MIT?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Medford/Tufts",
+     "toStation": "Kendall/MIT"
+    },
+    "ran": {
+     "fromStation": "Medford/Tufts",
+     "toStation": "Kendall/MIT"
+    }
+   },
+   {
+    "question": "Which stations are in Westwood?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Westwood"
+    },
+    "ran": {
+     "municipalityName": "Westwood"
+    }
+   },
+   {
+    "question": "Where does the Green Line B go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "refused",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Park Street"
+    },
+    "ran": "missing stationName"
+   },
+   {
+    "question": "I need to be at Forest Hills. I'm at Central Avenue now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Central Avenue",
+     "toStation": "Forest Hills"
+    },
+    "ran": {
+     "fromStation": "Central Avenue",
+     "toStation": "Forest Hills"
+    }
+   },
+   {
+    "question": "Starting at North Quincy, how do I reach Boston University Central?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "North Quincy",
+     "toStation": "Boston University Central"
+    },
+    "ran": {
+     "fromStation": "North Quincy",
+     "toStation": "Boston University Central"
+    }
+   },
+   {
+    "question": "List the stops inside Coolidge Corner.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Coolidge Corner"
+    },
+    "ran": {
+     "platformsOf": "Coolidge Corner"
+    }
+   },
+   {
+    "question": "What stations are there in Freetown?",
+    "expected": "Stations in a Municipality",
+    "grade": "wrong",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Freetown"
+    },
+    "ran": {
+     "stationName": "Freetown"
+    }
+   },
+   {
+    "question": "What's the way to Brookline Village if I start at Boston University East?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Boston University East",
+     "toStation": "Brookline Village"
+    },
+    "ran": {
+     "fromStation": "Boston University East",
+     "toStation": "Brookline Village"
+    }
+   },
+   {
+    "question": "I need to be at Dean Road. I'm at Beaconsfield now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Beaconsfield",
+     "toStation": "Dean Road"
+    },
+    "ran": {
+     "fromStation": "Beaconsfield",
+     "toStation": "Dean Road"
+    }
+   },
+   {
+    "question": "Starting at Warren Street, how do I reach Tufts Medical Center?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Warren Street",
+     "toStation": "Tufts Medical Center"
+    },
+    "ran": {
+     "fromStation": "Warren Street",
+     "toStation": "Tufts Medical Center"
+    }
+   },
+   {
+    "question": "Which routes serve Lowell?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Lowell"
+    },
+    "ran": {
+     "stationName": "Lowell"
+    }
+   },
+   {
+    "question": "List the stops inside Grafton.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Grafton"
+    },
+    "ran": {
+     "platformsOf": "Grafton"
+    }
+   },
+   {
+    "question": "Starting at Broadway, how do I reach Kendall?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Broadway",
+     "toStation": "Kendall"
+    },
+    "ran": {
+     "fromStation": "Broadway",
+     "toStation": "Kendall/MIT"
+    }
+   },
+   {
+    "question": "What is near Cedar Grove?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Cedar Grove",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Cedar Grove"
+    }
+   },
+   {
+    "question": "To Roxbury Crossing from State, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "State",
+     "toStation": "Roxbury Crossing"
+    },
+    "ran": {
+     "fromStation": "State",
+     "toStation": "Roxbury Crossing"
+    }
+   },
+   {
+    "question": "I need to be at Fenway. I'm at Malden Center now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Malden Center",
+     "toStation": "Fenway"
+    },
+    "ran": {
+     "fromStation": "Malden Center",
+     "toStation": "Fenway"
+    }
+   },
+   {
+    "question": "I need to be at East Somerville. I'm at Wonderland now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Wonderland",
+     "toStation": "East Somerville"
+    },
+    "ran": {
+     "fromStation": "Wonderland",
+     "toStation": "East Somerville"
+    }
+   },
+   {
+    "question": "Going to Fenway, leaving from Airport.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "wrong",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Airport"
+    },
+    "ran": {
+     "stationName": "Airport"
+    }
+   },
+   {
+    "question": "When is the next train from Chestnut Hill?",
+    "expected": null,
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Chestnut Hill",
+     "toStation": "Not specified in the question"
+    },
+    "ran": "missing toStation"
+   },
+   {
+    "question": "Is the Lowell Line delayed right now?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What's the way to Fields Corner if I start at Longwood?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Longwood",
+     "toStation": "Fields Corner"
+    },
+    "ran": {
+     "fromStation": "Longwood",
+     "toStation": "Fields Corner"
+    }
+   },
+   {
+    "question": "Get me from Haymarket to Museum of Fine Arts.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Haymarket",
+     "toStation": "Museum of Fine Arts"
+    },
+    "ran": {
+     "fromStation": "Haymarket",
+     "toStation": "Museum of Fine Arts"
+    }
+   },
+   {
+    "question": "Stations in Cambridge?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Cambridge"
+    },
+    "ran": {
+     "municipalityName": "Cambridge"
+    }
+   },
+   {
+    "question": "What platforms does Wood Island have?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Wood Island"
+    },
+    "ran": {
+     "platformsOf": "Wood Island"
+    }
+   },
+   {
+    "question": "What's the way to Government Center if I start at East Somerville?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "East Somerville",
+     "toStation": "Government Center"
+    },
+    "ran": {
+     "fromStation": "East Somerville",
+     "toStation": "Government Center"
+    }
+   },
+   {
+    "question": "List the stops inside Boston University East.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Boston University East"
+    },
+    "ran": {
+     "platformsOf": "Boston University East"
+    }
+   },
+   {
+    "question": "Which platforms at Chiswick Road are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Chiswick Road"
+    },
+    "ran": {
+     "platformsOf": "Chiswick Road"
+    }
+   },
+   {
+    "question": "Which routes serve Lansdowne?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Lansdowne"
+    },
+    "ran": {
+     "stationName": "Lansdowne"
+    }
+   },
+   {
+    "question": "Stations in Providence?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Providence"
+    },
+    "ran": {
+     "municipalityName": "Providence"
+    }
+   },
+   {
+    "question": "What's the way to Beaconsfield if I start at Dean Road?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Dean Road",
+     "toStation": "Beaconsfield"
+    },
+    "ran": {
+     "fromStation": "Dean Road",
+     "toStation": "Beaconsfield"
+    }
+   },
+   {
+    "question": "What's the way to Union Square if I start at Brookline Hills?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Brookline Hills",
+     "toStation": "Union Square"
+    },
+    "ran": {
+     "fromStation": "Brookline Hills",
+     "toStation": "Union Square"
+    }
+   },
+   {
+    "question": "Where does the Green Line E go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "refused",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Green Line E"
+    },
+    "ran": "0 stored values match 'Green Line E'"
+   },
+   {
+    "question": "How long does it take from Arlington to Wonderland?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Arlington",
+     "toStation": "Wonderland"
+    },
+    "ran": {
+     "fromStation": "Arlington",
+     "toStation": "Wonderland"
+    }
+   },
+   {
+    "question": "Delete the Needham Line.",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Which bus goes to Medford/Tufts?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Medford/Tufts"
+    },
+    "ran": {
+     "stationName": "Medford/Tufts"
+    }
+   },
+   {
+    "question": "What is the weather in Boston?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Going to Oak Grove, leaving from Maverick.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Maverick",
+     "toStation": "Oak Grove"
+    },
+    "ran": {
+     "fromStation": "Maverick",
+     "toStation": "Oak Grove"
+    }
+   },
+   {
+    "question": "Which bus goes to Wonderland?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "To Stony Brook from Kendall/MIT, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "refused",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Kendall/MIT",
+     "toStation": "To Stony Brook"
+    },
+    "ran": "0 stored values match 'To Stony Brook'"
+   },
+   {
+    "question": "Directions from Beachmont to Hynes Convention Center.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Beachmont",
+     "toStation": "Hynes Convention Center"
+    },
+    "ran": {
+     "fromStation": "Beachmont",
+     "toStation": "Hynes Convention Center"
+    }
+   },
+   {
+    "question": "List the stops inside Newton Centre.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Newton Centre"
+    },
+    "ran": {
+     "platformsOf": "Newton Centre"
+    }
+   },
+   {
+    "question": "What runs through Needham Heights?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Needham Heights"
+    },
+    "ran": {
+     "stationName": "Needham Heights"
+    }
+   },
+   {
+    "question": "Is there parking at Assembly?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Assembly"
+    },
+    "ran": {
+     "stationName": "Assembly"
+    }
+   },
+   {
+    "question": "Who cites SWE-bench?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What is near Quincy Center?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Quincy Center",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Quincy Center"
+    }
+   },
+   {
+    "question": "What is within 1000 metres of Tappan Street?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Tappan Street",
+     "withinMetres": 1000
+    },
+    "ran": {
+     "nearStation": "Tappan Street",
+     "withinMetres": 1000
+    }
+   },
+   {
+    "question": "Starting at Boston University East, how do I reach Chestnut Hill Avenue?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Boston University East",
+     "toStation": "Chestnut Hill Avenue"
+    },
+    "ran": {
+     "fromStation": "Boston University East",
+     "toStation": "Chestnut Hill Avenue"
+    }
+   },
+   {
+    "question": "Who built Brookline Village?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What is within 1000 metres of Brookline Hills?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Brookline Hills",
+     "withinMetres": 1000
+    },
+    "ran": {
+     "nearStation": "Brookline Hills",
+     "withinMetres": 1000
+    }
+   },
+   {
+    "question": "Which stations are close to Dedham Corporate Center?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Dedham Corporate Center",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Dedham Corporate Center"
+    }
+   },
+   {
+    "question": "Get me from Massachusetts Avenue to Fairbanks Street.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Massachusetts Avenue",
+     "toStation": "Fairbanks Street"
+    },
+    "ran": {
+     "fromStation": "Massachusetts Avenue",
+     "toStation": "Fairbanks Street"
+    }
+   },
+   {
+    "question": "How do I get from Green Street to Downtown Crossing?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Green Street",
+     "toStation": "Downtown Crossing"
+    },
+    "ran": {
+     "fromStation": "Green Street",
+     "toStation": "Downtown Crossing"
+    }
+   },
+   {
+    "question": "Which routes serve Coolidge Corner?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Coolidge Corner"
+    },
+    "ran": {
+     "stationName": "Coolidge Corner"
+    }
+   },
+   {
+    "question": "List the stops inside Newmarket.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Newmarket"
+    },
+    "ran": {
+     "platformsOf": "Newmarket"
+    }
+   },
+   {
+    "question": "Who built Northeastern University?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "How do I get from Washington Street to Braintree?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Washington Street",
+     "toStation": "Braintree"
+    },
+    "ran": {
+     "fromStation": "Washington Street",
+     "toStation": "Braintree"
+    }
+   },
+   {
+    "question": "How long does it take from Harvard to Brandon Hall?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Harvard",
+     "toStation": "Brandon Hall"
+    },
+    "ran": {
+     "fromStation": "Harvard",
+     "toStation": "Brandon Hall"
+    }
+   },
+   {
+    "question": "Which stations are in Attleboro?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Attleboro"
+    },
+    "ran": {
+     "municipalityName": "Attleboro"
+    }
+   },
+   {
+    "question": "Where does the Fitchburg Line go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Fitchburg Line"
+    },
+    "ran": {
+     "routeName": "Fitchburg Line"
+    }
+   },
+   {
+    "question": "What time does the last train leave Back Bay?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What platforms does Hersey have?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Hersey"
+    },
+    "ran": {
+     "platformsOf": "Hersey"
+    }
+   },
+   {
+    "question": "What stations are there in Ashland?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Ashland"
+    },
+    "ran": {
+     "municipalityName": "Ashland"
+    }
+   },
+   {
+    "question": "I need to be at Packard's Corner. I'm at Harvard Avenue now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Harvard Avenue",
+     "toStation": "Packard's Corner"
+    },
+    "ran": {
+     "fromStation": "Harvard Avenue",
+     "toStation": "Packard's Corner"
+    }
+   },
+   {
+    "question": "To Gilman Square from Massachusetts Avenue, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Massachusetts Avenue",
+     "toStation": "Gilman Square"
+    },
+    "ran": {
+     "fromStation": "Massachusetts Avenue",
+     "toStation": "Gilman Square"
+    }
+   },
+   {
+    "question": "I need to be at Ball Square. I'm at Ruggles now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Ruggles",
+     "toStation": "Ball Square"
+    },
+    "ran": {
+     "fromStation": "Ruggles",
+     "toStation": "Ball Square"
+    }
+   },
+   {
+    "question": "Delete the Fall River/New Bedford Line.",
+    "expected": null,
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Not applicable (No station name provided in the question)"
+    },
+    "ran": "missing stationName"
+   },
+   {
+    "question": "Rename Oak Grove to Blandford Street.",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What time does the last train leave Green Street?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Starting at Englewood Avenue, how do I reach Mission Park?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Englewood Avenue",
+     "toStation": "Mission Park"
+    },
+    "ran": {
+     "fromStation": "Englewood Avenue",
+     "toStation": "Mission Park"
+    }
+   },
+   {
+    "question": "List the stops on the Providence/Stoughton Line in order.",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Providence/Stoughton Line"
+    },
+    "ran": {
+     "routeName": "Providence/Stoughton Line"
+    }
+   },
+   {
+    "question": "Rename Community College to Medford/Tufts.",
+    "expected": null,
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Medford/Tufts"
+    },
+    "ran": "0 stored values match 'Medford/Tufts'"
+   },
+   {
+    "question": "Which platforms at Valley Road are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Valley Road"
+    },
+    "ran": {
+     "platformsOf": "Valley Road"
+    }
+   },
+   {
+    "question": "Directions from Symphony to Lechmere.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Symphony",
+     "toStation": "Lechmere"
+    },
+    "ran": {
+     "fromStation": "Symphony",
+     "toStation": "Lechmere"
+    }
+   },
+   {
+    "question": "Government Center to Malden Center?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Government Center",
+     "toStation": "Malden Center"
+    },
+    "ran": {
+     "fromStation": "Government Center",
+     "toStation": "Malden Center"
+    }
+   },
+   {
+    "question": "Which stations are in Cambridge?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Cambridge"
+    },
+    "ran": {
+     "municipalityName": "Cambridge"
+    }
+   },
+   {
+    "question": "I'm at Beaconsfield and need to reach East Somerville.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Beaconsfield",
+     "toStation": "East Somerville"
+    },
+    "ran": {
+     "fromStation": "Beaconsfield",
+     "toStation": "East Somerville"
+    }
+   },
+   {
+    "question": "To Wollaston from Quincy Adams, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Quincy Adams",
+     "toStation": "Wollaston"
+    },
+    "ran": {
+     "fromStation": "Quincy Adams",
+     "toStation": "Wollaston"
+    }
+   },
+   {
+    "question": "Going to Cedar Grove, leaving from Community College.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Community College",
+     "toStation": "Cedar Grove"
+    },
+    "ran": {
+     "fromStation": "Community College",
+     "toStation": "Cedar Grove"
+    }
+   },
+   {
+    "question": "Who built Allston Street?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "I'm at Chiswick Road and need to reach Reservoir.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Chiswick Road",
+     "toStation": "Reservoir"
+    },
+    "ran": {
+     "fromStation": "Chiswick Road",
+     "toStation": "Reservoir"
+    }
+   },
+   {
+    "question": "What's the way to Savin Hill if I start at Central?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Central",
+     "toStation": "Savin Hill"
+    },
+    "ran": {
+     "fromStation": "Central",
+     "toStation": "Savin Hill"
+    }
+   },
+   {
+    "question": "What can I walk to from Shirley?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Shirley",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Shirley"
+    }
+   },
+   {
+    "question": "Going to Aquarium, leaving from Boston University Central.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Boston University Central",
+     "toStation": "Aquarium"
+    },
+    "ran": {
+     "fromStation": "Boston University Central",
+     "toStation": "Aquarium"
+    }
+   },
+   {
+    "question": "List the stops inside North Billerica.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "North Billerica"
+    },
+    "ran": {
+     "platformsOf": "North Billerica"
+    }
+   },
+   {
+    "question": "Where does the Orange Line go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "refused",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Park Street"
+    },
+    "ran": "missing stationName"
+   },
+   {
+    "question": "I need to be at Copley. I'm at Saint Mary's Street now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Saint Mary's Street",
+     "toStation": "Copley"
+    },
+    "ran": {
+     "fromStation": "Saint Mary's Street",
+     "toStation": "Copley"
+    }
+   },
+   {
+    "question": "What lines stop at Middleborough?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Middleborough"
+    },
+    "ran": {
+     "stationName": "Middleborough"
+    }
+   },
+   {
+    "question": "Starting at Newton Highlands, how do I reach Fairbanks Street?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Newton Highlands",
+     "toStation": "Fairbanks Street"
+    },
+    "ran": {
+     "fromStation": "Newton Highlands",
+     "toStation": "Fairbanks Street"
+    }
+   },
+   {
+    "question": "Get me from Forest Hills to Prudential.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Forest Hills",
+     "toStation": "Prudential"
+    },
+    "ran": {
+     "fromStation": "Forest Hills",
+     "toStation": "Prudential"
+    }
+   },
+   {
+    "question": "Who built Shawmut?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "To Oak Grove from Milton, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Milton",
+     "toStation": "Oak Grove"
+    },
+    "ran": {
+     "fromStation": "Milton",
+     "toStation": "Oak Grove"
+    }
+   },
+   {
+    "question": "Get me from Beachmont to Downtown Crossing.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Beachmont",
+     "toStation": "Downtown Crossing"
+    },
+    "ran": {
+     "fromStation": "Beachmont",
+     "toStation": "Downtown Crossing"
+    }
+   },
+   {
+    "question": "What can I walk to from Wilmington?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Wilmington",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Wilmington"
+    }
+   },
+   {
+    "question": "What is within 500 metres of Cohasset?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Cohasset",
+     "withinMetres": 500
+    },
+    "ran": {
+     "nearStation": "Cohasset",
+     "withinMetres": 500
+    }
+   },
+   {
+    "question": "List the stops inside Suffolk Downs.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Suffolk Downs"
+    },
+    "ran": {
+     "platformsOf": "Suffolk Downs"
+    }
+   },
+   {
+    "question": "How long does it take from Wonderland to Harvard?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Wonderland",
+     "toStation": "Harvard"
+    },
+    "ran": {
+     "fromStation": "Wonderland",
+     "toStation": "Harvard"
+    }
+   },
+   {
+    "question": "What runs through Davis?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Davis"
+    },
+    "ran": {
+     "stationName": "Davis"
+    }
+   },
+   {
+    "question": "Stations in Norfolk?",
+    "expected": "Stations in a Municipality",
+    "grade": "wrong",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Norfolk"
+    },
+    "ran": {
+     "stationName": "Norfolk"
+    }
+   },
+   {
+    "question": "Rename Butler to Symphony.",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Get me from Fenwood Road to Newton Highlands.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Fenwood Road",
+     "toStation": "Newton Highlands"
+    },
+    "ran": {
+     "fromStation": "Fenwood Road",
+     "toStation": "Newton Highlands"
+    }
+   },
+   {
+    "question": "I need to be at Orient Heights. I'm at Fenwood Road now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Fenwood Road",
+     "toStation": "Orient Heights"
+    },
+    "ran": {
+     "fromStation": "Fenwood Road",
+     "toStation": "Orient Heights"
+    }
+   },
+   {
+    "question": "Which stations are close to Brigham Circle?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Brigham Circle",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Brigham Circle"
+    }
+   },
+   {
+    "question": "When is the next train from Hynes Convention Center?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Which routes serve Amory Street?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Amory Street"
+    },
+    "ran": {
+     "stationName": "Amory Street"
+    }
+   },
+   {
+    "question": "What runs through Stoughton?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Stoughton"
+    },
+    "ran": {
+     "stationName": "Stoughton"
+    }
+   },
+   {
+    "question": "Which stations are close to Montserrat?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Montserrat",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Montserrat"
+    }
+   },
+   {
+    "question": "What platforms does Fall River Depot have?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Fall River Depot"
+    },
+    "ran": {
+     "platformsOf": "Fall River Depot"
+    }
+   },
+   {
+    "question": "Andrew to Babcock Street?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Andrew",
+     "toStation": "Babcock Street"
+    },
+    "ran": {
+     "fromStation": "Andrew",
+     "toStation": "Babcock Street"
+    }
+   },
+   {
+    "question": "What stations are there in Southborough?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Southborough"
+    },
+    "ran": {
+     "municipalityName": "Southborough"
+    }
+   },
+   {
+    "question": "Directions from Forest Hills to Brookline Hills.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Forest Hills",
+     "toStation": "Brookline Hills"
+    },
+    "ran": {
+     "fromStation": "Forest Hills",
+     "toStation": "Brookline Hills"
+    }
+   },
+   {
+    "question": "Which routes serve Ashland?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Ashland"
+    },
+    "ran": {
+     "stationName": "Ashland"
+    }
+   },
+   {
+    "question": "To Boston University Central from Prudential, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Prudential",
+     "toStation": "Boston University Central"
+    },
+    "ran": {
+     "fromStation": "Prudential",
+     "toStation": "Boston University Central"
+    }
+   },
+   {
+    "question": "How do I get from Magoun Square to Airport?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Magoun Square",
+     "toStation": "Airport"
+    },
+    "ran": {
+     "fromStation": "Magoun Square",
+     "toStation": "Airport"
+    }
+   },
+   {
+    "question": "How do I get from Savin Hill to Riverway?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Savin Hill",
+     "toStation": "Riverway"
+    },
+    "ran": {
+     "fromStation": "Savin Hill",
+     "toStation": "Riverway"
+    }
+   },
+   {
+    "question": "How much is a ticket from Northeastern University to Central?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Northeastern University",
+     "toStation": "Central"
+    },
+    "ran": {
+     "fromStation": "Northeastern University",
+     "toStation": "Central"
+    }
+   },
+   {
+    "question": "Is the Green Line B delayed right now?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Starting at Boston University East, how do I reach Science Park?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Boston University East",
+     "toStation": "Science Park"
+    },
+    "ran": {
+     "fromStation": "Boston University East",
+     "toStation": "Science Park/West End"
+    }
+   },
+   {
+    "question": "I'm at Mattapan and need to reach JFK/UMass.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Mattapan",
+     "toStation": "JFK/UMass"
+    },
+    "ran": {
+     "fromStation": "Mattapan",
+     "toStation": "JFK/UMass"
+    }
+   },
+   {
+    "question": "What time does the last train leave Chiswick Road?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Stations in Ashland?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Ashland"
+    },
+    "ran": {
+     "municipalityName": "Ashland"
+    }
+   },
+   {
+    "question": "I'm at Prudential and need to reach Ashmont.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Prudential",
+     "toStation": "Ashmont"
+    },
+    "ran": {
+     "fromStation": "Prudential",
+     "toStation": "Ashmont"
+    }
+   },
+   {
+    "question": "What can I walk to from Medford/Tufts?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Medford/Tufts",
+     "withinMetres": 100
+    },
+    "ran": {
+     "nearStation": "Medford/Tufts"
+    }
+   },
+   {
+    "question": "Where does the CapeFLYER go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "refused",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "CapeFLYER"
+    },
+    "ran": "0 stored values match 'CapeFLYER'"
+   },
+   {
+    "question": "What's the way to Oak Grove if I start at Saint Paul Street?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Saint Paul Street",
+     "toStation": "Oak Grove"
+    },
+    "ran": {
+     "fromStation": "Saint Paul Street",
+     "toStation": "Oak Grove"
+    }
+   },
+   {
+    "question": "How do I get from Dean Road to Packard's Corner?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Dean Road",
+     "toStation": "Packard's Corner"
+    },
+    "ran": {
+     "fromStation": "Dean Road",
+     "toStation": "Packard's Corner"
+    }
+   },
+   {
+    "question": "Get me from Wonderland to Summit Avenue.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Wonderland",
+     "toStation": "Summit Avenue"
+    },
+    "ran": {
+     "fromStation": "Wonderland",
+     "toStation": "Summit Avenue"
+    }
+   },
+   {
+    "question": "Get me from Jackson Square to Warren Street.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Jackson Square",
+     "toStation": "Warren Street"
+    },
+    "ran": {
+     "fromStation": "Jackson Square",
+     "toStation": "Warren Street"
+    }
+   },
+   {
+    "question": "What's the way to Wood Island if I start at Waban?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Waban",
+     "toStation": "Wood Island"
+    },
+    "ran": {
+     "fromStation": "Waban",
+     "toStation": "Wood Island"
+    }
+   },
+   {
+    "question": "What stations are on the Fall River/New Bedford Line?",
+    "expected": "Stations on a Route in Order",
+    "grade": "refused",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Fall River/New Bedford Line"
+    },
+    "ran": "0 stored values match 'Fall River/New Bedford Line'"
+   },
+   {
+    "question": "Stations in Warwick?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Warwick"
+    },
+    "ran": {
+     "municipalityName": "Warwick"
+    }
+   },
+   {
+    "question": "Delete the CapeFLYER.",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Which stations are within 500 metres of Swampscott?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Swampscott",
+     "withinMetres": 500
+    },
+    "ran": {
+     "nearStation": "Swampscott",
+     "withinMetres": 500
+    }
+   },
+   {
+    "question": "What runs through Ipswich?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Ipswich"
+    },
+    "ran": {
+     "stationName": "Ipswich"
+    }
+   },
+   {
+    "question": "Stations in Concord?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Concord"
+    },
+    "ran": {
+     "municipalityName": "Concord"
+    }
+   },
+   {
+    "question": "Directions from Union Square to Hawes Street.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Union Square",
+     "toStation": "Hawes Street"
+    },
+    "ran": {
+     "fromStation": "Union Square",
+     "toStation": "Hawes Street"
+    }
+   },
+   {
+    "question": "When is the next train from Wollaston?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "To Washington Street from Orient Heights, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Orient Heights",
+     "toStation": "Washington Street"
+    },
+    "ran": {
+     "fromStation": "Orient Heights",
+     "toStation": "Washington Street"
+    }
+   },
+   {
+    "question": "What stations are on the Kingston Line?",
+    "expected": "Stations on a Route in Order",
+    "grade": "refused",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Kingston Line"
+    },
+    "ran": "0 stored values match 'Kingston Line'"
+   },
+   {
+    "question": "I need to be at Woodland. I'm at Washington Square now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Washington Square",
+     "toStation": "Woodland"
+    },
+    "ran": {
+     "fromStation": "Washington Square",
+     "toStation": "Woodland"
+    }
+   },
+   {
+    "question": "What lines stop at Chestnut Hill?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Chestnut Hill"
+    },
+    "ran": {
+     "stationName": "Chestnut Hill"
+    }
+   },
+   {
+    "question": "What lines stop at Suffolk Downs?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Suffolk Downs"
+    },
+    "ran": {
+     "stationName": "Suffolk Downs"
+    }
+   },
+   {
+    "question": "What stations are on the Green Line B?",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Green Line B"
+    },
+    "ran": {
+     "routeName": "Green Line B"
+    }
+   },
+   {
+    "question": "How long does it take from Alewife to Hynes Convention Center?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Alewife",
+     "toStation": "Hynes Convention Center"
+    },
+    "ran": {
+     "fromStation": "Alewife",
+     "toStation": "Hynes Convention Center"
+    }
+   },
+   {
+    "question": "Which stations are in Salem?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Salem"
+    },
+    "ran": {
+     "municipalityName": "Salem"
+    }
+   },
+   {
+    "question": "How do I get from Newton Centre to Washington Square?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Newton Centre",
+     "toStation": "Washington Square"
+    },
+    "ran": {
+     "fromStation": "Newton Centre",
+     "toStation": "Washington Square"
+    }
+   },
+   {
+    "question": "What is near Hawes Street?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Hawes Street",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Hawes Street"
+    }
+   },
+   {
+    "question": "What stations are there in Gloucester?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Gloucester"
+    },
+    "ran": {
+     "municipalityName": "Gloucester"
+    }
+   },
+   {
+    "question": "Who built Forest Hills?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What can I walk to from Arlington?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Arlington",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Arlington"
+    }
+   },
+   {
+    "question": "List the stops inside Four Corners.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Four Corners"
+    },
+    "ran": {
+     "platformsOf": "Four Corners/Geneva"
+    }
+   },
+   {
+    "question": "Where does the Greenbush Line go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "refused",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Greenbush Line"
+    },
+    "ran": "0 stored values match 'Greenbush Line'"
+   },
+   {
+    "question": "How do I get from Amory Street to Central Avenue?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Amory Street",
+     "toStation": "Central Avenue"
+    },
+    "ran": {
+     "fromStation": "Amory Street",
+     "toStation": "Central Avenue"
+    }
+   },
+   {
+    "question": "Directions from Boston College to Sutherland Road.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Boston College",
+     "toStation": "Sutherland Road"
+    },
+    "ran": {
+     "fromStation": "Boston College",
+     "toStation": "Sutherland Road"
+    }
+   },
+   {
+    "question": "What stations are on the Green Line C?",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Green Line C"
+    },
+    "ran": {
+     "routeName": "Green Line C"
+    }
+   },
+   {
+    "question": "Directions from Malden Center to Capen Street.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Malden Center",
+     "toStation": "Capen Street"
+    },
+    "ran": {
+     "fromStation": "Malden Center",
+     "toStation": "Capen Street"
+    }
+   },
+   {
+    "question": "Which platforms at Science Park are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Science Park"
+    },
+    "ran": {
+     "platformsOf": "Science Park/West End"
+    }
+   },
+   {
+    "question": "What runs through Rockport?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Rockport"
+    },
+    "ran": {
+     "stationName": "Rockport"
+    }
+   },
+   {
+    "question": "List the stops on the Foxboro Event Service in order.",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Foxboro Event Service"
+    },
+    "ran": {
+     "routeName": "Foxboro Event Service"
+    }
+   },
+   {
+    "question": "Which books mention telemetry?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What platforms does Haymarket have?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Haymarket"
+    },
+    "ran": {
+     "platformsOf": "Haymarket"
+    }
+   },
+   {
+    "question": "Stations in Sharon?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Sharon"
+    },
+    "ran": {
+     "municipalityName": "Sharon"
+    }
+   },
+   {
+    "question": "Which stations are within 800 metres of Manchester?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Manchester",
+     "withinMetres": 800
+    },
+    "ran": {
+     "nearStation": "Manchester",
+     "withinMetres": 800
+    }
+   },
+   {
+    "question": "What's the way to Sullivan Square if I start at Harvard?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Harvard",
+     "toStation": "Sullivan Square"
+    },
+    "ran": {
+     "fromStation": "Harvard",
+     "toStation": "Sullivan Square"
+    }
+   },
+   {
+    "question": "I need to be at Aquarium. I'm at Tappan Street now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Tappan Street",
+     "toStation": "Aquarium"
+    },
+    "ran": {
+     "fromStation": "Tappan Street",
+     "toStation": "Aquarium"
+    }
+   },
+   {
+    "question": "What is near Needham Heights?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Needham Heights",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Needham Heights"
+    }
+   },
+   {
+    "question": "Is there parking at Ball Square?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Ball Square"
+    },
+    "ran": {
+     "stationName": "Ball Square"
+    }
+   },
+   {
+    "question": "To Longwood Medical Area from Medford/Tufts, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "wrong",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Longwood Medical Area",
+     "toStation": "Medford/Tufts"
+    },
+    "ran": {
+     "fromStation": "Longwood Medical Area",
+     "toStation": "Medford/Tufts"
+    }
+   },
+   {
+    "question": "Which platforms at West Medford are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "West Medford"
+    },
+    "ran": {
+     "platformsOf": "West Medford"
+    }
+   },
+   {
+    "question": "Which routes serve Hersey?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Hersey"
+    },
+    "ran": {
+     "stationName": "Hersey"
+    }
+   },
+   {
+    "question": "Get me from Saint Paul Street to Malden Center.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Saint Paul Street",
+     "toStation": "Malden Center"
+    },
+    "ran": {
+     "fromStation": "Saint Paul Street",
+     "toStation": "Malden Center"
+    }
+   },
+   {
+    "question": "I'm at Stony Brook and need to reach Milton.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Stony Brook",
+     "toStation": "Milton"
+    },
+    "ran": {
+     "fromStation": "Stony Brook",
+     "toStation": "Milton"
+    }
+   },
+   {
+    "question": "What time does the last train leave Arlington?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "List the stops on the Fairmount Line in order.",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Fairmount Line"
+    },
+    "ran": {
+     "routeName": "Fairmount Line"
+    }
+   },
+   {
+    "question": "When is the next train from Butler?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "South Street to Malden Center?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "South Street",
+     "toStation": "Malden Center"
+    },
+    "ran": {
+     "fromStation": "South Street",
+     "toStation": "Malden Center"
+    }
+   },
+   {
+    "question": "Starting at Downtown Crossing, how do I reach Washington Square?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Downtown Crossing",
+     "toStation": "Washington Square"
+    },
+    "ran": {
+     "fromStation": "Downtown Crossing",
+     "toStation": "Washington Square"
+    }
+   },
+   {
+    "question": "Starting at Wollaston, how do I reach North Station?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Wollaston",
+     "toStation": "North Station"
+    },
+    "ran": {
+     "fromStation": "Wollaston",
+     "toStation": "North Station"
+    }
+   },
+   {
+    "question": "Which platforms at Tufts Medical Center are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Tufts Medical Center"
+    },
+    "ran": {
+     "platformsOf": "Tufts Medical Center"
+    }
+   },
+   {
+    "question": "Delete the Newburyport/Rockport Line.",
+    "expected": null,
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Not applicable (No station name provided in the question)"
+    },
+    "ran": "missing stationName"
+   },
+   {
+    "question": "When is the next train from Massachusetts Avenue?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What stations are on the CapeFLYER?",
+    "expected": "Stations on a Route in Order",
+    "grade": "refused",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "CapeFLYER"
+    },
+    "ran": "0 stored values match 'CapeFLYER'"
+   },
+   {
+    "question": "What stations are there in New Bedford?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "New Bedford"
+    },
+    "ran": {
+     "municipalityName": "New Bedford"
+    }
+   },
+   {
+    "question": "Starting at Riverside, how do I reach Lechmere?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Riverside",
+     "toStation": "Lechmere"
+    },
+    "ran": {
+     "fromStation": "Riverside",
+     "toStation": "Lechmere"
+    }
+   },
+   {
+    "question": "Which stations are within 500 metres of Wellesley Square?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Wellesley Square",
+     "withinMetres": 500
+    },
+    "ran": {
+     "nearStation": "Wellesley Square",
+     "withinMetres": 500
+    }
+   },
+   {
+    "question": "Which stations are close to Savin Hill?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Savin Hill",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Savin Hill"
+    }
+   },
+   {
+    "question": "Starting at Griggs Street, how do I reach Broadway?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Griggs Street",
+     "toStation": "Broadway"
+    },
+    "ran": {
+     "fromStation": "Griggs Street",
+     "toStation": "Broadway"
+    }
+   },
+   {
+    "question": "Which bus goes to Chestnut Hill Avenue?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "How do I get from Kent Street to Blandford Street?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Kent Street",
+     "toStation": "Blandford Street"
+    },
+    "ran": {
+     "fromStation": "Kent Street",
+     "toStation": "Blandford Street"
+    }
+   },
+   {
+    "question": "What is near Rockport?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Rockport",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Rockport"
+    }
+   }
+  ]
+ },
+ "fewshot": {
+  "model": "qwen2.5:3b",
+  "search_seconds": 691,
+  "right": 193,
+  "refused": 9,
+  "wrong": 9,
+  "of": 211,
+  "seconds_each": 0.72,
+  "rows": [
+   {
+    "question": "To State from Haymarket, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "refused",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Haymarket",
+     "toStation": ""
+    },
+    "ran": "missing toStation"
+   },
+   {
+    "question": "When is the next train from Capen Street?",
+    "expected": null,
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "None provided in the question."
+    },
+    "ran": "missing routeName"
+   },
+   {
+    "question": "Starting at Griggs Street, how do I reach Fenwood Road?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Griggs Street",
+     "toStation": "Fenwood Road"
+    },
+    "ran": {
+     "fromStation": "Griggs Street",
+     "toStation": "Fenwood Road"
+    }
+   },
+   {
+    "question": "Get me from Capen Street to Airport.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Capen Street",
+     "toStation": "Airport"
+    },
+    "ran": {
+     "fromStation": "Capen Street",
+     "toStation": "Airport"
+    }
+   },
+   {
+    "question": "What's the way to Heath Street if I start at Charles/MGH?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Charles/MGH",
+     "toStation": "Heath Street"
+    },
+    "ran": {
+     "fromStation": "Charles/MGH",
+     "toStation": "Heath Street"
+    }
+   },
+   {
+    "question": "I need to be at Wellington. I'm at Amory Street now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Amory Street",
+     "toStation": "Wellington"
+    },
+    "ran": {
+     "fromStation": "Amory Street",
+     "toStation": "Wellington"
+    }
+   },
+   {
+    "question": "What's the way to Downtown Crossing if I start at Chestnut Hill?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Chestnut Hill",
+     "toStation": "Downtown Crossing"
+    },
+    "ran": {
+     "fromStation": "Chestnut Hill",
+     "toStation": "Downtown Crossing"
+    }
+   },
+   {
+    "question": "What's the way to Haymarket if I start at Ball Square?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Ball Square",
+     "toStation": "Haymarket"
+    },
+    "ran": {
+     "fromStation": "Ball Square",
+     "toStation": "Haymarket"
+    }
+   },
+   {
+    "question": "Stations in Shirley?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Shirley"
+    },
+    "ran": {
+     "municipalityName": "Shirley"
+    }
+   },
+   {
+    "question": "Going to Cedar Grove, leaving from Brookline Village.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "refused",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Cedar Grove - Brookline Village"
+    },
+    "ran": "missing routeName"
+   },
+   {
+    "question": "Starting at Broadway, how do I reach Medford/Tufts?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Broadway",
+     "toStation": "Medford/Tufts"
+    },
+    "ran": {
+     "fromStation": "Broadway",
+     "toStation": "Medford/Tufts"
+    }
+   },
+   {
+    "question": "List the stops on the Green Line B in order.",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Green Line B"
+    },
+    "ran": {
+     "routeName": "Green Line B"
+    }
+   },
+   {
+    "question": "Get me from Kent Street to Back Bay.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Kent Street",
+     "toStation": "Back Bay"
+    },
+    "ran": {
+     "fromStation": "Kent Street",
+     "toStation": "Back Bay"
+    }
+   },
+   {
+    "question": "Where does the Mattapan Line go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Mattapan Line"
+    },
+    "ran": {
+     "routeName": "Mattapan Line"
+    }
+   },
+   {
+    "question": "What is near West Concord?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "West Concord",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "West Concord"
+    }
+   },
+   {
+    "question": "Which platforms at Magoun Square are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Magoun Square"
+    },
+    "ran": {
+     "platformsOf": "Magoun Square"
+    }
+   },
+   {
+    "question": "How do I get from Boston College to State?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Boston College",
+     "toStation": "State"
+    },
+    "ran": {
+     "fromStation": "Boston College",
+     "toStation": "State"
+    }
+   },
+   {
+    "question": "Which platforms at Brookline Village are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Brookline Village"
+    },
+    "ran": {
+     "platformsOf": "Brookline Village"
+    }
+   },
+   {
+    "question": "Stations in Scituate?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Scituate"
+    },
+    "ran": {
+     "municipalityName": "Scituate"
+    }
+   },
+   {
+    "question": "Is the Mattapan Line delayed right now?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "I'm at Suffolk Downs and need to reach Haymarket.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Suffolk Downs",
+     "toStation": "Haymarket"
+    },
+    "ran": {
+     "fromStation": "Suffolk Downs",
+     "toStation": "Haymarket"
+    }
+   },
+   {
+    "question": "Rename Central to Newton Centre.",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Medford/Tufts to Kendall/MIT?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Medford/Tufts",
+     "toStation": "Kendall/MIT"
+    },
+    "ran": {
+     "fromStation": "Medford/Tufts",
+     "toStation": "Kendall/MIT"
+    }
+   },
+   {
+    "question": "Which stations are in Westwood?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Westwood"
+    },
+    "ran": {
+     "municipalityName": "Westwood"
+    }
+   },
+   {
+    "question": "Where does the Green Line B go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Green Line B"
+    },
+    "ran": {
+     "routeName": "Green Line B"
+    }
+   },
+   {
+    "question": "I need to be at Forest Hills. I'm at Central Avenue now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Central Avenue",
+     "toStation": "Forest Hills"
+    },
+    "ran": {
+     "fromStation": "Central Avenue",
+     "toStation": "Forest Hills"
+    }
+   },
+   {
+    "question": "Starting at North Quincy, how do I reach Boston University Central?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "North Quincy",
+     "toStation": "Boston University Central"
+    },
+    "ran": {
+     "fromStation": "North Quincy",
+     "toStation": "Boston University Central"
+    }
+   },
+   {
+    "question": "List the stops inside Coolidge Corner.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Coolidge Corner"
+    },
+    "ran": {
+     "platformsOf": "Coolidge Corner"
+    }
+   },
+   {
+    "question": "What stations are there in Freetown?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Freetown"
+    },
+    "ran": {
+     "municipalityName": "Freetown"
+    }
+   },
+   {
+    "question": "What's the way to Brookline Village if I start at Boston University East?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Boston University East",
+     "toStation": "Brookline Village"
+    },
+    "ran": {
+     "fromStation": "Boston University East",
+     "toStation": "Brookline Village"
+    }
+   },
+   {
+    "question": "I need to be at Dean Road. I'm at Beaconsfield now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Beaconsfield",
+     "toStation": "Dean Road"
+    },
+    "ran": {
+     "fromStation": "Beaconsfield",
+     "toStation": "Dean Road"
+    }
+   },
+   {
+    "question": "Starting at Warren Street, how do I reach Tufts Medical Center?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Warren Street",
+     "toStation": "Tufts Medical Center"
+    },
+    "ran": {
+     "fromStation": "Warren Street",
+     "toStation": "Tufts Medical Center"
+    }
+   },
+   {
+    "question": "Which routes serve Lowell?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Lowell"
+    },
+    "ran": {
+     "stationName": "Lowell"
+    }
+   },
+   {
+    "question": "List the stops inside Grafton.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Grafton"
+    },
+    "ran": {
+     "platformsOf": "Grafton"
+    }
+   },
+   {
+    "question": "Starting at Broadway, how do I reach Kendall?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Broadway",
+     "toStation": "Kendall"
+    },
+    "ran": {
+     "fromStation": "Broadway",
+     "toStation": "Kendall/MIT"
+    }
+   },
+   {
+    "question": "What is near Cedar Grove?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Cedar Grove",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Cedar Grove"
+    }
+   },
+   {
+    "question": "To Roxbury Crossing from State, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "State",
+     "toStation": "Roxbury Crossing"
+    },
+    "ran": {
+     "fromStation": "State",
+     "toStation": "Roxbury Crossing"
+    }
+   },
+   {
+    "question": "I need to be at Fenway. I'm at Malden Center now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Malden Center",
+     "toStation": "Fenway"
+    },
+    "ran": {
+     "fromStation": "Malden Center",
+     "toStation": "Fenway"
+    }
+   },
+   {
+    "question": "I need to be at East Somerville. I'm at Wonderland now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Wonderland",
+     "toStation": "East Somerville"
+    },
+    "ran": {
+     "fromStation": "Wonderland",
+     "toStation": "East Somerville"
+    }
+   },
+   {
+    "question": "Going to Fenway, leaving from Airport.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Airport",
+     "toStation": "Fenway"
+    },
+    "ran": {
+     "fromStation": "Airport",
+     "toStation": "Fenway"
+    }
+   },
+   {
+    "question": "When is the next train from Chestnut Hill?",
+    "expected": null,
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Chestnut Hill Line"
+    },
+    "ran": "missing routeName"
+   },
+   {
+    "question": "Is the Lowell Line delayed right now?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What's the way to Fields Corner if I start at Longwood?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Longwood",
+     "toStation": "Fields Corner"
+    },
+    "ran": {
+     "fromStation": "Longwood",
+     "toStation": "Fields Corner"
+    }
+   },
+   {
+    "question": "Get me from Haymarket to Museum of Fine Arts.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Haymarket",
+     "toStation": "Museum of Fine Arts"
+    },
+    "ran": {
+     "fromStation": "Haymarket",
+     "toStation": "Museum of Fine Arts"
+    }
+   },
+   {
+    "question": "Stations in Cambridge?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Cambridge"
+    },
+    "ran": {
+     "municipalityName": "Cambridge"
+    }
+   },
+   {
+    "question": "What platforms does Wood Island have?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Wood Island"
+    },
+    "ran": {
+     "platformsOf": "Wood Island"
+    }
+   },
+   {
+    "question": "What's the way to Government Center if I start at East Somerville?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "East Somerville",
+     "toStation": "Government Center"
+    },
+    "ran": {
+     "fromStation": "East Somerville",
+     "toStation": "Government Center"
+    }
+   },
+   {
+    "question": "List the stops inside Boston University East.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Boston University East"
+    },
+    "ran": {
+     "platformsOf": "Boston University East"
+    }
+   },
+   {
+    "question": "Which platforms at Chiswick Road are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Chiswick Road"
+    },
+    "ran": {
+     "platformsOf": "Chiswick Road"
+    }
+   },
+   {
+    "question": "Which routes serve Lansdowne?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Lansdowne"
+    },
+    "ran": {
+     "stationName": "Lansdowne"
+    }
+   },
+   {
+    "question": "Stations in Providence?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Providence"
+    },
+    "ran": {
+     "municipalityName": "Providence"
+    }
+   },
+   {
+    "question": "What's the way to Beaconsfield if I start at Dean Road?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Dean Road",
+     "toStation": "Beaconsfield"
+    },
+    "ran": {
+     "fromStation": "Dean Road",
+     "toStation": "Beaconsfield"
+    }
+   },
+   {
+    "question": "What's the way to Union Square if I start at Brookline Hills?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Brookline Hills",
+     "toStation": "Union Square"
+    },
+    "ran": {
+     "fromStation": "Brookline Hills",
+     "toStation": "Union Square"
+    }
+   },
+   {
+    "question": "Where does the Green Line E go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Green Line E"
+    },
+    "ran": {
+     "routeName": "Green Line E"
+    }
+   },
+   {
+    "question": "How long does it take from Arlington to Wonderland?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Arlington",
+     "toStation": "Wonderland"
+    },
+    "ran": {
+     "fromStation": "Arlington",
+     "toStation": "Wonderland"
+    }
+   },
+   {
+    "question": "Delete the Needham Line.",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Which bus goes to Medford/Tufts?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Medford/Tufts"
+    },
+    "ran": {
+     "stationName": "Medford/Tufts"
+    }
+   },
+   {
+    "question": "What is the weather in Boston?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Going to Oak Grove, leaving from Maverick.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "refused",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Maverick to Oak Grove"
+    },
+    "ran": "missing routeName"
+   },
+   {
+    "question": "Which bus goes to Wonderland?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "To Stony Brook from Kendall/MIT, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "refused",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Kendall/MIT",
+     "toStation": "To Stony Brook"
+    },
+    "ran": "0 stored values match 'To Stony Brook'"
+   },
+   {
+    "question": "Directions from Beachmont to Hynes Convention Center.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Beachmont",
+     "toStation": "Hynes Convention Center"
+    },
+    "ran": {
+     "fromStation": "Beachmont",
+     "toStation": "Hynes Convention Center"
+    }
+   },
+   {
+    "question": "List the stops inside Newton Centre.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Newton Centre"
+    },
+    "ran": {
+     "platformsOf": "Newton Centre"
+    }
+   },
+   {
+    "question": "What runs through Needham Heights?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Needham Heights"
+    },
+    "ran": {
+     "stationName": "Needham Heights"
+    }
+   },
+   {
+    "question": "Is there parking at Assembly?",
+    "expected": null,
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Not provided in the question"
+    },
+    "ran": "missing municipalityName"
+   },
+   {
+    "question": "Who cites SWE-bench?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What is near Quincy Center?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Quincy Center",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Quincy Center"
+    }
+   },
+   {
+    "question": "What is within 1000 metres of Tappan Street?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Tappan Street",
+     "withinMetres": 1000
+    },
+    "ran": {
+     "nearStation": "Tappan Street",
+     "withinMetres": 1000
+    }
+   },
+   {
+    "question": "Starting at Boston University East, how do I reach Chestnut Hill Avenue?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Boston University East",
+     "toStation": "Chestnut Hill Avenue"
+    },
+    "ran": {
+     "fromStation": "Boston University East",
+     "toStation": "Chestnut Hill Avenue"
+    }
+   },
+   {
+    "question": "Who built Brookline Village?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What is within 1000 metres of Brookline Hills?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Brookline Hills",
+     "withinMetres": 1000
+    },
+    "ran": {
+     "nearStation": "Brookline Hills",
+     "withinMetres": 1000
+    }
+   },
+   {
+    "question": "Which stations are close to Dedham Corporate Center?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Dedham Corporate Center",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Dedham Corporate Center"
+    }
+   },
+   {
+    "question": "Get me from Massachusetts Avenue to Fairbanks Street.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Massachusetts Avenue",
+     "toStation": "Fairbanks Street"
+    },
+    "ran": {
+     "fromStation": "Massachusetts Avenue",
+     "toStation": "Fairbanks Street"
+    }
+   },
+   {
+    "question": "How do I get from Green Street to Downtown Crossing?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Green Street",
+     "toStation": "Downtown Crossing"
+    },
+    "ran": {
+     "fromStation": "Green Street",
+     "toStation": "Downtown Crossing"
+    }
+   },
+   {
+    "question": "Which routes serve Coolidge Corner?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Coolidge Corner"
+    },
+    "ran": {
+     "stationName": "Coolidge Corner"
+    }
+   },
+   {
+    "question": "List the stops inside Newmarket.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Newmarket"
+    },
+    "ran": {
+     "platformsOf": "Newmarket"
+    }
+   },
+   {
+    "question": "Who built Northeastern University?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "How do I get from Washington Street to Braintree?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Washington Street",
+     "toStation": "Braintree"
+    },
+    "ran": {
+     "fromStation": "Washington Street",
+     "toStation": "Braintree"
+    }
+   },
+   {
+    "question": "How long does it take from Harvard to Brandon Hall?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Harvard",
+     "toStation": "Brandon Hall"
+    },
+    "ran": {
+     "fromStation": "Harvard",
+     "toStation": "Brandon Hall"
+    }
+   },
+   {
+    "question": "Which stations are in Attleboro?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Attleboro"
+    },
+    "ran": {
+     "municipalityName": "Attleboro"
+    }
+   },
+   {
+    "question": "Where does the Fitchburg Line go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Fitchburg Line"
+    },
+    "ran": {
+     "routeName": "Fitchburg Line"
+    }
+   },
+   {
+    "question": "What time does the last train leave Back Bay?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What platforms does Hersey have?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Hersey"
+    },
+    "ran": {
+     "platformsOf": "Hersey"
+    }
+   },
+   {
+    "question": "What stations are there in Ashland?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Ashland"
+    },
+    "ran": {
+     "municipalityName": "Ashland"
+    }
+   },
+   {
+    "question": "I need to be at Packard's Corner. I'm at Harvard Avenue now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Harvard Avenue",
+     "toStation": "Packard's Corner"
+    },
+    "ran": {
+     "fromStation": "Harvard Avenue",
+     "toStation": "Packard's Corner"
+    }
+   },
+   {
+    "question": "To Gilman Square from Massachusetts Avenue, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Massachusetts Avenue",
+     "toStation": "Gilman Square"
+    },
+    "ran": {
+     "fromStation": "Massachusetts Avenue",
+     "toStation": "Gilman Square"
+    }
+   },
+   {
+    "question": "I need to be at Ball Square. I'm at Ruggles now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Ruggles",
+     "toStation": "Ball Square"
+    },
+    "ran": {
+     "fromStation": "Ruggles",
+     "toStation": "Ball Square"
+    }
+   },
+   {
+    "question": "Delete the Fall River/New Bedford Line.",
+    "expected": null,
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Fall River/New Bedford Line"
+    },
+    "ran": "0 stored values match 'Fall River/New Bedford Line'"
+   },
+   {
+    "question": "Rename Oak Grove to Blandford Street.",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What time does the last train leave Green Street?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Starting at Englewood Avenue, how do I reach Mission Park?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Englewood Avenue",
+     "toStation": "Mission Park"
+    },
+    "ran": {
+     "fromStation": "Englewood Avenue",
+     "toStation": "Mission Park"
+    }
+   },
+   {
+    "question": "List the stops on the Providence/Stoughton Line in order.",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Providence/Stoughton Line"
+    },
+    "ran": {
+     "routeName": "Providence/Stoughton Line"
+    }
+   },
+   {
+    "question": "Rename Community College to Medford/Tufts.",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Medford/Tufts",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Medford/Tufts"
+    }
+   },
+   {
+    "question": "Which platforms at Valley Road are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Valley Road"
+    },
+    "ran": {
+     "platformsOf": "Valley Road"
+    }
+   },
+   {
+    "question": "Directions from Symphony to Lechmere.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Symphony",
+     "toStation": "Lechmere"
+    },
+    "ran": {
+     "fromStation": "Symphony",
+     "toStation": "Lechmere"
+    }
+   },
+   {
+    "question": "Government Center to Malden Center?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Government Center",
+     "toStation": "Malden Center"
+    },
+    "ran": {
+     "fromStation": "Government Center",
+     "toStation": "Malden Center"
+    }
+   },
+   {
+    "question": "Which stations are in Cambridge?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Cambridge"
+    },
+    "ran": {
+     "municipalityName": "Cambridge"
+    }
+   },
+   {
+    "question": "I'm at Beaconsfield and need to reach East Somerville.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Beaconsfield",
+     "toStation": "East Somerville"
+    },
+    "ran": {
+     "fromStation": "Beaconsfield",
+     "toStation": "East Somerville"
+    }
+   },
+   {
+    "question": "To Wollaston from Quincy Adams, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Quincy Adams",
+     "toStation": "Wollaston"
+    },
+    "ran": {
+     "fromStation": "Quincy Adams",
+     "toStation": "Wollaston"
+    }
+   },
+   {
+    "question": "Going to Cedar Grove, leaving from Community College.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "refused",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Cedar Grove Community College Line"
+    },
+    "ran": "missing routeName"
+   },
+   {
+    "question": "Who built Allston Street?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "I'm at Chiswick Road and need to reach Reservoir.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Chiswick Road",
+     "toStation": "Reservoir"
+    },
+    "ran": {
+     "fromStation": "Chiswick Road",
+     "toStation": "Reservoir"
+    }
+   },
+   {
+    "question": "What's the way to Savin Hill if I start at Central?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Central",
+     "toStation": "Savin Hill"
+    },
+    "ran": {
+     "fromStation": "Central",
+     "toStation": "Savin Hill"
+    }
+   },
+   {
+    "question": "What can I walk to from Shirley?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Shirley",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Shirley"
+    }
+   },
+   {
+    "question": "Going to Aquarium, leaving from Boston University Central.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "refused",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Fitchburg Line"
+    },
+    "ran": "missing routeName"
+   },
+   {
+    "question": "List the stops inside North Billerica.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "North Billerica"
+    },
+    "ran": {
+     "platformsOf": "North Billerica"
+    }
+   },
+   {
+    "question": "Where does the Orange Line go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Orange Line"
+    },
+    "ran": {
+     "routeName": "Orange Line"
+    }
+   },
+   {
+    "question": "I need to be at Copley. I'm at Saint Mary's Street now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Saint Mary's Street",
+     "toStation": "Copley"
+    },
+    "ran": {
+     "fromStation": "Saint Mary's Street",
+     "toStation": "Copley"
+    }
+   },
+   {
+    "question": "What lines stop at Middleborough?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Middleborough"
+    },
+    "ran": {
+     "stationName": "Middleborough"
+    }
+   },
+   {
+    "question": "Starting at Newton Highlands, how do I reach Fairbanks Street?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Newton Highlands",
+     "toStation": "Fairbanks Street"
+    },
+    "ran": {
+     "fromStation": "Newton Highlands",
+     "toStation": "Fairbanks Street"
+    }
+   },
+   {
+    "question": "Get me from Forest Hills to Prudential.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Forest Hills",
+     "toStation": "Prudential"
+    },
+    "ran": {
+     "fromStation": "Forest Hills",
+     "toStation": "Prudential"
+    }
+   },
+   {
+    "question": "Who built Shawmut?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "To Oak Grove from Milton, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Milton",
+     "toStation": "Oak Grove"
+    },
+    "ran": {
+     "fromStation": "Milton",
+     "toStation": "Oak Grove"
+    }
+   },
+   {
+    "question": "Get me from Beachmont to Downtown Crossing.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Beachmont",
+     "toStation": "Downtown Crossing"
+    },
+    "ran": {
+     "fromStation": "Beachmont",
+     "toStation": "Downtown Crossing"
+    }
+   },
+   {
+    "question": "What can I walk to from Wilmington?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Wilmington",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Wilmington"
+    }
+   },
+   {
+    "question": "What is within 500 metres of Cohasset?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Cohasset",
+     "withinMetres": 500
+    },
+    "ran": {
+     "nearStation": "Cohasset",
+     "withinMetres": 500
+    }
+   },
+   {
+    "question": "List the stops inside Suffolk Downs.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Suffolk Downs"
+    },
+    "ran": {
+     "platformsOf": "Suffolk Downs"
+    }
+   },
+   {
+    "question": "How long does it take from Wonderland to Harvard?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Wonderland",
+     "toStation": "Harvard"
+    },
+    "ran": {
+     "fromStation": "Wonderland",
+     "toStation": "Harvard"
+    }
+   },
+   {
+    "question": "What runs through Davis?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Davis"
+    },
+    "ran": {
+     "stationName": "Davis"
+    }
+   },
+   {
+    "question": "Stations in Norfolk?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Norfolk"
+    },
+    "ran": {
+     "municipalityName": "Norfolk"
+    }
+   },
+   {
+    "question": "Rename Butler to Symphony.",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Get me from Fenwood Road to Newton Highlands.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Fenwood Road",
+     "toStation": "Newton Highlands"
+    },
+    "ran": {
+     "fromStation": "Fenwood Road",
+     "toStation": "Newton Highlands"
+    }
+   },
+   {
+    "question": "I need to be at Orient Heights. I'm at Fenwood Road now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Fenwood Road",
+     "toStation": "Orient Heights"
+    },
+    "ran": {
+     "fromStation": "Fenwood Road",
+     "toStation": "Orient Heights"
+    }
+   },
+   {
+    "question": "Which stations are close to Brigham Circle?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Brigham Circle",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Brigham Circle"
+    }
+   },
+   {
+    "question": "When is the next train from Hynes Convention Center?",
+    "expected": null,
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Northern Line"
+    },
+    "ran": "missing routeName"
+   },
+   {
+    "question": "Which routes serve Amory Street?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Amory Street"
+    },
+    "ran": {
+     "stationName": "Amory Street"
+    }
+   },
+   {
+    "question": "What runs through Stoughton?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Stoughton"
+    },
+    "ran": {
+     "stationName": "Stoughton"
+    }
+   },
+   {
+    "question": "Which stations are close to Montserrat?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Montserrat",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Montserrat"
+    }
+   },
+   {
+    "question": "What platforms does Fall River Depot have?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Fall River Depot"
+    },
+    "ran": {
+     "platformsOf": "Fall River Depot"
+    }
+   },
+   {
+    "question": "Andrew to Babcock Street?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Andrew",
+     "toStation": "Babcock Street"
+    },
+    "ran": {
+     "fromStation": "Andrew",
+     "toStation": "Babcock Street"
+    }
+   },
+   {
+    "question": "What stations are there in Southborough?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Southborough"
+    },
+    "ran": {
+     "municipalityName": "Southborough"
+    }
+   },
+   {
+    "question": "Directions from Forest Hills to Brookline Hills.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Forest Hills",
+     "toStation": "Brookline Hills"
+    },
+    "ran": {
+     "fromStation": "Forest Hills",
+     "toStation": "Brookline Hills"
+    }
+   },
+   {
+    "question": "Which routes serve Ashland?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Ashland"
+    },
+    "ran": {
+     "stationName": "Ashland"
+    }
+   },
+   {
+    "question": "To Boston University Central from Prudential, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Prudential",
+     "toStation": "Boston University Central"
+    },
+    "ran": {
+     "fromStation": "Prudential",
+     "toStation": "Boston University Central"
+    }
+   },
+   {
+    "question": "How do I get from Magoun Square to Airport?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Magoun Square",
+     "toStation": "Airport"
+    },
+    "ran": {
+     "fromStation": "Magoun Square",
+     "toStation": "Airport"
+    }
+   },
+   {
+    "question": "How do I get from Savin Hill to Riverway?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Savin Hill",
+     "toStation": "Riverway"
+    },
+    "ran": {
+     "fromStation": "Savin Hill",
+     "toStation": "Riverway"
+    }
+   },
+   {
+    "question": "How much is a ticket from Northeastern University to Central?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Northeastern University",
+     "toStation": "Central"
+    },
+    "ran": {
+     "fromStation": "Northeastern University",
+     "toStation": "Central"
+    }
+   },
+   {
+    "question": "Is the Green Line B delayed right now?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Starting at Boston University East, how do I reach Science Park?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Boston University East",
+     "toStation": "Science Park"
+    },
+    "ran": {
+     "fromStation": "Boston University East",
+     "toStation": "Science Park/West End"
+    }
+   },
+   {
+    "question": "I'm at Mattapan and need to reach JFK/UMass.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Mattapan",
+     "toStation": "JFK/UMass"
+    },
+    "ran": {
+     "fromStation": "Mattapan",
+     "toStation": "JFK/UMass"
+    }
+   },
+   {
+    "question": "What time does the last train leave Chiswick Road?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Stations in Ashland?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Ashland"
+    },
+    "ran": {
+     "municipalityName": "Ashland"
+    }
+   },
+   {
+    "question": "I'm at Prudential and need to reach Ashmont.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Prudential",
+     "toStation": "Ashmont"
+    },
+    "ran": {
+     "fromStation": "Prudential",
+     "toStation": "Ashmont"
+    }
+   },
+   {
+    "question": "What can I walk to from Medford/Tufts?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Medford/Tufts",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Medford/Tufts"
+    }
+   },
+   {
+    "question": "Where does the CapeFLYER go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "refused",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Reading"
+    },
+    "ran": "missing stationName"
+   },
+   {
+    "question": "What's the way to Oak Grove if I start at Saint Paul Street?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Saint Paul Street",
+     "toStation": "Oak Grove"
+    },
+    "ran": {
+     "fromStation": "Saint Paul Street",
+     "toStation": "Oak Grove"
+    }
+   },
+   {
+    "question": "How do I get from Dean Road to Packard's Corner?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Dean Road",
+     "toStation": "Packard's Corner"
+    },
+    "ran": {
+     "fromStation": "Dean Road",
+     "toStation": "Packard's Corner"
+    }
+   },
+   {
+    "question": "Get me from Wonderland to Summit Avenue.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Wonderland",
+     "toStation": "Summit Avenue"
+    },
+    "ran": {
+     "fromStation": "Wonderland",
+     "toStation": "Summit Avenue"
+    }
+   },
+   {
+    "question": "Get me from Jackson Square to Warren Street.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Jackson Square",
+     "toStation": "Warren Street"
+    },
+    "ran": {
+     "fromStation": "Jackson Square",
+     "toStation": "Warren Street"
+    }
+   },
+   {
+    "question": "What's the way to Wood Island if I start at Waban?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "refused",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Fitchburg Line"
+    },
+    "ran": "missing routeName"
+   },
+   {
+    "question": "What stations are on the Fall River/New Bedford Line?",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Fall River/New Bedford Line"
+    },
+    "ran": {
+     "routeName": "Fall River/New Bedford Line"
+    }
+   },
+   {
+    "question": "Stations in Warwick?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Warwick"
+    },
+    "ran": {
+     "municipalityName": "Warwick"
+    }
+   },
+   {
+    "question": "Delete the CapeFLYER.",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "Which stations are within 500 metres of Swampscott?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Swampscott",
+     "withinMetres": 500
+    },
+    "ran": {
+     "nearStation": "Swampscott",
+     "withinMetres": 500
+    }
+   },
+   {
+    "question": "What runs through Ipswich?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Ipswich"
+    },
+    "ran": {
+     "stationName": "Ipswich"
+    }
+   },
+   {
+    "question": "Stations in Concord?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Concord"
+    },
+    "ran": {
+     "municipalityName": "Concord"
+    }
+   },
+   {
+    "question": "Directions from Union Square to Hawes Street.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Union Square",
+     "toStation": "Hawes Street"
+    },
+    "ran": {
+     "fromStation": "Union Square",
+     "toStation": "Hawes Street"
+    }
+   },
+   {
+    "question": "When is the next train from Wollaston?",
+    "expected": null,
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Wollaston"
+    },
+    "ran": "0 stored values match 'Wollaston'"
+   },
+   {
+    "question": "To Washington Street from Orient Heights, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Orient Heights",
+     "toStation": "Washington Street"
+    },
+    "ran": {
+     "fromStation": "Orient Heights",
+     "toStation": "Washington Street"
+    }
+   },
+   {
+    "question": "What stations are on the Kingston Line?",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Kingston Line"
+    },
+    "ran": {
+     "routeName": "Kingston Line"
+    }
+   },
+   {
+    "question": "I need to be at Woodland. I'm at Washington Square now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Washington Square",
+     "toStation": "Woodland"
+    },
+    "ran": {
+     "fromStation": "Washington Square",
+     "toStation": "Woodland"
+    }
+   },
+   {
+    "question": "What lines stop at Chestnut Hill?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Chestnut Hill"
+    },
+    "ran": {
+     "stationName": "Chestnut Hill"
+    }
+   },
+   {
+    "question": "What lines stop at Suffolk Downs?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Suffolk Downs"
+    },
+    "ran": {
+     "stationName": "Suffolk Downs"
+    }
+   },
+   {
+    "question": "What stations are on the Green Line B?",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Green Line B"
+    },
+    "ran": {
+     "routeName": "Green Line B"
+    }
+   },
+   {
+    "question": "How long does it take from Alewife to Hynes Convention Center?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Alewife",
+     "toStation": "Hynes Convention Center"
+    },
+    "ran": {
+     "fromStation": "Alewife",
+     "toStation": "Hynes Convention Center"
+    }
+   },
+   {
+    "question": "Which stations are in Salem?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Salem"
+    },
+    "ran": {
+     "municipalityName": "Salem"
+    }
+   },
+   {
+    "question": "How do I get from Newton Centre to Washington Square?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Newton Centre",
+     "toStation": "Washington Square"
+    },
+    "ran": {
+     "fromStation": "Newton Centre",
+     "toStation": "Washington Square"
+    }
+   },
+   {
+    "question": "What is near Hawes Street?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Hawes Street",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Hawes Street"
+    }
+   },
+   {
+    "question": "What stations are there in Gloucester?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Gloucester"
+    },
+    "ran": {
+     "municipalityName": "Gloucester"
+    }
+   },
+   {
+    "question": "Who built Forest Hills?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What can I walk to from Arlington?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Arlington",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Arlington"
+    }
+   },
+   {
+    "question": "List the stops inside Four Corners.",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Four Corners"
+    },
+    "ran": {
+     "platformsOf": "Four Corners/Geneva"
+    }
+   },
+   {
+    "question": "Where does the Greenbush Line go?",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Greenbush Line"
+    },
+    "ran": {
+     "routeName": "Greenbush Line"
+    }
+   },
+   {
+    "question": "How do I get from Amory Street to Central Avenue?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Amory Street",
+     "toStation": "Central Avenue"
+    },
+    "ran": {
+     "fromStation": "Amory Street",
+     "toStation": "Central Avenue"
+    }
+   },
+   {
+    "question": "Directions from Boston College to Sutherland Road.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Boston College",
+     "toStation": "Sutherland Road"
+    },
+    "ran": {
+     "fromStation": "Boston College",
+     "toStation": "Sutherland Road"
+    }
+   },
+   {
+    "question": "What stations are on the Green Line C?",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Green Line C"
+    },
+    "ran": {
+     "routeName": "Green Line C"
+    }
+   },
+   {
+    "question": "Directions from Malden Center to Capen Street.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Malden Center",
+     "toStation": "Capen Street"
+    },
+    "ran": {
+     "fromStation": "Malden Center",
+     "toStation": "Capen Street"
+    }
+   },
+   {
+    "question": "Which platforms at Science Park are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Science Park"
+    },
+    "ran": {
+     "platformsOf": "Science Park/West End"
+    }
+   },
+   {
+    "question": "What runs through Rockport?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Rockport"
+    },
+    "ran": {
+     "stationName": "Rockport"
+    }
+   },
+   {
+    "question": "List the stops on the Foxboro Event Service in order.",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Foxboro Event Service"
+    },
+    "ran": {
+     "routeName": "Foxboro Event Service"
+    }
+   },
+   {
+    "question": "Which books mention telemetry?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "What platforms does Haymarket have?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Haymarket"
+    },
+    "ran": {
+     "platformsOf": "Haymarket"
+    }
+   },
+   {
+    "question": "Stations in Sharon?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "Sharon"
+    },
+    "ran": {
+     "municipalityName": "Sharon"
+    }
+   },
+   {
+    "question": "Which stations are within 800 metres of Manchester?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Manchester",
+     "withinMetres": 800
+    },
+    "ran": {
+     "nearStation": "Manchester",
+     "withinMetres": 800
+    }
+   },
+   {
+    "question": "What's the way to Sullivan Square if I start at Harvard?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Harvard",
+     "toStation": "Sullivan Square"
+    },
+    "ran": {
+     "fromStation": "Harvard",
+     "toStation": "Sullivan Square"
+    }
+   },
+   {
+    "question": "I need to be at Aquarium. I'm at Tappan Street now.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Tappan Street",
+     "toStation": "Aquarium"
+    },
+    "ran": {
+     "fromStation": "Tappan Street",
+     "toStation": "Aquarium"
+    }
+   },
+   {
+    "question": "What is near Needham Heights?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Needham Heights",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Needham Heights"
+    }
+   },
+   {
+    "question": "Is there parking at Ball Square?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "To Longwood Medical Area from Medford/Tufts, please.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "wrong",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Longwood Medical Area",
+     "toStation": "Medford/Tufts"
+    },
+    "ran": {
+     "fromStation": "Longwood Medical Area",
+     "toStation": "Medford/Tufts"
+    }
+   },
+   {
+    "question": "Which platforms at West Medford are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "West Medford"
+    },
+    "ran": {
+     "platformsOf": "West Medford"
+    }
+   },
+   {
+    "question": "Which routes serve Hersey?",
+    "expected": "Which Routes Serve a Station",
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Hersey"
+    },
+    "ran": {
+     "stationName": "Hersey"
+    }
+   },
+   {
+    "question": "Get me from Saint Paul Street to Malden Center.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Saint Paul Street",
+     "toStation": "Malden Center"
+    },
+    "ran": {
+     "fromStation": "Saint Paul Street",
+     "toStation": "Malden Center"
+    }
+   },
+   {
+    "question": "I'm at Stony Brook and need to reach Milton.",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Stony Brook",
+     "toStation": "Milton"
+    },
+    "ran": {
+     "fromStation": "Stony Brook",
+     "toStation": "Milton"
+    }
+   },
+   {
+    "question": "What time does the last train leave Arlington?",
+    "expected": null,
+    "grade": "right",
+    "chose": "none",
+    "arguments": {},
+    "ran": "no tool"
+   },
+   {
+    "question": "List the stops on the Fairmount Line in order.",
+    "expected": "Stations on a Route in Order",
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Fairmount Line"
+    },
+    "ran": {
+     "routeName": "Fairmount Line"
+    }
+   },
+   {
+    "question": "When is the next train from Butler?",
+    "expected": null,
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Butler"
+    },
+    "ran": "0 stored values match 'Butler'"
+   },
+   {
+    "question": "South Street to Malden Center?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "South Street",
+     "toStation": "Malden Center"
+    },
+    "ran": {
+     "fromStation": "South Street",
+     "toStation": "Malden Center"
+    }
+   },
+   {
+    "question": "Starting at Downtown Crossing, how do I reach Washington Square?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Downtown Crossing",
+     "toStation": "Washington Square"
+    },
+    "ran": {
+     "fromStation": "Downtown Crossing",
+     "toStation": "Washington Square"
+    }
+   },
+   {
+    "question": "Starting at Wollaston, how do I reach North Station?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Wollaston",
+     "toStation": "North Station"
+    },
+    "ran": {
+     "fromStation": "Wollaston",
+     "toStation": "North Station"
+    }
+   },
+   {
+    "question": "Which platforms at Tufts Medical Center are wheelchair accessible?",
+    "expected": "Platforms in a Station",
+    "grade": "right",
+    "chose": "Platforms in a Station",
+    "arguments": {
+     "platformsOf": "Tufts Medical Center"
+    },
+    "ran": {
+     "platformsOf": "Tufts Medical Center"
+    }
+   },
+   {
+    "question": "Delete the Newburyport/Rockport Line.",
+    "expected": null,
+    "grade": "right",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "None (No station name provided in the question)"
+    },
+    "ran": "missing stationName"
+   },
+   {
+    "question": "When is the next train from Massachusetts Avenue?",
+    "expected": null,
+    "grade": "right",
+    "chose": "Stations on a Route in Order",
+    "arguments": {
+     "routeName": "Massachusetts Avenue"
+    },
+    "ran": "0 stored values match 'Massachusetts Avenue'"
+   },
+   {
+    "question": "What stations are on the CapeFLYER?",
+    "expected": "Stations on a Route in Order",
+    "grade": "refused",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "CapeFLYER"
+    },
+    "ran": "0 stored values match 'CapeFLYER'"
+   },
+   {
+    "question": "What stations are there in New Bedford?",
+    "expected": "Stations in a Municipality",
+    "grade": "right",
+    "chose": "Stations in a Municipality",
+    "arguments": {
+     "municipalityName": "New Bedford"
+    },
+    "ran": {
+     "municipalityName": "New Bedford"
+    }
+   },
+   {
+    "question": "Starting at Riverside, how do I reach Lechmere?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Riverside",
+     "toStation": "Lechmere"
+    },
+    "ran": {
+     "fromStation": "Riverside",
+     "toStation": "Lechmere"
+    }
+   },
+   {
+    "question": "Which stations are within 500 metres of Wellesley Square?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Wellesley Square",
+     "withinMetres": 500
+    },
+    "ran": {
+     "nearStation": "Wellesley Square",
+     "withinMetres": 500
+    }
+   },
+   {
+    "question": "Which stations are close to Savin Hill?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Savin Hill",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Savin Hill"
+    }
+   },
+   {
+    "question": "Starting at Griggs Street, how do I reach Broadway?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Griggs Street",
+     "toStation": "Broadway"
+    },
+    "ran": {
+     "fromStation": "Griggs Street",
+     "toStation": "Broadway"
+    }
+   },
+   {
+    "question": "Which bus goes to Chestnut Hill Avenue?",
+    "expected": null,
+    "grade": "wrong",
+    "chose": "Which Routes Serve a Station",
+    "arguments": {
+     "stationName": "Chestnut Hill Avenue"
+    },
+    "ran": {
+     "stationName": "Chestnut Hill Avenue"
+    }
+   },
+   {
+    "question": "How do I get from Kent Street to Blandford Street?",
+    "expected": "Subway Journey Between Two Stations",
+    "grade": "right",
+    "chose": "Subway Journey Between Two Stations",
+    "arguments": {
+     "fromStation": "Kent Street",
+     "toStation": "Blandford Street"
+    },
+    "ran": {
+     "fromStation": "Kent Street",
+     "toStation": "Blandford Street"
+    }
+   },
+   {
+    "question": "What is near Rockport?",
+    "expected": "Stations Near a Station",
+    "grade": "right",
+    "chose": "Stations Near a Station",
+    "arguments": {
+     "nearStation": "Rockport",
+     "withinMetres": null
+    },
+    "ran": {
+     "nearStation": "Rockport"
+    }
+   }
+  ]
+ }
+}
