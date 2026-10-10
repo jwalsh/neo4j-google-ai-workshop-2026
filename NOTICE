@@ -10,6 +10,7 @@ This repository includes text from other works:
   Copyright 2022-2026 Neo4j, licensed under the Apache License, Version 2.0.
   prompts/README.org and each file's header say which are theirs.
 
-Diagrams in notes/diagrams/ are redrawn from slides shown at the workshop by
-Neo4j and Google; each note says which slide. The slides themselves are not
-included.
+Five diagrams in notes/diagrams/ are redrawn from slides shown at the
+workshop by Neo4j and Google: each of those files names its slide in its
+first line, and the note that uses it says so. The other diagrams there are
+this repository's own. The slides themselves are not included.
