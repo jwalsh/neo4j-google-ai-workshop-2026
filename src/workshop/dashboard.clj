@@ -14,6 +14,7 @@
             [workshop.env :as env]
             [workshop.mbta :as mbta]
             [workshop.neo4j :as neo4j]
+            [workshop.otlp :as otlp]
             [workshop.status :as status]
             [workshop.telemetry :as telemetry])
   (:import (com.sun.net.httpserver HttpExchange HttpHandler HttpServer)
@@ -75,8 +76,12 @@
               padding: 3px 12px 3px 0; }
    .data td, .data td:first-child { width: auto; color: var(--ink); padding-right: 12px; }
    .data td.number { text-align: right; font-variant-numeric: tabular-nums; }
-   .statement { font: 12px/1.4 ui-monospace, monospace; color: var(--muted); margin: 6px 0 0;
-                overflow-wrap: anywhere; }
+   .statement { font: 12px/1.45 ui-monospace, monospace; color: var(--muted); margin: 6px 0 0;
+                overflow-wrap: anywhere; white-space: pre-wrap; }
+   .statement b { color: var(--ink); font-weight: 600; }
+   details > summary { cursor: pointer; color: var(--muted); font-size: 12px; margin-top: 6px; }
+   .arguments { margin: 0; padding: 0; list-style: none; }
+   .arguments code { font: 12px ui-monospace, monospace; color: var(--muted); }
    form { display: flex; gap: 8px; }
    select { font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px;
             background: var(--card); color: var(--ink); }
@@ -170,6 +175,216 @@
        (catch Exception failure
          (assoc question :error (or (ex-message failure) (str (class failure)))))))
 
+;; A statement arrives as its author wrote it. One written over several
+;; lines is shown as written. One on a single line, which is what an agent's
+;; JSON file holds, is laid out a clause to a line.
+
+(def ^:private clause-words
+  ;; longest first, so that OPTIONAL MATCH is not read as MATCH
+  ["OPTIONAL MATCH" "DETACH DELETE" "UNION ALL" "ORDER BY" "LOAD CSV" "FOREACH" "UNWIND"
+   "RETURN" "CREATE" "DELETE" "MATCH" "MERGE" "WHERE" "LIMIT" "UNION" "YIELD" "WITH" "SKIP"
+   "CALL" "SET"])
+
+(defn- clause-at
+  "The clause word that starts at position in text, or nil."
+  [^String text position]
+  (some (fn [^String word]
+          (let [end (+ position (count word))]
+            (when (and (.startsWith text word (int position))
+                       (or (= end (count text))
+                           (not (re-matches #"\w" (str (.charAt text end))))))
+              word)))
+        clause-words))
+
+(defn- clause-lines
+  "A single-line statement a clause to a line, a subquery's body indented
+  under its CALL. Nothing inside a string, a list, a map or a function's
+  arguments is touched, so a WHERE in a list comprehension stays where it
+  is, and STARTS WITH is not a WITH."
+  [^String text]
+  (loop [position 0, out "", depth 0, braces (), quote-mark nil]
+    (if (>= position (count text))
+      (str/trimr out)
+      (let [character (.charAt text position)
+            indent (fn [] (apply str (repeat (* 2 (count (filter #{:block} braces))) " ")))
+            at-word-start? (or (zero? position)
+                               (Character/isWhitespace (.charAt text (dec position)))
+                               (= \{ (.charAt text (dec position))))
+            clause (when (and (nil? quote-mark) (zero? depth) at-word-start?)
+                     (clause-at text position))
+            operator? (and (= "WITH" clause) (re-find #"(STARTS|ENDS)\s*$" out))]
+        (cond
+          quote-mark
+          (if (and (= \\ character) (< (inc position) (count text)))
+            (recur (+ 2 position) (str out character (.charAt text (inc position))) depth braces quote-mark)
+            (recur (inc position) (str out character) depth braces
+                   (when-not (= quote-mark character) quote-mark)))
+
+          (#{\' \" \`} character)
+          (recur (inc position) (str out character) depth braces character)
+
+          (and clause (not operator?))
+          (recur (+ position (count clause))
+                 (str (str/trimr out) (when-not (str/blank? out) "\n") (indent) clause)
+                 depth braces nil)
+
+          (= \{ character)
+          (if (and (zero? depth) (re-find #"CALL\s*$" out))
+            (recur (inc position) (str out character) depth (conj braces :block) nil)
+            (recur (inc position) (str out character) (inc depth) (conj braces :map) nil))
+
+          (= \} character)
+          (if (= :block (first braces))
+            (let [remaining (rest braces)]
+              (recur (inc position)
+                     (str (str/trimr out) "\n"
+                          (apply str (repeat (* 2 (count (filter #{:block} remaining))) " ")) "}")
+                     depth remaining nil))
+            (recur (inc position) (str out character) (max 0 (dec depth)) (rest braces) nil))
+
+          (#{\( \[} character) (recur (inc position) (str out character) (inc depth) braces nil)
+          (#{\) \]} character) (recur (inc position) (str out character) (max 0 (dec depth)) braces nil)
+
+          (Character/isWhitespace character)
+          (recur (inc position) (if (re-find #"\s$" out) out (str out " ")) depth braces nil)
+
+          :else (recur (inc position) (str out character) depth braces nil))))))
+
+(defn- split-top-level
+  "Cuts text before every position at which (cut? text position) holds,
+  looking only outside strings, brackets and CASE ... END. The pieces,
+  untrimmed, in order."
+  [^String text cut?]
+  (loop [position 0, piece-start 0, depth 0, quote-mark nil, pieces []]
+    (if (>= position (count text))
+      (conj pieces (subs text piece-start))
+      (let [character (.charAt text position)
+            word-start? (and (Character/isLetter character)
+                             (or (zero? position)
+                                 (not (re-matches #"\w" (str (.charAt text (dec position)))))))
+            word (when word-start? (re-find #"^\w+" (subs text position)))]
+        (cond
+          quote-mark
+          (if (and (= \\ character) (< (inc position) (count text)))
+            (recur (+ 2 position) piece-start depth quote-mark pieces)
+            (recur (inc position) piece-start depth (when-not (= quote-mark character) quote-mark) pieces))
+
+          (#{\' \" \`} character) (recur (inc position) piece-start depth character pieces)
+          (#{\( \[ \{} character) (recur (inc position) piece-start (inc depth) nil pieces)
+          (#{\) \] \}} character) (recur (inc position) piece-start (max 0 (dec depth)) nil pieces)
+          (= "CASE" word) (recur (+ 4 position) piece-start (inc depth) nil pieces)
+          (= "END" word) (recur (+ 3 position) piece-start (max 0 (dec depth)) nil pieces)
+
+          (and (zero? depth) (pos? position) (cut? text position word))
+          (recur (inc position) position depth nil (conj pieces (subs text piece-start position)))
+
+          :else (recur (inc position) piece-start depth nil pieces))))))
+
+(def ^:private widest-clause-kept-whole 80)
+
+(defn- lay-out-clause
+  "One clause's line as the lines it is shown on. A WHERE gets a line for
+  each AND and OR. A WITH or a RETURN too wide to read at a glance keeps
+  the names it only passes on together and gives each thing it names with
+  AS a line of its own."
+  [line]
+  (let [[_ leading rest-of-line] (re-matches #"(\s*)(.*)" line)
+        clause (clause-at rest-of-line 0)
+        body (when clause (str/trim (subs rest-of-line (count clause))))]
+    (case clause
+      "WHERE"
+      (let [[first-condition & more] (map str/trim (split-top-level body (fn [_ _ word] (#{"AND" "OR"} word))))]
+        (cons (str leading "WHERE " first-condition)
+              (map #(str leading "  " %) more)))
+
+      ("WITH" "RETURN")
+      (let [items (map str/trim (split-top-level body (fn [^String text position _]
+                                                        (= \, (.charAt text (dec position))))))
+            named? #(boolean (re-find #"\sAS\s" %))
+            groups (reduce (fn [groups item]
+                             (if (and (seq groups) (not (named? item)) (not (named? (peek (peek groups)))))
+                               (update groups (dec (count groups)) conj item)
+                               (conj groups [item])))
+                           [] items)
+            group-lines (map #(str/join " " %) groups)]
+        (cond
+          (or (= 1 (count group-lines)) (<= (count line) widest-clause-kept-whole)) [line]
+          (= "RETURN" clause) (cons (str leading "RETURN") (map #(str leading "  " %) group-lines))
+          :else (cons (str leading "WITH " (first group-lines))
+                      (map #(str leading "     " %) (rest group-lines)))))
+
+      [line])))
+
+(def ^:private lines-before-stages 12)
+
+(defn- with-stages
+  "A long statement with a blank line before each stage of it: a MATCH, a
+  CALL, the RETURN, and a WITH that does not follow an UNWIND. Only at the
+  top level; a subquery's body stays together."
+  [lines]
+  (if (<= (count lines) lines-before-stages)
+    lines
+    (loop [remaining lines, previous-clause nil, out []]
+      (if-let [line (first remaining)]
+        (let [clause (cond (= "}" line) "}"
+                           (re-find #"^\S" line) (clause-at line 0))
+              opens-stage? (or (#{"MATCH" "OPTIONAL MATCH" "CALL" "RETURN"} clause)
+                               (= "}" previous-clause)
+                               (and (= "WITH" clause) (not= "UNWIND" previous-clause)))]
+          (recur (rest remaining)
+                 (or clause previous-clause)
+                 (cond-> out
+                   (and clause opens-stage? (seq out) (not= "}" clause)) (conj "")
+                   true (conj line))))
+        out))))
+
+(defn format-statement
+  "A Cypher statement laid out to be read: a clause to a line, a subquery's
+  body indented under its CALL, a condition to a line, a named value to a
+  line, and in a long statement a blank line between stages. Only
+  whitespace changes. A statement that already has line breaks is returned
+  as it is."
+  [statement]
+  (let [text (str/trim (str statement))]
+    (if (str/includes? text "\n")
+      text
+      (->> (str/split-lines (clause-lines text))
+           (mapcat lay-out-clause)
+           with-stages
+           (str/join "\n")))))
+
+(def ^:private lines-shown-open 12)
+
+(defn- render-statement
+  "The statement laid out, its clause words marked. A long one is folded
+  away under its line count, so the rows are not a screen below it."
+  [statement]
+  (let [lines (str/split-lines (format-statement statement))
+        marked (str/join
+                "\n"
+                (map (fn [line]
+                       (let [[_ leading rest-of-line] (re-matches #"(\s*)(.*)" line)
+                             clause (clause-at rest-of-line 0)]
+                         (str leading
+                              (if clause
+                                (str "<b>" clause "</b>" (escape-html (subs rest-of-line (count clause))))
+                                (escape-html rest-of-line)))))
+                     lines))
+        block (str "<pre class=\"statement\">" marked "</pre>")]
+    (if (> (count lines) lines-shown-open)
+      (str "<details><summary>the statement, " (count lines) " lines</summary>" block "</details>")
+      block)))
+
+(defn- render-arguments
+  "A map of names to values as a list, one to a line."
+  [arguments]
+  (str "<ul class=\"arguments\">"
+       (str/join (map (fn [[argument-name argument-value]]
+                        (str "<li><code>" (escape-html (name argument-name)) "</code> "
+                             (escape-html (pr-str argument-value)) "</li>"))
+                      (sort-by (comp name key) arguments)))
+       "</ul>"))
+
 (defn- render-cell
   [cell-value]
   (if (number? cell-value)
@@ -196,7 +411,7 @@
        (if error
          "<span class=\"state down\">failed</span>"
          (str "<span class=\"millis\">" (count rows) " rows</span>"))
-       "</h2><p class=\"statement\">" (escape-html statement) "</p>"
+       "</h2>" (render-statement statement)
        (cond
          error (str "<p class=\"summary\">" (escape-html error) "</p>")
          (seq rows) (render-rows rows))
@@ -371,6 +586,8 @@
               (java.net.URLDecoder/decode (str pair-value) "UTF-8"))))
         (str/split (str raw-query) #"&")))
 
+(declare render-trace)
+
 (defn render-ask
   "The question form and, when a question was asked, what the agent did with
   it: the tool, the parameters as run, what was dropped or resolved, and the
@@ -398,22 +615,28 @@
                       (str "<span class=\"millis\">" (count rows) " rows</span>"))
                     "</h2><table>"
                     (str/join
-                     (for [[row-name row-value]
-                           [["agent and source" (str agent-id " on " source)]
-                            ["model" (str (:model choice) ", "
-                                          (some->> (:seconds choice) double (format "%.2f s")))]
-                            ["parameters as run" (when (seq parameters) (pr-str parameters))]
-                            ["resolved against the graph" (when (seq resolved) (pr-str resolved))]
-                            ["dropped, not in the question" (when (seq (:dropped choice)) (pr-str (:dropped choice)))]
-                            ["why no rows" problem]
-                            ["stored values that match" (when (seq candidates) (str/join "; " candidates))]]
-                           :when row-value]
-                       (str "<tr><td>" (escape-html row-name) "</td><td>" (escape-html row-value) "</td></tr>")))
+                     (for [[row-name row-html]
+                           [["agent and source" (escape-html (str agent-id " on " source))]
+                            ["model" (escape-html (str (:model choice) ", "
+                                                       (some->> (:seconds choice) double (format "%.2f s"))))]
+                            ["parameters as run" (when (seq parameters) (render-arguments parameters))]
+                            ["resolved against the graph" (when (seq resolved) (render-arguments resolved))]
+                            ["dropped, not in the question" (when (seq (:dropped choice))
+                                                              (render-arguments (:dropped choice)))]
+                            ["why no rows" (some-> problem escape-html)]
+                            ["stored values that match" (when (seq candidates)
+                                                          (escape-html (str/join "; " candidates)))]]
+                           :when row-html]
+                       (str "<tr><td>" (escape-html row-name) "</td><td>" row-html "</td></tr>")))
                     "</table></section>"
                     (when (seq rows)
                       (render-answer {:title "Rows" :rows rows
                                       :statement (some #(when (= tool (:name %)) (:template %))
-                                                       (:tools (agent/load-agent (:agent (agent/entry agent-id)))))})))))
+                                                       (:tools (agent/load-agent (:agent (agent/entry agent-id)))))}))
+                    ;; What this request has cost so far, call by call: the
+                    ;; model, each lookup, the statement. The request's own
+                    ;; span is still open, so it is not among them.
+                    (some-> (telemetry/so-far) (assoc :name "Calls") render-trace))))
         false))
 
 (defn- bar-class
@@ -534,9 +757,10 @@
   "Starts the page on loopback and returns a no-argument function that stops
   it. One driver is held for the life of the server; if .env has no
   connection yet, the Neo4j check opens its own each time and reports why
-  it cannot."
+  it cannot. Spans go to a collector too, when the settings name one."
   ([] (start default-port))
   ([port]
+   (otlp/install!)
    (let [driver (try (neo4j/connect) (catch Exception _ nil))
          server (HttpServer/create (InetSocketAddress. "127.0.0.1" (int port)) 0)]
      (.createContext server "/" (handler driver))
