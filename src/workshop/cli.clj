@@ -15,6 +15,7 @@
             [workshop.gcp :as gcp]
             [workshop.msa :as msa]
             [workshop.neo4j :as neo4j]
+            [workshop.otlp :as otlp]
             [workshop.papers :as papers]
             [workshop.ports :as ports]
             [workshop.redact :as redact]
@@ -192,8 +193,11 @@
   [& [command-name & arguments]]
   (if-let [{:keys [run]} (get commands command-name)]
     (try
+      (otlp/install!)
       (run arguments)
+      (otlp/flush!)
       (catch Exception failure
+        (otlp/flush!)
         (binding [*out* *err*]
           (println (str command-name ": " (ex-message failure))))
         (System/exit 1)))

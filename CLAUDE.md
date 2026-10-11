@@ -86,7 +86,8 @@ workshop.env-test/parse-dotenv-test`.
   Cloud Storage client (unauthenticated by default: the datasets are
   public), `form13` explores Lab 4's file in memory and checks a load
   against it; `status` holds one check per dependency and `dashboard` renders
-  them; `telemetry` holds spans in memory for `/traces`; `ollama` is the
+  them; `telemetry` holds spans in memory for `/traces`, and `otlp` sends
+  them to a collector when `OTEL_EXPORTER_OTLP_ENDPOINT` is set (through curl, as `ports` does; `deployment.environment.name` is `dev` unless told otherwise); `ollama` is the
   one model client; `agent` answers a question by choosing a template;
   `papers` reads the paper cache; `ports` is this checkout's ports and their
 claims in portclaim; `annotations` is the store of notes on books

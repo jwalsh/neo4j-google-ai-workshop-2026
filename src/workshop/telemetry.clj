@@ -4,8 +4,10 @@
   without the dependency. `span` wraps a body; spans opened inside it,
   on this thread or in a `future` started from it, become its children.
 
-  Nothing leaves the process. The last `capacity` spans are held for the
-  dashboard's /traces page and for a REPL: (traces), (slowest 10).
+  The last `capacity` spans are held for the dashboard's /traces page and
+  for a REPL: (traces), (slowest 10). Nothing leaves the process from here:
+  `on-finish!` takes a function to be told of each span as it ends, and
+  `workshop.otlp` is the one that uses it, to send them to a collector.
 
   Attributes are for the reader of a trace. Put a statement's first line
   in one; never a parameter value, a credential or a row."
@@ -21,11 +23,23 @@
 
 (defn- new-id [] (subs (str (java.util.UUID/randomUUID)) 0 8))
 
+(defonce ^:private listener (atom nil))
+
+(defn on-finish!
+  "Has listen-fn called with each span as it ends, or with nil stops that.
+  One listener; what it throws is dropped, so that sending a span somewhere
+  can never fail the work the span timed."
+  [listen-fn]
+  (reset! listener listen-fn)
+  nil)
+
 (defn- record!
   [finished-span]
   (swap! recorded (fn [queue]
                     (let [grown (conj queue finished-span)]
-                      (if (> (count grown) capacity) (pop grown) grown)))))
+                      (if (> (count grown) capacity) (pop grown) grown))))
+  (when-let [listen-fn @listener]
+    (try (listen-fn finished-span) (catch Throwable _ nil))))
 
 (defn annotate!
   "Adds attributes to the span being timed. Does nothing outside one."
@@ -93,6 +107,18 @@
                              (sort-by :start-ms (children (:span-id span-row))))))]
     (vec (mapcat #(walk 0 %) (sort-by :start-ms (children nil))))))
 
+(defn- as-trace
+  [trace-id trace-spans]
+  (let [ordered (depth-first trace-spans)
+        started (apply min (map :start-ms ordered))
+        ended (apply max (map #(+ (:start-ms %) (:duration-ms %)) ordered))]
+    {:trace-id trace-id
+     :name (:name (first ordered))
+     :start-ms started
+     :duration-ms (- ended started)
+     :errors (count (filter #(= :error (:status %)) ordered))
+     :spans (mapv #(assoc % :offset-ms (- (:start-ms %) started)) ordered)}))
+
 (defn traces
   "The held spans as traces, newest first:
   {:trace-id :name :start-ms :duration-ms :errors :spans}, where :spans are
@@ -100,19 +126,20 @@
   ([] (traces 20))
   ([limit]
    (->> (group-by :trace-id @recorded)
-        (map (fn [[trace-id trace-spans]]
-               (let [ordered (depth-first trace-spans)
-                     started (apply min (map :start-ms ordered))
-                     ended (apply max (map #(+ (:start-ms %) (:duration-ms %)) ordered))]
-                 {:trace-id trace-id
-                  :name (:name (first ordered))
-                  :start-ms started
-                  :duration-ms (- ended started)
-                  :errors (count (filter #(= :error (:status %)) ordered))
-                  :spans (mapv #(assoc % :offset-ms (- (:start-ms %) started)) ordered)})))
+        (map (fn [[trace-id trace-spans]] (as-trace trace-id trace-spans)))
         (sort-by :start-ms >)
         (take limit)
         vec)))
+
+(defn so-far
+  "The spans that have ended inside the span being timed on this thread, as
+  one trace in the shape `traces` gives, or nil when there are none or no
+  span is open. The open span itself has not ended and is not in it: this
+  is what a page can show of the request that is drawing it."
+  []
+  (when-let [trace-id (:trace-id *current*)]
+    (when-let [ended (seq (filter #(= trace-id (:trace-id %)) @recorded))]
+      (as-trace trace-id ended))))
 
 (defn slowest
   "The slowest held spans with the given name prefix, as rows for a table."
