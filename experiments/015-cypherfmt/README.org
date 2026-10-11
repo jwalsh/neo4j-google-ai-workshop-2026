@@ -1,0 +1,169 @@
+#+TITLE: 015 - cypherfmt on every statement held here
+#+DATE: 2026-10-10
+
+* Source
+
+The dashboard's =/ask= page shows the statement it ran. An agent's JSON
+file holds each statement on one line, so =workshop.dashboard= lays it out
+itself (=format-statement=, about a hundred lines of Clojure). The owner
+laid the transit journey out by hand as the target, =journey.hand.cypher=,
+and named an existing tool: =cypherfmt=, the command in Neo4j's
+=@neo4j-cypher/language-support= npm package (Apache 2.0), the formatter
+behind the Neo4j VS Code extension. It follows the Cypher Style Guide in
+the Cypher Manual. The hand layout follows that guide and adds four things
+of the owner's: blank lines between stages, one projection to a line in a
+long =WITH=, =AS= in a column, and =CASE= and map literals over several
+lines.
+
+* Hypothesis
+
+cypherfmt can be the one layout for Cypher in this repository: a check
+that the files in =labs/= are formatted, and the layout the page shows,
+in place of the Clojure.
+
+* Method
+
+1. =npm install --ignore-scripts @neo4j-cypher/language-support= into a
+   directory outside the checkout. Nothing of it is committed; it is 97 MB.
+2. =compare.clj= gathers every statement held: the tools of the four
+   agents in =agents/registry.edn= (22), the dashboard's =/data=
+   questions (5) and the files under =labs/= (21, each whole, comments and
+   all). 48.
+3. Each goes to cypherfmt on standard input, and its output goes through
+   again. Recorded: the exit, the time, whether the text changed apart
+   from whitespace, whether the second pass changed anything, the number
+   of lines and the widest. The same shape is recorded for
+   =format-statement=.
+4. The journey statement is written out in each layout beside the hand
+   one, and all three are run against the transit graph with the same
+   parameters.
+
+#+begin_src sh
+CYPHERFMT=/path/to/node_modules/.bin/cypherfmt \
+  clojure -M -i experiments/015-cypherfmt/compare.clj
+#+end_src
+
+* Gate
+
+Set after trying cypherfmt on one five-clause statement and before the
+run over the 48.
+
+1. Every statement is formatted; no exit other than 0.
+2. Only whitespace changes, in every statement.
+3. Formatting its own output changes nothing.
+4. The journey statement comes out with no line wider than 80.
+5. A call costs under 50 ms, so the page could make one per request.
+
+* Result
+
+| gate              | result     |                                            |
+|-------------------+------------+--------------------------------------------|
+| 1 formats all     | passed     | 48 of 48, and it proves little: see below  |
+| 2 whitespace only | not passed | 47 of 48                                   |
+| 3 idempotent      | passed     | 48 of 48                                   |
+| 4 80 columns      | not passed | two lines of the journey, 82 and 91        |
+| 5 under 50 ms     | not passed | 107 least, 138 median, 194 most            |
+
+The journey statement, 3,670 characters on one line as held:
+
+| layout                              | lines | widest |
+|-------------------------------------+-------+--------|
+| by hand                             |   129 |     87 |
+| cypherfmt                           |   169 |     91 |
+| =format-statement=                  |    91 |    246 |
+
+All three return the same two rows for Maverick to Kendall/MIT.
+
+Statements with a line wider than 80: 10 from cypherfmt, 16 from
+=format-statement=.
+
+* What it does
+
+- *The one change that is not whitespace*: =allShortestPaths((a)-...)= comes
+  out as =ALLSHORTESTPATHS ((a)-...)=. It reads the word as a keyword of
+  the newer path syntax, where the template uses it as the older function.
+  The rows are the same.
+- *Blank lines are kept, not made.* The template on one line comes out
+  with none. The hand layout comes out with its ten blank lines still in
+  it, and the two outputs are otherwise the same. So the output depends
+  on the input, and "between stages" stays the author's job.
+- *Operators end a line*: =WHERE= on its own line, then =a AND= / =b=.
+  The hand layout starts the line with =AND=.
+- *A broken projection list starts under the clause*: =WITH= alone, then
+  each item indented two. The hand layout keeps the first item beside
+  =WITH= and keeps names that are only passed on together; cypherfmt
+  gives every one a line, which is most of the 169.
+- *No =AS= in a column.* It removes the padding from the hand layout.
+- *Maps and =CASE= are broken when they do not fit*, close to the hand
+  layout. =reduce(...)= and =WHEN ... THEN= are broken in places a person
+  would not: =ride IN= / =best.rides |=, and =WHEN= alone on a line.
+- *A statement that does not parse comes back as it went in, exit 0.*
+  =MATCH (n:Station WHERE RETURN n= and =RETRN m= both do, with nothing on
+  standard error. So gate 1 would have passed on broken Cypher, and the
+  command cannot be the syntax check for =labs/= or the agents' templates.
+- *Comments survive.* The two header lines of a lab file come through.
+- *Lab statements that are the lab's own get rearranged*: Lab 4's
+  =MERGE (m)-[r:OWNS {...}]->(c)= becomes eight lines. Those files say
+  "as run", so formatting them is a change to a record.
+- *=-c= fails a file that ends in a newline.* The output has no final
+  newline, and the check wants the file byte for byte. All 21 files under
+  =labs/= fail =cypherfmt -c= today, and would fail again after any editor
+  that adds the newline back.
+
+* What carries back
+
+Nothing is replaced. The page keeps =format-statement=: cypherfmt costs
+about 140 ms a call to start node, against none, and needs an install the
+Clojure core does not have. Three things are worth taking from it into
+=format-statement=, and none is done here:
+
+1. Break a map literal or a =CASE= that does not fit the line. This is
+   where the page's 246-column line comes from, and cypherfmt and the hand
+   layout agree on how.
+2. Break a function call's arguments when the call is too wide.
+3. Nothing for blank lines: the page already puts them between stages,
+   which cypherfmt does not.
+
+As a check on =labs/= it is not ready to be a gate: the trailing newline
+alone fails every file, and a statement that does not parse passes
+unremarked. CI therefore runs =bb test=, which holds =format-statement=
+to whitespace-only changes on every agent's templates, and does not run
+cypherfmt.
+
+* Log
+
+1. =npm install -g @neo4j-cypher/language-support= as the tool is usually
+   introduced installs =latest=, which is =2.0.0-next.6= and has no
+   command in it. The =next= tag, =2.0.0-next.39=, has
+   =bin: cypherfmt=. Published 2026-10-09, the day before this run, so it
+   was installed with =--ignore-scripts= and outside the checkout.
+2. One trial statement: keywords upper-cased, =TRUE= lower-cased, double
+   quotes left as they were (the guide prefers single).
+3. The gate was written, then =compare.clj= run over the 48.
+4. =cypherfmt -c labs= to see the check: 21 of 21 "not formatted
+   correctly", exit 1. No file was changed; =-i= was never run.
+5. A formatted file with and without its final newline through =-c=: exit
+   1 with, 0 without.
+6. The journey in its three layouts against the transit graph from the
+   REPL: the same rows from each.
+7. After the write-up, while wiring CI: two statements with syntax errors
+   through cypherfmt. Both returned unchanged with exit 0. Gate 1 was the
+   wrong gate; it is left as written.
+
+* Not done
+
+- No parser was tried as the syntax check cypherfmt turned out not to be.
+  The embedded Neo4j this repository already starts could =EXPLAIN= each
+  statement.
+- No other formatter. The Cypher-DSL parser and renderer (Java, so it
+  could be a dependency rather than a process) was named beside this one;
+  its renderer normalises a query, so the whitespace-only gate would need
+  to be a same-rows gate.
+- The formatter was not called as a library from node in one long-lived
+  process, which is how the 140 ms would be avoided.
+- Nothing was changed in =labs/=, in the agents' JSON or in
+  =format-statement=.
+- Only one statement was run against a graph. The other 47 are held to be
+  unchanged because their text is, apart from whitespace.
+- Whether =2.0.0-next.6= to =next.39= changed the layout rules: only one
+  version was run.

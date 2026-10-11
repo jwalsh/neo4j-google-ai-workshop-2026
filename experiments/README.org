@@ -19,3 +19,4 @@ rewritten into =src/workshop/= in Clojure or babashka.
 - =012-book-index=: concepts from each book's own index, read by word position in babashka; 8,288 concepts from 24 books, 777 shared
 - =013-laptop-models=: the agents on two small models on this machine, asked once and asked twice; 42 questions, more right both times, one new wrong answer
 - =014-dspy-mbta=: a prompt searched for by DSPy and a decision model (=laya=) on 211 generated transit questions; five more right from the search, half right from the decision model, neither gate passed
+- =015-cypherfmt=: Neo4j's Cypher formatter on the 48 statements held here, beside the page's own and a layout by hand; formats all and is idempotent, renames one function, 140 ms a call, and its check fails any file ending in a newline
