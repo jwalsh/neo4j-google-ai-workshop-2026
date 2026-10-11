@@ -37,7 +37,7 @@ that needs no JVM. `bb tasks` lists it: `bb ping`, `bb databases`,
 `bb redact IN.png OUT.png` (cover emails and `.env` secrets in a
 screenshot), `bb status` (every connection check once) with `bb dashboard` (pages on
 127.0.0.1:8377, loopback only: `/` an overview of every source in
-`agents/registry.edn`, `/map`, `/data`, `/ask`, `/traces`, and `/config`
+`agents/registry.edn`, `/map`, `/data`, `/ask`, `/traces`, `/preferences`, and `/config`
 for the connection checks), `bb ask [--agent ID] QUESTION` (a local model chooses one of an agent's
 Cypher templates; `agents/registry.edn` ties each agent to its own Neo4j),
 `bb local` (an embedded Neo4j on localhost:7688 for the filings),
@@ -87,7 +87,7 @@ workshop.env-test/parse-dotenv-test`.
   public), `form13` explores Lab 4's file in memory and checks a load
   against it; `status` holds one check per dependency and `dashboard` renders
   them; `telemetry` holds spans in memory for `/traces`, and `otlp` sends
-  them to a collector when `OTEL_EXPORTER_OTLP_ENDPOINT` is set (through curl, as `ports` does; `deployment.environment.name` is `dev` unless told otherwise); `ollama` is the
+  them to a collector when `OTEL_EXPORTER_OTLP_ENDPOINT` is set (through curl, as `ports` does; `deployment.environment.name` is `dev` unless told otherwise); `preferences` is what one person chose for `/preferences` (which graph first, statements folded or open), kept outside the repository, and who that person is: the owner, or the header a proxy sets when `WORKSHOP_USER_HEADER` names it; `ollama` is the
   one model client; `agent` answers a question by choosing a template;
   `papers` reads the paper cache; `ports` is this checkout's ports and their
 claims in portclaim; `annotations` is the store of notes on books

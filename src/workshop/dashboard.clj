@@ -15,6 +15,7 @@
             [workshop.mbta :as mbta]
             [workshop.neo4j :as neo4j]
             [workshop.otlp :as otlp]
+            [workshop.preferences :as preferences]
             [workshop.status :as status]
             [workshop.telemetry :as telemetry])
   (:import (com.sun.net.httpserver HttpExchange HttpHandler HttpServer)
@@ -131,7 +132,7 @@
                         (str "<a href=\"" path "\"" (when (= path current-path) " class=\"here\"")
                              ">" label "</a>"))
                       [["/" "Overview"] ["/map" "Map"] ["/data" "Data"] ["/ask" "Ask"]
-                       ["/traces" "Traces"] ["/config" "Config"]]))
+                       ["/traces" "Traces"] ["/config" "Config"] ["/preferences" "Preferences"]]))
        "</nav><main" (when main-class (str " class=\"" main-class "\"")) ">" body "</main></body></html>"))
 
 (defn- clock [] (.format (LocalTime/now) (DateTimeFormatter/ofPattern "HH:mm:ss")))
@@ -355,6 +356,10 @@
 
 (def ^:private lines-shown-open 12)
 
+;; What the person asking has chosen, for the length of one request. See
+;; workshop.preferences.
+(def ^:dynamic *preferences* preferences/defaults)
+
 (defn- render-statement
   "The statement laid out, its clause words marked. A long one is folded
   away under its line count, so the rows are not a screen below it."
@@ -371,7 +376,10 @@
                                 (escape-html rest-of-line)))))
                      lines))
         block (str "<pre class=\"statement\">" marked "</pre>")]
-    (if (> (count lines) lines-shown-open)
+    (if (case (:statements *preferences*)
+          :open false
+          :folded true
+          (> (count lines) lines-shown-open))
       (str "<details><summary>the statement, " (count lines) " lines</summary>" block "</details>")
       block)))
 
@@ -482,14 +490,17 @@
    ["/data" "Data" "Five questions asked of the graph the env file names, each one statement."]
    ["/ask" "Ask" "A question to any source's agent: a local model chooses a Cypher template."]
    ["/traces" "Traces" "What the other pages cost: every statement and model call as a waterfall."]
-   ["/config" "Config" "Every connection the lab depends on, checked: the database, the bucket, the browser."]])
+   ["/config" "Config" "Every connection the lab depends on, checked: the database, the bucket, the browser."]
+   ["/preferences" "Preferences" "Which graph comes first for you, and whether a statement is shown folded."]])
 
 (defn render-overview
   [sources]
   (page "/" "Neo4j and Google workshop"
         (str (count (remove :problem sources)) " of " (count sources) " data sources running, asked " (clock))
         "cards"
-        (str (str/join (map render-source sources))
+        (str (str/join (map render-source
+                            ;; the graph this person starts in comes first
+                            (sort-by #(if (= (:graph *preferences*) (:id %)) 0 1) sources)))
              "<section><h2><span>Pages</span></h2><table>"
              (str/join (map (fn [[path label what]]
                               (str "<tr><td><a href=\"" path "\">" label "</a></td><td>" (escape-html what) "</td></tr>"))
@@ -714,42 +725,111 @@
     (with-open [response-body (.getResponseBody exchange)]
       (.write response-body body-bytes))))
 
+(defn render-preferences
+  "The form, with what is kept now and who the pages take the reader for."
+  [person kept]
+  (page "/preferences" "Neo4j and Google workshop: preferences"
+        "which graph comes first, and how a statement is shown" nil
+        (str "<section><h2><span>Yours</span></h2><form method=\"post\" action=\"/preferences\"><table>"
+             "<tr><td>start in</td><td><select name=\"graph\"><option value=\"\">the first on offer</option>"
+             (str/join (map (fn [{:keys [id about]}]
+                              (str "<option value=\"" (escape-html id) "\" title=\"" (escape-html about) "\""
+                                   (when (= id (:graph kept)) " selected") ">" (escape-html id) "</option>"))
+                            (agent/registry)))
+             "</select></td></tr><tr><td>a statement is shown</td><td><select name=\"statements\">"
+             (str/join (map (fn [[choice label]]
+                              (str "<option value=\"" (name choice) "\""
+                                   (when (= choice (:statements kept)) " selected") ">" label "</option>"))
+                            [[:auto "folded when it is long"] [:open "always open"] [:folded "always folded"]]))
+             "</select></td></tr></table><button>Keep</button></form></section>"
+             "<section><h2><span>What is kept</span></h2><table>"
+             "<tr><td>who this is</td><td>"
+             (if (= :proxy (:source person))
+               (str (escape-html (:name person)) ", as the sign-in in front of these pages says")
+               "the owner of this machine; nothing signs anyone in here")
+             "</td></tr><tr><td>kept</td><td>the two choices above and when they were made. "
+             "Not the name, not a question asked, not an address.</td></tr>"
+             "<tr><td>kept since</td><td>" (escape-html (or (:at kept) "nothing is kept yet")) "</td></tr>"
+             "</table><form method=\"post\" action=\"/preferences/forget\"><button>Forget all of it</button></form>"
+             "</section>")
+        false))
+
+(defn- answer-preferences
+  "GET shows the form. POST keeps or forgets, and only for a request that
+  came from these pages and from someone the pages can tell apart."
+  [^HttpExchange exchange settings header-value person store forget?]
+  (let [post? (= "POST" (.getRequestMethod exchange))]
+    (cond
+      (nil? person)
+      (respond exchange 401 "text/plain" "The sign-in in front of these pages did not say who this is.\n")
+
+      (and (not post?) (not forget?))
+      (respond exchange 200 "text/html; charset=utf-8"
+               (render-preferences person (let [preferences-file (java.io.File. ^String store (str (:key person) ".edn"))]
+                                            (cond-> (preferences/recall store (:key person))
+                                              (.exists preferences-file)
+                                              (assoc :at (str (java.time.Instant/ofEpochMilli (.lastModified preferences-file))))))))
+
+      (not post?)
+      (respond exchange 405 "text/plain" "POST only\n")
+
+      (not (preferences/same-origin? settings header-value))
+      (respond exchange 403 "text/plain" "That did not come from these pages.\n")
+
+      :else
+      (let [body (String. (.readNBytes (.getRequestBody exchange) 4096) "UTF-8")]
+        (if forget?
+          (preferences/forget! store (:key person))
+          (preferences/record! store (:key person)
+                               (preferences/checked (preferences/parse-form body) (map :id (agent/registry)))))
+        (.add (.getResponseHeaders exchange) "Location" "/preferences")
+        (.sendResponseHeaders exchange 303 -1)
+        (.close exchange)))))
+
 (defn- handler
   [driver]
   (reify HttpHandler
     (handle [_ exchange]
       (try
-        (case (.getPath (.getRequestURI exchange))
-          "/" (respond exchange 200 "text/html; charset=utf-8"
-                       (telemetry/span "GET /" {}
-                         (render-overview (overview))))
-          "/config" (respond exchange 200 "text/html; charset=utf-8"
-                             (telemetry/span "GET /config" {}
-                               (render-page (status/all-checks driver))))
-          "/map" (respond exchange 200 "text/html; charset=utf-8"
-                          (telemetry/span "GET /map" {}
-                            (render-map (query-parameter (.getRawQuery (.getRequestURI exchange)) "view"))))
-          "/status.edn" (respond exchange 200 "application/edn; charset=utf-8"
-                                 (with-out-str (pprint/pprint (status/all-checks driver))))
-          "/data" (respond exchange 200 "text/html; charset=utf-8"
-                           (telemetry/span "GET /data" {}
-                             (render-data (mapv #(answer driver %) data-questions))))
-          "/ask" (let [raw-query (.getRawQuery (.getRequestURI exchange))
-                       question (query-parameter raw-query "q")
-                       agent-id (:id (agent/entry (query-parameter raw-query "agent")))]
-                   (respond exchange 200 "text/html; charset=utf-8"
-                            (if (str/blank? question)
-                              (render-ask agent-id "" nil)
-                              (telemetry/span "GET /ask" {:agent-id agent-id}
-                                (render-ask agent-id question
-                                            (try (agent/ask-agent agent-id question)
-                                                 (catch Exception failure
-                                                   {:problem (or (ex-message failure) (str (class failure)))})))))))
-          "/traces" (respond exchange 200 "text/html; charset=utf-8"
-                             (render-traces (telemetry/traces 12) (telemetry/summary)))
-          "/spans.edn" (respond exchange 200 "application/edn; charset=utf-8"
-                                (with-out-str (pprint/pprint (telemetry/spans))))
-          (respond exchange 404 "text/plain" "not found\n"))
+        (let [settings (env/load-env ".env")
+              header-value #(.getFirst (.getRequestHeaders exchange) ^String %)
+              person (preferences/who settings header-value)
+              store (preferences/store-root settings)]
+          (binding [*preferences* (if person (preferences/recall store (:key person)) preferences/defaults)]
+            (case (.getPath (.getRequestURI exchange))
+              "/preferences" (answer-preferences exchange settings header-value person store false)
+              "/preferences/forget" (answer-preferences exchange settings header-value person store true)
+              "/" (respond exchange 200 "text/html; charset=utf-8"
+                           (telemetry/span "GET /" {}
+                             (render-overview (overview))))
+              "/config" (respond exchange 200 "text/html; charset=utf-8"
+                                 (telemetry/span "GET /config" {}
+                                   (render-page (status/all-checks driver))))
+              "/map" (respond exchange 200 "text/html; charset=utf-8"
+                              (telemetry/span "GET /map" {}
+                                (render-map (query-parameter (.getRawQuery (.getRequestURI exchange)) "view"))))
+              "/status.edn" (respond exchange 200 "application/edn; charset=utf-8"
+                                     (with-out-str (pprint/pprint (status/all-checks driver))))
+              "/data" (respond exchange 200 "text/html; charset=utf-8"
+                               (telemetry/span "GET /data" {}
+                                 (render-data (mapv #(answer driver %) data-questions))))
+              "/ask" (let [raw-query (.getRawQuery (.getRequestURI exchange))
+                           question (query-parameter raw-query "q")
+                           agent-id (:id (agent/entry (or (not-empty (query-parameter raw-query "agent"))
+                                                          (:graph *preferences*))))]
+                       (respond exchange 200 "text/html; charset=utf-8"
+                                (if (str/blank? question)
+                                  (render-ask agent-id "" nil)
+                                  (telemetry/span "GET /ask" {:agent-id agent-id}
+                                    (render-ask agent-id question
+                                                (try (agent/ask-agent agent-id question)
+                                                     (catch Exception failure
+                                                       {:problem (or (ex-message failure) (str (class failure)))})))))))
+              "/traces" (respond exchange 200 "text/html; charset=utf-8"
+                                 (render-traces (telemetry/traces 12) (telemetry/summary)))
+              "/spans.edn" (respond exchange 200 "application/edn; charset=utf-8"
+                                    (with-out-str (pprint/pprint (telemetry/spans))))
+              (respond exchange 404 "text/plain" "not found\n"))))
         (catch Exception failure
           (respond exchange 500 "text/plain" (str (ex-message failure) "\n")))))))
 
