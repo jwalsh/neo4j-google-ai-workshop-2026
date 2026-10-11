@@ -1,0 +1,163 @@
+#+TITLE: Review checklist: the integrated view, and what comes next
+#+DATE: 2026-10-11
+#+TODO: TODO | DONE
+
+The goal stated for this round: one page on which a student sees the
+question, the statement, how it ran and where the time went, and can tell
+why an answer is wrong or slow. This is the list to go through before more
+is built. A box is ticked when the thing was decided or checked by the
+owner, not when it was written.
+
+Where each item comes from is said. Four of the sections are from surveys
+made by subagents on 2026-10-11, read-only; what a survey did not verify
+is repeated here as not verified. Nothing a survey proposes is built
+except where a line says so.
+
+* TODO What landed in this round
+
+Built and pushed; to be read, not taken on trust.
+
+- [ ] =/ask= lays the statement out (=workshop.dashboard/format-statement=)
+  and draws the request's calls under the rows. Read one long statement
+  and one short one on the page.
+- [ ] Spans go to a collector when =OTEL_EXPORTER_OTLP_ENDPOINT= is set
+  (=workshop.otlp=). One test trace was accepted; nobody has looked a
+  trace up at the collector's end.
+- [ ] CI (=.github/workflows/ci.yml=): =guard-env= and =bb test= on a push
+  and a pull request. Actions are pinned by commit. There is no deploy
+  step: staging is still put in place by hand.
+- [ ] =/preferences= (=workshop.preferences=): which graph comes first and
+  how a statement is shown, one file a person outside the repository.
+- [ ] Experiment 015: cypherfmt is neither the page's formatter nor a
+  check. Agree or say what would change that.
+
+* TODO The integrated view and debugging
+
+From the survey of visualizations and the survey of Cypher tooling in
+other languages. Both begin at the same place: =workshop.neo4j/query=
+keeps the records of a result and throws away its summary, which holds the
+plan, the profile, counters, notifications with a line and column, and
+the server's two timings. No new dependency is needed for the first three.
+
+- [ ] Keep the driver's summary. Decide where it rides: metadata on the
+  rows, or a second function beside =query=.
+- [ ] A plan beside the statement: =EXPLAIN= on every =/ask=, =PROFILE=
+  only when asked and only for a read, since it runs the statement again.
+  An operator tree with rows and db hits as bars, in the waterfall's CSS.
+- [ ] The waterfall tied to the statement: the summary's timings and db
+  hits on the =cypher= span, and a link from a bar to its statement. A
+  span holds 90 characters of statement today, and never a parameter
+  value; keep that rule.
+- [ ] Notifications shown on the statement. Open question: the server's
+  position is into the text that was sent, and the page shows a re-laid
+  text. Either send the laid-out text or map the offsets.
+- [ ] A check before running: the labels and relationship types a
+  statement names against the ones the graph has
+  (neo4j-cypher-dsl's =StatementCatalog=; the parser module is a new
+  dependency, Apache 2.0, and throws on constructs it cannot map; how many
+  of the 48 statements it parses is not known).
+- [ ] What the model chose beside what ran, per parameter: said, default,
+  resolved to, ran with. The data is nearly all held already.
+- [ ] The schema of each graph drawn from the graph, in place of the
+  =:shape= line written by hand in =agents/registry.edn=.
+- [ ] The journey drawn on =/map=. Needs the journey template to return
+  station ids, which it does not.
+- [ ] A result as a node-link drawing. No template returns a node or a
+  path today, so there is nothing to draw; deferred until one does.
+  Cytoscape.js (MIT) was the survey's choice if it is built. Neo4j's NVL
+  is free of charge and not open: its licence limits it to Neo4j's hosted
+  and commercial products, which the embedded servers here are not.
+- [ ] Not to build, per the survey: a ClojureScript front end grown from
+  experiment 007, charts for =/data=, a free-form Cypher editor, more
+  pages about the pages. Agree or strike.
+- [ ] From other languages, to emulate rather than call: Ruby's
+  activegraph stamps each logged query with its caller; libcypher-parser
+  prints an error as message, line, column, the source line and a caret.
+  The openCypher TCK as a corpus for =format-statement=.
+
+* TODO The first five minutes
+
+From the survey of what a student first sees.
+
+- [ ] =/= says nothing about what to do first. Add a "Start here" above
+  the cards: the map, a question, its trace.
+- [ ] The order of the cards follows the registry; Transit, which the
+  README says to start with, is last. =/preferences= moves one graph
+  first for one person; decide the order for everyone.
+- [ ] A card's example question is a link that runs a model at once.
+  Prefill it and let the student press Ask.
+- [ ] A card shows rows and not the statement that made them, though the
+  statement is in the registry.
+- [ ] =/data= asks the server =.env= names, not a card's graph. The survey
+  found the two disagreeing at the time (different node counts). Give it a
+  graph parameter from the registry, or say on the page which server.
+- [ ] No link from an answer to its trace; =/traces= has no address for
+  one trace.
+- [ ] One example that fails on purpose and leads to the fix.
+- [ ] =/config= is the owner's page. A profile that hides it exists on an
+  unmerged branch; decide whether that comes to main.
+- [ ] The server answers one request at a time. A room asking at once
+  waits behind the slowest model call. A thread pool, and which host
+  serves the model.
+- [ ] The page title is "Workshop status" on every page and the README
+  calls the project something else.
+
+* TODO Signing in and a preference
+
+=notes/project-setup.org= step 14 says the dashboard should not grow a
+login. It has not: =workshop.preferences= believes a header a proxy sets,
+and only when =WORKSHOP_USER_HEADER= names it. These are the survey's
+questions and the ones the code raises.
+
+- [ ] Is believing a proxy's header within step 14, or a reversal of it?
+- [ ] The header is believed, not checked. It is sound only while the
+  server listens on loopback and the proxy is the one way in. Confirm that
+  for staging before the variable is set there, and that the proxy
+  overwrites the header rather than passing a client's through (not
+  tested).
+- [ ] Nothing is set on staging. Setting it is a change to the jail, to be
+  asked for.
+- [ ] A person who signs in and is not let in by the proxy gets an error
+  page today. Is an account at one code host the right door for students?
+- [ ] A file is named by a digest of the account's name, so the store
+  does not say who used the pages. It also means the owner cannot delete
+  one person's file by name without computing the digest. Enough?
+- [ ] What is kept is two choices and a time. Is a landing page or a
+  display name wanted? Each is one more thing kept about a person.
+- [ ] Should =/config=, =/traces= and the two =.edn= routes be the
+  owner's only, behind the same identity?
+- [ ] No account name goes into a span: spans leave the process.
+  Nothing puts one there today; there is no test that says so.
+
+* TODO Datasets
+
+From the survey of sources to add. Sizes and licences as the survey read
+them; counts of objects were not verified.
+
+- [ ] Is a fifth graph wanted before the view above is done?
+- [ ] MITRE ATT&CK (Enterprise, STIX 2.1): about 54 MB, MITRE's own
+  licence, which asks that copies carry its copyright line. Six or more
+  labels and relationship types that carry the meaning; questions about
+  what is absent. The survey's first choice.
+- [ ] Congress: members, committees and roll calls. Signed edges, and a
+  bipartite graph projected to a similarity graph. One source states no
+  licence, only a request to cite.
+- [ ] The MBTA's alerts over the transit graph already held, with the
+  timetable already in the cache and unused. Cheapest; a graph that
+  changes. The feed's terms were not read.
+- [ ] The dependency graph of the Maven artifacts already on a machine: a
+  DAG, and "why is this on my classpath".
+- [ ] A slice of Wikidata by SPARQL; Bluebikes trips as flows between
+  docks (its licence forbids redistribution, which a cache-only use
+  respects).
+- [ ] Whichever is chosen starts as an experiment with a gate, as the
+  others did, and costs about what Transit cost: a fetch script, a
+  loader, an agent file, a registry entry, three tasks, a port, tests and
+  a note.
+
+* TODO Not looked at
+
+- [ ] The surveys were read by one reader and not checked against their
+  sources.
+- [ ] The preferences page has not been used through a proxy at all.
+- [ ] Nothing here was shown to a student.

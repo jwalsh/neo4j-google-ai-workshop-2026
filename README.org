@@ -156,6 +156,7 @@ In =notes/=, one file per session or topic. The system first:
 - [[file:notes/local-first.org][The lab, local first]]: the same path with an embedded Neo4j and a small local model, lab by lab, and what does not carry over
 - [[file:notes/telemetry.org][Telemetry]]: spans around every statement, check and lab step, and the dashboard's Data and Traces pages
 - [[file:notes/project-setup.org][Setting a project up]]: the order this one was set up in, from conventions to a hosted page, with what each step is proven to do, which are still on unreviewed branches, and what breaks when it is repeated for many projects
+- [[file:notes/review-checklist-2026-10-11.org][Review checklist]]: what to decide before more is built, in six lists: what landed, the integrated view and debugging, a student's first five minutes, signing in and a preference, datasets to add, and what nobody looked at
 - [[file:notes/data-sources.org][Other data sources]]: fifteen public datasets checked by request, ranked, with what a dataset-agnostic loader would need from each
 
 The workshop record:
